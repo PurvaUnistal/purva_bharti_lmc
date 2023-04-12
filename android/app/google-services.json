@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "392269229688",
+    "project_id": "hpcl-lmc",
+    "storage_bucket": "hpcl-lmc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392269229688:android:a5c87114adff596baa478d",
+        "android_client_info": {
+          "package_name": "com.app.lmc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392269229688-c8eo2tjhvui147q3qlsepck15g4cmbid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmqqWxix6RuWsWNe4Kya0Uttz25LlLWNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392269229688-c8eo2tjhvui147q3qlsepck15g4cmbid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
