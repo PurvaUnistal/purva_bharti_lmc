@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +32,6 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   String area_id = '';
   OptionItem countryId;
   List<DropdownMenuItem<OptionItem>> _regionDropDown;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Notification> notifications = [];
   String _id = '';
   String _schema = '';
@@ -89,7 +87,8 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
 
   Future<void> _getLabelsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var res = await http.get(Uri.parse(GlobalConstants.getLabels));
+    var token = prefs.get(GlobalConstants.token);
+    var res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': token,} );
     print("getLabels-->" +res.body);
     prefs.setString(GlobalConstants.hpclLabels, res.body);
     if (res.statusCode == 200) {
@@ -137,53 +136,6 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
         });
         _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), '${widget.selection}',bpNumber, area_id);
       }
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> notification) async {
-        setState(() {
-          notifications.add(
-            Notification(
-              title: notification["notification"]["title"],
-              body: notification["notification"]["body"],
-              color: Colors.red,
-            ),
-          );
-        });
-      },
-      onLaunch: (Map<String, dynamic> notification) async {
-        setState(() {
-          notifications.clear();
-          notifications.add(
-            Notification(
-              title: notification["notification"]["title"],
-              body: notification["notification"]["body"],
-              color: Colors.green,
-            ),
-          );
-        });
-      },
-      onResume: (Map<String, dynamic> notification) async {
-        setState(() {
-          notifications.clear();
-          notifications.add(
-            Notification(
-              title: notification["notification"]["title"],
-              body: notification["notification"]["body"],
-              color: Colors.blue,
-            ),
-          );
-        });
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
-    _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      setState(() {});
-      print("Push Messaging token: $token");
     });
   }
   Future<String> getCountry() async {
@@ -365,8 +317,8 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
 
                         ):  Padding(
                           padding: const EdgeInsets.only(top: 200.0),
-                              child: Text('Data Not Found'),
-                            ),
+                          child: Text('Data Not Found'),
+                        ),
                       )
                   ),
                 ),
@@ -678,7 +630,8 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_localityLabel"),
-                            Text( rows.locality ?? ''),
+                            Expanded(child
+                                : Text( rows.locality ?? '')),
                           ],),
                       ),
                       Divider(color: Colors.teal.shade100,thickness: 1.0,),
@@ -776,7 +729,9 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   }
 
   Future<void> getReadyForNgc() async {
-    var res = await http.get(Uri.parse(GlobalConstants.getReadyForNgc,));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.get(GlobalConstants.token);
+    var res = await http.get(Uri.parse(GlobalConstants.getReadyForNgc,),headers: { 'Authorization': token,});
     print(res.body);
     final decoded = jsonDecode(res.body) as Map;
     decoded.forEach((k,v){

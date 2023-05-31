@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'package:lmc/style/text_style.dart';
 import 'package:lmc/utils/global_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/custom_toast.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -15,7 +17,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   String email, password;
   final _key = new GlobalKey<FormState>();
   bool _showProgress = false;
@@ -26,6 +27,7 @@ class _LoginState extends State<Login> {
       _secureText = !_secureText;
     });
   }
+
   check() {
     final form = _key.currentState;
     if (form.validate()) {
@@ -56,8 +58,13 @@ class _LoginState extends State<Login> {
                         children: <Widget>[
                           Image.asset("assets/icons/ic_launcher.png"),
                           SizedBox(height: 20.0),
-                          Text('L M C',style: AppTextStyle.appTitle,),
-                          SizedBox(height: 40,),
+                          Text(
+                            'L M C',
+                            style: AppTextStyle.appTitle,
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
                           Card(
                             elevation: 6.0,
                             child: TextFormField(
@@ -66,7 +73,7 @@ class _LoginState extends State<Login> {
                                 if (e.isEmpty) {
                                   CustomToast.showToast('Please Insert Email');
                                   return "Please Insert Email";
-                                } else if(!isValidEmail(e)){
+                                } else if (!isValidEmail(e)) {
                                   CustomToast.showToast('Please Insert Valid Email');
                                   return "Please Insert Valid Email";
                                 }
@@ -84,8 +91,11 @@ class _LoginState extends State<Login> {
                                 labelText: "Email",
                                 prefixIcon: Padding(
                                   padding: EdgeInsets.only(left: 20, right: 15),
-                                  child:Icon(Icons.person, color: Colors.black),
-                                ),),),),
+                                  child: Icon(Icons.person, color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
                           Card(
                             elevation: 6.0,
                             child: TextFormField(
@@ -96,7 +106,6 @@ class _LoginState extends State<Login> {
                                 }
                                 return null;
                               },
-
                               obscureText: _secureText,
                               onSaved: (e) => password = e,
                               style: TextStyle(
@@ -110,7 +119,7 @@ class _LoginState extends State<Login> {
                                 labelText: "Password",
                                 prefixIcon: Padding(
                                   padding: EdgeInsets.only(left: 20, right: 15),
-                                  child: Icon(Icons.phonelink_lock,color: Colors.black),
+                                  child: Icon(Icons.phonelink_lock, color: Colors.black),
                                 ),
                                 suffixIcon: IconButton(
                                   onPressed: showHide,
@@ -124,17 +133,21 @@ class _LoginState extends State<Login> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               SizedBox(
-                                height: 44.0, width: 200,
+                                height: 44.0,
+                                width: 200,
                                 child: ElevatedButton(
-                                    child: Text("Login",style: AppTextStyle.buttonTitle,),
-                                    onPressed: ()=> check(),
+                                    child: Text(
+                                      "Login",
+                                      style: AppTextStyle.buttonTitle,
+                                    ),
+                                    onPressed: () => check(),
                                     style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFf7d426),),
+                                        backgroundColor: MaterialStateProperty.all<Color>(
+                                          Color(0xFFf7d426),
+                                        ),
                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(borderRadius:BorderRadius.circular(20.0)),
-                                        )
-                                    )
-                                ),
+                                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                        ))),
                               ),
                             ],
                           ),
@@ -146,100 +159,123 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
-          (_showProgress) ? Container(
-            color: Colors.white60,
-            child: Center(
-              child: Card(
-                elevation: 5,
-                child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: Wrap(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 5,),
-                        child: SizedBox(
-                          child: CircularProgressIndicator(strokeWidth: 3,),
-                          height: 20.0,
-                          width: 20.0,
+          (_showProgress)
+              ? Container(
+                  color: Colors.white60,
+                  child: Center(
+                    child: Card(
+                      elevation: 5,
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Wrap(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 5,
+                              ),
+                              child: SizedBox(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                ),
+                                height: 20.0,
+                                width: 20.0,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 10, right: 5),
+                              child: Text(
+                                'Wait..',
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10,right: 5),
-                        child: Text('Wait..',),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ):Container()
+                )
+              : Container()
         ],
       ),
     );
   }
 
   bool isValidEmail(String _email) {
-    return RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(_email);
+    return RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(_email);
   }
+
+  getUniqueDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // unique ID on Android
+    }
+    return null;
+  }
+
   Future<void> attemptLogIn(String username, String password) async {
+    var deviceId = await getUniqueDeviceId();
     setState(() {
-      _showProgress=true;
+      _showProgress = true;
     });
-    try{
-      final data ={"email": username,"password": password};
+    try {
+      final data = {"email": username, "password": password, "device": deviceId};
       final jsonString = json.encode(data);
-      var res = await http.post(Uri.parse(GlobalConstants.login),body: jsonString
-      );
-      print("login-->" +res.body);
+      var res = await http.post(Uri.parse(GlobalConstants.login), body: jsonString);
+      print("login-->" + jsonString);
+      print("login-->" + GlobalConstants.login);
+      print("login-->" + res.body);
       setState(() {
-        _showProgress=false;
+        _showProgress = false;
       });
-      print("login--> " +res.body);
-      try{
+      print("login--> " + res.body);
+      try {
         LoginDetails lgd = new LoginDetails.fromJson(json.decode(res.body));
 
-        if(lgd.status == 200 && lgd.user.role.toLowerCase().contains('lmc')) {
+        if (lgd.status == 200 && lgd.user.role.toLowerCase().contains('lmc')) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool(GlobalConstants.isUserLogIn, true);
           prefs.setString(GlobalConstants.username, username);
           prefs.setString(GlobalConstants.password, password);
-          prefs.setString(GlobalConstants.id,lgd.user.id);
+          prefs.setString(GlobalConstants.id, lgd.user.id);
           prefs.setString(GlobalConstants.token, lgd.token);
-          prefs.setString(GlobalConstants.schema,lgd.user.schema);
+          prefs.setString(GlobalConstants.schema, lgd.user.schema);
           prefs.setString(GlobalConstants.name, lgd.user.name);
-          prefs.setString(GlobalConstants.role,lgd.user.role);
+          prefs.setString(GlobalConstants.role, lgd.user.role);
           // CustomToast.showToast(lgd.messages);
-          if(lgd.user.role.toLowerCase().contains('lmc')){
+          if (lgd.user.role.toLowerCase().contains('lmc')) {
             CustomToast.showToast(lgd.messages);
-            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => DashboardScreen()),
-                  (Route<dynamic> route) => false,);
-          } else{
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => DashboardScreen()),
+              (Route<dynamic> route) => false,
+            );
+          } else {
             CustomToast.showToast('Invalid UserName and Password');
           }
           // Navigator.pushAndRemoveUntil(
           //   context, MaterialPageRoute(builder: (context) => NgcListScreen()),
           //       (Route<dynamic> route) => false,
           // );
-        } else if(lgd.status == 401){
+        } else if (lgd.status == 401) {
           CustomToast.showToast('Invalid UserName and Password');
-        } else{
+        } else {
           CustomToast.showToast('Invalid UserName and Password');
           //CustomToast.showToast(lgd.messages);
         }
-      } catch(e){
+      } catch (e) {
         print(e);
         CustomToast.showToast('$e');
       }
-    } catch(e){
+    } catch (e) {
       print(e.toString());
       setState(() {
-        _showProgress=false;
+        _showProgress = false;
       });
       CustomToast.showToast('Check Your Internet Connection');
     }
   }
-
-
 }

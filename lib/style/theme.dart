@@ -28,7 +28,7 @@ final ThemeData kLightThemeData = ThemeData(
   accentColor: AppColor.accent,
   errorColor: AppColor.error,
   // ignore: deprecated_member_use
-  cursorColor: AppColor.primaryVariant,
+  buttonColor: AppColor.primaryVariant,
   scaffoldBackgroundColor: Colors.white,
   brightness: Brightness.light,
   iconTheme: IconThemeData(

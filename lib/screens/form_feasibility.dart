@@ -66,8 +66,9 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
   Future<void> _getLabelsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var res =prefs.get(GlobalConstants.hpclLabels??'');
+    var token = prefs.get(GlobalConstants.token);
     if(res== '') {
-      var _res = await http.get(Uri.parse(GlobalConstants.getLabels));
+      var _res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': token,});
       res = _res.body;
       print("getLabels-->" + _res.body);
     }
@@ -86,7 +87,8 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
   Future<void> _getFreeMaterialData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var schema =  prefs.getString(GlobalConstants.schema);
-    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi+schema));
+    var token = prefs.get(GlobalConstants.token);
+    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi+schema),headers: { 'Authorization': token,});
     print("getFreeMaterialApi-->" + res.body);
     if(res.statusCode == 200) {
       FreeMaterial dataList = FreeMaterial.fromJson(json.decode(res.body));
@@ -115,7 +117,9 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
 
 
   Future<void> getReadyForNgc() async {
-    var res = await http.get( Uri.parse(GlobalConstants.lmcReason,));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.get(GlobalConstants.token);
+    var res = await http.get( Uri.parse(GlobalConstants.lmcReason,),headers: { 'Authorization': token,});
     print("lmcReason-->" + res.body);
     final decoded = jsonDecode(res.body) as Map;
     decoded.forEach((k,v){
@@ -129,11 +133,13 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     });
   }
   Future<void> isFeasibleDropdownList() async {
-    var res = await http.get(Uri.parse (GlobalConstants.isFeasible,));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.get(GlobalConstants.token);
+    var res = await http.get(Uri.parse (GlobalConstants.isFeasible,),headers: { 'Authorization': token,});
     print("isFeasible-->" + res.body);
     final decoded = jsonDecode(res.body) as Map;
     decoded.forEach((k,v){
-      dropDownFeasibleList.add(DropdownMenuItem(value: OptionItem(id: k,title: v), child: Text(v),));
+      dropDownFeasibleList.add(DropdownMenuItem(value: OptionItem(id: k,title: v.toString()), child: Text(v.toString()),));
     });
     _isFeasibleItem = dropDownFeasibleList.first.value;
     _isFeasibleId   = _isFeasibleItem.id;
