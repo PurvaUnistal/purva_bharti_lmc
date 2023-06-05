@@ -1,10 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/login/domain/bloc/login_event.dart';
 import 'package:lmc/features/login/domain/bloc/login_state.dart';
+import 'package:lmc/features/login/domain/model/login_model.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState>{
   LoginBloc() : super(LoginStateInit()){
-  //  on<LoginLoadingEvent>(_pageLoad);
+    on<LoginLoadingEvent>(pageLoader);
+    on<LoginEmailEvent>(_setEmailId);
+    on<LoginPasswordEvent>(_setPassword);
+    on<LoginHideShowPasswordEvent>(_setHideShow);
+  //  on<LoginSubmitEvent>(_submitLoginData);
 
   }
 
@@ -16,6 +21,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
 
   String emailId = "";
   String password = "";
+
+  LoginModel _loginModel = LoginModel();
+  LoginModel get loginModel => _loginModel;
+
 
   pageLoader(LoginLoadingEvent event, emit){
     emailId = "";
@@ -34,6 +43,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
   }
   _setHideShow(LoginHideShowPasswordEvent event, emit){
     _isPassword = event.visible;
+  }
+  _submitData(LoginSubmitEvent event, emit){
+
   }
 
   _eventComplete(Emitter<LoginState> emit){

@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/global_constant.dart';
+import '../features/ChangePassword/presentations/Screen/change_password_screen.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  static String tag = 'splash-screen';
   const SplashScreen({Key key}) : super(key: key);
 
   @override
@@ -21,14 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
     _isLogin = prefs.getBool(GlobalConstants.isUserLogIn) ?? false;
     print("_isLogin--> $_isLogin");
     if(_isLogin) {
-      // if (this.mounted) {
-      //   setState(() {
-      //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen()),);
-      //   });
-      // }
        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen()),);
-    } else{
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Login()));
+    }else{
+     Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Login()));
+    //  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
     }
   }
   Future<Timer> timeDuration() async {

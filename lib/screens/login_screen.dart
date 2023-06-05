@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/custom_toast.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../features/ChangePassword/presentations/Screen/change_password_screen.dart';
+
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -37,164 +39,178 @@ class _LoginState extends State<Login> {
   }
 
   var value;
+
+
+  @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
+    // TODO: implement initState
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Center(
-            child: ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.all(15.0),
-              children: <Widget>[
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                      key: _key,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset("assets/icons/ic_launcher.png"),
-                          SizedBox(height: 20.0),
-                          Text(
-                            'L M C',
-                            style: AppTextStyle.appTitle,
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Card(
-                            elevation: 6.0,
-                            child: TextFormField(
-                              inputFormatters: [FilteringTextInputFormatter.deny(' ')],
-                              validator: (e) {
-                                if (e.isEmpty) {
-                                  CustomToast.showToast('Please Insert Email');
-                                  return "Please Insert Email";
-                                } else if (!isValidEmail(e)) {
-                                  CustomToast.showToast('Please Insert Valid Email');
-                                  return "Please Insert Valid Email";
-                                }
-                                return null;
-                              },
-                              onSaved: (e) => email = e,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(18),
-                                labelStyle: AppTextStyle.textContent,
-                                labelText: "Email",
-                                prefixIcon: Padding(
-                                  padding: EdgeInsets.only(left: 20, right: 15),
-                                  child: Icon(Icons.person, color: Colors.black),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Center(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(15.0),
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Form(
+                        key: _key,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset("assets/icons/ic_launcher.png"),
+                            SizedBox(height: 20.0),
+                            Text(
+                              'L M C',
+                              style: AppTextStyle.appTitle,
+                            ),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            Card(
+                              elevation: 6.0,
+                              child: TextFormField(
+                                inputFormatters: [FilteringTextInputFormatter.deny(' ')],
+                                validator: (e) {
+                                  if (e.isEmpty) {
+                                    CustomToast.showToast('Please Insert Email');
+                                    return "Please Insert Email";
+                                  } else if (!isValidEmail(e)) {
+                                    CustomToast.showToast('Please Insert Valid Email');
+                                    return "Please Insert Valid Email";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (e) => email = e,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(18),
+                                  labelStyle: AppTextStyle.textContent,
+                                  labelText: "Email",
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(left: 20, right: 15),
+                                    child: Icon(Icons.person, color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Card(
-                            elevation: 6.0,
-                            child: TextFormField(
-                              inputFormatters: [FilteringTextInputFormatter.deny(' ')],
-                              validator: (e) {
-                                if (e.isEmpty) {
-                                  return "Password Can't be Empty";
-                                }
-                                return null;
-                              },
-                              obscureText: _secureText,
-                              onSaved: (e) => password = e,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(18),
-                                labelStyle: AppTextStyle.textContent,
-                                labelText: "Password",
-                                prefixIcon: Padding(
-                                  padding: EdgeInsets.only(left: 20, right: 15),
-                                  child: Icon(Icons.phonelink_lock, color: Colors.black),
+                            Card(
+                              elevation: 6.0,
+                              child: TextFormField(
+                                inputFormatters: [FilteringTextInputFormatter.deny(' ')],
+                                validator: (e) {
+                                  if (e.isEmpty) {
+                                    return "Password Can't be Empty";
+                                  }
+                                  return null;
+                                },
+                                obscureText: _secureText,
+                                onSaved: (e) => password = e,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
                                 ),
-                                suffixIcon: IconButton(
-                                  onPressed: showHide,
-                                  icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(18),
+                                  labelStyle: AppTextStyle.textContent,
+                                  labelText: "Password",
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(left: 20, right: 15),
+                                    child: Icon(Icons.phonelink_lock, color: Colors.black),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: showHide,
+                                    icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 50),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 44.0,
-                                width: 200,
-                                child: ElevatedButton(
-                                    child: Text(
-                                      "Login",
-                                      style: AppTextStyle.buttonTitle,
-                                    ),
-                                    onPressed: () => check(),
-                                    style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(
-                                          Color(0xFFf7d426),
-                                        ),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                        ))),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          (_showProgress)
-              ? Container(
-                  color: Colors.white60,
-                  child: Center(
-                    child: Card(
-                      elevation: 5,
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Wrap(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: 5,
-                              ),
-                              child: SizedBox(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 3,
+                            SizedBox(height: 50),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 44.0,
+                                  width: 200,
+                                  child: ElevatedButton(
+                                      child: Text(
+                                        "Login",
+                                        style: AppTextStyle.buttonTitle,
+                                      ),
+                                      onPressed: () => check(),
+                                      style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all<Color>(
+                                            Color(0xFFf7d426),
+                                          ),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                          ))),
                                 ),
-                                height: 20.0,
-                                width: 20.0,
-                              ),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10, right: 5),
-                              child: Text(
-                                'Wait..',
-                              ),
-                            )
                           ],
                         ),
                       ),
                     ),
                   ),
-                )
-              : Container()
-        ],
+                ],
+              ),
+            ),
+            (_showProgress)
+                ? Container(
+                    color: Colors.white60,
+                    child: Center(
+                      child: Card(
+                        elevation: 5,
+                        child: Container(
+                          padding: EdgeInsets.all(10.0),
+                          child: Wrap(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 5,
+                                ),
+                                child: SizedBox(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                  ),
+                                  height: 20.0,
+                                  width: 20.0,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, right: 5),
+                                child: Text(
+                                  'Wait..',
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }
@@ -248,11 +264,20 @@ class _LoginState extends State<Login> {
           // CustomToast.showToast(lgd.messages);
           if (lgd.user.role.toLowerCase().contains('lmc')) {
             CustomToast.showToast(lgd.messages);
-            Navigator.pushAndRemoveUntil(
+            if(lgd.user.pwdChanged == "1"){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                    (Route<dynamic> route) => false,
+              );
+            }else{
+               Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => DashboardScreen()),
               (Route<dynamic> route) => false,
             );
+            }
+
           } else {
             CustomToast.showToast('Invalid UserName and Password');
           }

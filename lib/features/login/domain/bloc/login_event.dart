@@ -35,8 +35,9 @@ class LoginHideShowPasswordEvent extends LoginEvent{
 
 class LoginSubmitEvent extends LoginEvent{
   final BuildContext context;
-  LoginSubmitEvent({this.context});
+  final bool isLoginPage;
+  LoginSubmitEvent({this.context, this.isLoginPage});
   @override
   // TODO: implement props
-  List<Object> get props => [context];
+  List<Object> get props => [context, isLoginPage];
 }

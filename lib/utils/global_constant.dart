@@ -41,4 +41,5 @@ class GlobalConstants {
   static String getLmcInstallationDone = BaseUrl + "getlmcInstallationdone?";
   static String updateLMCInstallationImages = BaseUrl + "UpdateLMCInstallationImages";
   static String getLmcFeasibilityAPI = BaseUrl + "getlmcFeasibilityAPI";
+  static String resetPassword = BaseUrl + "resetpassword";
 }

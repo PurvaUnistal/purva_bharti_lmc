@@ -41,15 +41,29 @@ class User {
   String id;
   String email;
   String name;
+  String userStatus;
+  String pwdChanged;
+  String modules;
   String schema;
   String role;
 
-  User({this.id, this.email, this.name, this.schema, this.role});
+  User({
+    this.id,
+    this.email,
+    this.name,
+    this.userStatus,
+    this.pwdChanged,
+    this.modules,
+    this.schema,
+    this.role,});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     email = json['email'];
     name = json['name'];
+    userStatus = json['user_status'];
+    pwdChanged = json['pwd_changed'];
+    modules = json['modules'];
     schema = json['schema'];
     role = json['role'];
   }
@@ -59,6 +73,9 @@ class User {
     data['id'] = this.id;
     data['email'] = this.email;
     data['name'] = this.name;
+    data['user_status'] = this.userStatus;
+    data['pwd_changed'] = this.pwdChanged;
+    data['modules'] = this.modules;
     data['schema'] = this.schema;
     data['role'] = this.role;
     return data;
