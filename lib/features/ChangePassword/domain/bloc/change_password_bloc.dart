@@ -47,8 +47,8 @@ class ChangePasswordBloc extends Bloc<ChangePasswordEvent, ChangePasswordState>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId  = prefs.getString(GlobalConstants.id);
     _changePasswordModel = ChangePasswordModel();
-    var textFieldValidationCheck = await ChangePasswordHelper.textFieldValidation(newPassword: password,confirmPassword:confirmPassword ,context: event.context);
-    if(textFieldValidationCheck == true){
+ //   var textFieldValidationCheck = await ChangePasswordHelper.textFieldValidation(newPassword: password,confirmPassword:confirmPassword ,context: event.context);
+   // if(textFieldValidationCheck == true){
       var res = await ChangePasswordHelper.fetchChangePassword(userId, password, confirmPassword);
       if(res != null){
         _changePasswordModel = ChangePasswordModel();
@@ -63,7 +63,7 @@ class ChangePasswordBloc extends Bloc<ChangePasswordEvent, ChangePasswordState>{
       }else{
         print("Null Data");
       }
-    }
+  //  }
   }
 
 }

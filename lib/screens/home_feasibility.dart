@@ -15,7 +15,7 @@ import 'package:lmc/style/text_style.dart';
 import 'package:lmc/utils/global_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/custom_dialog_box.dart';
+import '../utils/commonWidgets/common_session_dialog_box.dart';
 import '../utils/text_style.dart';
 
 class FeasibilityHomeScreen extends StatefulWidget {
@@ -464,8 +464,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
   @override
   void showError([onError]) {
     if (onError.toString() == '403') {
-      DialogUtils.showCustomDialog(context,
-          okBtnFunction: () =>DialogUtils.logOut(context));
+      SessionDialogUtils.showCustomDialog(context,
+          okBtnFunction: () => SessionDialogUtils.logOut(context));
      // _sessionExpireDialog();
     } else if (onError.toString() == '401') {
       getPref();

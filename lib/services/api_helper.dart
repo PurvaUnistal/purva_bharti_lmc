@@ -27,12 +27,9 @@ class ApiHelper{
     }
   }
 
-  static Future<dynamic> postData({@required String url, @required var body, @required BuildContext context}) async {
+  static Future<dynamic> postData({@required String url, @required var body}) async {
     try{
-      Uri uri =  Uri.parse( baseUrl+url);
-      print(uri);
-      print(body);
-      var res =  await post(uri, body: body);
+      var res =  await post(Uri.parse(url), body: body);
       print(res.body);
       if(res.statusCode == 200){
         return jsonDecode(res.body);
@@ -40,6 +37,7 @@ class ApiHelper{
         return Api.error;
       }
     }catch(e){
+      print(e.toString());
       CustomToast.showToast(e.toString());
       return Api.error;
     }

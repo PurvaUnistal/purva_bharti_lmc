@@ -7,7 +7,7 @@ import 'package:lmc/style/text_style.dart';
 import 'package:lmc/utils/global_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/logout_method.dart';
+import '../utils/commonWidgets/logout_method.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void showError([onError]) {
     if (onError.toString() == '403') {
 
-    //  _sessionExpireDialog();
+      _sessionExpireDialog();
     } else if (onError.toString() == '401') {
       getUserDetails();
     }

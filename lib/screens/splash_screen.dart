@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/global_constant.dart';
 import '../features/ChangePassword/presentations/Screen/change_password_screen.dart';
+import 'change_password_page.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
@@ -21,13 +22,22 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _isLogin = prefs.getBool(GlobalConstants.isUserLogIn) ?? false;
+    String changePassword = prefs.getString(GlobalConstants.changePassword);
     print("_isLogin--> $_isLogin");
-    if(_isLogin) {
-       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen()),);
-    }else{
-     Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Login()));
-    //  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
+    if(changePassword == "0"){
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+            (Route<dynamic> route) => false,
+      );
+    }else {
+      if(_isLogin) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen()),);
+      }else{
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Login()));
+      }
     }
+
   }
   Future<Timer> timeDuration() async {
     return Timer(Duration(seconds: 1), checkLogin);

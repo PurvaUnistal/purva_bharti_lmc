@@ -6,6 +6,7 @@ class GlobalConstants {
   static String id = "id";
   static String lmcId = "lmcId";
   static String role = "role";
+  static String changePassword = "changePassword";
   static String schema = "schema";
   static String name = "name";
   static String bpNumber = "bp Number";

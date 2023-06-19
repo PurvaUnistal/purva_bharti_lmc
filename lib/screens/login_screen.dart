@@ -12,6 +12,7 @@ import '../utils/custom_toast.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../features/ChangePassword/presentations/Screen/change_password_screen.dart';
+import 'change_password_page.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -83,6 +84,7 @@ class _LoginState extends State<Login> {
                             Card(
                               elevation: 6.0,
                               child: TextFormField(
+                                autofillHints: [AutofillHints.email],
                                 inputFormatters: [FilteringTextInputFormatter.deny(' ')],
                                 validator: (e) {
                                   if (e.isEmpty) {
@@ -114,6 +116,7 @@ class _LoginState extends State<Login> {
                             Card(
                               elevation: 6.0,
                               child: TextFormField(
+                                autofillHints: [AutofillHints.password],
                                 inputFormatters: [FilteringTextInputFormatter.deny(' ')],
                                 validator: (e) {
                                   if (e.isEmpty) {
@@ -155,7 +158,9 @@ class _LoginState extends State<Login> {
                                         "Login",
                                         style: AppTextStyle.buttonTitle,
                                       ),
-                                      onPressed: () => check(),
+                                      onPressed: () {
+                                        TextInput.finishAutofillContext();
+                                          check();},
                                       style: ButtonStyle(
                                           backgroundColor: MaterialStateProperty.all<Color>(
                                             Color(0xFFf7d426),
@@ -261,13 +266,14 @@ class _LoginState extends State<Login> {
           prefs.setString(GlobalConstants.schema, lgd.user.schema);
           prefs.setString(GlobalConstants.name, lgd.user.name);
           prefs.setString(GlobalConstants.role, lgd.user.role);
+          prefs.setString(GlobalConstants.changePassword, lgd.user.pwdChanged);
           // CustomToast.showToast(lgd.messages);
           if (lgd.user.role.toLowerCase().contains('lmc')) {
             CustomToast.showToast(lgd.messages);
-            if(lgd.user.pwdChanged == "1"){
+            if(lgd.user.pwdChanged == "0"){
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                     (Route<dynamic> route) => false,
               );
             }else{
@@ -281,10 +287,6 @@ class _LoginState extends State<Login> {
           } else {
             CustomToast.showToast('Invalid UserName and Password');
           }
-          // Navigator.pushAndRemoveUntil(
-          //   context, MaterialPageRoute(builder: (context) => NgcListScreen()),
-          //       (Route<dynamic> route) => false,
-          // );
         } else if (lgd.status == 401) {
           CustomToast.showToast('Invalid UserName and Password');
         } else {

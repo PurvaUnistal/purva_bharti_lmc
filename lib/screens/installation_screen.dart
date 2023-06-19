@@ -628,15 +628,6 @@ class InstallationScreenPage extends State<InstallationScreen> {
       }
     }
 
-    // _materialList.asMap().values.map((e) => (){
-    //   print('Ankush');
-    //   if(e.name.toLowerCase().contains('pipe')){
-    //
-    //     if(e.controller.text!=''){
-    //       quantity = quantity + int.parse(e.controller.text);
-    //     }
-    //   }
-    // }).toList();
     print("quantity--> $quantity");
     if (quantity > 15.0) {
       Map<String, String> requestBody = <String, String>{

@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:lmc/utils/custom_toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/InstallationImagesModel.dart';
+import '../model/change_password_model.dart';
 import '../model/get_lmc_feasibility_api_model.dart';
 import '../model/lmc_installation_done_model.dart';
 import '../utils/global_constant.dart';
+import 'api_helper.dart';
 
 class ApiIntegration{
 
@@ -29,6 +32,23 @@ class ApiIntegration{
       throw Exception(e);
     }
   }
+
+  Future<ChangePasswordModel> changePasswordApi(ChangePasswordResponse changePasswordResponse)async{
+    String url = GlobalConstants.resetPassword;
+    var res = await ApiHelper.postData(url: url, body: changePasswordResponse.toJson());
+    try{
+      if(res != null){
+        return ChangePasswordModel.fromJson(res);
+      } else{
+        print("Null Data");
+      }
+    }catch(e){
+      print(e.toString());
+      CustomToast.showToast(e.toString());
+    }
+    return null;
+  }
+
 
   Future<InstallationImagesModel> lmcInstallationImages(InstallationImagesReqModel installationImagesReqModel) async{
     String url = GlobalConstants.updateLMCInstallationImages;

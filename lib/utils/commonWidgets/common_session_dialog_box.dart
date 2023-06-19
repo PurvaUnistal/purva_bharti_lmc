@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../screens/login_screen.dart';
-import 'global_constant.dart';
+import '../../screens/login_screen.dart';
+import '../global_constant.dart';
 
-class DialogUtils {
-  static DialogUtils _instance = new DialogUtils.internal();
+class SessionDialogUtils {
+  static SessionDialogUtils _instance = new SessionDialogUtils.internal();
 
-  DialogUtils.internal();
+  SessionDialogUtils.internal();
 
-  factory DialogUtils() => _instance;
+  factory SessionDialogUtils() => _instance;
 
   static void showCustomDialog(BuildContext context,{@required Function okBtnFunction}) {
     showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text('Timeout'),
+            title: Text('Session Expired'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text('Session was expire you need to login again?'),
+                  Text('Your session has expired. Please sign in again.'),
                 ],
               ),
             ),

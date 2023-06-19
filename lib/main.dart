@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:lmc/features/ChangePassword/presentations/Screen/change_password_screen.dart';
 import 'package:lmc/model/image_model.dart';
@@ -41,8 +40,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ChangePasswordBloc()),
       ],
       child:  MaterialApp(
-
-          debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
           title: 'HPCL LMC',
           routes: routes,
           home: SplashScreen(),

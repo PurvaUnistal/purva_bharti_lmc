@@ -15,43 +15,71 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  ChangePasswordBloc changePasswordBloc;
+
   @override
   void initState() {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
-    BlocProvider.of<ChangePasswordBloc>(context).add(ChangePasswordPageLoaderEvent());
+    BlocProvider.of<ChangePasswordBloc>(context).add(
+        ChangePasswordPageLoaderEvent());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+    ChangePasswordBloc changePasswordBloc = context.read<ChangePasswordBloc>();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Change Password"),
         ),
-        body: BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
-          builder: (context, state){
-             if(state is ChangePasswordInitial){
-               print("_buildLayout");
-              return buildLoading();
-            } else if(state is ChangePasswordLoading){
-               return buildLoading();
-             } else if(state is ChangePasswordSuccess){
-               return _buildLayout(state);
-             }else{
-               print("notShowingBuildLayout");
-              return const SizedBox.shrink();
+        body: BlocListener<ChangePasswordBloc, ChangePasswordState>(
+          listener: (context, state) {
+            if (state is ChangePasswordError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.error),
+              ));
             }
           },
-
+          child: _buildLayout(),
         )
     );
   }
+
+
+  Widget _buildLayout() {
+    return Padding(
+      padding: const EdgeInsets.all(13.0),
+      child: Center(
+        child: SingleChildScrollView(
+          reverse: true,
+          physics: AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset("assets/icons/ic_launcher.png"),
+              horgentental(),
+              horgentental(),
+              _newPasswordWidget(),
+              horgentental(),
+              _confirmPasswordWidget(),
+              horgentental(),
+              horgentental(),
+              _loginButton(),
+              Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(),
@@ -70,49 +98,49 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  Widget _newPasswordWidget(ChangePasswordSuccess dataState){
-    return  AppTextFormField.kTextFieldDecoration(
-      "Password",
-      "Password", (value)=> BlocProvider.of<ChangePasswordBloc>(context).add(NewPasswordEvent(newPassword: value)),
+  Widget _newPasswordWidget() {
+    ChangePasswordBloc changePasswordBloc = context.read<ChangePasswordBloc>();
+    return AppTextFormField(
+      hintText:  "New Password",
+      labelText: "New Password",
+      prefixIcon: Icons.lock_outline_rounded,
+      onChanged: (value) =>
+          changePasswordBloc.add(NewPasswordEvent(newPassword: value)),
     );
   }
 
-  Widget _confirmPasswordWidget(ChangePasswordSuccess dataState){
-    return  AppTextFormField.kTextFieldDecoration(
-      "Confirm Password",
-      "Confirm Password",
-          (value)=> BlocProvider.of<ChangePasswordBloc>(context).add(ConfirmPasswordEvent(confirmPassword: value)),
+  Widget _confirmPasswordWidget() {
+    ChangePasswordBloc changePasswordBloc = context.read<ChangePasswordBloc>();
+    return AppTextFormField(
+      prefixIcon: Icons.lock_outline_rounded,
+      hintText: "Confirm Password",
+      labelText:"Confirm Password",
+      onChanged: (value) =>
+          changePasswordBloc.add(ConfirmPasswordEvent(confirmPassword: value)),
 
     );
   }
 
-  Widget _loginButton(ChangePasswordSuccess dataState){
-    return ElevatedButton(
-        child: Text("Change Password"),
-        onPressed: (){
-      BlocProvider.of<ChangePasswordBloc>(context).add(ChangePasswordSubmitEvent(context: context));
-    });
+  Widget _loginButton() {
+    ChangePasswordBloc changePasswordBloc = context.read<ChangePasswordBloc>();
+    return  BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
+      builder: (context, state) {
+        if (state is ChangePasswordLoading) {
+          return buildLoading();
+        }
+        return ElevatedButton(
+            child: Text("Change Password"),
+            onPressed: () {
+              changePasswordBloc.add(
+                  ChangePasswordSubmitEvent(context: context));
+            });
+      },
+    );
   }
-  Widget _buildLayout(ChangePasswordSuccess dataState){
-    ChangePasswordBloc changePasswordBloc = ChangePasswordBloc();
-    return  Padding(
-      padding: const EdgeInsets.all(13.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset("assets/icons/ic_launcher.png"),
-          AppTextFormField.horizontal(),
-          AppTextFormField.horizontal(),
-          _newPasswordWidget(dataState),
-          AppTextFormField.horizontal(),
-          _confirmPasswordWidget(dataState),
-          AppTextFormField.horizontal(),
-          AppTextFormField.horizontal(),
-          _loginButton(dataState)
-        ],
 
-      ),
+  Widget horgentental(){
+    return SizedBox(
+      height: 15,
     );
   }
 }
