@@ -8,7 +8,7 @@ import '../model/change_password_model.dart';
 import '../model/get_lmc_feasibility_api_model.dart';
 import '../model/lmc_installation_done_model.dart';
 import '../utils/global_constant.dart';
-import 'api_helper.dart';
+import '../../../../Meter Reader/meter_reader_flutter_app/lib/service/api_helper.dart';
 
 class ApiIntegration{
 
