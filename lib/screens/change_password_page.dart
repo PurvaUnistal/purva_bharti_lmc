@@ -1,15 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lmc/utils/RoundedButton.dart';
-import 'package:lmc/utils/custom_toast.dart';
-import 'package:password_validated_field/password_validated_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/change_password_model.dart';
-import '../services/api_integration.dart';
-import '../utils/commonWidgets/common_dialog_box.dart';
-import '../utils/global_constant.dart';
-import '../utils/commonWidgets/logout_method.dart';
+import '../ExportFile/export_file.dart';
 
 
 class ChangePasswordPage extends StatefulWidget {
@@ -28,6 +18,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void initState() {
+    newPasswordController.addListener(()=>  removeSpace(newPasswordController));
+    conformPasswordController.addListener(()=>  removeSpace(conformPasswordController));
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
@@ -42,9 +35,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
      userId  = prefs.getString(GlobalConstants.id);
    });
   }
+  void removeSpace(TextEditingController controller){
+    if(controller.text.trim() == ""){
+      setState(()=> controller.text = "");
+    }
+    print("controller==>"+controller.text);
+  }
 
   Future getChangeData() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     RegExp upperRegex=  RegExp(r'[A-Z]');
     RegExp smallRegex=  RegExp(r'[a-z]');
     RegExp charRegex=  RegExp(r'[!@#$%^&*(),.?":{}|<>]');
@@ -88,7 +86,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           okBtnFunction: ()=>  LogOutMethod.logOut(context)
       );
 
-    }else{
+    } else{
       print("Null Data");
     }
   }
@@ -167,6 +165,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
       controller: conformPasswordController,
       prefixIcon: Icons.lock_outline_rounded,
@@ -183,6 +183,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 Widget newPasswordValidation(){
     return PasswordValidatedFields(
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
+      autofillHints: [AutofillHints.newPassword],
       textEditingController: newPasswordController,
       obscureText: isVisibility,
       inputDecoration: InputDecoration(

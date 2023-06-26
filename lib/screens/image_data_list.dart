@@ -1,20 +1,5 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lmc/model/image_model.dart';
-import 'package:lmc/screens/records.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
-import '../model/InstallationImagesModel.dart';
-import '../services/api_integration.dart';
-import '../utils/global_constant.dart';
-import '../utils/loader_dialog.dart';
-import '../utils/reused_box.dart';
+import '../ExportFile/export_file.dart';
 
 
 class ImageListScreen extends StatefulWidget {

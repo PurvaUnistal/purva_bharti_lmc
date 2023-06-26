@@ -1,6 +1,4 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import '../ExportFile/export_file.dart';
 
 // ignore: must_be_immutable
 class CustomImagePicker extends StatefulWidget {

@@ -1,11 +1,3 @@
-
-import 'dart:convert';
-/*
-IndustryResponse industryListeResponseFromJson(String str) =>
-    IndustryResponse.fromJson(json.decode(str));
-
-String industryListeResponseToJson(IndustryResponse data) =>
-    json.encode(data.toJson());*/
 class IndustryResponse {
   String code;
   Result result;

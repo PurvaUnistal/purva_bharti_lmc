@@ -1,4 +1,4 @@
-class LoginDetails {
+class LoginModel {
   int status;
   bool error;
   String messages;
@@ -6,7 +6,7 @@ class LoginDetails {
   User user;
   String exptime;
 
-  LoginDetails(
+  LoginModel(
       {this.status,
         this.error,
         this.messages,
@@ -14,7 +14,7 @@ class LoginDetails {
         this.user,
         this.exptime});
 
-  LoginDetails.fromJson(Map<String, dynamic> json) {
+  LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     error = json['error'];
     messages = json['messages'];

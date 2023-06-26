@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../utils/global_constant.dart';
-import 'bp_list_image.dart';
-import 'dashboard_screen.dart';
-import 'image_data_list.dart';
-import 'login_screen.dart';
+import '../ExportFile/export_file.dart';
 
 class CustomerRecords extends StatefulWidget {
   const CustomerRecords({Key key}) : super(key: key);
