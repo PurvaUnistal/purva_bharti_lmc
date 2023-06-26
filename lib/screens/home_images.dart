@@ -1,17 +1,4 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive/hive.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:lmc/model/image_model.dart';
-import 'package:lmc/utils/custom_toast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
-import '../utils/customTextField.dart';
-import '../utils/global_constant.dart';
-import '../utils/openImageSource.dart';
-import '../utils/photo_controller.dart';
-import 'image_data_list.dart';
+import '../ExportFile/export_file.dart';
 
 class HomeImagesScreen extends StatefulWidget {
   bool isEdit;
@@ -498,22 +485,6 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                 ElevatedButton(
                     child: Text("Save"),
                     onPressed: () async {
-                      /* if (!(image1Controller.profileImage1 != null && image1Controller.profileImage1.path != null)) {
-                        CustomToast.showToast('Select RFC Image');
-                      return;
-                      }
-                      if (!(image2Controller.profileImage2 != null && image2Controller.profileImage2.path != null)) {
-                        CustomToast.showToast('Select Work Completed Image');
-                        return;
-                      }
-                      if (!(image3Controller.profileImage3 != null && image3Controller.profileImage3.path != null)) {
-                        CustomToast.showToast('Select Isometric Image');
-                        return;
-                      }
-                      if (!(image4Controller.profileImage4 != null && image4Controller.profileImage4.path != null)) {
-                        CustomToast.showToast('Select Pneumatic Image');
-                        return;
-                      }*/
                       storeRecords();
                     }),
                 ElevatedButton(

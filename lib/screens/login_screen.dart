@@ -1,18 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import '../ExportFile/export_file.dart';
 import 'package:http/http.dart' as http;
-import 'package:lmc/model/login_model.dart';
-import 'package:lmc/screens/dashboard_screen.dart';
-import 'package:lmc/style/text_style.dart';
-import 'package:lmc/utils/global_constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/custom_toast.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 
-import '../features/ChangePassword/presentations/Screen/change_password_screen.dart';
-import 'change_password_page.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -84,7 +72,14 @@ class _LoginState extends State<Login> {
                             Card(
                               elevation: 6.0,
                               child: TextFormField(
-                                autofillHints: [AutofillHints.email],
+                                keyboardType: TextInputType.emailAddress,
+                                autocorrect: false,
+                                autofillHints: const [
+                                  AutofillHints.username,
+                                  AutofillHints.email
+                                ],
+                                textCapitalization: TextCapitalization.none,
+                                textInputAction: TextInputAction.next,
                                 inputFormatters: [FilteringTextInputFormatter.deny(' ')],
                                 validator: (e) {
                                   if (e.isEmpty) {
@@ -116,7 +111,9 @@ class _LoginState extends State<Login> {
                             Card(
                               elevation: 6.0,
                               child: TextFormField(
-                                autofillHints: [AutofillHints.password],
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.done,
+                                autofillHints: const [AutofillHints.password],
                                 inputFormatters: [FilteringTextInputFormatter.deny(' ')],
                                 validator: (e) {
                                   if (e.isEmpty) {
@@ -254,7 +251,7 @@ class _LoginState extends State<Login> {
       });
       print("login--> " + res.body);
       try {
-        LoginDetails lgd = new LoginDetails.fromJson(json.decode(res.body));
+        LoginModel lgd = new LoginModel.fromJson(json.decode(res.body));
 
         if (lgd.status == 200 && lgd.user.role.toLowerCase().contains('lmc')) {
           SharedPreferences prefs = await SharedPreferences.getInstance();

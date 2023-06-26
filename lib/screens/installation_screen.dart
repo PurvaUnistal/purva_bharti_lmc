@@ -1,23 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:lmc/model/extra_price_pipe.dart';
-import 'package:lmc/model/free_material.dart';
-import 'package:lmc/model/hpcl_labels.dart';
 import 'package:lmc/model/lmc_model.dart';
-import 'package:lmc/model/meters_model.dart';
-import 'package:lmc/style/text_style.dart';
-import 'package:lmc/utils/global_constant.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../ExportFile/export_file.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
-import '../model/result_installation.dart';
 
 // ignore: must_be_immutable
 class InstallationScreen extends StatefulWidget {
