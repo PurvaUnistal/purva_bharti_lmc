@@ -50,15 +50,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isEdit) {
-      bpNumberController.text = widget.studentModel.bpNumber;
-      lmcIDController.text = widget.studentModel.lmcID;
-      dmaIDController.text = widget.studentModel.dmaID;
-      pic1 = widget.studentModel.image1 ?? "";
-      pic2 = widget.studentModel.image2 ?? "";
-      pic3 = widget.studentModel.image3 ?? "";
-      pic4 = widget.studentModel.image4 ?? "";
-    }
+      if (widget.isEdit) {
+        bpNumberController.text = widget.studentModel.bpNumber;
+        lmcIDController.text = widget.studentModel.lmcID;
+        dmaIDController.text = widget.studentModel.dmaID;
+        pic1 = widget.studentModel.image1 ?? "";
+        pic2 = widget.studentModel.image2 ?? "";
+        pic3 = widget.studentModel.image3 ?? "";
+        pic4 = widget.studentModel.image4 ?? "";
+      }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -503,10 +503,6 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
     var getBPNumber = bpNumberController.text;
     var getLmcID = lmcID;
     var getDmaID = dmaID;
-    // var   getImage1 = image1Controller.profileImage1.path.toString() ?? "";
-    // var  getImage2 = image2Controller.profileImage2.path.toString() ?? "";
-    // var getImage3 =  image3Controller.profileImage3.path.toString() ?? "";
-    // var getImage4 = image4Controller.profileImage4.path.toString() ?? "";
     var getImage1 = "", getImage2 = "", getImage3 = "", getImage4 = "";
     if (image1Controller.profileImage1 != null) {
       getImage1 = image1Controller.profileImage1.path.toString() ?? "";

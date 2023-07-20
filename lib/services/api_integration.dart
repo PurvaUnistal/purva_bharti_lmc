@@ -97,7 +97,8 @@ class ApiIntegration{
         }
       } catch(e){
         throw Exception('Failed to load data!');
-      }  }catch(exception )
+      }
+    }catch(exception )
     {
       print("request exception-->"+ exception.toString());
     }

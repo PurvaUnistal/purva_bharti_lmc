@@ -1,4 +1,5 @@
 import 'package:lmc/utils/RoundedButton.dart';
+import 'package:lmc/utils/commonWidgets/custom_validation_field.dart';
 import '../ExportFile/export_file.dart';
 
 
@@ -31,9 +32,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   String userId;
   getSharedPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-   setState(() {
-     userId  = prefs.getString(GlobalConstants.id);
-   });
+    setState(() {
+      userId  = prefs.getString(GlobalConstants.id);
+    });
   }
   void removeSpace(TextEditingController controller){
     if(controller.text.trim() == ""){
@@ -47,23 +48,23 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     RegExp smallRegex=  RegExp(r'[a-z]');
     RegExp charRegex=  RegExp(r'[!@#$%^&*(),.?":{}|<>]');
 
-    if(newPasswordController.value.text.isEmpty){
+    if(newPasswordController.value.text.trim().isEmpty){
       CustomToast.showToast("Password is required please enter");
       return false;
-    } else  if(!smallRegex.hasMatch(newPasswordController.text)){
+    } else  if(!smallRegex.hasMatch(newPasswordController.text.trim())){
       CustomToast.showToast("The Password must be at least one Small letter.");
       return false;
-    }else  if(!upperRegex.hasMatch(newPasswordController.text)){
+    }else  if(!upperRegex.hasMatch(newPasswordController.text.trim())){
       CustomToast.showToast("The Password must be at least one Uppercase letter.");
       return false;
     }
-    else if(newPasswordController.text.length < 8){
-      CustomToast.showToast("Password must be at least 8 characters long");
+    else if(newPasswordController.text.length < 6){
+      CustomToast.showToast("Password must be at least 6 characters long");
       return false;
-    }else  if(!charRegex.hasMatch(newPasswordController.text)){
+    }else  if(!charRegex.hasMatch(newPasswordController.text.trim())){
       CustomToast.showToast("The Password must be at least one special character.");
       return false;
-    } else if(conformPasswordController.text.isEmpty){
+    } else if(conformPasswordController.text.trim().isEmpty){
       CustomToast.showToast("Please enter conform password");
       return false;
     }else if(conformPasswordController.text.toString().trim() != newPasswordController.text.toString().trim()){
@@ -102,42 +103,45 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-
+  final formGlobalKey = GlobalKey<FormState>();
   Widget _buildLayout() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: SingleChildScrollView(
-          reverse: true,
-          physics: AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset("assets/icons/ic_launcher.png"),
-              horgentental(),
-              newPasswordValidation(),
-              horgentental(),
-              _confirmPasswordWidget(),
-              horgentental(),
-              horgentental(),
-             TextButton(
-               style: TextButton.styleFrom(
-                   foregroundColor: Colors.white,
-                   backgroundColor: Colors.blue,
-               ),
-                 child: Text("Change Password"),
-               onPressed: (){
-                 TextInput.finishAutofillContext();
-               getChangeData();
+    return Form(
+      key: formGlobalKey,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Center(
+          child: SingleChildScrollView(
+            reverse: true,
+            physics: AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/icons/ic_launcher.png"),
+                horgentental(),
+                newPasswordValidation(),
+                //   horgentental(),
+                _confirmPasswordWidget(),
+                horgentental(),
+                horgentental(),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: Text("Change Password"),
+                  onPressed: (){
+                    TextInput.finishAutofillContext();
+                    getChangeData();
 
-             },
-             ),
-              Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
-              )
-            ],
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -165,6 +169,26 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
+      maxLength:20,
+      onChanged: (value){
+        formGlobalKey.currentState.validate();
+        value =  conformPasswordController.text.trim().toString();
+      },
+      validator: (value){
+        bool passValid = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$').hasMatch(value);
+        if (value.trim().isEmpty) {
+          return "Conform Password cannot be emtpy!";
+        } if(value.length < 6){
+          return "Conform Password must be atleast 6 characters long";
+        }
+        if(value.length > 20){
+          return "Conform Password must be less than 20 characters";
+        }else if (!passValid) {
+          return "Requirement(s) missing!";
+        }
+        return null;
+
+      },
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
@@ -181,8 +205,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       isVisibility = !isVisibility;
     });
   }
-Widget newPasswordValidation(){
-    return PasswordValidatedFields(
+  CustomPasswordValidatedFields newPasswe = CustomPasswordValidatedFields();
+  Widget newPasswordValidation(){
+    return CustomPasswordValidatedFields(
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
@@ -215,7 +240,7 @@ Widget newPasswordValidation(){
 
       activeIcon: Icons.done_all,
     );
-}
+  }
 
   Widget horgentental(){
     return SizedBox(
