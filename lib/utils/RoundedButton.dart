@@ -1,4 +1,5 @@
-import '../ExportFile/export_file.dart';
+import 'package:flutter/material.dart';
+import 'package:password_validated_field/password_validated_field.dart';
 
 class RoundedButton extends StatelessWidget {
   RoundedButton({ this.colour, this.title, this.onPressed});
@@ -31,27 +32,19 @@ class RoundedButton extends StatelessWidget {
 class AppTextFormField extends StatelessWidget {
   final VoidCallback passwordOnPressed;
   final ValueChanged<String> onChanged;
-  final TextInputType keyboardType;
-  final  TextInputAction textInputAction;
   final TextEditingController controller;
   final String hintText;
   final String labelText;
-  final int maxLength;
   final IconData prefixIcon;
-  final Function(String) validator;
   final Iterable<String> autofillHints;
   const AppTextFormField({Key key,
     this.passwordOnPressed,
     this.onChanged,
-    this.keyboardType,
-    this.textInputAction,
     this.controller,
     this.hintText,
     this.labelText,
     this.prefixIcon,
-    this.autofillHints,
-    this.validator,
-    this.maxLength,
+    this.autofillHints
 
   }) : super(key: key);
 
@@ -60,18 +53,9 @@ class AppTextFormField extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(10.0),
         child: TextFormField(
-          inputFormatters: [
-            FilteringTextInputFormatter.deny(
-                RegExp(r'\s')),
-          ],
-          maxLength:maxLength,
-          validator:validator,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
         onChanged:onChanged,
-          controller: controller,
+        controller: controller,
         obscureText: true,
-          textCapitalization: TextCapitalization.words,
           autofillHints: autofillHints,
         decoration:  InputDecoration(
             hintText: hintText,

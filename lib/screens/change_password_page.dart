@@ -1,6 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lmc/utils/RoundedButton.dart';
-import 'package:lmc/utils/commonWidgets/custom_validation_field.dart';
-import '../ExportFile/export_file.dart';
+import 'package:lmc/utils/custom_toast.dart';
+import 'package:password_validated_field/password_validated_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/change_password_model.dart';
+import '../services/api_integration.dart';
+import '../utils/commonWidgets/common_dialog_box.dart';
+import '../utils/global_constant.dart';
+import '../utils/commonWidgets/logout_method.dart';
 
 
 class ChangePasswordPage extends StatefulWidget {
@@ -19,9 +28,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void initState() {
-    newPasswordController.addListener(()=>  removeSpace(newPasswordController));
-    conformPasswordController.addListener(()=>  removeSpace(conformPasswordController));
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
@@ -32,39 +38,34 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   String userId;
   getSharedPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userId  = prefs.getString(GlobalConstants.id);
-    });
-  }
-  void removeSpace(TextEditingController controller){
-    if(controller.text.trim() == ""){
-      setState(()=> controller.text = "");
-    }
-    print("controller==>"+controller.text);
+   setState(() {
+     userId  = prefs.getString(GlobalConstants.id);
+   });
   }
 
   Future getChangeData() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     RegExp upperRegex=  RegExp(r'[A-Z]');
     RegExp smallRegex=  RegExp(r'[a-z]');
     RegExp charRegex=  RegExp(r'[!@#$%^&*(),.?":{}|<>]');
 
-    if(newPasswordController.value.text.trim().isEmpty){
+    if(newPasswordController.value.text.isEmpty){
       CustomToast.showToast("Password is required please enter");
       return false;
-    } else  if(!smallRegex.hasMatch(newPasswordController.text.trim())){
+    } else  if(!smallRegex.hasMatch(newPasswordController.text)){
       CustomToast.showToast("The Password must be at least one Small letter.");
       return false;
-    }else  if(!upperRegex.hasMatch(newPasswordController.text.trim())){
+    }else  if(!upperRegex.hasMatch(newPasswordController.text)){
       CustomToast.showToast("The Password must be at least one Uppercase letter.");
       return false;
     }
-    else if(newPasswordController.text.length < 6){
-      CustomToast.showToast("Password must be at least 6 characters long");
+    else if(newPasswordController.text.length < 8){
+      CustomToast.showToast("Password must be at least 8 characters long");
       return false;
-    }else  if(!charRegex.hasMatch(newPasswordController.text.trim())){
+    }else  if(!charRegex.hasMatch(newPasswordController.text)){
       CustomToast.showToast("The Password must be at least one special character.");
       return false;
-    } else if(conformPasswordController.text.trim().isEmpty){
+    } else if(conformPasswordController.text.isEmpty){
       CustomToast.showToast("Please enter conform password");
       return false;
     }else if(conformPasswordController.text.toString().trim() != newPasswordController.text.toString().trim()){
@@ -87,7 +88,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           okBtnFunction: ()=>  LogOutMethod.logOut(context)
       );
 
-    } else{
+    }else{
       print("Null Data");
     }
   }
@@ -103,45 +104,42 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  final formGlobalKey = GlobalKey<FormState>();
-  Widget _buildLayout() {
-    return Form(
-      key: formGlobalKey,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: SingleChildScrollView(
-            reverse: true,
-            physics: AlwaysScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset("assets/icons/ic_launcher.png"),
-                horgentental(),
-                newPasswordValidation(),
-                //   horgentental(),
-                _confirmPasswordWidget(),
-                horgentental(),
-                horgentental(),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: Text("Change Password"),
-                  onPressed: (){
-                    TextInput.finishAutofillContext();
-                    getChangeData();
 
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
-                )
-              ],
-            ),
+  Widget _buildLayout() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Center(
+        child: SingleChildScrollView(
+          reverse: true,
+          physics: AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset("assets/icons/ic_launcher.png"),
+              horgentental(),
+              newPasswordValidation(),
+              horgentental(),
+              _confirmPasswordWidget(),
+              horgentental(),
+              horgentental(),
+             TextButton(
+               style: TextButton.styleFrom(
+                   foregroundColor: Colors.white,
+                   backgroundColor: Colors.blue,
+               ),
+                 child: Text("Change Password"),
+               onPressed: (){
+                 TextInput.finishAutofillContext();
+               getChangeData();
+
+             },
+             ),
+              Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
+              )
+            ],
           ),
         ),
       ),
@@ -169,28 +167,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
-      maxLength:20,
-      onChanged: (value){
-        formGlobalKey.currentState.validate();
-        value =  conformPasswordController.text.trim().toString();
-      },
-      validator: (value){
-        bool passValid = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$').hasMatch(value);
-        if (value.trim().isEmpty) {
-          return "Conform Password cannot be emtpy!";
-        } if(value.length < 6){
-          return "Conform Password must be atleast 6 characters long";
-        }
-        if(value.length > 20){
-          return "Conform Password must be less than 20 characters";
-        }else if (!passValid) {
-          return "Requirement(s) missing!";
-        }
-        return null;
-
-      },
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
       autofillHints: [AutofillHints.newPassword],
       controller: conformPasswordController,
       prefixIcon: Icons.lock_outline_rounded,
@@ -205,12 +181,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       isVisibility = !isVisibility;
     });
   }
-  CustomPasswordValidatedFields newPasswe = CustomPasswordValidatedFields();
-  Widget newPasswordValidation(){
-    return CustomPasswordValidatedFields(
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
-      autofillHints: [AutofillHints.newPassword],
+Widget newPasswordValidation(){
+    return PasswordValidatedFields(
       textEditingController: newPasswordController,
       obscureText: isVisibility,
       inputDecoration: InputDecoration(
@@ -240,7 +212,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
       activeIcon: Icons.done_all,
     );
-  }
+}
 
   Widget horgentental(){
     return SizedBox(
