@@ -39,6 +39,7 @@ dependencies:
   equatable: ^2.0.5
   password_validated_field: ^0.0.3
   shared_preferences: ^2.1.2
+  permission_handler: ^10.4.3
 
 dev_dependencies:
   hive_generator: ^2.0.0

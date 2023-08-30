@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lmc/model/lmc_model.dart';
 import '../ExportFile/export_file.dart';
 import 'installation_screen.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 
 class Home extends StatefulWidget {
   final String selection;
@@ -109,6 +109,7 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   @override
   void initState() {
     super.initState();
+    _multipleRequstPermission();
     getPref();
     _getLabelsData();
     getCountry();
@@ -125,6 +126,22 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
         _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), '${widget.selection}',bpNumber, area_id);
       }
     });
+  }
+
+  Future<bool> _multipleRequstPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,Permission.storage, Permission.camera,
+    ].request();
+    if(statuses[Permission.location].isGranted){
+      print("Location permission is isGranted.");
+    }
+    if(statuses[Permission.camera].isGranted){
+      print("Camera permission is isGranted.");
+    }
+    if(statuses[Permission.storage].isGranted){
+      print("Camera permission is isGranted.");
+    }
+    return true;
   }
   Future<String> getCountry() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
