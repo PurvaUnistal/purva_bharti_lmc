@@ -80,7 +80,11 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     var schema =  prefs.getString(GlobalConstants.schema);
     var token = prefs.get(GlobalConstants.token);
     var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi+schema),headers: { 'Authorization': token,});
+
+    print("getFreeMaterialUrlApi-->" + GlobalConstants.getFreeMaterialApi+schema);
     print("getFreeMaterialApi-->" + res.body);
+    print("base url-->" +GlobalConstants.getFreeMaterialApi+schema);
+    print("Authorization-->" +token);
     if(res.statusCode == 200) {
       FreeMaterial dataList = FreeMaterial.fromJson(json.decode(res.body));
       List<MaterialItem> materialList=[];

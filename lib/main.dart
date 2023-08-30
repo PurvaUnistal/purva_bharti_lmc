@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   final routes = <String, WidgetBuilder>{
     SplashScreen.tag: (context) => SplashScreen(),
-    '/_ChangePasswordScreenState': (BuildContext context) => ChangePasswordScreen(),
+  //  '/_ChangePasswordScreenState': (BuildContext context) => ChangePasswordScreen(),
   };
   @override
   Widget build(BuildContext context) {

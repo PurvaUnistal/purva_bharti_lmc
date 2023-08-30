@@ -469,7 +469,8 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
                               Expanded(
                                 child: Align(
                                   alignment: Alignment.centerRight,
-                                  child: rows.dmaRegId == null ? InkWell(
+                                  child: rows.dmaRegId == null
+                                      ? InkWell(
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: Colors.blue,

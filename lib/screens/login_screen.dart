@@ -267,19 +267,19 @@ class _LoginState extends State<Login> {
           // CustomToast.showToast(lgd.messages);
           if (lgd.user.role.toLowerCase().contains('lmc')) {
             CustomToast.showToast(lgd.messages);
-            if(lgd.user.pwdChanged == "0"){
+         /*   if(lgd.user.pwdChanged == "0"){
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                     (Route<dynamic> route) => false,
               );
-            }else{
+            }else{*/
                Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => DashboardScreen()),
               (Route<dynamic> route) => false,
             );
-            }
+         //   }
 
           } else {
             CustomToast.showToast('Invalid UserName and Password');

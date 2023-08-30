@@ -17,19 +17,19 @@ class _SplashScreenState extends State<SplashScreen> {
     _isLogin = prefs.getBool(GlobalConstants.isUserLogIn) ?? false;
     String changePassword = prefs.getString(GlobalConstants.changePassword);
     print("_isLogin--> $_isLogin");
-    if(changePassword == "0"){
+   /* if(changePassword == "0"){
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => ChangePasswordPage()),
             (Route<dynamic> route) => false,
       );
-    }else {
+    }else {*/
       if(_isLogin) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardScreen()),);
       }else{
         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Login()));
       }
-    }
+   // }
 
   }
   Future<Timer> timeDuration() async {

@@ -67,7 +67,9 @@ class InstallationScreenPage extends State<InstallationScreen> {
   Future<void> _getFreeMaterialData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var schema = prefs.getString(GlobalConstants.schema);
-    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi + schema));
+    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi + schema),headers: {
+    "authorization": token,
+    } );
     print("getFreeMaterialApi-->" + res.body);
     if (res.statusCode == 200) {
       FreeMaterial dataList = FreeMaterial.fromJson(json.decode(res.body));
@@ -109,7 +111,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var url = GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
     var res = await http.get(Uri.parse(url), headers: {
       "authorization": token,
-    });
+    }
+    );
     print("getMeters--> ${res.body.toString()}");
     Meters dataList = Meters.fromJson(json.decode(res.body));
     print("meterSerial${dataList.data.toString()}");
@@ -469,13 +472,18 @@ class InstallationScreenPage extends State<InstallationScreen> {
       _extrePrice = extraPriceController.text.split(' ').first;
     else
       _extrePrice = extraPriceController.text;
+   double initialData = double.parse(initialReadingController.text) + double.parse(initialReadingController2.text) + double.parse(initialReadingController3.text);
+   double initialReadingData = initialData/1000;
+   print(initialData);
+   print(initialReadingData);
     Map<String, String> requestBody = <String, String>{
       "dma_id": widget.rows.dma,
       "actual_work_start": workStartDateController.text,
       "meter_number": meterNoController.text,
       "delay_reason": _reasonIfDelay.title == 'Select Reason Delay' ? '' : _reasonIfDelay.title,
       "meter_reading_date": meterReadingDateController.text,
-      "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
+     // "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
+      "meter_reading": initialReadingData.toString(),
       "tf_number": (tfNoController.text),
       "latitude_tf": tfLatitudeController.text,
       "longitude_tf": tfLongitudeController.text,
@@ -495,7 +503,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
       'regulators': currentMeterNoId2,
       'feasibility_id': widget.rows.lmcFeasId,
     };
-    print("request+1 " + requestBody.toString());
+    print("request+1 data Print " + requestBody.toString());
+    print("meter_reading"+ initialReadingController.text + initialReadingController2.text + initialReadingController3.text);
     setState(() {
       hideButton = !hideButton;
     });
@@ -518,13 +527,17 @@ class InstallationScreenPage extends State<InstallationScreen> {
     try {
       if (_res.success == 200) {
         _showMyDialog(context, _res.data);
+        print(_res.data);
       } else if (_res.success == 403) {
         _showMyDialog(context, _res.data);
+        print(_res.data);
       } else {
         _showErrorDialog(context, " " + _res.toString());
+        print(_res.data);
       }
     } catch (e) {
       _showMyDialog(context, e.toString());
+      print(e.toString());
       pr.hide();
     }
   }
@@ -647,6 +660,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
     _getCurrentLocation('TF');
     _getCurrentLocation('');
     super.initState();
+    print("widget.rows--->");
+    print(widget.rows.dmaId);
+    print(currentMeterNoId);
+    print(widget.rows.lmcFeasId);
     pr = ProgressDialog(context);
     pr = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
     _reasonIfDelay = reasonArrItems.first.value;

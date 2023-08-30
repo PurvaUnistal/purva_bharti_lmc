@@ -813,7 +813,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
   }
 
   gotoInstallation(BuildContext context, Rows rows) async {
-    String received = await Navigator.push(mContext, MaterialPageRoute(builder: (context) => InstallationScreen(rows: rows, action: 'Push')));
+    String received = await Navigator.push(mContext, MaterialPageRoute(builder: (context) =>
+        InstallationScreen(rows: rows, action: 'Push')));
     if (received == 'Refresh') {
       Navigator.of(context).pop();
       getPref();
