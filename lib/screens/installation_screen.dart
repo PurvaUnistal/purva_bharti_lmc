@@ -52,12 +52,13 @@ class InstallationScreenPage extends State<InstallationScreen> {
   String currentMeterNo = "";
   String currentMeterNoId = "";
 
-  List<MeterData> meterDataList2 = [];
-  List<String> meterNoList2 = [];
+  List<MeterData> regulatorListData = [];
+  List<String> regulatorMeterNoList = [];
   List<String> meterNoIdList2 = [];
   String currentMeterNo2 = "";
-  String currentMeterNoId2 = "";
-  GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
+  String currentRegulatorList = "";
+  GlobalKey<AutoCompleteTextFieldState<String>> key1 = GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key2 = GlobalKey();
   List<String> addedMeterNo = [];
   List<DropdownMenuItem<OptionItem>> typeOfNrItems = ([]);
   OptionItem _typeOfNrc;
@@ -109,13 +110,9 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var token = prefs.getString(GlobalConstants.token);
     var schema = prefs.getString(GlobalConstants.schema);
     var url = GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
-    var res = await http.get(Uri.parse(url), headers: {
-      "authorization": token,
-    }
-    );
-    print("getMeters--> ${res.body.toString()}");
+    var res = await http.get(Uri.parse(url), headers: {"authorization": token,});
+    print("getMeterNumberList--> ${res.body.toString()}");
     Meters dataList = Meters.fromJson(json.decode(res.body));
-    print("meterSerial${dataList.data.toString()}");
     if (dataList.success == 200) {
       List<String> _meterNoList = [];
       List<String> _meterNoIdList = [];
@@ -146,24 +143,21 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var res = await http.get(Uri.parse(url), headers: {
       "authorization": token,
     });
-    print("getMeters--> ${res.body.toString()}");
-    Meters dataList2 = Meters.fromJson(json.decode(res.body));
-    print("meterSerial${dataList2.data.toString()}");
-    if (dataList2.success == 200) {
+    print("getMeterRegulatorList--> ${res.body.toString()}");
+    Meters regulatorList = Meters.fromJson(json.decode(res.body));
+    if (regulatorList.success == 200) {
       List<String> _meterNoList2 = [];
       List<String> _meterNoIdList2 = [];
-      meterDataList2 = List.generate(
-        dataList2.data.length,
-        (i) => dataList2.data[i],
-      );
-      _meterNoList2 = List.generate(dataList2.data.length, (i) => ('${dataList2.data[i].serialNumber}'));
+      regulatorListData = List.generate(
+        regulatorList.data.length, (i) => regulatorList.data[i],);
+      _meterNoList2 = List.generate(regulatorList.data.length, (i) => ('${regulatorList.data[i].serialNumber}'));
       _meterNoIdList2 = List.generate(
-        dataList2.data.length,
-        (i) => '${dataList2.data[i].id}',
+        regulatorList.data.length,
+        (i) => '${regulatorList.data[i].id}',
       );
       if (!mounted) return;
       setState(() {
-        meterNoList2.addAll(_meterNoList2);
+        regulatorMeterNoList.addAll(_meterNoList2);
         meterNoIdList2.addAll(_meterNoIdList2);
       });
     }
@@ -472,18 +466,19 @@ class InstallationScreenPage extends State<InstallationScreen> {
       _extrePrice = extraPriceController.text.split(' ').first;
     else
       _extrePrice = extraPriceController.text;
-   double initialData = double.parse(initialReadingController.text) + double.parse(initialReadingController2.text) + double.parse(initialReadingController3.text);
-   double initialReadingData = initialData/1000;
-   print(initialData);
-   print(initialReadingData);
+    String initReaderAdd = initialReadingController.text + initialReadingController2.text + initialReadingController3.text;
+    double changeinitialReading = double.parse(initReaderAdd);
+    double dividerinitialReading = changeinitialReading / 1000;
+    print(dividerinitialReading);
+    print(initialReadingController.text + initialReadingController2.text + initialReadingController3.text);
     Map<String, String> requestBody = <String, String>{
       "dma_id": widget.rows.dma,
       "actual_work_start": workStartDateController.text,
       "meter_number": meterNoController.text,
       "delay_reason": _reasonIfDelay.title == 'Select Reason Delay' ? '' : _reasonIfDelay.title,
       "meter_reading_date": meterReadingDateController.text,
-     // "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
-      "meter_reading": initialReadingData.toString(),
+    //  "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
+      "meter_reading": dividerinitialReading.toString(),
       "tf_number": (tfNoController.text),
       "latitude_tf": tfLatitudeController.text,
       "longitude_tf": tfLongitudeController.text,
@@ -500,7 +495,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       'conversion_date': conversionDateController.text,
       'type_of_nr': _typeOfNrValue,
       'ngc': _readyForNgcValue,
-      'regulators': currentMeterNoId2,
+      'regulators': currentRegulatorList,
       'feasibility_id': widget.rows.lmcFeasId,
     };
     print("request+1 data Print " + requestBody.toString());
@@ -660,10 +655,6 @@ class InstallationScreenPage extends State<InstallationScreen> {
     _getCurrentLocation('TF');
     _getCurrentLocation('');
     super.initState();
-    print("widget.rows--->");
-    print(widget.rows.dmaId);
-    print(currentMeterNoId);
-    print(widget.rows.lmcFeasId);
     pr = ProgressDialog(context);
     pr = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
     _reasonIfDelay = reasonArrItems.first.value;
@@ -691,10 +682,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Date propose ${widget.rows.proposedDate}");
     proposedDateController.text = '${"${widget.rows.proposedDate}".split(' ')[0]}';
+
     _autoCompleteTextView = SimpleAutoCompleteTextField(
-      //  key: key,
+        key: key1,
       decoration: new InputDecoration(
         labelStyle: new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         hintText: 'XYZ-000-00',
@@ -707,6 +698,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       suggestions: meterNoList,
       textChanged: (text) => {
         currentMeterNo = text,
+        print("suggestions--->$meterNoList"),
       },
       clearOnSubmit: false,
       textSubmitted: (text) => setState(() {
@@ -716,6 +708,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
           try {
             int i = meterNoList.indexWhere((element) => element.contains(text));
             currentMeterNoId = meterNoIdList.elementAt(i);
+            print("currentMeterNoId--->"+currentMeterNoId);
           } catch (e) {
             _toast(e.toString());
           }
@@ -724,7 +717,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
     );
 
     _autoCompleteTextView2 = SimpleAutoCompleteTextField(
-      key: key,
+      key: key2,
       decoration: new InputDecoration(
         labelStyle: new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         hintText: 'XYZ-000-00',
@@ -734,7 +727,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
       ),
       controller: regulatorNoController,
-      suggestions: meterNoList2,
+      suggestions: regulatorMeterNoList,
       textChanged: (text) => {
         currentMeterNo2 = text,
       },
@@ -744,8 +737,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
           //addedMeterNo.clear();
           //addedMeterNo.add(text);
           try {
-            int i = meterNoList2.indexWhere((element) => element.contains(text));
-            currentMeterNoId2 = meterNoIdList2.elementAt(i);
+            int i = regulatorMeterNoList.indexWhere((element) => element.contains(text));
+            currentRegulatorList = meterNoIdList2.elementAt(i);
           } catch (e) {
             _toast(e.toString());
           }

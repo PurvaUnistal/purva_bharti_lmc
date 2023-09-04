@@ -255,7 +255,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   )),
                   Text("GA : " + schema),
                   Text("LMC Version : 1"),
-                  Text("Release Date : 29-08-2023"),
+                  Text("Release Date : 01-09-2023"),
                 ],
               ),
             ),

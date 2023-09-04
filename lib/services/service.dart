@@ -16,6 +16,8 @@ class Service implements DataRepository{
     return http.get(Uri.parse(_url),headers: {'Authorization':'$token'}).then((value) async {
       JsonDecoder _decoder = new JsonDecoder();
       final jsonData = _decoder.convert(value.body);
+      print("selection-->" +selection);
+      print("_urlselection-->" +_url);
       print("getLmcApi-->" +value.body);
       print("lmcDataList--> ${jsonData.toString()}");
       int status = jsonData["success"];
