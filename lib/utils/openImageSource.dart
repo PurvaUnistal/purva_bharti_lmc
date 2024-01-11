@@ -61,7 +61,7 @@ class ImageCircle extends StatelessWidget {
                   },
                 );
                 AlertDialog alert = AlertDialog(
-                  title: Text("HPCL DMA"),
+                  title: Text("PBG DMA"),
                   content: Image.file(File(pathImage)),
                   actions: [
                     okButton,

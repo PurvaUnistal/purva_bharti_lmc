@@ -15,10 +15,14 @@ class _CustomerRecordsState extends State<CustomerRecords> {
         // Do something here
         print("After clicking the Android Back Button");
         //  return Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (_) =>  DashboardScreen()),(r) => false);
-        return Navigator.push(context,MaterialPageRoute(builder: (context) => DashboardScreen()));
+        return Navigator.push(context,
+            MaterialPageRoute(builder: (context) => DashboardScreen()));
       },
       child: Scaffold(
-        appBar: AppBar(title: Text("Data"),),
+          appBar: AppBar(
+            backgroundColor: Colors.green.shade800,
+            title: Text("Data"),
+          ),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -26,13 +30,14 @@ class _CustomerRecordsState extends State<CustomerRecords> {
               children: [
                 Card(
                   shape: Border(
-                    left: BorderSide(color: Colors.blue, width: 15),
-                    right: BorderSide(color: Colors.blue, width: 15),),
+                    left: BorderSide(color: Colors.green.shade800, width: 15),
+                    right: BorderSide(color: Colors.yellow.shade800, width: 15),
+                  ),
                   elevation: 5,
-                  shadowColor: Colors.lightBlueAccent,
+                  shadowColor: Colors.green.shade500,
                   color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:7),
+                    padding: const EdgeInsets.symmetric(horizontal: 7),
                     child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: _itemList.length,
@@ -44,13 +49,14 @@ class _CustomerRecordsState extends State<CustomerRecords> {
                 ),
               ],
             ),
-          )
-      ),
+          )),
     );
   }
+
   get _itemList {
     List<Widget> list = [];
-    list.add(listItem("", "LMC Images", icon: Icons.list_alt_outlined,click: () {
+    list.add(
+        listItem("", "LMC Images", icon: Icons.list_alt_outlined, click: () {
       showView(BPListDataImagePage());
     }));
     list.add(listItem("", "View and Sync Records", icon: Icons.sync, click: () {
@@ -61,7 +67,8 @@ class _CustomerRecordsState extends State<CustomerRecords> {
 
   showView(Object object) async {
     var result = await Navigator.push(
-        context,MaterialPageRoute(
+        context,
+        MaterialPageRoute(
           builder: (context) => object,
         ));
     print("result $result");
@@ -72,8 +79,7 @@ class _CustomerRecordsState extends State<CustomerRecords> {
     return result;
   }
 
-  getBundle(Map<String, dynamic> bundle) {
-  }
+  getBundle(Map<String, dynamic> bundle) {}
   listItem(step, title, {icon, color, Function click}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -88,20 +94,34 @@ class _CustomerRecordsState extends State<CustomerRecords> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                icon != null  ? Container(
-                  padding: EdgeInsets.all(11),
-                  margin: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey)),
-                  child: new Icon(icon,color: color ?? Theme.of(context).primaryColor,),
-                  alignment: Alignment.centerLeft,
-                ) : Container(),
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.center,)         ,
-                Container(height: 10,),
+                icon != null
+                    ? Container(
+                        padding: EdgeInsets.all(11),
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey)),
+                        child: new Icon(
+                          icon,
+                          color: color ?? Theme.of(context).primaryColor,
+                        ),
+                        alignment: Alignment.centerLeft,
+                      )
+                    : Container(),
+                Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                Container(
+                  height: 10,
+                ),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Text(step, style: TextStyle(color: Colors.blue, fontStyle: FontStyle.italic),textAlign: TextAlign.end),
+                  child: Text(step,
+                      style: TextStyle(
+                          color: Colors.green, fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.end),
                 ),
               ],
             ),

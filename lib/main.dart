@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child:  MaterialApp(
         debugShowCheckedModeBanner: false,
-          title: 'HPCL LMC',
+          title: 'PBG LMC',
           routes: routes,
           home: SplashScreen(),
         )

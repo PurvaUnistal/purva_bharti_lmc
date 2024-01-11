@@ -3,7 +3,6 @@ import '../ExportFile/export_file.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-
 // ignore: must_be_immutable
 class InstallationScreen extends StatefulWidget {
   Rows rows;
@@ -15,9 +14,12 @@ class InstallationScreen extends StatefulWidget {
 
 class InstallationScreenPage extends State<InstallationScreen> {
   bool hideButton = false;
-  TextEditingController workStartDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
-  TextEditingController conversionDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
-  TextEditingController proposedDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController workStartDateController = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController conversionDateController = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController proposedDateController = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
   TextEditingController regulatorNoController = TextEditingController(text: '');
   TextEditingController extraPipeController = TextEditingController(text: '0');
   TextEditingController extraPriceController = TextEditingController(text: '0');
@@ -28,18 +30,25 @@ class InstallationScreenPage extends State<InstallationScreen> {
   TextEditingController tfLatitudeController = TextEditingController();
   TextEditingController houseLongitudeController = TextEditingController();
   TextEditingController houseLatitudeController = TextEditingController();
-  TextEditingController workCompleteDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
-  TextEditingController workAcknowledgmentDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController workCompleteDateController = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController workAcknowledgmentDateController =
+      TextEditingController(
+          text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
 
   PhotoController meterImgController = PhotoController();
   PhotoController isometricImgController = PhotoController();
   PhotoController workCompleteController = PhotoController();
   PhotoController acknowledgmentImgController = PhotoController();
   TextEditingController meterNoController = TextEditingController(text: '');
-  TextEditingController initialReadingController = TextEditingController(text: '');
-  TextEditingController initialReadingController2 = TextEditingController(text: '');
-  TextEditingController initialReadingController3 = TextEditingController(text: '');
-  TextEditingController meterReadingDateController = TextEditingController(text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  TextEditingController initialReadingController =
+      TextEditingController(text: '');
+  TextEditingController initialReadingController2 =
+      TextEditingController(text: '');
+  TextEditingController initialReadingController3 =
+      TextEditingController(text: '');
+  TextEditingController meterReadingDateController = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
 
   Position tfPositional;
   Position housePositional;
@@ -68,9 +77,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
   Future<void> _getFreeMaterialData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var schema = prefs.getString(GlobalConstants.schema);
-    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi + schema),headers: {
-    "authorization": token,
-    } );
+    var res = await http
+        .get(Uri.parse(GlobalConstants.getFreeMaterialApi + schema), headers: {
+      "authorization": token,
+    });
     print("getFreeMaterialApi-->" + res.body);
     if (res.statusCode == 200) {
       FreeMaterial dataList = FreeMaterial.fromJson(json.decode(res.body));
@@ -78,8 +88,12 @@ class InstallationScreenPage extends State<InstallationScreen> {
 
       materialList = List.generate(
         dataList.data.length,
-        (i) =>
-            MaterialItem(value: '0', id: '${dataList.data[i].id}', name: '${dataList.data[i].materialName}', label: '${dataList.data[i].materialUnit}', controller: TextEditingController(text: '0')),
+        (i) => MaterialItem(
+            value: '0',
+            id: '${dataList.data[i].id}',
+            name: '${dataList.data[i].materialName}',
+            label: '${dataList.data[i].materialUnit}',
+            controller: TextEditingController(text: '0')),
       );
       if (!mounted) return;
       setState(() {
@@ -109,8 +123,11 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var id = prefs.getString(GlobalConstants.id);
     var token = prefs.getString(GlobalConstants.token);
     var schema = prefs.getString(GlobalConstants.schema);
-    var url = GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
-    var res = await http.get(Uri.parse(url), headers: {"authorization": token,});
+    var url =
+        GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
+    var res = await http.get(Uri.parse(url), headers: {
+      "authorization": token,
+    });
     print("getMeterNumberList--> ${res.body.toString()}");
     Meters dataList = Meters.fromJson(json.decode(res.body));
     if (dataList.success == 200) {
@@ -120,7 +137,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
         dataList.data.length,
         (i) => dataList.data[i],
       );
-      _meterNoList = List.generate(dataList.data.length, (i) => ('${dataList.data[i].serialNumber}'));
+      _meterNoList = List.generate(
+          dataList.data.length, (i) => ('${dataList.data[i].serialNumber}'));
       _meterNoIdList = List.generate(
         dataList.data.length,
         (i) => '${dataList.data[i].id}',
@@ -138,7 +156,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var id = prefs.getString(GlobalConstants.id);
     var token = prefs.getString(GlobalConstants.token);
     var schema = prefs.getString(GlobalConstants.schema);
-    var url = GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
+    var url =
+        GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
     print("urls--> $url");
     var res = await http.get(Uri.parse(url), headers: {
       "authorization": token,
@@ -149,8 +168,11 @@ class InstallationScreenPage extends State<InstallationScreen> {
       List<String> _meterNoList2 = [];
       List<String> _meterNoIdList2 = [];
       regulatorListData = List.generate(
-        regulatorList.data.length, (i) => regulatorList.data[i],);
-      _meterNoList2 = List.generate(regulatorList.data.length, (i) => ('${regulatorList.data[i].serialNumber}'));
+        regulatorList.data.length,
+        (i) => regulatorList.data[i],
+      );
+      _meterNoList2 = List.generate(regulatorList.data.length,
+          (i) => ('${regulatorList.data[i].serialNumber}'));
       _meterNoIdList2 = List.generate(
         regulatorList.data.length,
         (i) => '${regulatorList.data[i].id}',
@@ -244,9 +266,13 @@ class InstallationScreenPage extends State<InstallationScreen> {
     // "paintaingofGIpipe": '0'
   };
   Future<void> isRfcList() async {
-    var res = await http.get(Uri.parse(
-      GlobalConstants.getRfc,
-    ), headers: { 'Authorization': token,});
+    var res = await http.get(
+        Uri.parse(
+          GlobalConstants.getRfc,
+        ),
+        headers: {
+          'Authorization': token,
+        });
     print("getRfc--> " + res.body);
     final decoded = jsonDecode(res.body) as Map;
     decoded.forEach((k, v) {
@@ -260,9 +286,13 @@ class InstallationScreenPage extends State<InstallationScreen> {
   }
 
   Future<void> getReadyForNgc() async {
-    var res = await http.get(Uri.parse(
-      GlobalConstants.getReadyForNgc,
-    ),headers: { 'Authorization': token,});
+    var res = await http.get(
+        Uri.parse(
+          GlobalConstants.getReadyForNgc,
+        ),
+        headers: {
+          'Authorization': token,
+        });
     print("getReadyForNgc--> " + res.body);
     final decoded = jsonDecode(res.body) as Map;
     decoded.forEach((k, v) {
@@ -276,7 +306,13 @@ class InstallationScreenPage extends State<InstallationScreen> {
     });
   }
 
-  getTextFormField(TextEditingController controller, {Function(String) onChanged, String hintText, String fieldText, int maxLimit, bool focusable = false, TextInputType keyboardType}) {
+  getTextFormField(TextEditingController controller,
+      {Function(String) onChanged,
+      String hintText,
+      String fieldText,
+      int maxLimit,
+      bool focusable = false,
+      TextInputType keyboardType}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
       child: DefaultTextStyle(
@@ -286,14 +322,23 @@ class InstallationScreenPage extends State<InstallationScreen> {
           keyboardType: keyboardType,
           maxLength: maxLimit ?? 20,
           autofocus: focusable,
-          decoration: new InputDecoration(border: OutlineInputBorder(), labelText: hintText, hintText: fieldText ?? ""),
+          decoration: new InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: hintText,
+              hintText: fieldText ?? ""),
           onChanged: onChanged,
         ),
       ),
     );
   }
 
-  getTextMeterFormField(TextEditingController controller, {Function(String) onChanged, String hintText, String fieldText, int maxLimit, bool focusable = false, TextInputType keyboardType}) {
+  getTextMeterFormField(TextEditingController controller,
+      {Function(String) onChanged,
+      String hintText,
+      String fieldText,
+      int maxLimit,
+      bool focusable = false,
+      TextInputType keyboardType}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
       child: DefaultTextStyle(
@@ -316,7 +361,12 @@ class InstallationScreenPage extends State<InstallationScreen> {
     );
   }
 
-  getLatLongTextField(TextEditingController controller, {Function(String) onChanged, String hintText, String fieldText, bool focusable = false, TextInputType keyboardType = TextInputType.text}) {
+  getLatLongTextField(TextEditingController controller,
+      {Function(String) onChanged,
+      String hintText,
+      String fieldText,
+      bool focusable = false,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
       child: DefaultTextStyle(
@@ -325,7 +375,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
           keyboardType: keyboardType,
           controller: controller,
           enabled: focusable,
-          decoration: new InputDecoration(border: OutlineInputBorder(), labelText: fieldText ?? hintText ?? "", hintText: hintText ?? fieldText ?? ""),
+          decoration: new InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: fieldText ?? hintText ?? "",
+              hintText: hintText ?? fieldText ?? ""),
           onChanged: (value) {
             if (onChanged != null) onChanged(value);
           },
@@ -334,7 +387,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
     );
   }
 
-  getTextField(String hintText, String fieldText, {TextEditingController controller, Function onChanged, TextInputType keyboardType = TextInputType.text}) {
+  getTextField(String hintText, String fieldText,
+      {TextEditingController controller,
+      Function onChanged,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: DefaultTextStyle(
@@ -346,13 +402,17 @@ class InstallationScreenPage extends State<InstallationScreen> {
           autofocus: false,
           enabled: false,
           initialValue: fieldText,
-          decoration: new InputDecoration(border: OutlineInputBorder(), labelText: hintText, hintText: hintText),
+          decoration: new InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: hintText,
+              hintText: hintText),
         ),
       ),
     );
   }
 
-  getDropDown(dropListModel, OptionItem _value, {title, Function(OptionItem optionItem) onChanged}) {
+  getDropDown(dropListModel, OptionItem _value,
+      {title, Function(OptionItem optionItem) onChanged}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: DropdownButtonFormField<OptionItem>(
@@ -402,13 +462,20 @@ class InstallationScreenPage extends State<InstallationScreen> {
     if (workStartDateController.text == '') {
       _toast('Select Work Start Date');
       return;
-    } else if (((DateTime.parse(workStartDateController.text).difference(DateTime.parse(proposedDateController.text)).inDays > 0) && (_reasonIfDelay.title == 'Select Delay Reason'))) {
+    } else if (((DateTime.parse(workStartDateController.text)
+                .difference(DateTime.parse(proposedDateController.text))
+                .inDays >
+            0) &&
+        (_reasonIfDelay.title == 'Select Delay Reason'))) {
       _toast('Select Delay Reason');
       return;
     } else if (meterNoController.text == '') {
       _toast('Enter Meter No.');
       return;
-    } else if (initialReadingController.text + initialReadingController2.text + initialReadingController3.text == '') {
+    } else if (initialReadingController.text +
+            initialReadingController2.text +
+            initialReadingController3.text ==
+        '') {
       _toast('Enter Meter Reading');
       return;
     } else if (meterReadingDateController.text == '') {
@@ -417,7 +484,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     } else if (regulatorNoController.text == '') {
       _toast('Enter Regulator No.');
       return;
-    } else if (meterImgController.imagePath == null || meterImgController.imagePath.path == '') {
+    } else if (meterImgController.imagePath == null ||
+        meterImgController.imagePath.path == '') {
       _toast('Choose Meter Photo');
       return;
     } else if (tfLatitudeController.text == '') {
@@ -441,7 +509,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     //   return;
     // }
     if (meterNoController.text != '') {
-      int i = meterNoList.indexWhere((element) => element == (meterNoController.text));
+      int i = meterNoList
+          .indexWhere((element) => element == (meterNoController.text));
       if (i > -1) {
         currentMeterNoId = meterNoIdList.elementAt(i);
       } else {
@@ -453,9 +522,18 @@ class InstallationScreenPage extends State<InstallationScreen> {
       return;
     }
     var _arrId = _materialList.asMap().values.map((e) => e.id).toList();
-    var _arrQty = _materialList.asMap().values.map((e) => e.controller.text).toList();
-    var _qtyArr = _arrQty.toString().replaceAll(', ', ',').replaceAll('[', '').replaceAll(']', '');
-    var _idArr = _arrId.toString().replaceAll(', ', ',').replaceAll('[', '').replaceAll(']', '');
+    var _arrQty =
+        _materialList.asMap().values.map((e) => e.controller.text).toList();
+    var _qtyArr = _arrQty
+        .toString()
+        .replaceAll(', ', ',')
+        .replaceAll('[', '')
+        .replaceAll(']', '');
+    var _idArr = _arrId
+        .toString()
+        .replaceAll(', ', ',')
+        .replaceAll('[', '')
+        .replaceAll(']', '');
     String _extrePipe = '0';
     String _extrePrice = '0';
     if (extraPipeController.text.toLowerCase().contains('meter'))
@@ -466,18 +544,24 @@ class InstallationScreenPage extends State<InstallationScreen> {
       _extrePrice = extraPriceController.text.split(' ').first;
     else
       _extrePrice = extraPriceController.text;
-    String initReaderAdd = initialReadingController.text + initialReadingController2.text + initialReadingController3.text;
+    String initReaderAdd = initialReadingController.text +
+        initialReadingController2.text +
+        initialReadingController3.text;
     double changeinitialReading = double.parse(initReaderAdd);
     double dividerinitialReading = changeinitialReading / 1000;
     print(dividerinitialReading);
-    print(initialReadingController.text + initialReadingController2.text + initialReadingController3.text);
+    print(initialReadingController.text +
+        initialReadingController2.text +
+        initialReadingController3.text);
     Map<String, String> requestBody = <String, String>{
       "dma_id": widget.rows.dma,
       "actual_work_start": workStartDateController.text,
       "meter_number": meterNoController.text,
-      "delay_reason": _reasonIfDelay.title == 'Select Reason Delay' ? '' : _reasonIfDelay.title,
+      "delay_reason": _reasonIfDelay.title == 'Select Reason Delay'
+          ? ''
+          : _reasonIfDelay.title,
       "meter_reading_date": meterReadingDateController.text,
-    //  "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
+      //  "meter_reading": initialReadingController.text + initialReadingController2.text + initialReadingController3.text,
       "meter_reading": dividerinitialReading.toString(),
       "tf_number": (tfNoController.text),
       "latitude_tf": tfLatitudeController.text,
@@ -499,7 +583,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
       'feasibility_id': widget.rows.lmcFeasId,
     };
     print("request+1 data Print " + requestBody.toString());
-    print("meter_reading"+ initialReadingController.text + initialReadingController2.text + initialReadingController3.text);
+    print("meter_reading" +
+        initialReadingController.text +
+        initialReadingController2.text +
+        initialReadingController3.text);
     setState(() {
       hideButton = !hideButton;
     });
@@ -508,8 +595,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers.addAll(headers);
     request.fields.addAll(requestBody);
-    if (!(meterImgController == null || meterImgController.imagePath.path == '')) {
-      var pic1 = await http.MultipartFile.fromPath("meter_photo", meterImgController.imagePath.path);
+    if (!(meterImgController == null ||
+        meterImgController.imagePath.path == '')) {
+      var pic1 = await http.MultipartFile.fromPath(
+          "meter_photo", meterImgController.imagePath.path);
       request.files.add(pic1);
     }
     print("Request --> " + requestBody.toString());
@@ -569,7 +658,9 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var token = prefs.get(GlobalConstants.token);
     var res = prefs.get(GlobalConstants.hpclLabels ?? '');
     if (res == '') {
-      var _res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': token,});
+      var _res = await http.get(Uri.parse(GlobalConstants.getLabels), headers: {
+        'Authorization': token,
+      });
       print("getLabels-->" + _res.body);
       res = _res.body;
     }
@@ -627,13 +718,19 @@ class InstallationScreenPage extends State<InstallationScreen> {
         "schema": schema,
         "pipeQty": quantity.toString(),
       };
-      var _res = await http.post(Uri.parse(GlobalConstants.getExtraPipeDetails), body: requestBody, headers: {'authorization': '$token'});
+      var _res = await http.post(Uri.parse(GlobalConstants.getExtraPipeDetails),
+          body: requestBody, headers: {'authorization': '$token'});
       print("getExtraPipeDetails--> ${_res.body.toString()}");
-      ExtraPipePrice extraPipePrice = new ExtraPipePrice.fromJson(json.decode(_res.body));
+      ExtraPipePrice extraPipePrice =
+          new ExtraPipePrice.fromJson(json.decode(_res.body));
       if (!extraPipePrice.error && extraPipePrice.data != null) {
         setState(() {
-          extraPriceController.text = extraPipePrice.data.price.toString() + ' ' + extraPipePrice.data.priceUm;
-          extraPipeController.text = extraPipePrice.data.qty.toString() + ' ' + extraPipePrice.data.pipeUm;
+          extraPriceController.text = extraPipePrice.data.price.toString() +
+              ' ' +
+              extraPipePrice.data.priceUm;
+          extraPipeController.text = extraPipePrice.data.qty.toString() +
+              ' ' +
+              extraPipePrice.data.pipeUm;
         });
       } else {
         setState(() {
@@ -656,7 +753,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     _getCurrentLocation('');
     super.initState();
     pr = ProgressDialog(context);
-    pr = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+    pr = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
     _reasonIfDelay = reasonArrItems.first.value;
     _getLabelsData();
     _getMeters();
@@ -682,12 +780,14 @@ class InstallationScreenPage extends State<InstallationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    proposedDateController.text = '${"${widget.rows.proposedDate}".split(' ')[0]}';
+    proposedDateController.text =
+        '${"${widget.rows.proposedDate}".split(' ')[0]}';
 
     _autoCompleteTextView = SimpleAutoCompleteTextField(
-        key: key1,
+      key: key1,
       decoration: new InputDecoration(
-        labelStyle: new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+        labelStyle:
+            new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         hintText: 'XYZ-000-00',
         hintMaxLines: 1,
         fillColor: Colors.black,
@@ -708,7 +808,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
           try {
             int i = meterNoList.indexWhere((element) => element.contains(text));
             currentMeterNoId = meterNoIdList.elementAt(i);
-            print("currentMeterNoId--->"+currentMeterNoId);
+            print("currentMeterNoId--->" + currentMeterNoId);
           } catch (e) {
             _toast(e.toString());
           }
@@ -719,7 +819,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     _autoCompleteTextView2 = SimpleAutoCompleteTextField(
       key: key2,
       decoration: new InputDecoration(
-        labelStyle: new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+        labelStyle:
+            new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         hintText: 'XYZ-000-00',
         hintMaxLines: 1,
         fillColor: Colors.black,
@@ -737,7 +838,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
           //addedMeterNo.clear();
           //addedMeterNo.add(text);
           try {
-            int i = regulatorMeterNoList.indexWhere((element) => element.contains(text));
+            int i = regulatorMeterNoList
+                .indexWhere((element) => element.contains(text));
             currentRegulatorList = meterNoIdList2.elementAt(i);
           } catch (e) {
             _toast(e.toString());
@@ -748,6 +850,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.green.shade800,
         title: Text(
           'LMC Installation',
           style: AppTextStyle.toolbarHeadline,
@@ -759,175 +862,55 @@ class InstallationScreenPage extends State<InstallationScreen> {
                 padding: EdgeInsets.all(20.0),
                 child: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
-                    return Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      getTextField("BP NUMBER", '${widget.rows.bpNumber}'),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      getDropDown(
-                        typeOfNrItems,
-                        _typeOfNrc,
-                        title: typeOfNrLabel,
-                        onChanged: (OptionItem value) {
-                          setState(() {
-                            _typeOfNrc = value;
-                            _typeOfNrValue = value.title;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      getDateTextField(proposedDateLabel, '${"${widget.rows.proposedDate}".split(' ')[0]}', controller: proposedDateController),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      DefaultTextStyle(
-                        style: TextStyle(color: Colors.black),
-                        child: InkWell(
-                          child: TextFormField(
-                            controller: workStartDateController,
-                            autofocus: false,
-                            enabled: false,
-                            decoration: new InputDecoration(border: OutlineInputBorder(), labelText: actualWorkStartLabel, hintText: actualWorkStartLabel),
-                          ),
-                          onTap: () {
-                            _selectDate(context).then((value) {
-                              setState(() {
-                                workStartDateController.text = ("${value.toLocal()}".split(' ')[0]);
-                              });
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      getDropDown(
-                        reasonArrItems,
-                        _reasonIfDelay,
-                        title: reasonLabel,
-                        onChanged: (OptionItem value) {
-                          setState(() {
-                            _reasonIfDelay = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Column(
-                        children: _materialList.map((item) {
-                          return ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 7,
-                                  child: getTextField(materialLabel, item.name),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                (item.name.toLowerCase()).contains('pipe')
-                                    ? Expanded(
-                                        flex: 3,
-                                        child: getQtyTextField(
-                                          item.label,
-                                          item.controller.text,
-                                          enable: true,
-                                          controller: item.controller,
-                                          onChanged: (value) {
-                                            if (value != null) _getExtraPipeDetails(value.toString());
-                                          },
-                                        ),
-                                      )
-                                    : Expanded(
-                                        flex: 3,
-                                        child: getQtyTextField(
-                                          item.label,
-                                          item.controller.text,
-                                          enable: true,
-                                          controller: item.controller,
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                      getLatLongTextField(extraPipeController, hintText: extraPipeLabel, fieldText: extraPipeLabel, keyboardType: TextInputType.number),
-                      getLatLongTextField(extraPriceController, hintText: extraPriceLabel, fieldText: extraPriceLabel, keyboardType: TextInputType.number),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Column(
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.grey[200],
-                            child: Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text(
-                                meterPhotoLabel,
-                                style: AppTextStyle.headline,
-                              ),
-                            ),
+                          getTextField("BP NUMBER", '${widget.rows.bpNumber}'),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          getDropDown(
+                            typeOfNrItems,
+                            _typeOfNrc,
+                            title: typeOfNrLabel,
+                            onChanged: (OptionItem value) {
+                              setState(() {
+                                _typeOfNrc = value;
+                                _typeOfNrValue = value.title;
+                              });
+                            },
                           ),
                           SizedBox(
                             height: 15,
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              meterNoLabel,
-                              style: AppTextStyle.headline,
-                            ),
-                          ),
-                          _autoCompleteTextView,
-                          Padding(padding: const EdgeInsets.all(4.0)),
-                          Text(
-                            initialReadingLabel,
-                            style: AppTextStyle.headline,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                  width: 35,
-                                  margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
-                                  child: Center(child: getTextMeterFormField(initialReadingController, fieldText: '0', keyboardType: TextInputType.number, maxLimit: 1))),
-                              Container(
-                                  width: 35,
-                                  margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
-                                  child: Center(child: getTextMeterFormField(initialReadingController2, fieldText: '0', keyboardType: TextInputType.number, maxLimit: 1))),
-                              Container(
-                                  width: 35,
-                                  margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
-                                  child: Center(child: getTextMeterFormField(initialReadingController3, fieldText: '0', keyboardType: TextInputType.number, maxLimit: 1))),
-                            ],
+                          getDateTextField(proposedDateLabel,
+                              '${"${widget.rows.proposedDate}".split(' ')[0]}',
+                              controller: proposedDateController),
+                          SizedBox(
+                            height: 15,
                           ),
                           DefaultTextStyle(
                             style: TextStyle(color: Colors.black),
                             child: InkWell(
                               child: TextFormField(
-                                controller: meterReadingDateController,
+                                controller: workStartDateController,
                                 autofocus: false,
                                 enabled: false,
-                                decoration: new InputDecoration(border: OutlineInputBorder(), labelText: readingDateLabel, hintText: readingDateLabel),
+                                decoration: new InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: actualWorkStartLabel,
+                                    hintText: actualWorkStartLabel),
                               ),
                               onTap: () {
                                 _selectDate(context).then((value) {
                                   setState(() {
-                                    meterReadingDateController.text = ("${value.toLocal()}".split(' ')[0]);
+                                    workStartDateController.text =
+                                        ("${value.toLocal()}".split(' ')[0]);
                                   });
                                 });
                               },
@@ -936,200 +919,421 @@ class InstallationScreenPage extends State<InstallationScreen> {
                           SizedBox(
                             height: 15,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("$regulatorNoLabel"),
+                          getDropDown(
+                            reasonArrItems,
+                            _reasonIfDelay,
+                            title: reasonLabel,
+                            onChanged: (OptionItem value) {
+                              setState(() {
+                                _reasonIfDelay = value;
+                              });
+                            },
                           ),
-                          _autoCompleteTextView2,
                           SizedBox(
                             height: 15,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              meterImgController.imagePath != null
-                                  ? Container(
-                                      child: Row(
-                                      children: [
-                                        Image.file(
-                                          meterImgController.imagePath,
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ],
-                                    ))
-                                  : Container(
-                                      child: Row(children: [
-                                      Image.asset(
-                                        'assets/icons/place_holder.png',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      )
-                                    ])),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                  ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).primaryColor,
-                                      ),
-                                      child: Text(
-                                        takeMeterPhotoLabel,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () async {
-                                        _openImageSource(context, meterImgController);
-                                      }),
-                                ]),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      getTextFormField(tfNoController, hintText: tfNoLabel, fieldText: '', keyboardType: TextInputType.number, maxLimit: 10),
-                      getLatLongTextField(tfLatitudeController..text = tfPositional != null ? tfPositional.longitude.toString() : "", hintText: tfLatitudeLabel, focusable: true),
-                      getLatLongTextField(tfLongitudeController..text = tfPositional != null ? tfPositional.latitude.toString() : "", hintText: tfLongitudeLabel, focusable: true),
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                            ),
-                            child: Text(
-                              btnTfLocationLabel,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              _getCurrentLocation('TF');
-                            }),
-                      ]),
-                      getLatLongTextField(houseLatitudeController..text = housePositional != null ? housePositional.longitude.toString() : "", hintText: houseLatLabel, focusable: true),
-                      getLatLongTextField(houseLongitudeController..text = housePositional != null ? housePositional.latitude.toString() : "", hintText: houseLongLabel, focusable: true),
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                            ),
-                            child: Text(
-                              btnHouseLocationLabel,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              _getCurrentLocation('');
-                            }),
-                      ]),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      DefaultTextStyle(
-                        style: TextStyle(color: Colors.black),
-                        child: InkWell(
-                          child: TextFormField(
-                            controller: workCompleteDateController,
-                            autofocus: false,
-                            enabled: false,
-                            decoration: new InputDecoration(border: OutlineInputBorder(), labelText: workCompleteDateLabel, hintText: workCompleteDateLabel),
+                          Column(
+                            children: _materialList.map((item) {
+                              return ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 0.0),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: getTextField(
+                                          materialLabel, item.name),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    (item.name.toLowerCase()).contains('pipe')
+                                        ? Expanded(
+                                            flex: 3,
+                                            child: getQtyTextField(
+                                              item.label,
+                                              item.controller.text,
+                                              enable: true,
+                                              controller: item.controller,
+                                              onChanged: (value) {
+                                                if (value != null)
+                                                  _getExtraPipeDetails(
+                                                      value.toString());
+                                              },
+                                            ),
+                                          )
+                                        : Expanded(
+                                            flex: 3,
+                                            child: getQtyTextField(
+                                              item.label,
+                                              item.controller.text,
+                                              enable: true,
+                                              controller: item.controller,
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          onTap: () {
-                            _selectDate(context).then((value) => setState(() {
-                                  workCompleteDateController.text = ("${value.toLocal()}".split(' ')[0]);
-                                }));
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Column(
-                        children: [
+                          getLatLongTextField(extraPipeController,
+                              hintText: extraPipeLabel,
+                              fieldText: extraPipeLabel,
+                              keyboardType: TextInputType.number),
+                          getLatLongTextField(extraPriceController,
+                              hintText: extraPriceLabel,
+                              fieldText: extraPriceLabel,
+                              keyboardType: TextInputType.number),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.grey[200],
+                                child: Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    meterPhotoLabel,
+                                    style: AppTextStyle.headline,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  meterNoLabel,
+                                  style: AppTextStyle.headline,
+                                ),
+                              ),
+                              _autoCompleteTextView,
+                              Padding(padding: const EdgeInsets.all(4.0)),
+                              Text(
+                                initialReadingLabel,
+                                style: AppTextStyle.headline,
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                      width: 35,
+                                      margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
+                                      child: Center(
+                                          child: getTextMeterFormField(
+                                              initialReadingController,
+                                              fieldText: '0',
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              maxLimit: 1))),
+                                  Container(
+                                      width: 35,
+                                      margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
+                                      child: Center(
+                                          child: getTextMeterFormField(
+                                              initialReadingController2,
+                                              fieldText: '0',
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              maxLimit: 1))),
+                                  Container(
+                                      width: 35,
+                                      margin: EdgeInsets.fromLTRB(0, 0, 1, 0),
+                                      child: Center(
+                                          child: getTextMeterFormField(
+                                              initialReadingController3,
+                                              fieldText: '0',
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              maxLimit: 1))),
+                                ],
+                              ),
+                              DefaultTextStyle(
+                                style: TextStyle(color: Colors.black),
+                                child: InkWell(
+                                  child: TextFormField(
+                                    controller: meterReadingDateController,
+                                    autofocus: false,
+                                    enabled: false,
+                                    decoration: new InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: readingDateLabel,
+                                        hintText: readingDateLabel),
+                                  ),
+                                  onTap: () {
+                                    _selectDate(context).then((value) {
+                                      setState(() {
+                                        meterReadingDateController.text =
+                                            ("${value.toLocal()}"
+                                                .split(' ')[0]);
+                                      });
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("$regulatorNoLabel"),
+                              ),
+                              _autoCompleteTextView2,
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  meterImgController.imagePath != null
+                                      ? Container(
+                                          child: Row(
+                                          children: [
+                                            Image.file(
+                                              meterImgController.imagePath,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ],
+                                        ))
+                                      : Container(
+                                          child: Row(children: [
+                                          Image.asset(
+                                            'assets/icons/place_holder.png',
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          )
+                                        ])),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 10.0, 0.0, 10.0),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              child: Text(
+                                                takeMeterPhotoLabel,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () async {
+                                                _openImageSource(context,
+                                                    meterImgController);
+                                              }),
+                                        ]),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          getTextFormField(tfNoController,
+                              hintText: tfNoLabel,
+                              fieldText: '',
+                              keyboardType: TextInputType.number,
+                              maxLimit: 10),
+                          getLatLongTextField(
+                              tfLatitudeController
+                                ..text = tfPositional != null
+                                    ? tfPositional.longitude.toString()
+                                    : "",
+                              hintText: tfLatitudeLabel,
+                              focusable: true),
+                          getLatLongTextField(
+                              tfLongitudeController
+                                ..text = tfPositional != null
+                                    ? tfPositional.latitude.toString()
+                                    : "",
+                              hintText: tfLongitudeLabel,
+                              focusable: true),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Text(
+                                      btnTfLocationLabel,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      _getCurrentLocation('TF');
+                                    }),
+                              ]),
+                          getLatLongTextField(
+                              houseLatitudeController
+                                ..text = housePositional != null
+                                    ? housePositional.longitude.toString()
+                                    : "",
+                              hintText: houseLatLabel,
+                              focusable: true),
+                          getLatLongTextField(
+                              houseLongitudeController
+                                ..text = housePositional != null
+                                    ? housePositional.latitude.toString()
+                                    : "",
+                              hintText: houseLongLabel,
+                              focusable: true),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Text(
+                                      btnHouseLocationLabel,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      _getCurrentLocation('');
+                                    }),
+                              ]),
+                          SizedBox(
+                            height: 15,
+                          ),
                           DefaultTextStyle(
                             style: TextStyle(color: Colors.black),
                             child: InkWell(
                               child: TextFormField(
-                                controller: conversionDateController,
+                                controller: workCompleteDateController,
                                 autofocus: false,
                                 enabled: false,
-                                decoration: new InputDecoration(border: OutlineInputBorder(), labelText: conversionLabel, hintText: conversionLabel),
+                                decoration: new InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: workCompleteDateLabel,
+                                    hintText: workCompleteDateLabel),
                               ),
                               onTap: () {
-                                conversionDate(context).then((value) => setState(() {
-                                      conversionDateController.text = ("${value.toLocal()}".split(' ')[0]);
-                                    }));
+                                _selectDate(context)
+                                    .then((value) => setState(() {
+                                          workCompleteDateController.text =
+                                              ("${value.toLocal()}"
+                                                  .split(' ')[0]);
+                                        }));
                               },
                             ),
                           ),
                           SizedBox(
                             height: 15,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.grey[200],
-                            child: Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text(
-                                'Checklist Before RFC',
-                                style: AppTextStyle.headline,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
                           Column(
-                            children: rfcList.map((item) {
-                              return CheckboxListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                                value: checkListJson[item.id] == '0' ? false : true,
-                                title: Align(
-                                  alignment: Alignment.centerLeft,
+                            children: [
+                              DefaultTextStyle(
+                                style: TextStyle(color: Colors.black),
+                                child: InkWell(
+                                  child: TextFormField(
+                                    controller: conversionDateController,
+                                    autofocus: false,
+                                    enabled: false,
+                                    decoration: new InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: conversionLabel,
+                                        hintText: conversionLabel),
+                                  ),
+                                  onTap: () {
+                                    conversionDate(context)
+                                        .then((value) => setState(() {
+                                              conversionDateController.text =
+                                                  ("${value.toLocal()}"
+                                                      .split(' ')[0]);
+                                            }));
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.grey[200],
+                                child: Padding(
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
-                                    '${item.title}',
-                                    style: AppTextStyle.textContent,
+                                    'Checklist Before RFC',
+                                    style: AppTextStyle.headline,
                                   ),
                                 ),
-                                onChanged: (val) {
-                                  setState(() {
-                                    if (val)
-                                      checkListJson[item.id] = '1';
-                                    else
-                                      checkListJson[item.id] = '0';
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
-                          child: hideButton
-                              ? null
-                              : ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Theme.of(context).primaryColor,
-                                  ),
-                                  child: Container(
-                                    width: 200,
-                                    child: Align(
-                                      alignment: Alignment.center,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Column(
+                                children: rfcList.map((item) {
+                                  return CheckboxListTile(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 0.0),
+                                    value: checkListJson[item.id] == '0'
+                                        ? false
+                                        : true,
+                                    title: Align(
+                                      alignment: Alignment.centerLeft,
                                       child: Text(
-                                        btnSubmit,
-                                        style: TextStyle(color: Colors.white),
+                                        '${item.title}',
+                                        style: AppTextStyle.textContent,
                                       ),
                                     ),
-                                  ),
-                                  onPressed: () async {
-                                    _uploadImage();
-                                  }),
-                        ),
-                      ),
-                    ]);
+                                    onChanged: (val) {
+                                      setState(() {
+                                        if (val)
+                                          checkListJson[item.id] = '1';
+                                        else
+                                          checkListJson[item.id] = '0';
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  0.0, 30.0, 0.0, 10.0),
+                              child: hideButton
+                                  ? null
+                                  : ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Theme.of(context).primaryColor,
+                                      ),
+                                      child: Container(
+                                        width: 200,
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            btnSubmit,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        _uploadImage();
+                                      }),
+                            ),
+                          ),
+                        ]);
                   },
                 ),
               ),
@@ -1170,15 +1374,21 @@ class InstallationScreenPage extends State<InstallationScreen> {
     );
   }
 
-  Future<void> getImage(PhotoController photoController, ImageSource imageSource) async {
+  Future<void> getImage(
+      PhotoController photoController, ImageSource imageSource) async {
     try {
       final picker = ImagePicker();
       //File _image;
-      final pickedFile = await picker.getImage(source: imageSource, maxHeight: 900, maxWidth: 1000, imageQuality: 100);
+      final pickedFile = await picker.getImage(
+          source: imageSource,
+          maxHeight: 900,
+          maxWidth: 1000,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           //_image=File(pickedFile.path);
-          if (photoController != null) photoController.imagePath = File(pickedFile.path);
+          if (photoController != null)
+            photoController.imagePath = File(pickedFile.path);
         } else {
           print('No image selected.');
         }
@@ -1190,7 +1400,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
 
   String getDate(String savedDateString) {
     if (savedDateString != null && savedDateString != '') {
-      String tempDate = new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
+      String tempDate =
+          new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
       return tempDate;
     }
     return '';
@@ -1221,13 +1432,15 @@ class InstallationScreenPage extends State<InstallationScreen> {
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
-                      getImage(controller, ImageSource.gallery).then((value) => setState(() {}));
+                      getImage(controller, ImageSource.gallery)
+                          .then((value) => setState(() {}));
                     }),
                 ListTile(
                   title: Text('Camera', style: AppTextStyle.textTitle),
                   onTap: () {
                     Navigator.of(context).pop();
-                    getImage(controller, ImageSource.camera).then((value) => setState(() {}));
+                    getImage(controller, ImageSource.camera)
+                        .then((value) => setState(() {}));
                   },
                 ),
                 //Text('Would you like to approve of this message?'),
@@ -1249,7 +1462,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
     );
   }
 
-  getDateTextField(String hintText, String fieldText, {TextEditingController controller, Function onChanged, TextInputType keyboardType = TextInputType.text}) {
+  getDateTextField(String hintText, String fieldText,
+      {TextEditingController controller,
+      Function onChanged,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
       child: DefaultTextStyle(
@@ -1259,7 +1475,10 @@ class InstallationScreenPage extends State<InstallationScreen> {
             controller: controller,
             autofocus: false,
             enabled: false,
-            decoration: new InputDecoration(border: OutlineInputBorder(), labelText: hintText, hintText: hintText),
+            decoration: new InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: hintText,
+                hintText: hintText),
           ),
           onTap: () {
             _selectDate(context).then((value) => setState(() {
@@ -1273,14 +1492,25 @@ class InstallationScreenPage extends State<InstallationScreen> {
 }
 
 _toast(String _msg) {
-  Fluttertoast.showToast(msg: _msg, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, timeInSecForIosWeb: 1, backgroundColor: Colors.red, textColor: Colors.white, fontSize: 16.0);
+  Fluttertoast.showToast(
+      msg: _msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
 
 class PhotoController {
   File imagePath;
 }
 
-getQtyTextField(String hintText, String fieldText, {TextEditingController controller, Function(String) onChanged, bool enable, TextInputType keyboardType = TextInputType.number}) {
+getQtyTextField(String hintText, String fieldText,
+    {TextEditingController controller,
+    Function(String) onChanged,
+    bool enable,
+    TextInputType keyboardType = TextInputType.number}) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
     child: DefaultTextStyle(
@@ -1291,13 +1521,17 @@ getQtyTextField(String hintText, String fieldText, {TextEditingController contro
         keyboardType: keyboardType,
         autofocus: false,
         enabled: enable ?? false,
-        decoration: new InputDecoration(border: OutlineInputBorder(), labelText: hintText, hintText: hintText),
+        decoration: new InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: hintText,
+            hintText: hintText),
       ),
     ),
   );
 }
 
-getDropDown(dropListModel, OptionItem _value, {title, Function(OptionItem optionItem) onChanged}) {
+getDropDown(dropListModel, OptionItem _value,
+    {title, Function(OptionItem optionItem) onChanged}) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
     child: DropdownButtonFormField<OptionItem>(
@@ -1330,7 +1564,12 @@ class MaterialItem {
   final String value;
   final String label;
   final TextEditingController controller;
-  MaterialItem({@required this.id, @required this.name, @required this.value, @required this.label, this.controller});
+  MaterialItem(
+      {@required this.id,
+      @required this.name,
+      @required this.value,
+      @required this.label,
+      this.controller});
 }
 
 Future<void> _showMyDialog(BuildContext mContext, String _msg) async {

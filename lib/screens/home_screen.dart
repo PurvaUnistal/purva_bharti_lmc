@@ -14,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class HomePage extends State<Home> implements LMCPresenterInterface {
-
   bool _showProgress = false;
   bool _loadMore = false;
   String area_id = '';
@@ -26,8 +25,7 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   String _token = '';
   int _offSet = 0;
   String bpNumber = '';
-  String _firstNameLabel = '',
-      _customerRegNoLabel = '';
+  String _firstNameLabel = '', _customerRegNoLabel = '';
   String _lmcFeasibilityDateLabel = '',
       _lmcProposedDateLabel = '',
       _areaLabel = '';
@@ -53,9 +51,8 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
 
   LmcPresenter _lmcPresenter;
   List<Rows> _lmcDataList = [];
-  List<DropdownMenuItem<OptionItem>> readyForNgcItems=([]);
-  List<DropdownMenuItem<OptionItem>> typeOfNrItems=([]);
-
+  List<DropdownMenuItem<OptionItem>> readyForNgcItems = ([]);
+  List<DropdownMenuItem<OptionItem>> typeOfNrItems = ([]);
 
   getPref() async {
     setState(() {
@@ -70,14 +67,17 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
     if (_lmcDataList.length > 0) {
       _lmcDataList.clear();
     }
-    _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), widget.selection,bpNumber,area_id);
+    _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(),
+        widget.selection, bpNumber, area_id);
   }
 
   Future<void> _getLabelsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get(GlobalConstants.token);
-    var res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': token,} );
-    print("getLabels-->" +res.body);
+    var res = await http.get(Uri.parse(GlobalConstants.getLabels), headers: {
+      'Authorization': token,
+    });
+    print("getLabels-->" + res.body);
     prefs.setString(GlobalConstants.hpclLabels, res.body);
     if (res.statusCode == 200) {
       HpclLabel hpclLabel = HpclLabel.fromJson(json.decode(res.body));
@@ -117,62 +117,72 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
     _lmcDataList = [];
     _lmcPresenter = new LmcPresenter(this);
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         _offSet++;
-        print("_offSet-->"+ _offSet.toString());
+        print("_offSet-->" + _offSet.toString());
         setState(() {
           _loadMore = true;
         });
-        _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), '${widget.selection}',bpNumber, area_id);
+        _lmcPresenter.getDataFromServer(_id, _schema, _token,
+            _offSet.toString(), '${widget.selection}', bpNumber, area_id);
       }
     });
   }
 
   Future<bool> _multipleRequstPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,Permission.storage, Permission.camera,
+      Permission.location,
+      Permission.storage,
+      Permission.camera,
     ].request();
-    if(statuses[Permission.location].isGranted){
+    if (statuses[Permission.location].isGranted) {
       print("Location permission is isGranted.");
     }
-    if(statuses[Permission.camera].isGranted){
+    if (statuses[Permission.camera].isGranted) {
       print("Camera permission is isGranted.");
     }
-    if(statuses[Permission.storage].isGranted){
+    if (statuses[Permission.storage].isGranted) {
       print("Camera permission is isGranted.");
     }
     return true;
   }
+
   Future<String> getCountry() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(GlobalConstants.token) ?? '';
     String schema = pref.getString(GlobalConstants.schema) ?? '';
     String url = GlobalConstants.areaList + schema;
-    print("token-->"+token);
-    print("schema-->"+schema);
-    print("url-->"+url);
+    print("token-->" + token);
+    print("schema-->" + schema);
+    print("url-->" + url);
 
-    var res = await http.get(Uri.parse(url), headers: {"authorization": "$token"});
+    var res =
+        await http.get(Uri.parse(url), headers: {"authorization": "$token"});
     var dataList = json.decode(res.body);
-    print("areaList-->"+res.body);
+    print("areaList-->" + res.body);
     List<DropdownMenuItem<OptionItem>> menuItems = List.generate(
-      dataList.length,(i) => DropdownMenuItem(
-      value:OptionItem(id: dataList[i]['gid'], title: dataList[i]['area_name']),
-      child: Text( "${dataList[i]['area_name']}",
-      ),),
+      dataList.length,
+      (i) => DropdownMenuItem(
+        value:
+            OptionItem(id: dataList[i]['gid'], title: dataList[i]['area_name']),
+        child: Text(
+          "${dataList[i]['area_name']}",
+        ),
+      ),
     );
     if (mounted) {
       setState(() {
         EasyLoading.dismiss();
         _regionDropDown = menuItems;
         // countryId = _regionDropDown.first.value;
-
       });
     }
     return "Success";
   }
-  var  dataRow = [
-    DataRow( cells: [
+
+  var dataRow = [
+    DataRow(cells: [
       DataCell(Text("Waiting")),
     ]),
   ];
@@ -184,7 +194,11 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Home',style: AppTextStyle.appBarTitle,),
+        backgroundColor: Colors.green.shade800,
+        title: Text(
+          'Home',
+          style: AppTextStyle.appBarTitle,
+        ),
       ),
       body: Stack(
         children: [
@@ -192,17 +206,25 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
             // crossAxisAlignment: CrossAxisAlignment.center,
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Align(
                   alignment: Alignment.topLeft,
                   child: Text(" Select Area", style: ThemeStyle.selectArea)),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 13),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(
-                    contentPadding:EdgeInsets.symmetric(vertical: 12,horizontal: 10),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(18),),
-                    focusedBorder:OutlineInputBorder( borderRadius: BorderRadius.circular(18),),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                   hint: Text("--Please Select Area--"),
                   items: _regionDropDown,
@@ -212,147 +234,192 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
                     print('countryId -->' + newVal.id);
                     setState(() {
                       countryId = newVal;
-                      _lmcPresenter.getDataFromServer(_id,_schema,_token,_offSet.toString(),widget.selection, bpNumber,area_id);
+                      _lmcPresenter.getDataFromServer(
+                          _id,
+                          _schema,
+                          _token,
+                          _offSet.toString(),
+                          widget.selection,
+                          bpNumber,
+                          area_id);
                       //   _lmcPresenter.getDataFromServer(_id,_schema,_token,_offSet.toString(),widget.selection,bpNumber,area_id);
-                      _showProgress=true;
+                      _showProgress = true;
                     });
                   },
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 13),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
                 child: TextField(
                   decoration: InputDecoration(
-                    contentPadding:EdgeInsets.symmetric(vertical: 12,horizontal: 10),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      borderSide: BorderSide(color: Colors.grey,),
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      borderSide: BorderSide(color: Colors.blue,),
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                      ),
                     ),
                     hintText: "Search...",
                     suffixIcon: IconButton(
                       icon: Icon(Icons.search),
-                      onPressed: (){
+                      onPressed: () {
                         setState(() {
-                          _lmcPresenter.getDataFromServer(_id,_schema,_token,'1',widget.selection, searchController.text.toString(),area_id);
-                          _showProgress=true;
+                          _lmcPresenter.getDataFromServer(
+                              _id,
+                              _schema,
+                              _token,
+                              '1',
+                              widget.selection,
+                              searchController.text.toString(),
+                              area_id);
+                          _showProgress = true;
                         });
                       },
-
                     ),
                   ),
                   controller: searchController,
-                  keyboardType:TextInputType.number,),
+                  keyboardType: TextInputType.number,
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
                   child: Scrollbar(
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:_showProgress
-                            ? Padding(
-                          padding: const EdgeInsets.only(top: 200.0),
-                          child: Card(
-                            elevation: 5,
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              child: Wrap(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5,),
-                                    child: SizedBox(
-                                      child: CircularProgressIndicator(strokeWidth: 3,),
-                                      height: 20.0, width: 20.0,
+                    scrollDirection: Axis.horizontal,
+                    child: _showProgress
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 200.0),
+                            child: Card(
+                              elevation: 5,
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                child: Wrap(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 5,
+                                      ),
+                                      child: SizedBox(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                        ),
+                                        height: 20.0,
+                                        width: 20.0,
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Text('Wait..',),
-                                  )
-                                ],
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Text(
+                                        'Wait..',
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ):
-                        (_lmcDataList.length > 0)
-                            ?  DataTable(
-                            sortAscending: true,
-                            columnSpacing: 12,
-                            horizontalMargin: 0,
-                            showCheckboxColumn: false,
-                            headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey),
-                            columns: [
-                              DataColumn(label: Text("Area")),
-                              DataColumn(label: Text("Mobile No.")),
-                              DataColumn(label: Text("Name")),
-                              DataColumn(label: Text("Proposed Date")),
-                              DataColumn(label: Text("BP Number")),
+                          )
+                        : (_lmcDataList.length > 0)
+                            ? DataTable(
+                                sortAscending: true,
+                                columnSpacing: 12,
+                                horizontalMargin: 0,
+                                showCheckboxColumn: false,
+                                headingRowColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.grey),
+                                columns: [
+                                  DataColumn(label: Text("Area")),
+                                  DataColumn(label: Text("Mobile No.")),
+                                  DataColumn(label: Text("Name")),
+                                  DataColumn(label: Text("Proposed Date")),
+                                  DataColumn(label: Text("BP Number")),
+                                ],
+                                rows:
+                                    //  _showProgress  ? []
+                                    //    :
+                                    _lmcDataList
+                                        .mapIndexed((index, element) => DataRow(
+                                                onSelectChanged: (value) {
+                                                  _showDetailsDialog(
+                                                      context,
+                                                      'LMC Installation',
+                                                      element);
+                                                },
+                                                cells: [
+                                                  DataCell(
+                                                      Text(element.areaName)),
+                                                  DataCell(Text(
+                                                      element.mobileNumber)),
+                                                  DataCell(
+                                                      Text(element.firstName)),
+                                                  DataCell(Text(
+                                                      element.proposedDate)),
+                                                  DataCell(
+                                                      Text(element.bpNumber)),
+                                                ]))
+                                        .toList()
+                                //        :
+                                //    [
+                                //      // DataRow(
+                                //      //   cells: [
+                                //      //     DataCell(Text(("Data Not Found...")))
+                                //      //   ]
+                                //      // )
+                                //    ].whereType<DataRow>().toList(),
+                                // // Center(child: Text('Data Not Found'),),
 
-                            ],
-                            rows:
-                            //  _showProgress  ? []
-                            //    :
-                            _lmcDataList.mapIndexed((index,element) => DataRow(
-                                onSelectChanged: (value){
-                                  _showDetailsDialog(context, 'LMC Installation', element);
-                                },
-                                cells:[
-                                  DataCell(Text(element.areaName)),
-                                  DataCell(Text(element.mobileNumber)),
-                                  DataCell(Text(element.firstName)),
-                                  DataCell(Text(element.proposedDate)),
-                                  DataCell(Text(element.bpNumber)),
-                                ]
-                            )
-                            ).toList()
-                          //        :
-                          //    [
-                          //      // DataRow(
-                          //      //   cells: [
-                          //      //     DataCell(Text(("Data Not Found...")))
-                          //      //   ]
-                          //      // )
-                          //    ].whereType<DataRow>().toList(),
-                          // // Center(child: Text('Data Not Found'),),
-
-                        ):  Padding(
-                          padding: const EdgeInsets.only(top: 200.0),
-                          child: Text('Data Not Found'),
-                        ),
-                      )
-                  ),
+                                )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 200.0),
+                                child: Text('Data Not Found'),
+                              ),
+                  )),
                 ),
               )
             ],
           ),
-          _loadMore ? Center(
-            child: Card(
-              elevation: 5,
-              child: Container(
-                padding: EdgeInsets.all(10.0),
-                child: Wrap(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 5, ),
-                      child: SizedBox(
-                        height: 20.0,  width: 20.0,
-                        child: CircularProgressIndicator(strokeWidth: 3, ),
+          _loadMore
+              ? Center(
+                  child: Card(
+                    elevation: 5,
+                    child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 5,
+                            ),
+                            child: SizedBox(
+                              height: 20.0,
+                              width: 20.0,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10, right: 5),
+                            child: Text(
+                              'Loading..',
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10, right: 5),
-                      child: Text('Loading..',),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          )
+                  ),
+                )
               : Container()
         ],
       ),
@@ -370,7 +437,10 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
       prefs.setString(GlobalConstants.schema, '');
       prefs.setString(GlobalConstants.name, '');
       Navigator.pushAndRemoveUntil(
-        context,MaterialPageRoute(builder: (context) => Login()),(Route<dynamic> route) => false,);
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+        (Route<dynamic> route) => false,
+      );
     } catch (e) {
       print(e);
     }
@@ -379,7 +449,7 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   @override
   void showDataList(List<Rows> lmcList) {
     // if (lmcList == null || lmcList.length == 0) {
-    if(lmcList == null){
+    if (lmcList == null) {
       setState(() {
         _showProgress = false;
         _loadMore = true;
@@ -390,14 +460,22 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
         _showProgress = false;
         _loadMore = false;
         _lmcDataList.clear();
-        for (int i=0; i< lmcList.length;i++) {
-          if(lmcList.elementAt(i).bpNumber.contains(searchController.text.trim()) || lmcList.elementAt(i).mobileNumber.contains(searchController.text.trim()))
-          {
-            print(" element mobile--> " + lmcList.elementAt(i).mobileNumber +" element bp--> " + lmcList.elementAt(i).bpNumber );
+        for (int i = 0; i < lmcList.length; i++) {
+          if (lmcList
+                  .elementAt(i)
+                  .bpNumber
+                  .contains(searchController.text.trim()) ||
+              lmcList
+                  .elementAt(i)
+                  .mobileNumber
+                  .contains(searchController.text.trim())) {
+            print(" element mobile--> " +
+                lmcList.elementAt(i).mobileNumber +
+                " element bp--> " +
+                lmcList.elementAt(i).bpNumber);
             _lmcDataList.add(lmcList.elementAt(i));
           }
         }
-
       });
     }
   }
@@ -464,9 +542,12 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("LMC Installation",style: TextStyle(fontSize:18),),
+                            Text(
+                              "LMC Installation",
+                              style: TextStyle(fontSize: 18),
+                            ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.of(context).pop();
                               },
                               child: CircleAvatar(
@@ -479,231 +560,350 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
                       ),
                       (rows.isInstall == null)
                           ? Container(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: rows.dmaRegId == null
-                                      ? InkWell(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        border: Border.all(color: Colors.blue,width: 1,),
-                                        borderRadius:BorderRadius.circular(0),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.edit,color: Colors.white,size: 20.0,),
-                                          Text('Feasibility',style: TextStyle(color:Colors.white),
-                                          )
-                                        ],
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: rows.dmaRegId == null
+                                            ? InkWell(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blue,
+                                                    border: Border.all(
+                                                      color: Colors.blue,
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            0),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.edit,
+                                                        color: Colors.white,
+                                                        size: 20.0,
+                                                      ),
+                                                      Text(
+                                                        'Feasibility',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  gotoFeasibility(
+                                                      context, rows);
+                                                  // Navigator.of(context).pop();
+                                                  // Navigator.push(
+                                                  //     mContext,
+                                                  //     MaterialPageRoute(builder: (context) => FeasibilityScreen(rows: rows,)));
+                                                  //_showFeasibilityDialog(context,'Feasibility Details Form',widget.rows);
+                                                },
+                                              )
+                                            : Visibility(
+                                                visible: false,
+                                                child: InkWell(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.blue,
+                                                      border: Border.all(
+                                                        color: Colors.blue,
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              0),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.edit,
+                                                          color: Colors.white,
+                                                          size: 20.0,
+                                                        ),
+                                                        Text(
+                                                          'Installation',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    gotoInstallation(
+                                                        context, rows);
+                                                  },
+                                                ),
+                                              ),
                                       ),
                                     ),
-                                    onTap: () {
-                                      gotoFeasibility(context, rows);
-                                      // Navigator.of(context).pop();
-                                      // Navigator.push(
-                                      //     mContext,
-                                      //     MaterialPageRoute(builder: (context) => FeasibilityScreen(rows: rows,)));
-                                      //_showFeasibilityDialog(context,'Feasibility Details Form',widget.rows);
-                                    },
-                                  )
-                                      : Visibility(
-                                    visible: false,
-                                    child: InkWell(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          border: Border.all(color: Colors.blue,width: 1,),
-                                          borderRadius:BorderRadius.circular(0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.edit,color: Colors.white,size: 20.0,),
-                                            Text('Installation',style: TextStyle(color: Colors.white),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      onTap: () {gotoInstallation(context, rows);
-                                      },
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ): Container(),
+                            )
+                          : Container(),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_customerRegNoLabel"),
-                            Text( rows.crn ?? 'Registration No'),
-                          ],),
+                            Text(rows.crn ?? 'Registration No'),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_lmcFeasibilityDateLabel"),
-                            Text( rows.feasibilityVisitDate ?? ''),
-                          ],),
+                            Text(rows.feasibilityVisitDate ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_lmcProposedDateLabel"),
-                            Text( rows.proposedDate ?? ''),
-                          ],),
+                            Text(rows.proposedDate ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_areaLabel"),
-                            Text( rows.areaName ?? ''),
-                          ],),
+                            Text(rows.areaName ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_firstNameLabel"),
-                            Text( rows.firstName ?? ''),
-                          ],),
+                            Text(rows.firstName ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_guardianNameLabel"),
-                            Text( rows.guardianName ?? ''),
-                          ],),
+                            Text(rows.guardianName ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100, thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_propertyCategoryNameLabel"),
-                            Text( rows.propName ?? ''),
-                          ],),
+                            Text(rows.propName ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_propertyCategoryClassLabel"),
-                            Text( rows.propClass ?? ''),
-                          ],),
+                            Text(rows.propClass ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_houseNoLabel"),
-                            Text( rows.houseNumber ?? ''),
-                          ],),
+                            Text(rows.houseNumber ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_localityLabel"),
-                            Expanded(child
-                                : Text( rows.locality ?? '')),
-                          ],),
+                            Expanded(child: Text(rows.locality ?? '')),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_townLabel"),
-                            Text( rows.town ?? ''),
-                          ],),
+                            Text(rows.town ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_stateLabel"),
-                            Text( rows.state ?? ''),
-                          ],),
+                            Text(rows.state ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_districtLabel"),
-                            Text( rows.district ?? ''),
-                          ],),
+                            Text(rows.district ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100,thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("$_pinCodeLabel"),
-                            Text( rows.pinCode ?? ''),
-                          ],),
+                            Text(rows.pinCode ?? ''),
+                          ],
+                        ),
                       ),
-                      Divider(color: Colors.teal.shade100, thickness: 1.0,),
+                      Divider(
+                        color: Colors.teal.shade100,
+                        thickness: 1.0,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             ElevatedButton(
                               child: Text('Installation'),
                               style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   primary: Colors.black,
-                                  textStyle: TextStyle(color: Colors.white )),
-                              onPressed: ()=> {
-                                Navigator.of(context, rootNavigator: true).pop(),
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                                    InstallationScreen(rows: rows, action: 'Push'))).then((value) {
+                                  textStyle: TextStyle(color: Colors.white)),
+                              onPressed: () => {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(),
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            InstallationScreen(
+                                                rows: rows, action: 'Push')))
+                                    .then((value) {
                                   setState(() {
-                                    _lmcPresenter.getDataFromServer(_id,_schema,_token,_offSet.toString(),widget.selection,bpNumber,area_id);
-                                    _showProgress=true;
-                                  });})
-
+                                    _lmcPresenter.getDataFromServer(
+                                        _id,
+                                        _schema,
+                                        _token,
+                                        _offSet.toString(),
+                                        widget.selection,
+                                        bpNumber,
+                                        area_id);
+                                    _showProgress = true;
+                                  });
+                                })
                               },
                             ),
-                          ],),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -717,8 +917,11 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   }
 
   gotoInstallation(BuildContext context, Rows rows) async {
-    String received = await Navigator.push(mContext, MaterialPageRoute(builder: (context) =>
-        InstallationScreen(rows: rows, action: 'Push')));
+    String received = await Navigator.push(
+        mContext,
+        MaterialPageRoute(
+            builder: (context) =>
+                InstallationScreen(rows: rows, action: 'Push')));
     if (received == 'Refresh') {
       Navigator.of(context).pop();
       getPref();
@@ -726,8 +929,11 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   }
 
   gotoFeasibility(BuildContext context, Rows rows) async {
-    String received = await Navigator.push( mContext, MaterialPageRoute(builder: (context) =>
-        FeasibilityScreen(rows: rows, action: 'Push')));
+    String received = await Navigator.push(
+        mContext,
+        MaterialPageRoute(
+            builder: (context) =>
+                FeasibilityScreen(rows: rows, action: 'Push')));
     if (received == 'Refresh') {
       Navigator.of(context).pop();
       getPref();
@@ -737,23 +943,29 @@ class HomePage extends State<Home> implements LMCPresenterInterface {
   Future<void> getReadyForNgc() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get(GlobalConstants.token);
-    var res = await http.get(Uri.parse(GlobalConstants.getReadyForNgc,),headers: { 'Authorization': token,});
+    var res = await http.get(
+        Uri.parse(
+          GlobalConstants.getReadyForNgc,
+        ),
+        headers: {
+          'Authorization': token,
+        });
     print(res.body);
     final decoded = jsonDecode(res.body) as Map;
-    decoded.forEach((k,v){
+    decoded.forEach((k, v) {
       readyForNgcItems.add(DropdownMenuItem(
-        value: OptionItem(id: k,title: v),
+        value: OptionItem(id: k, title: v),
         child: Text(v),
       ));
     });
-    setState(() {
-    });
+    setState(() {});
   }
 }
+
 String getDate(String savedDateString) {
   if (savedDateString != null && savedDateString != '') {
     String tempDate =
-    new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
+        new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
     return tempDate;
   }
   return '';
@@ -780,20 +992,22 @@ getTextField(String hintText, String fieldText,
     ),
   );
 }
+
 class OptionItem {
   final String id;
   final String title;
   OptionItem({@required this.id, @required this.title});
 }
 
-
-getDropDown(dropListModel,OptionItem _value,
+getDropDown(dropListModel, OptionItem _value,
     {title, Function(OptionItem optionItem) onChanged}) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-    child:
-    DropdownButtonFormField<OptionItem>(
-      decoration: InputDecoration(labelText: title,border: OutlineInputBorder(),),
+    child: DropdownButtonFormField<OptionItem>(
+      decoration: InputDecoration(
+        labelText: title,
+        border: OutlineInputBorder(),
+      ),
       value: _value,
       items: dropListModel
       /*List.generate(
@@ -802,11 +1016,13 @@ getDropDown(dropListModel,OptionItem _value,
               value: dropListModel[i],
               child: Text(dropListModel[i].title),
             ),
-          )*/,
+          )*/
+      ,
       onChanged: onChanged,
     ),
   );
 }
+
 class Notification {
   final String title;
   final String body;

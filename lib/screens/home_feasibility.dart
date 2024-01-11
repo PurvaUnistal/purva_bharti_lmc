@@ -12,7 +12,8 @@ class FeasibilityHomeScreen extends StatefulWidget {
   State<FeasibilityHomeScreen> createState() => _FeasibilityHomeScreenState();
 }
 
-class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implements LMCPresenterInterface {
+class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen>
+    implements LMCPresenterInterface {
   String _id = '';
   String _schema = '';
   String _token = '';
@@ -57,15 +58,17 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
     if (_lmcDataList.length > 0) {
       _lmcDataList.clear();
     }
-    _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), widget.selection, bpNumber, area_id);
-
+    _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(),
+        widget.selection, bpNumber, area_id);
     setState(() {});
   }
 
   Future<void> _getLabelsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      var res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': _token,}).timeout(Duration(seconds: 10));
+      var res = await http.get(Uri.parse(GlobalConstants.getLabels), headers: {
+        'Authorization': _token,
+      }).timeout(Duration(seconds: 10));
       print("getLabels-->" + res.body);
       prefs.setString(GlobalConstants.hpclLabels, res.body);
       if (res.statusCode == 200) {
@@ -87,10 +90,12 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
       }
     } on TimeoutException catch (e, s) {
       print("TimeoutException-->${e.message.toString()}");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Your Server Side Is Slow")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Your Server Side Is Slow")));
     } catch (e) {
       print('catch error--> : $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
       return null;
     }
     return null;
@@ -105,16 +110,17 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
     _lmcDataList = [];
     _lmcPresenter = new LmcPresenter(this);
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         _offSet++;
         print("_offSet--->" + _offSet.toString());
         setState(() {
           _loadMore = true;
         });
-        _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), '${widget.selection}', bpNumber, area_id);
+        _lmcPresenter.getDataFromServer(_id, _schema, _token,
+            _offSet.toString(), '${widget.selection}', bpNumber, area_id);
       }
     });
-
   }
 
   Future<String> getCountry() async {
@@ -126,14 +132,16 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
     print(schema);
     print(url);
     try {
-      var res = await http.get(Uri.parse(url), headers: {"authorization": "$token"}).timeout(Duration(seconds: 10));
+      var res = await http.get(Uri.parse(url),
+          headers: {"authorization": "$token"}).timeout(Duration(seconds: 10));
       var dataList = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
         List<DropdownMenuItem<OptionItem>> menuItems = List.generate(
           dataList.length,
           (i) => DropdownMenuItem(
-            value: OptionItem(id: dataList[i]['gid'], title: dataList[i]['area_name']),
+            value: OptionItem(
+                id: dataList[i]['gid'], title: dataList[i]['area_name']),
             child: Text(
               "${dataList[i]['area_name']}",
             ),
@@ -152,10 +160,12 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
       }
     } on TimeoutException catch (e, s) {
       print("TimeoutException-->${e.message.toString()}");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Your Server Side Is Slow")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Your Server Side Is Slow")));
     } catch (e) {
       print('catch error--> : $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
       return null;
     }
   }
@@ -166,6 +176,7 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.green.shade800,
         title: Text(
           'Home',
           style: AppTextStyle.appBarTitle,
@@ -181,10 +192,12 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
               ),
               Text(" Select Area", style: ThemeStyle.selectArea),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
@@ -200,7 +213,14 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                     print('countryId -->' + newVal.id);
                     setState(() {
                       countryId = newVal;
-                      _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), widget.selection, bpNumber, area_id);
+                      _lmcPresenter.getDataFromServer(
+                          _id,
+                          _schema,
+                          _token,
+                          _offSet.toString(),
+                          widget.selection,
+                          bpNumber,
+                          area_id);
                       _showProgress = true;
                     });
                   },
@@ -210,12 +230,14 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 13),
                 child: TextField(
                   controller: searchController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18.0),
                       borderSide: BorderSide(
@@ -232,7 +254,14 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                       icon: Icon(Icons.search),
                       onPressed: () {
                         setState(() {
-                          _lmcPresenter.getDataFromServer(_id, _schema, _token, '1', widget.selection, searchController.text.toString(), area_id);
+                          _lmcPresenter.getDataFromServer(
+                              _id,
+                              _schema,
+                              _token,
+                              '1',
+                              widget.selection,
+                              searchController.text.toString(),
+                              area_id);
                           _showProgress = true;
                         });
                       },
@@ -327,10 +356,13 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                               itemBuilder: (BuildContext context, int index) {
                                 Rows _rows = _lmcDataList.elementAt(index);
                                 return ListTile(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 0.0),
                                   title: Container(
                                       height: 60.0,
-                                      color: (_rows.dmaRegId == null) ? Colors.black12 : Colors.blue[50],
+                                      color: (_rows.dmaRegId == null)
+                                          ? Colors.black12
+                                          : Colors.blue[50],
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -357,14 +389,17 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                                           Expanded(
                                               child: Center(
                                             child: Text(
-                                              _rows.bpNumber == null ? '-' : _rows.bpNumber,
+                                              _rows.bpNumber == null
+                                                  ? '-'
+                                                  : _rows.bpNumber,
                                               style: AppTextStyle.textTitle,
                                             ),
                                           )),
                                         ],
                                       )),
                                   onTap: () {
-                                    _showDetailsDialog(context, 'LMC Feasibility', _rows);
+                                    _showDetailsDialog(
+                                        context, 'LMC Feasibility', _rows);
                                   },
                                 );
                                 // return new LmcListItem(rows: _rows,);
@@ -437,8 +472,18 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
         _loadMore = false;
         _lmcDataList.clear();
         for (int i = 0; i < lmcList.length; i++) {
-          if (lmcList.elementAt(i).bpNumber.contains(searchController.text.trim()) || lmcList.elementAt(i).mobileNumber.contains(searchController.text.trim())) {
-            print(" element mobile" + lmcList.elementAt(i).mobileNumber + " element bp" + lmcList.elementAt(i).bpNumber);
+          if (lmcList
+                  .elementAt(i)
+                  .bpNumber
+                  .contains(searchController.text.trim()) ||
+              lmcList
+                  .elementAt(i)
+                  .mobileNumber
+                  .contains(searchController.text.trim())) {
+            print(" element mobile" +
+                lmcList.elementAt(i).mobileNumber +
+                " element bp" +
+                lmcList.elementAt(i).bpNumber);
             _lmcDataList.add(lmcList.elementAt(i));
           }
         }
@@ -452,7 +497,7 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
     if (onError.toString() == '403') {
       SessionDialogUtils.showCustomDialog(context,
           okBtnFunction: () => SessionDialogUtils.logOut(context));
-     // _sessionExpireDialog();
+      // _sessionExpireDialog();
     } else if (onError.toString() == '401') {
       getPref();
     }
@@ -525,7 +570,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                       (rows.isInstall == null)
                           ? Container(
                               child: Padding(
-                                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                padding:
+                                    EdgeInsets.only(top: 10.0, bottom: 10.0),
                                 child: Row(
                                   children: [
                                     /*   Expanded(
@@ -600,7 +646,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                             )
                           : Container(),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -614,7 +661,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -628,7 +676,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -642,7 +691,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -656,7 +706,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -670,7 +721,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -684,7 +736,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -698,7 +751,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -712,7 +766,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -726,7 +781,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -740,7 +796,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -754,7 +811,8 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -768,31 +826,36 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
                         thickness: 1.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                        padding:
+                            const EdgeInsets.only(top: 8, left: 8, right: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 textStyle: TextStyle(
                                   color: Colors.white,
                                 ),
                                 primary: Colors.blue,
                               ),
                               onPressed: () {
-                                Navigator.of(context, rootNavigator: true).pop();
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
                               },
                               child: Text('No'),
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 primary: Colors.black,
                                 textStyle: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                Navigator.of(context, rootNavigator: true).pop();
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
                                 gotoFeasibility(context, rows);
                                 //    Navigator.of(context).push(MaterialPageRoute(builder: (context) => InstallationScreen(rows: rows, action: 'Push')))
                               },
@@ -813,8 +876,11 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
   }
 
   gotoInstallation(BuildContext context, Rows rows) async {
-    String received = await Navigator.push(mContext, MaterialPageRoute(builder: (context) =>
-        InstallationScreen(rows: rows, action: 'Push')));
+    String received = await Navigator.push(
+        mContext,
+        MaterialPageRoute(
+            builder: (context) =>
+                InstallationScreen(rows: rows, action: 'Push')));
     if (received == 'Refresh') {
       Navigator.of(context).pop();
       getPref();
@@ -822,11 +888,16 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
   }
 
   Future<void> gotoFeasibility(BuildContext context, Rows rows) async {
-    String received = await Navigator.push(context, MaterialPageRoute(builder: (context) => FeasibilityScreen(rows: rows, action: 'Push'))).then((value) {
+    String received = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                FeasibilityScreen(rows: rows, action: 'Push'))).then((value) {
       setState(() {
         _showProgress = true;
       });
-      return _lmcPresenter.getDataFromServer(_id, _schema, _token, _offSet.toString(), widget.selection, bpNumber, area_id);
+      return _lmcPresenter.getDataFromServer(_id, _schema, _token,
+          _offSet.toString(), widget.selection, bpNumber, area_id);
     });
     if (received == 'Refresh') {
       Navigator.of(context).pop();
@@ -837,13 +908,15 @@ class _FeasibilityHomeScreenState extends State<FeasibilityHomeScreen> implement
 
 String getDate(String savedDateString) {
   if (savedDateString != null && savedDateString != '') {
-    String tempDate = new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
+    String tempDate =
+        new DateFormat("yyyy-MM-dd").format(DateTime.parse(savedDateString));
     return tempDate;
   }
   return '';
 }
 
-getTextField(String hintText, String fieldText, {TextInputType keyboardType = TextInputType.text}) {
+getTextField(String hintText, String fieldText,
+    {TextInputType keyboardType = TextInputType.text}) {
   return Container(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -854,7 +927,10 @@ getTextField(String hintText, String fieldText, {TextInputType keyboardType = Te
           autofocus: false,
           enabled: false,
           initialValue: fieldText,
-          decoration: new InputDecoration(border: OutlineInputBorder(), labelText: hintText, hintText: hintText),
+          decoration: new InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: hintText,
+              hintText: hintText),
         ),
       ),
     ),
@@ -865,7 +941,8 @@ class Notification {
   final String title;
   final String body;
   final Color color;
-  const Notification({@required this.title, @required this.body, @required this.color});
+  const Notification(
+      {@required this.title, @required this.body, @required this.color});
 }
 
 class OptionItem {

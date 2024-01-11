@@ -1,45 +1,51 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:lmc/model/IndustryResponse.dart';
 import 'package:lmc/model/lmc_model.dart';
+import 'package:lmc/utils/commonWidgets/button_widget.dart';
 import '../ExportFile/export_file.dart';
 
 // ignore: must_be_immutable
 class FeasibilityScreen extends StatefulWidget {
-
   Rows rows;
   String action;
-  FeasibilityScreen({Key key,this.rows,this.action}):super(key: key);
+  FeasibilityScreen({Key key, this.rows, this.action}) : super(key: key);
 
   @override
   FeasibilityScreenPage createState() => FeasibilityScreenPage();
 }
 
-
-class FeasibilityScreenPage extends State<FeasibilityScreen>{
+class FeasibilityScreenPage extends State<FeasibilityScreen> {
   //List<DropdownMenuItem<MaterialData>> _materialDropdownItems;
   //MaterialData _materialName;
   //String _materialId;
   bool show = false;
   TextEditingController qtyController = TextEditingController();
-  List<MaterialItem> _materialList=[];
+  List<MaterialItem> _materialList = [];
   ProgressDialog pr;
-  String _lmcFeasibilityDateLabel='',_lmcProposedDateLabel='';
-  String _additionalLabel='',_qtyLabel='',_materialLabel='';
-  String _followUpDateLabel='',_isFeasibleLabel='',_reasonCommentLabel='';
-  TextEditingController feasibilityDateController= TextEditingController(text: "${DateTime.now().toLocal()}".split(' ')[0]);
-  TextEditingController feasibilityDateController2= TextEditingController(text: "${DateTime.now().toLocal()}".split(' ')[0]);
-  TextEditingController followUpDateController= TextEditingController(text: '');
-  TextEditingController reasonController= TextEditingController(text: '');
+  String _lmcFeasibilityDateLabel = '', _lmcProposedDateLabel = '';
+  String _additionalLabel = '', _qtyLabel = '', _materialLabel = '';
+  String _followUpDateLabel = '',
+      _isFeasibleLabel = '',
+      _reasonCommentLabel = '';
+  TextEditingController feasibilityDateController =
+      TextEditingController(text: "${DateTime.now().toLocal()}".split(' ')[0]);
+  TextEditingController feasibilityDateController2 =
+      TextEditingController(text: "${DateTime.now().toLocal()}".split(' ')[0]);
+  TextEditingController followUpDateController =
+      TextEditingController(text: '');
+  TextEditingController reasonController = TextEditingController(text: '');
   List<IndustryList> list;
-  bool _checkBoxStatus=true;
+  bool _checkBoxStatus = true;
   DateTime _proposedDate = DateTime.now();
   DateTime _feasibilityVisitDate = DateTime.now();
   DateTime _followUpDate = DateTime.now();
 
-  List<DropdownMenuItem<OptionItem>> dropDownFeasibleList=([]);
-  List<DropdownMenuItem<OptionItem>> dropDownFeasibleList2=([]);
-  List<TextEditingController> _qtyControllerList=[];
-  List<DropdownMenuItem<OptionItem>> readyForNgcItems=([]);
+  List<DropdownMenuItem<OptionItem>> dropDownFeasibleList = ([]);
+  List<DropdownMenuItem<OptionItem>> dropDownFeasibleList2 = ([]);
+  List<TextEditingController> _qtyControllerList = [];
+  List<DropdownMenuItem<OptionItem>> readyForNgcItems = ([]);
 
   OptionItem _isFeasibleItem;
   OptionItem _isFeasibleItem2;
@@ -48,18 +54,16 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
   String _isFeasibleId;
   String _isFeasibleId2;
 
-
-
-
-
   String countryId, stateId;
-  String responsible='';
+  String responsible = '';
   Future<void> _getLabelsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var res =prefs.get(GlobalConstants.hpclLabels??'');
+    var res = prefs.get(GlobalConstants.hpclLabels ?? '');
     var token = prefs.get(GlobalConstants.token);
-    if(res== '') {
-      var _res = await http.get(Uri.parse(GlobalConstants.getLabels),headers: { 'Authorization': token,});
+    if (res == '') {
+      var _res = await http.get(Uri.parse(GlobalConstants.getLabels), headers: {
+        'Authorization': token,
+      });
       res = _res.body;
       print("getLabels-->" + _res.body);
     }
@@ -69,38 +73,43 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     _additionalLabel = hpclLabel.lmc.additional;
     _qtyLabel = hpclLabel.lmc.qty;
     _materialLabel = hpclLabel.lmc.material;
-    _isFeasibleLabel= hpclLabel.lmc.isFeasible;
+    _isFeasibleLabel = hpclLabel.lmc.isFeasible;
     responsible = hpclLabel.lmc.reason;
-    _followUpDateLabel  = hpclLabel.lmc.followUpDate;
-    _reasonCommentLabel ="Comment";
+    _followUpDateLabel = hpclLabel.lmc.followUpDate;
+    _reasonCommentLabel = "Comment";
   }
 
   Future<void> _getFreeMaterialData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var schema =  prefs.getString(GlobalConstants.schema);
+    var schema = prefs.getString(GlobalConstants.schema);
     var token = prefs.get(GlobalConstants.token);
-    var res = await http.get(Uri.parse(GlobalConstants.getFreeMaterialApi+schema),headers: { 'Authorization': token,});
+    var res = await http
+        .get(Uri.parse(GlobalConstants.getFreeMaterialApi + schema), headers: {
+      'Authorization': token,
+    });
 
-    print("getFreeMaterialUrlApi-->" + GlobalConstants.getFreeMaterialApi+schema);
+    print("getFreeMaterialUrlApi-->" +
+        GlobalConstants.getFreeMaterialApi +
+        schema);
     print("getFreeMaterialApi-->" + res.body);
-    print("base url-->" +GlobalConstants.getFreeMaterialApi+schema);
-    print("Authorization-->" +token);
-    if(res.statusCode == 200) {
+    print("base url-->" + GlobalConstants.getFreeMaterialApi + schema);
+    print("Authorization-->" + token);
+    if (res.statusCode == 200) {
       FreeMaterial dataList = FreeMaterial.fromJson(json.decode(res.body));
-      List<MaterialItem> materialList=[];
-      for(int i =0;i<dataList.data.length;i++) {
-        TextEditingController qtyController= new TextEditingController(text: '0');
+      List<MaterialItem> materialList = [];
+      for (int i = 0; i < dataList.data.length; i++) {
+        TextEditingController qtyController =
+            new TextEditingController(text: '0');
         _qtyControllerList.add(qtyController);
       }
 
       materialList = List.generate(
-        dataList.data.length,(i) =>
-          MaterialItem(
-              id: '${dataList.data[i].id}',
-              name: '${dataList.data[i].materialName}',
-              value: '0',
-              controller: TextEditingController(text: '0')
-          ),
+        dataList.data.length,
+        (i) => MaterialItem(
+            id: '${dataList.data[i].id}',
+            name: '${dataList.data[i].materialName}',
+            value: '0',
+            controller: TextEditingController(text: '0')),
       );
       if (!mounted) return;
       setState(() {
@@ -109,50 +118,67 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     }
   }
 
-
-
   Future<void> getReadyForNgc() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get(GlobalConstants.token);
-    var res = await http.get( Uri.parse(GlobalConstants.lmcReason,),headers: { 'Authorization': token,});
+    var res = await http.get(
+        Uri.parse(
+          GlobalConstants.lmcReason,
+        ),
+        headers: {
+          'Authorization': token,
+        });
     print("lmcReason-->" + res.body);
     final decoded = jsonDecode(res.body) as Map;
-    decoded.forEach((k,v){
-      dropDownFeasibleList2.add(DropdownMenuItem(value: OptionItem(id: k,title: v), child: Text(v),));
+    decoded.forEach((k, v) {
+      dropDownFeasibleList2.add(DropdownMenuItem(
+        value: OptionItem(id: k, title: v),
+        child: Text(v),
+      ));
     });
     _isFeasibleItem2 = dropDownFeasibleList2.first.value;
-    _isFeasibleId2   = _isFeasibleItem2.id;
+    _isFeasibleId2 = _isFeasibleItem2.id;
     setState(() {
-
       EasyLoading.dismiss();
     });
   }
+
   Future<void> isFeasibleDropdownList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get(GlobalConstants.token);
-    var res = await http.get(Uri.parse (GlobalConstants.isFeasible,),headers: { 'Authorization': token,});
+    var res = await http.get(
+        Uri.parse(
+          GlobalConstants.isFeasible,
+        ),
+        headers: {
+          'Authorization': token,
+        });
     print("isFeasible-->" + res.body);
     final decoded = jsonDecode(res.body) as Map;
-    decoded.forEach((k,v){
-      dropDownFeasibleList.add(DropdownMenuItem(value: OptionItem(id: k,title: v.toString()), child: Text(v.toString()),));
+    decoded.forEach((k, v) {
+      dropDownFeasibleList.add(DropdownMenuItem(
+        value: OptionItem(id: k, title: v.toString()),
+        child: Text(v.toString()),
+      ));
     });
     _isFeasibleItem = dropDownFeasibleList.first.value;
-    _isFeasibleId   = _isFeasibleItem.id;
+    _isFeasibleId = _isFeasibleItem.id;
     setState(() {
       EasyLoading.dismiss();
     });
   }
+
   @override
   void initState() {
     EasyLoading.show(status: 'loading...');
     super.initState();
     pr = ProgressDialog(context);
-    pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+    pr = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
     isFeasibleDropdownList();
     getReadyForNgc();
     _getFreeMaterialData();
     _getLabelsData();
-
   }
 
   @override
@@ -160,12 +186,17 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('LMC Feasibility',style: AppTextStyle.toolbarHeadline,),),
+        backgroundColor: Colors.green.shade800,
+        title: Text(
+          'LMC Feasibility',
+          style: AppTextStyle.toolbarHeadline,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(15.0),
           child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState){
+            builder: (BuildContext context, StateSetter setState) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -174,51 +205,68 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        SizedBox(height:2,),
-                        getDateTextField(
-                            '$_lmcProposedDateLabel',
+                        SizedBox(
+                          height: 2,
+                        ),
+                        getDateTextField('$_lmcProposedDateLabel',
                             "${_proposedDate.toLocal()}".split(' ')[0],
-                            controller: feasibilityDateController2
-                        ),
-                        getDateTextField(
-                            '$_lmcFeasibilityDateLabel',
+                            controller: feasibilityDateController2),
+                        getDateTextField('$_lmcFeasibilityDateLabel',
                             "${_feasibilityVisitDate.toLocal()}".split(' ')[0],
-                            controller: feasibilityDateController
+                            controller: feasibilityDateController),
+                        SizedBox(
+                          height: 15,
                         ),
-                        SizedBox(height: 15,),
-                        getDropDown(dropDownFeasibleList, _isFeasibleItem,title: _isFeasibleLabel,onChanged:(OptionItem value) {
-                          setState(() {
-                            _isFeasibleItem = value;
-                            _isFeasibleId   = value.id;
-                            if(_isFeasibleId=='1'){
-                              reasonController.text = '';
-                              followUpDateController.text = '';
-                              _checkBoxStatus=true;
-                            }
-                            if(_isFeasibleId=='2'){
-                              _checkBoxStatus=false;
-                            }
-                            if(_isFeasibleId=='3'){
-                              _checkBoxStatus=true;
-                            }
-
-                          });
-                        },),
-                        SizedBox(height: 15,),
-                        _isFeasibleId!='1'? getDropDown(dropDownFeasibleList2, _isFeasibleItem2,title:responsible,onChanged:(OptionItem value) {
-                          setState(() {
-                            _isFeasibleItem2 = value;
-                            _isFeasibleId2   = value.id;
-                            print("_isFeasibleId$_isFeasibleId2");
-                          });
-                        },)
-                            :Container(),
-                        SizedBox(height: 5,),
-                        _isFeasibleId!='1'
-                            ? getEditTextField('$_reasonCommentLabel',enable: true,controller: reasonController)
+                        getDropDown(
+                          dropDownFeasibleList,
+                          _isFeasibleItem,
+                          title: _isFeasibleLabel,
+                          onChanged: (OptionItem value) {
+                            setState(() {
+                              _isFeasibleItem = value;
+                              _isFeasibleId = value.id;
+                              if (_isFeasibleId == '1') {
+                                reasonController.text = '';
+                                followUpDateController.text = '';
+                                _checkBoxStatus = true;
+                              }
+                              if (_isFeasibleId == '2') {
+                                _checkBoxStatus = false;
+                              }
+                              if (_isFeasibleId == '3') {
+                                _checkBoxStatus = true;
+                              }
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        _isFeasibleId != '1'
+                            ? getDropDown(
+                                dropDownFeasibleList2,
+                                _isFeasibleItem2,
+                                title: responsible,
+                                onChanged: (OptionItem value) {
+                                  setState(() {
+                                    _isFeasibleItem2 = value;
+                                    _isFeasibleId2 = value.id;
+                                    print("_isFeasibleId$_isFeasibleId2");
+                                  });
+                                },
+                              )
                             : Container(),
-                        _isFeasibleId=='3'
-                            ? getDateTextField('$_followUpDateLabel',"${_followUpDate.toLocal()}".split(' ')[0],controller: followUpDateController)
+                        SizedBox(
+                          height: 5,
+                        ),
+                        _isFeasibleId != '1'
+                            ? getEditTextField('$_reasonCommentLabel',
+                                enable: true, controller: reasonController)
+                            : Container(),
+                        _isFeasibleId == '3'
+                            ? getDateTextField('$_followUpDateLabel',
+                                "${_followUpDate.toLocal()}".split(' ')[0],
+                                controller: followUpDateController)
                             : Container(),
 
                         // SizedBox(height:2,),
@@ -232,7 +280,9 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
                         //     "${_feasibilityVisitDate.toLocal()}".split(' ')[0],
                         //     controller: feasibilityDateController
                         // ),
-                        SizedBox(height: 15,),
+                        SizedBox(
+                          height: 15,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -244,93 +294,116 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
                             //     _checkBoxStatus = value;
                             //   },
                             // ),
-                            _checkBoxStatus ?  Text('$_additionalLabel',style: AppTextStyle.headline,) :Container(),
+                            _checkBoxStatus
+                                ? Text(
+                                    '$_additionalLabel',
+                                    style: AppTextStyle.headline,
+                                  )
+                                : Container(),
                           ],
                         ),
                       ],
                     ),
-                    _checkBoxStatus ? Column(
-                      children: _materialList.map((item) {
-                        return ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex:7,
-                                child: getTextField(_materialLabel,item.name),
-                              ),
-                              SizedBox(width: 5,),
-                              Expanded(
-                                flex:3,
-                                child: getQtyTextField(_qtyLabel,item.controller.text,enable: true,controller: item.controller),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    )
+                    _checkBoxStatus
+                        ? Column(
+                            children: _materialList.map((item) {
+                              return ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 0.0),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: getTextField(
+                                          _materialLabel, item.name),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: getQtyTextField(
+                                          _qtyLabel, item.controller.text,
+                                          enable: true,
+                                          controller: item.controller),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          )
                         : Container(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
-                      child: show  ? null :  ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor,),
-                          child: Container(
-                            width:200,
-                            child: Align(
-                              alignment:Alignment.center,
-                              child: Text('Submit',style: TextStyle(color: Colors.white),),),
-                          ),
-                          onPressed: () async {
-                            setState((){
-                              show = !show;
-                            });
-                            String _strProposedDate = "${_proposedDate.toLocal()}".split(' ')[0];
-                            String _strVisitDate = "${_feasibilityVisitDate.toLocal()}".split(' ')[0];
-                            _postFeasibilityData(widget.rows,_strProposedDate,_strVisitDate,_materialList);
-                          }
-                      ),
-                    )
-                  ]
-              );
+                    show
+                        ? null
+                        : ButtonWidget(
+                            text: 'Submit',
+                            onPressed: () async {
+                              setState(() {
+                                show = !show;
+                              });
+                              String _strProposedDate =
+                                  "${_proposedDate.toLocal()}".split(' ')[0];
+                              String _strVisitDate =
+                                  "${_feasibilityVisitDate.toLocal()}"
+                                      .split(' ')[0];
+                              _postFeasibilityData(
+                                  widget.rows,
+                                  _strProposedDate,
+                                  _strVisitDate,
+                                  _materialList);
+                            }),
+                  ]);
             },
           ),
         ),
       ),
     );
   }
-  getDropDown(dropListModel,OptionItem _value,
+
+  getDropDown(dropListModel, OptionItem _value,
       {title, Function(OptionItem optionItem) onChanged}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-      child:
-      DropdownButtonFormField<OptionItem>(
+      child: DropdownButtonFormField<OptionItem>(
         decoration: InputDecoration(
           labelText: title,
-          border: OutlineInputBorder(),),
+          border: OutlineInputBorder(),
+        ),
         value: _value,
         items: dropListModel,
         onChanged: onChanged,
       ),
     );
   }
-  Future<void> _postFeasibilityData(Rows rows, String strProposedDate, String strVisitDate, List<MaterialItem> materialList) async {
+
+  Future<void> _postFeasibilityData(Rows rows, String strProposedDate,
+      String strVisitDate, List<MaterialItem> materialList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var schema  =  prefs.getString(GlobalConstants.schema);
-    var token   =  prefs.getString(GlobalConstants.token);
-    var lmcId   =  rows.assignId;
-    var dmaId   =  rows.dma;
-    var bom     =  _checkBoxStatus?'1':'0';
-    var _arrId  = _materialList.asMap().values.map((e) => e.id).toList();
-    var _arrQty = _materialList.asMap().values.map((e) => e.controller.text).toList();
-    var _qtyArr = _arrQty.toString().replaceAll(', ', ',').replaceAll('[', '').replaceAll(']', '');
-    var _idArr  = _arrId.toString().replaceAll(', ', ',').replaceAll('[', '').replaceAll(']', '');
+    var schema = prefs.getString(GlobalConstants.schema);
+    var token = prefs.getString(GlobalConstants.token);
+    var lmcId = rows.assignId;
+    var dmaId = rows.dma;
+    var bom = _checkBoxStatus ? '1' : '0';
+    var _arrId = _materialList.asMap().values.map((e) => e.id).toList();
+    var _arrQty =
+        _materialList.asMap().values.map((e) => e.controller.text).toList();
+    var _qtyArr = _arrQty
+        .toString()
+        .replaceAll(', ', ',')
+        .replaceAll('[', '')
+        .replaceAll(']', '');
+    var _idArr = _arrId
+        .toString()
+        .replaceAll(', ', ',')
+        .replaceAll('[', '')
+        .replaceAll(']', '');
 
-
-    if(_isFeasibleId!='1'&&reasonController.text==''){
+    if (_isFeasibleId != '1' && reasonController.text == '') {
       _toast('Enter comment for  feasibility');
       return;
-    }else if(_isFeasibleId=='3'&&followUpDateController.text==''){
+    } else if (_isFeasibleId == '3' && followUpDateController.text == '') {
       _toast('Select follow up date');
       return;
     }
@@ -341,10 +414,10 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
       'feasibility_visit_date': strVisitDate,
       'schema': schema,
       'bom': bom,
-      'material_id': _checkBoxStatus?_idArr:'',
-      'qty': _checkBoxStatus?_qtyArr:'',
+      'material_id': _checkBoxStatus ? _idArr : '',
+      'qty': _checkBoxStatus ? _qtyArr : '',
       'is_feasible': _isFeasibleId,
-      'feas_reason':_isFeasibleId2,
+      'feas_reason': _isFeasibleId2,
       'comment': reasonController.text,
       'follow_up_date': followUpDateController.text,
     };
@@ -352,24 +425,26 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
     //return;
     await pr.show();
 
-    var res = await http.post(Uri.parse(GlobalConstants.postFeasibilityDataApi), body: jsonVAr, headers: {'authorization':'$token'});
-    print("postFeasibilityDataApi-->" +res.body);
+    var res = await http.post(Uri.parse(GlobalConstants.postFeasibilityDataApi),
+        body: jsonVAr, headers: {'authorization': '$token'});
+    log("postFeasibilityDataApi-->${GlobalConstants.postFeasibilityDataApi}");
+    print("postFeasibilityDataApi-->" + res.body);
     SuccessResponce _res = new SuccessResponce.fromJson(json.decode(res.body));
-    if(_res.success == 200) {
+    if (_res.success == 200) {
       pr.hide();
-      _showMyDialog(context,_res.data);
-    }else{
+      _showMyDialog(context, _res.data);
+    } else {
       pr.hide();
-      _showErrorDialog(context,_res.data);
+      _showErrorDialog(context, _res.data);
       //print(res.body);
     }
   }
-  getTextField(String hintText,
-      String fieldText,{
-        TextEditingController controller,
-        Function onChanged,
-        bool enable,
-        TextInputType keyboardType = TextInputType.text}) {
+
+  getTextField(String hintText, String fieldText,
+      {TextEditingController controller,
+      Function onChanged,
+      bool enable,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
       child: DefaultTextStyle(
@@ -379,46 +454,22 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
           onTap: onChanged,
           keyboardType: keyboardType,
           autofocus: false,
-          enabled: enable??false,
+          enabled: enable ?? false,
           initialValue: fieldText,
           decoration: new InputDecoration(
               border: OutlineInputBorder(),
-              labelText:  hintText ,
-              hintText: hintText),
-        ),
-      ),
-    );
-  }
-  getEditTextField(String hintText, {
-    TextEditingController controller,
-    Function onChanged,
-    bool enable,
-    TextInputType keyboardType = TextInputType.text}) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-      child: DefaultTextStyle(
-        style: TextStyle(color: Colors.black),
-        child: TextFormField(
-          controller: controller,
-          onTap: onChanged,
-          keyboardType: keyboardType,
-          autofocus: false,
-          enabled: enable??false,
-          decoration: new InputDecoration(
-              border: OutlineInputBorder(),
-              labelText:  hintText ,
+              labelText: hintText,
               hintText: hintText),
         ),
       ),
     );
   }
 
-  getQtyTextField(String hintText,
-      String fieldText,{
-        TextEditingController controller,
-        Function onChanged,
-        bool enable,
-        TextInputType keyboardType = TextInputType.number}) {
+  getEditTextField(String hintText,
+      {TextEditingController controller,
+      Function onChanged,
+      bool enable,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
       child: DefaultTextStyle(
@@ -428,20 +479,44 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
           onTap: onChanged,
           keyboardType: keyboardType,
           autofocus: false,
-          enabled: enable??false,
+          enabled: enable ?? false,
           decoration: new InputDecoration(
               border: OutlineInputBorder(),
-              labelText:  hintText ,
+              labelText: hintText,
               hintText: hintText),
         ),
       ),
     );
   }
-  getDateTextField(String hintText,
-      String fieldText,{
-        TextEditingController controller,
-        Function onChanged,
-        TextInputType keyboardType = TextInputType.text}) {
+
+  getQtyTextField(String hintText, String fieldText,
+      {TextEditingController controller,
+      Function onChanged,
+      bool enable,
+      TextInputType keyboardType = TextInputType.number}) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+      child: DefaultTextStyle(
+        style: TextStyle(color: Colors.black),
+        child: TextFormField(
+          controller: controller,
+          onTap: onChanged,
+          keyboardType: keyboardType,
+          autofocus: false,
+          enabled: enable ?? false,
+          decoration: new InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: hintText,
+              hintText: hintText),
+        ),
+      ),
+    );
+  }
+
+  getDateTextField(String hintText, String fieldText,
+      {TextEditingController controller,
+      Function onChanged,
+      TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
       child: DefaultTextStyle(
@@ -453,25 +528,20 @@ class FeasibilityScreenPage extends State<FeasibilityScreen>{
             enabled: false,
             decoration: new InputDecoration(
                 border: OutlineInputBorder(),
-                labelText:  hintText,
+                labelText: hintText,
                 hintText: hintText),
           ),
-          onTap: (){
-            _selectDate(context).then((value) =>
-                setState(() {
+          onTap: () {
+            _selectDate(context).then((value) => setState(() {
                   controller.text = ("${value.toLocal()}".split(' ')[0]);
-                })
-            );
+                }));
           },
         ),
       ),
     );
   }
-
-
-
-
 }
+
 class SuccessResponce {
   int success;
   bool error;
@@ -490,7 +560,8 @@ class SuccessResponce {
     return data;
   }
 }
-Future<void> _showMyDialog(BuildContext mContext,String _msg) async {
+
+Future<void> _showMyDialog(BuildContext mContext, String _msg) async {
   return showDialog<void>(
     context: mContext,
     barrierDismissible: false, // user must tap button!
@@ -509,7 +580,7 @@ Future<void> _showMyDialog(BuildContext mContext,String _msg) async {
             child: Text('OK'),
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.pop(mContext,'Refresh');
+              Navigator.pop(mContext, 'Refresh');
             },
           ),
         ],
@@ -517,7 +588,8 @@ Future<void> _showMyDialog(BuildContext mContext,String _msg) async {
     },
   );
 }
-Future<void> _showErrorDialog(BuildContext mContext,String _msg) async {
+
+Future<void> _showErrorDialog(BuildContext mContext, String _msg) async {
   return showDialog<void>(
     context: mContext,
     barrierDismissible: false,
@@ -527,7 +599,7 @@ Future<void> _showErrorDialog(BuildContext mContext,String _msg) async {
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              Text(_msg),
+              Text(_msg ?? ""),
             ],
           ),
         ),
@@ -544,7 +616,8 @@ Future<void> _showErrorDialog(BuildContext mContext,String _msg) async {
     },
   );
 }
-Future<DateTime>  _selectDate(BuildContext context) async {
+
+Future<DateTime> _selectDate(BuildContext context) async {
   final DateTime picked = await showDatePicker(
     context: context,
     initialDate: DateTime.now(),
@@ -556,21 +629,29 @@ Future<DateTime>  _selectDate(BuildContext context) async {
   }
   return DateTime.now();
 }
+
 String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
 class OptionItem {
   final String id;
   final String title;
   OptionItem({@required this.id, @required this.title});
 }
+
 class MaterialItem {
   final String id;
   final String name;
   final String value;
   final TextEditingController controller;
-  MaterialItem({@required this.id, @required this.name,@required this.value,this.controller,});
-
+  MaterialItem({
+    @required this.id,
+    @required this.name,
+    @required this.value,
+    this.controller,
+  });
 }
-_toast(String _msg){
+
+_toast(String _msg) {
   Fluttertoast.showToast(
       msg: _msg,
       toastLength: Toast.LENGTH_SHORT,
@@ -578,6 +659,5 @@ _toast(String _msg){
       timeInSecForIosWeb: 1,
       backgroundColor: Colors.red,
       textColor: Colors.white,
-      fontSize: 16.0
-  );
+      fontSize: 16.0);
 }

@@ -13,9 +13,9 @@ class GlobalConstants {
   static String dmaId = "DMA ID";
   static String lmcProposedDate = "LMC Proposed Date";
 
-   static const String BaseUrl       = "https://citygas.hpcl.co.in/api/";
- // static const String BaseUrl = "http://142.79.231.30:8084/api/";
-  //https://citygas.hpcl.co.in/api/getlmcapi
+  //  static const String BaseUrl       = "https://citygas.hpcl.co.in/api/";
+//  static const String BaseUrl = "http://142.79.231.30:8084/api/";
+  static const String BaseUrl = "http://pbgpl.smartgasnet.com/api/";
   static String login = BaseUrl + "auth";
   static String getLmcApi = BaseUrl + "getlmcapi";
   static String getlmcInstallationApi = BaseUrl + "getlmcInstallationApi";
@@ -30,7 +30,8 @@ class GlobalConstants {
   static String isFeasible = '$BaseUrl' + "/getConstant?key=is_feasible";
   static String lmcReason = '$BaseUrl' + "/getConstant?key=lmcReason";
   static String getRfc = '$BaseUrl' + "/getConstant?key=rfc";
-  static String getReadyForNgc = '$BaseUrl' + "/getConstant?key=isCustomerReadyForNgc";
+  static String getReadyForNgc =
+      '$BaseUrl' + "/getConstant?key=isCustomerReadyForNgc";
   static String getTypeOfNr = '$BaseUrl' + "/getConstant?key=typeOfNr";
 
   static String getAllArea = BaseUrl + "getAllArea";
@@ -40,7 +41,8 @@ class GlobalConstants {
 
   static String areaList = BaseUrl + "getAllArea?schema=";
   static String getLmcInstallationDone = BaseUrl + "getlmcInstallationdone?";
-  static String updateLMCInstallationImages = BaseUrl + "UpdateLMCInstallationImages";
+  static String updateLMCInstallationImages =
+      BaseUrl + "UpdateLMCInstallationImages";
   static String getLmcFeasibilityAPI = BaseUrl + "getlmcFeasibilityAPI";
   static String resetPassword = BaseUrl + "resetpassword";
 }

@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "392269229688",
-    "project_id": "hpcl-lmc",
-    "storage_bucket": "hpcl-lmc.appspot.com"
+    "project_id": "pbg-lmc",
+    "storage_bucket": "pbg-lmc.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:392269229688:android:a5c87114adff596baa478d",
         "android_client_info": {
-          "package_name": "com.app.lmc"
+          "package_name": "com.app.pbg.lmc"
         }
       },
       "oauth_client": [

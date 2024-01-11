@@ -5,7 +5,8 @@ class HomeImagesScreen extends StatefulWidget {
   int position = -1;
   ImageDataModel studentModel;
 
-  HomeImagesScreen(this.isEdit, this.position, this.studentModel, {Key key}) : super(key: key);
+  HomeImagesScreen(this.isEdit, this.position, this.studentModel, {Key key})
+      : super(key: key);
 
   @override
   State<HomeImagesScreen> createState() => _HomeImagesScreenState();
@@ -42,7 +43,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
   dataLoad() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      bpNumberController = TextEditingController(text: pref.getString(GlobalConstants.bpNumber) ?? "");
+      bpNumberController = TextEditingController(
+          text: pref.getString(GlobalConstants.bpNumber) ?? "");
       lmcID = pref.getString(GlobalConstants.lmcId) ?? "";
       dmaID = pref.getString(GlobalConstants.dmaId) ?? "";
     });
@@ -50,19 +52,20 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-      if (widget.isEdit) {
-        bpNumberController.text = widget.studentModel.bpNumber;
-        lmcIDController.text = widget.studentModel.lmcID;
-        dmaIDController.text = widget.studentModel.dmaID;
-        pic1 = widget.studentModel.image1 ?? "";
-        pic2 = widget.studentModel.image2 ?? "";
-        pic3 = widget.studentModel.image3 ?? "";
-        pic4 = widget.studentModel.image4 ?? "";
-      }
+    if (widget.isEdit) {
+      bpNumberController.text = widget.studentModel.bpNumber;
+      lmcIDController.text = widget.studentModel.lmcID;
+      dmaIDController.text = widget.studentModel.dmaID;
+      pic1 = widget.studentModel.image1 ?? "";
+      pic2 = widget.studentModel.image2 ?? "";
+      pic3 = widget.studentModel.image3 ?? "";
+      pic4 = widget.studentModel.image4 ?? "";
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.green.shade800,
         title: Text("Image Store"),
       ),
       body: SingleChildScrollView(
@@ -93,7 +96,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                           children: [
                             customCard("RFC Image"),
                             InkWell(
-                              onTap: () => _openImageSource1(context, image1Controller),
+                              onTap: () =>
+                                  _openImageSource1(context, image1Controller),
                               child: image1Controller.profileImage1 != null
                                   ? Image.file(
                                       image1Controller.profileImage1,
@@ -116,7 +120,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                               children: [
                                 customCard("GI Pipe Image"),
                                 InkWell(
-                                  onTap: () => _openImageSource2(context, image2Controller),
+                                  onTap: () => _openImageSource2(
+                                      context, image2Controller),
                                   child: image2Controller.profileImage2 != null
                                       ? Image.file(
                                           image2Controller.profileImage2,
@@ -147,7 +152,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                           children: [
                             customCard("Isometric Image"),
                             InkWell(
-                              onTap: () => _openImageSource3(context, image3Controller),
+                              onTap: () =>
+                                  _openImageSource3(context, image3Controller),
                               child: image3Controller.profileImage3 != null
                                   ? Image.file(
                                       image3Controller.profileImage3,
@@ -168,7 +174,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                           children: [
                             customCard("Pneumatic Image"),
                             InkWell(
-                              onTap: () => _openImageSource4(context, image4Controller),
+                              onTap: () =>
+                                  _openImageSource4(context, image4Controller),
                               child: image4Controller.profileImage4 != null
                                   ? Image.file(
                                       image4Controller.profileImage4,
@@ -227,10 +234,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
     );
   }
 
-  Future<void> getImage1(PhotoController photoController, ImageSource imageSource) async {
+  Future<void> getImage1(
+      PhotoController photoController, ImageSource imageSource) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.getImage(source: imageSource, maxHeight: 900, maxWidth: 1000, imageQuality: 100);
+      final pickedFile = await picker.getImage(
+          source: imageSource,
+          maxHeight: 900,
+          maxWidth: 1000,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           if (photoController != null) {
@@ -270,10 +282,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
     );
   }
 
-  Future<void> getImage2(PhotoController photoController, ImageSource imageSource) async {
+  Future<void> getImage2(
+      PhotoController photoController, ImageSource imageSource) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.getImage(source: imageSource, maxHeight: 900, maxWidth: 1000, imageQuality: 100);
+      final pickedFile = await picker.getImage(
+          source: imageSource,
+          maxHeight: 900,
+          maxWidth: 1000,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           if (photoController != null) {
@@ -313,10 +330,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
     );
   }
 
-  Future<void> getImage3(PhotoController photoController, ImageSource imageSource) async {
+  Future<void> getImage3(
+      PhotoController photoController, ImageSource imageSource) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.getImage(source: imageSource, maxHeight: 900, maxWidth: 1000, imageQuality: 100);
+      final pickedFile = await picker.getImage(
+          source: imageSource,
+          maxHeight: 900,
+          maxWidth: 1000,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null) {
           if (photoController != null) {
@@ -356,10 +378,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
     );
   }
 
-  Future<void> getImage4(PhotoController photoController, ImageSource imageSource) async {
+  Future<void> getImage4(
+      PhotoController photoController, ImageSource imageSource) async {
     try {
       final picker = ImagePicker();
-      final pickedFile = await picker.getImage(source: imageSource, maxHeight: 900, maxWidth: 1000, imageQuality: 100);
+      final pickedFile = await picker.getImage(
+          source: imageSource,
+          maxHeight: 900,
+          maxWidth: 1000,
+          imageQuality: 100);
       setState(() {
         if (pickedFile != null && photoController != null) {
           photoController.profileImage4 = File(pickedFile.path);
@@ -382,7 +409,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
             children: [
               ListTile(
                 leading: Text("$bpNoLabel"),
-                trailing: Text("${bpNumberController.text.toString() == null ? '-' : bpNumberController.text.toString()}"),
+                trailing: Text(
+                    "${bpNumberController.text.toString() == null ? '-' : bpNumberController.text.toString()}"),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -390,17 +418,20 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                   customCard("RFC Image"),
                   image1Controller.profileImage1 == null
                       ? InkWell(
-                          onTap: () => _openImageSource1(context, image1Controller),
+                          onTap: () =>
+                              _openImageSource1(context, image1Controller),
                           child: Container(
                               decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("assets/icons/place_holder.png"),
+                              image:
+                                  AssetImage("assets/icons/place_holder.png"),
                               fit: BoxFit.cover,
                             ),
                           )))
                       : ImageCircle(
                           fileImage1: image1Controller.profileImage1,
-                          pathImage: image1Controller.profileImage1.path.toString(),
+                          pathImage:
+                              image1Controller.profileImage1.path.toString(),
                         ),
                 ],
               ),
@@ -413,17 +444,20 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                   customCard("Work Completed"),
                   image2Controller.profileImage2 == null
                       ? InkWell(
-                          onTap: () => _openImageSource2(context, image2Controller),
+                          onTap: () =>
+                              _openImageSource2(context, image2Controller),
                           child: Container(
                               decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("assets/icons/place_holder.png"),
+                              image:
+                                  AssetImage("assets/icons/place_holder.png"),
                               fit: BoxFit.cover,
                             ),
                           )))
                       : ImageCircle(
                           fileImage1: image2Controller.profileImage2,
-                          pathImage: image2Controller.profileImage2.path.toString(),
+                          pathImage:
+                              image2Controller.profileImage2.path.toString(),
                         ),
                 ],
               ),
@@ -436,17 +470,20 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                   customCard("Isometric Image"),
                   image3Controller.profileImage3 == null
                       ? InkWell(
-                          onTap: () => _openImageSource3(context, image3Controller),
+                          onTap: () =>
+                              _openImageSource3(context, image3Controller),
                           child: Container(
                               decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("assets/icons/place_holder.png"),
+                              image:
+                                  AssetImage("assets/icons/place_holder.png"),
                               fit: BoxFit.cover,
                             ),
                           )))
                       : ImageCircle(
                           fileImage1: image3Controller.profileImage3,
-                          pathImage: image3Controller.profileImage3.path.toString(),
+                          pathImage:
+                              image3Controller.profileImage3.path.toString(),
                         ),
                 ],
               ),
@@ -459,17 +496,20 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                   customCard("Pneumatic Image"),
                   image4Controller.profileImage4 == null
                       ? InkWell(
-                          onTap: () => _openImageSource4(context, image4Controller),
+                          onTap: () =>
+                              _openImageSource4(context, image4Controller),
                           child: Container(
                               decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("assets/icons/place_holder.png"),
+                              image:
+                                  AssetImage("assets/icons/place_holder.png"),
                               fit: BoxFit.cover,
                             ),
                           )))
                       : ImageCircle(
                           fileImage1: image4Controller.profileImage4,
-                          pathImage: image4Controller.profileImage4.path.toString(),
+                          pathImage:
+                              image4Controller.profileImage4.path.toString(),
                         ),
                 ],
               ),
@@ -526,7 +566,10 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
         image3: getImage3 ?? "",
         image4: getImage4 ?? "",
       );
-      if (data.image1.isNotEmpty || data.image2.isNotEmpty || data.image3.isNotEmpty || data.image4.isNotEmpty == true) {
+      if (data.image1.isNotEmpty ||
+          data.image2.isNotEmpty ||
+          data.image3.isNotEmpty ||
+          data.image4.isNotEmpty == true) {
         print("save");
         if (widget.isEdit) {
           dataBox.putAt(widget.position, data);
@@ -534,7 +577,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
           dataBox.add(data);
         }
         EasyLoading.showSuccess('Great Success! \n Record Save');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ImageListScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ImageListScreen()));
       } else {
         print("not save");
         CustomToast.showToast("Please select at least one image");

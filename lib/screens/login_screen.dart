@@ -1,7 +1,6 @@
 import '../ExportFile/export_file.dart';
 import 'package:http/http.dart' as http;
 
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -29,7 +28,6 @@ class _LoginState extends State<Login> {
 
   var value;
 
-
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -38,7 +36,6 @@ class _LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +77,17 @@ class _LoginState extends State<Login> {
                                 ],
                                 textCapitalization: TextCapitalization.none,
                                 textInputAction: TextInputAction.next,
-                                inputFormatters: [FilteringTextInputFormatter.deny(' ')],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(' ')
+                                ],
                                 validator: (e) {
                                   if (e.isEmpty) {
-                                    CustomToast.showToast('Please Insert Email');
+                                    CustomToast.showToast(
+                                        'Please Insert Email');
                                     return "Please Insert Email";
                                   } else if (!isValidEmail(e)) {
-                                    CustomToast.showToast('Please Insert Valid Email');
+                                    CustomToast.showToast(
+                                        'Please Insert Valid Email');
                                     return "Please Insert Valid Email";
                                   }
                                   return null;
@@ -102,8 +103,10 @@ class _LoginState extends State<Login> {
                                   labelStyle: AppTextStyle.textContent,
                                   labelText: "Email",
                                   prefixIcon: Padding(
-                                    padding: EdgeInsets.only(left: 20, right: 15),
-                                    child: Icon(Icons.person, color: Colors.black),
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 15),
+                                    child:
+                                        Icon(Icons.person, color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -114,7 +117,9 @@ class _LoginState extends State<Login> {
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.done,
                                 autofillHints: const [AutofillHints.password],
-                                inputFormatters: [FilteringTextInputFormatter.deny(' ')],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(' ')
+                                ],
                                 validator: (e) {
                                   if (e.isEmpty) {
                                     return "Password Can't be Empty";
@@ -133,12 +138,16 @@ class _LoginState extends State<Login> {
                                   labelStyle: AppTextStyle.textContent,
                                   labelText: "Password",
                                   prefixIcon: Padding(
-                                    padding: EdgeInsets.only(left: 20, right: 15),
-                                    child: Icon(Icons.phonelink_lock, color: Colors.black),
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 15),
+                                    child: Icon(Icons.phonelink_lock,
+                                        color: Colors.black),
                                   ),
                                   suffixIcon: IconButton(
                                     onPressed: showHide,
-                                    icon: Icon(_secureText ? Icons.visibility_off : Icons.visibility),
+                                    icon: Icon(_secureText
+                                        ? Icons.visibility_off
+                                        : Icons.visibility),
                                   ),
                                 ),
                               ),
@@ -157,13 +166,19 @@ class _LoginState extends State<Login> {
                                       ),
                                       onPressed: () {
                                         TextInput.finishAutofillContext();
-                                          check();},
+                                        check();
+                                      },
                                       style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.all<Color>(
-                                            Color(0xFFf7d426),
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            Colors.green.shade800,
                                           ),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
                                           ))),
                                 ),
                               ],
@@ -218,7 +233,9 @@ class _LoginState extends State<Login> {
   }
 
   bool isValidEmail(String _email) {
-    return RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(_email);
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(_email);
   }
 
   getUniqueDeviceId() async {
@@ -240,9 +257,14 @@ class _LoginState extends State<Login> {
       _showProgress = true;
     });
     try {
-      final data = {"email": username, "password": password, "device": deviceId};
+      final data = {
+        "email": username,
+        "password": password,
+        "device": deviceId
+      };
       final jsonString = json.encode(data);
-      var res = await http.post(Uri.parse(GlobalConstants.login), body: jsonString);
+      var res =
+          await http.post(Uri.parse(GlobalConstants.login), body: jsonString);
       print("login-->" + jsonString);
       print("login-->" + GlobalConstants.login);
       print("login-->" + res.body);
@@ -267,20 +289,19 @@ class _LoginState extends State<Login> {
           // CustomToast.showToast(lgd.messages);
           if (lgd.user.role.toLowerCase().contains('lmc')) {
             CustomToast.showToast(lgd.messages);
-         /*   if(lgd.user.pwdChanged == "0"){
+            /*   if(lgd.user.pwdChanged == "0"){
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                     (Route<dynamic> route) => false,
               );
             }else{*/
-               Navigator.pushAndRemoveUntil(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => DashboardScreen()),
               (Route<dynamic> route) => false,
             );
-         //   }
-
+            //   }
           } else {
             CustomToast.showToast('Invalid UserName and Password');
           }

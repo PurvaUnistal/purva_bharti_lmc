@@ -11,7 +11,6 @@ import '../utils/commonWidgets/common_dialog_box.dart';
 import '../utils/global_constant.dart';
 import '../utils/commonWidgets/logout_method.dart';
 
-
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({Key key}) : super(key: key);
 
@@ -23,8 +22,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   ApiIntegration apiIntegration;
   ChangePasswordResponse changePasswordResponse;
 
-  TextEditingController newPasswordController =  TextEditingController();
-  TextEditingController conformPasswordController =  TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController conformPasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -35,40 +34,43 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     getSharedPref();
     super.initState();
   }
+
   String userId;
-  getSharedPref() async{
+  getSharedPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-   setState(() {
-     userId  = prefs.getString(GlobalConstants.id);
-   });
+    setState(() {
+      userId = prefs.getString(GlobalConstants.id);
+    });
   }
 
-  Future getChangeData() async{
+  Future getChangeData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    RegExp upperRegex=  RegExp(r'[A-Z]');
-    RegExp smallRegex=  RegExp(r'[a-z]');
-    RegExp charRegex=  RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+    RegExp upperRegex = RegExp(r'[A-Z]');
+    RegExp smallRegex = RegExp(r'[a-z]');
+    RegExp charRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
 
-    if(newPasswordController.value.text.isEmpty){
+    if (newPasswordController.value.text.isEmpty) {
       CustomToast.showToast("Password is required please enter");
       return false;
-    } else  if(!smallRegex.hasMatch(newPasswordController.text)){
+    } else if (!smallRegex.hasMatch(newPasswordController.text)) {
       CustomToast.showToast("The Password must be at least one Small letter.");
       return false;
-    }else  if(!upperRegex.hasMatch(newPasswordController.text)){
-      CustomToast.showToast("The Password must be at least one Uppercase letter.");
+    } else if (!upperRegex.hasMatch(newPasswordController.text)) {
+      CustomToast.showToast(
+          "The Password must be at least one Uppercase letter.");
       return false;
-    }
-    else if(newPasswordController.text.length < 8){
+    } else if (newPasswordController.text.length < 8) {
       CustomToast.showToast("Password must be at least 8 characters long");
       return false;
-    }else  if(!charRegex.hasMatch(newPasswordController.text)){
-      CustomToast.showToast("The Password must be at least one special character.");
+    } else if (!charRegex.hasMatch(newPasswordController.text)) {
+      CustomToast.showToast(
+          "The Password must be at least one special character.");
       return false;
-    } else if(conformPasswordController.text.isEmpty){
+    } else if (conformPasswordController.text.isEmpty) {
       CustomToast.showToast("Please enter conform password");
       return false;
-    }else if(conformPasswordController.text.toString().trim() != newPasswordController.text.toString().trim()){
+    } else if (conformPasswordController.text.toString().trim() !=
+        newPasswordController.text.toString().trim()) {
       CustomToast.showToast("Password does not match. Please re-type again.");
       return false;
     }
@@ -77,18 +79,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       password: newPasswordController.text.trim().toString(),
       confirmPassword: conformPasswordController.text.trim().toString(),
     );
-    print("changePasswordResponse==>"+changePasswordResponse.toJson().toString());
+    print("changePasswordResponse==>" +
+        changePasswordResponse.toJson().toString());
     var res = await apiIntegration.changePasswordApi(changePasswordResponse);
-    if(res != null){
+    if (res != null) {
       print("Not Null");
       CommonDialogBox.showCommonDialog(
           context: context,
           title: "Password Updated",
-          subTitle:"Your password has been reset Successfully! \n Now login with your new password",
-          okBtnFunction: ()=>  LogOutMethod.logOut(context)
-      );
-
-    }else{
+          subTitle:
+              "Your password has been reset Successfully! \n Now login with your new password",
+          okBtnFunction: () => LogOutMethod.logOut(context));
+    } else {
       print("Null Data");
     }
   }
@@ -98,12 +100,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          backgroundColor: Colors.green.shade800,
           title: Text("Change Password"),
         ),
-        body: _buildLayout()
-    );
+        body: _buildLayout());
   }
-
 
   Widget _buildLayout() {
     return Padding(
@@ -124,20 +125,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               _confirmPasswordWidget(),
               horgentental(),
               horgentental(),
-             TextButton(
-               style: TextButton.styleFrom(
-                   foregroundColor: Colors.white,
-                   backgroundColor: Colors.blue,
-               ),
-                 child: Text("Change Password"),
-               onPressed: (){
-                 TextInput.finishAutofillContext();
-               getChangeData();
-
-             },
-             ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                ),
+                child: Text("Change Password"),
+                onPressed: () {
+                  TextInput.finishAutofillContext();
+                  getChangeData();
+                },
+              ),
               Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom * 1),
               )
             ],
           ),
@@ -164,16 +165,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-
   Widget _confirmPasswordWidget() {
     return AppTextFormField(
       autofillHints: [AutofillHints.newPassword],
       controller: conformPasswordController,
       prefixIcon: Icons.lock_outline_rounded,
       hintText: "Confirm Password",
-      labelText:"Confirm Password",
+      labelText: "Confirm Password",
     );
   }
+
   bool isVisibility = true;
 
   showHide() {
@@ -181,19 +182,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       isVisibility = !isVisibility;
     });
   }
-Widget newPasswordValidation(){
+
+  Widget newPasswordValidation() {
     return PasswordValidatedFields(
       textEditingController: newPasswordController,
       obscureText: isVisibility,
       inputDecoration: InputDecoration(
-          prefixIcon:Icon( Icons.lock_outline_rounded),
+          prefixIcon: Icon(Icons.lock_outline_rounded),
           suffixIcon: IconButton(
-            icon: Icon(isVisibility?Icons.visibility_off : Icons.visibility),
-            onPressed:showHide ,
+            icon: Icon(isVisibility ? Icons.visibility_off : Icons.visibility),
+            onPressed: showHide,
           ),
           hintText: "New Password",
-          labelText:"New Password",
-          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          labelText: "New Password",
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(32.0)),
           ),
@@ -204,17 +207,15 @@ Widget newPasswordValidation(){
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
             borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
+          )),
       inActiveRequirementColor: Colors.red,
       activeRequirementColor: Colors.green,
       inActiveIcon: Icons.cancel,
-
       activeIcon: Icons.done_all,
     );
-}
+  }
 
-  Widget horgentental(){
+  Widget horgentental() {
     return SizedBox(
       height: 15,
     );

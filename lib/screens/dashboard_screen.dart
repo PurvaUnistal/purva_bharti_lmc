@@ -71,6 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          backgroundColor: Colors.green.shade800,
             title: Text(
               'L M C',
               style: AppTextStyle.appBarTitle,

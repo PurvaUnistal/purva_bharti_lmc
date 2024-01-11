@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.app.lmc">
+    package="com.app.pbg.lmc">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -12,7 +12,7 @@
         tools:ignore="UnusedAttribute" />
    <application
         android:label="LMC"
-       android:icon="@drawable/ic_launcher">
+       android:icon="@mipmap/pbg_logo">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

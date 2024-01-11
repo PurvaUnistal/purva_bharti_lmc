@@ -12,6 +12,7 @@ final ThemeData kDarkThemeData = ThemeData(
   ),
   accentColor: AppColor.accent,
   appBarTheme: AppBarTheme(
+    backgroundColor: Colors.green.shade800,
     color: Color(0xff333333),
     brightness: Brightness.dark,
     iconTheme: IconThemeData(
@@ -36,6 +37,7 @@ final ThemeData kLightThemeData = ThemeData(
     color: AppColor.accent,
   ),
   appBarTheme: AppBarTheme(
+    backgroundColor: Colors.green.shade800,
     color: Colors.white,
     brightness: Brightness.light,
     iconTheme: IconThemeData(

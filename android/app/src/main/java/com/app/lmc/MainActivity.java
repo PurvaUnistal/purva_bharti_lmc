@@ -1,4 +1,4 @@
-package com.app.lmc;
+package com.app.pbg.lmc;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.plugins.GeneratedPluginRegistrant;
