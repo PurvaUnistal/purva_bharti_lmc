@@ -425,8 +425,11 @@ class FeasibilityScreenPage extends State<FeasibilityScreen> {
     //return;
     await pr.show();
 
-    var res = await http.post(Uri.parse(GlobalConstants.postFeasibilityDataApi),
-        body: jsonVAr, headers: {'authorization': '$token'});
+    var res = await http.post(
+      Uri.parse(GlobalConstants.postFeasibilityDataApi),
+      body: jsonVAr,
+      //  headers: {'authorization': '$token'}
+    );
     log("postFeasibilityDataApi-->${GlobalConstants.postFeasibilityDataApi}");
     print("postFeasibilityDataApi-->" + res.body);
     SuccessResponce _res = new SuccessResponce.fromJson(json.decode(res.body));
