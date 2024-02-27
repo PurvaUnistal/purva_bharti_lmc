@@ -1,4 +1,5 @@
 import 'package:lmc/model/lmc_model.dart';
+import 'package:lmc/utils/commonWidgets/button_widget.dart';
 import '../ExportFile/export_file.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -605,6 +606,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var response = await request.send();
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
+    print("GlobalConstants.saveLmcInstallation-->" +
+        GlobalConstants.saveLmcInstallation);
     print("saveLmcInstallation-->" + responseString);
     pr.hide();
     Result _res = new Result.fromJson(json.decode(responseString));
@@ -1125,9 +1128,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
                                         children: [
                                           ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                primary: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
+                                                  backgroundColor:
+                                                      Colors.green.shade800),
                                               child: Text(
                                                 takeMeterPhotoLabel,
                                                 style: TextStyle(
@@ -1170,8 +1172,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
                               children: [
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context).primaryColor,
-                                    ),
+                                        backgroundColor: Colors.green.shade800),
                                     child: Text(
                                       btnTfLocationLabel,
                                       style: TextStyle(color: Colors.white),
@@ -1199,8 +1200,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
                               children: [
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context).primaryColor,
-                                    ),
+                                        backgroundColor: Colors.green.shade800),
                                     child: Text(
                                       btnHouseLocationLabel,
                                       style: TextStyle(color: Colors.white),
@@ -1306,17 +1306,24 @@ class InstallationScreenPage extends State<InstallationScreen> {
                               ),
                             ],
                           ),
+                          /* hideButton
+                              ? Text("")
+                              : ButtonWidget(
+                                  text: btnSubmit,
+                                  onPressed: () async {
+                                    _uploadImage();
+                                  }),*/
                           Align(
                             alignment: Alignment.center,
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(
                                   0.0, 30.0, 0.0, 10.0),
                               child: hideButton
-                                  ? null
+                                  ? Text("")
                                   : ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).primaryColor,
-                                      ),
+                                          backgroundColor:
+                                              Colors.green.shade800),
                                       child: Container(
                                         width: 200,
                                         child: Align(

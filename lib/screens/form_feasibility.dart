@@ -336,7 +336,7 @@ class FeasibilityScreenPage extends State<FeasibilityScreen> {
                           )
                         : Container(),
                     show
-                        ? null
+                        ? Text("")
                         : ButtonWidget(
                             text: 'Submit',
                             onPressed: () async {
@@ -421,7 +421,7 @@ class FeasibilityScreenPage extends State<FeasibilityScreen> {
       'comment': reasonController.text,
       'follow_up_date': followUpDateController.text,
     };
-    print(jsonVAr.toString());
+    print("jsonVAr-->${jsonVAr.toString()}");
     //return;
     await pr.show();
 

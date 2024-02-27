@@ -57,7 +57,11 @@ class _LoginState extends State<Login> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Image.asset("assets/icons/ic_launcher.png"),
+                            Image.asset(
+                              "assets/icons/ic_launcher.png",
+                              height: 100,
+                              width: 100,
+                            ),
                             SizedBox(height: 20.0),
                             Text(
                               'L M C',

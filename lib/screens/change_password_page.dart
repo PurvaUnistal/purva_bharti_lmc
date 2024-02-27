@@ -186,7 +186,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget newPasswordValidation() {
     return PasswordValidatedFields(
       textEditingController: newPasswordController,
-      obscureText: isVisibility,
+   //   obscureText: isVisibility,
       inputDecoration: InputDecoration(
           prefixIcon: Icon(Icons.lock_outline_rounded),
           suffixIcon: IconButton(

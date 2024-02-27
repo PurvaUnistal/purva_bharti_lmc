@@ -200,6 +200,8 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
                   height: 20,
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade800),
                   onPressed: () => dialogBox(),
                   child: Text("Details"),
                 )
@@ -523,11 +525,15 @@ class _HomeImagesScreenState extends State<HomeImagesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green.shade800),
                     child: Text("Save"),
                     onPressed: () async {
                       storeRecords();
                     }),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade800),
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text('Edit'),
                 ),

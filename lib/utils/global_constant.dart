@@ -13,9 +13,9 @@ class GlobalConstants {
   static String dmaId = "DMA ID";
   static String lmcProposedDate = "LMC Proposed Date";
 
-  //  static const String BaseUrl       = "https://citygas.hpcl.co.in/api/";
-//  static const String BaseUrl = "http://142.79.231.30:8084/api/";
-  static const String BaseUrl = "http://pbgpl.smartgasnet.com/api/";
+
+  static const String BaseUrl = "http://142.79.231.30:8099/api/";
+//  static const String BaseUrl = "http://pbgpl.smartgasnet.com/api/";
   static String login = BaseUrl + "auth";
   static String getLmcApi = BaseUrl + "getlmcapi";
   static String getlmcInstallationApi = BaseUrl + "getlmcInstallationApi";
