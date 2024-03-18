@@ -14,7 +14,7 @@ class GlobalConstants {
   static String lmcProposedDate = "LMC Proposed Date";
 
 
-  static const String BaseUrl = "http://142.79.231.30:8099/api/";
+  static const String BaseUrl = "http://142.79.231.30:8097/api/";
 //  static const String BaseUrl = "http://pbgpl.smartgasnet.com/api/";
   static String login = BaseUrl + "auth";
   static String getLmcApi = BaseUrl + "getlmcapi";
