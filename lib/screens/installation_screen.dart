@@ -619,7 +619,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
         _showMyDialog(context, _res.data);
         print(_res.data);
       } else {
-        _showErrorDialog(context, " " + _res.toString());
+        _showErrorDialog(context, " " + _res.data.toString());
         print(_res.data);
       }
     } catch (e) {
