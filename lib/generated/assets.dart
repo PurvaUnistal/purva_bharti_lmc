@@ -2,7 +2,7 @@
 class Assets {
   Assets._();
 
-  static const String iconsPbgLogo = 'assets/icons/ic_launcher.png';
+  static const String iconsPbgLogo = 'assets/icons/PBG_Logo.png';
   static const String iconsPlaceHolder = 'assets/icons/place_holder.png';
   static const String montserratMontserratBlack =
       'assets/fonts/Montserrat/Montserrat-Black.ttf';

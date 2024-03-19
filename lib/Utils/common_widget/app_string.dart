@@ -1,0 +1,95 @@
+class AppString {
+  static String appName = "Laying HFCL";
+  static String release = "Release";
+  static String relDate = "16/03/2024";
+
+  static String login = "Login";
+  static String userName = "Enter Your Username";
+  static String password = "Enter Your Password";
+  static String photo = "Photo";
+  static String star = "* ";
+  static String logoutMsg = "Do you want to logout this App?";
+  static String logout = "Logout";
+  static String no = "No";
+  static String submit = "Submit";
+
+  static String dashboard = "Dashboard";
+  static String laying = "Laying";
+  static String fitting = "Fitting";
+  static String createGap = "Create Gap";
+  static String removeGap = "Remove Gap";
+  static String crossing = "Crossing";
+  static String hsc = "HSC";
+  static String hindrance = "Hindrance";
+  static String records = "All Records";
+
+  static String networkType = "Network Type";
+  static String zone = "Zone";
+  static String date = "Date";
+  static String district = "District";
+  static String block = "Block";
+  static String scheme = "Scheme";
+  static String schemeId = "Scheme Id";
+  static String pipeSegment = "Select Pipe Number";
+  static String startNode = "Start Node";
+  static String endNode = "End Node";
+  static String scope = "Scope Length";
+  static String chainageFrom = "Chainage From";
+  static String chainageTo = "Chainage To";
+  static String type = "Pipe Type";
+  static String subType = "Pipe Sub Type";
+  static String diameter = "Pipe Diameter";
+  static String startIp = "Capture Start IP";
+  static String nextIp = "Capture Next IP";
+  static String endIp = "Capture End IP";
+  static String lat = "Latitude";
+  static String long = "Longitude";
+  static String depth = "Depth";
+  static String gapLength = "Gap Length";
+  static String trenchDepth = "Trench Depth";
+  static String trenchWidth = "Trench Width";
+  static String intermediatePoint = "Intermediate Point";
+  static String alignment = "Alignment";
+  static String surface = "Surface";
+  static String contractor = "Contractor";
+  static String backfilling = "Backfilling";
+  static String length = "Laying Length";
+  static String gallery = "Gallery";
+  static String camera = "Camera";
+  static String remarks = "Remarks";
+  static String record = "Record";
+  static String fittingType = "Fitting Type";
+  static String subFittingType = "Sub Fitting Type";
+  static String reason = "Reason";
+  static String crossingClass = "Crossing Class";
+  static String crossingType = "Crossing Type";
+  static String owner = "Owner";
+  static String crossingPosition = "Crossing Position";
+  static String crossingC = "Crossing Crossing";
+  static String positionPipeline = "Position of Pipeline";
+  static String permissionAuthority = "Permission Authority";
+  static String holdingNo = "Holding Number";
+  static String aadharNo = "Aadhar Number";
+  static String familyNo = "Family Number";
+  static String roadCrossing = "PCC Road Crossing";
+  static String lengthConnect = "Length of Connection";
+  static String waterStorage = "Water Storage";
+  static String supervisor = "Supervisor";
+  static String custPhoto = "Customer Photo";
+  static String hscPhoto = "HSC Photo";
+  static String holdingPhoto = "Holding Photo";
+  static String workImpacted = "Work Impacted";
+}
+
+class ImgAsset {
+  static String appLogo = "assets/icons/PBG_Logo.png";
+  static String homeIcon = "assets/images/home-icon.png";
+  static String layingIcon = "assets/images/laying-icon.png";
+  static String fittingIcon = "assets/images/fitting-icon.png";
+  static String createGapIcon = "assets/images/createGap-icon.png";
+  static String removeGapIcon = "assets/images/removeGap-icon.png";
+  static String crossingIcon = "assets/images/crossing-icon.png";
+  static String hscIcon = "assets/images/hsc-icon.png";
+  static String hindranceIcon = "assets/images/hindrance-icon.png";
+  static String recordsIcons = "assets/images/records.png";
+}

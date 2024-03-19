@@ -1,0 +1,6 @@
+class HiveBoxName {
+}
+
+class HiveTypeId {
+
+}

@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import '../ExportFile/export_file.dart';
-
-String dataBoxName="dataBoxName";
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/common_widget/app_color.dart';
+import 'package:lmc/Utils/common_widget/app_string.dart';
+import 'package:lmc/Utils/routes/routes.dart';
+import 'package:lmc/Utils/routes/routes_name.dart';
+import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 
 void main() async{
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
-  Directory directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
-  Hive.registerAdapter(ImageDataModelAdapter());
-  await Hive.openBox<ImageDataModel>(dataBoxName);
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
 
-  final routes = <String, WidgetBuilder>{
-    SplashScreen.tag: (context) => SplashScreen(),
-  //  '/_ChangePasswordScreenState': (BuildContext context) => ChangePasswordScreen(),
-  };
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => ChangePasswordBloc()),
+        BlocProvider(create: (BuildContext context) => LoginBloc()),
+     //   BlocProvider(create: (BuildContext context) => ChangePasswordBloc()),
       ],
-      child:  MaterialApp(
+      child: MaterialApp(
+        title: AppString.appName,
         debugShowCheckedModeBanner: false,
-          title: 'PBG LMC',
-          routes: routes,
-          home: SplashScreen(),
-        )
+        theme: ThemeData(
+          primaryColor: AppColor.primer,
+          hintColor: AppColor.primer,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primer),
+        ),
+        initialRoute: RoutesName.splash,
+        onGenerateRoute: Routes.generateRoute,
+      ),
       
     );
   }
