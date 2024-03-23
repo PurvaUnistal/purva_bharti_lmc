@@ -26,12 +26,12 @@ class LoginModel {
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    status: json["status"] ?? null,
-    error: json["error"]?? null,
+    status: json["status"] ?? "",
+    error: json["error"]?? "",
     messages: json["messages"] ?? Messages.fromJson(json["messages"]),
-    token: json["token"]?? null,
+    token: json["token"] ?? "",
     user: json["user"]== null ? null : User.fromJson(json["user"]),
-    exptime: json["exptime"]?? null,
+    exptime: json["exptime"]?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -66,14 +66,14 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    gaId: json["ga_id"],
-    email: json["email"],
-    name: json["name"],
-    level: json["level"],
-    modules: json["modules"],
-    schema: json["schema"],
-    role: json["role"],
+    id: json["id"]?? "",
+    gaId: json["ga_id"]?? "",
+    email: json["email"]?? "",
+    name: json["name"]?? "",
+    level: json["level"]?? "",
+    modules: json["modules"]?? "",
+    schema: json["schema"]?? "",
+    role: json["role"]?? "",
   );
 
   Map<String, dynamic> toJson() => {
