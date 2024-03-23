@@ -25,6 +25,7 @@ class GlobalConstants {
   static String saveLmcInstallation = BaseUrl + "saveLmcInstallation";
   // static String getMeters           = BaseUrl+"getMeters?schema=meterSerial=dia&user_id=12" ;
   static String getMeters = BaseUrl + "getMeters?schema=";
+  static String getRegulators = BaseUrl + "getRegulators?schema=";
   static String getLabels = BaseUrl + "getLabel";
   static String hpclLabels = "HPCL_Labels";
   static String isFeasible = '$BaseUrl' + "/getConstant?key=is_feasible";

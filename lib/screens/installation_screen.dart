@@ -21,7 +21,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
   TextEditingController proposedDateController = TextEditingController(
       text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
-  TextEditingController regulatorNoController = TextEditingController(text: '');
+  TextEditingController regulatorNumberController = TextEditingController(text: '');
   TextEditingController extraPipeController = TextEditingController(text: '0');
   TextEditingController extraPriceController = TextEditingController(text: '0');
   TextEditingController pipeController = TextEditingController(text: '0');
@@ -63,7 +63,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
   String currentMeterNoId = "";
 
   List<MeterData> regulatorListData = [];
-  List<String> regulatorMeterNoList = [];
+  List<String> listOfRegulatorMeter = [];
   List<String> meterNoIdList2 = [];
   String currentMeterNo2 = "";
   String currentRegulatorList = "";
@@ -158,7 +158,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
     var token = prefs.getString(GlobalConstants.token);
     var schema = prefs.getString(GlobalConstants.schema);
     var url =
-        GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
+     //   GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
+        GlobalConstants.getRegulators + schema + '&meterSerial=dia&user_id=$id';
     print("urls--> $url");
     var res = await http.get(Uri.parse(url), headers: {
       "authorization": token,
@@ -174,13 +175,13 @@ class InstallationScreenPage extends State<InstallationScreen> {
       );
       _meterNoList2 = List.generate(regulatorList.data.length,
           (i) => ('${regulatorList.data[i].serialNumber}'));
-      _meterNoIdList2 = List.generate(
-        regulatorList.data.length,
+
+      _meterNoIdList2 = List.generate(regulatorList.data.length,
         (i) => '${regulatorList.data[i].id}',
       );
       if (!mounted) return;
       setState(() {
-        regulatorMeterNoList.addAll(_meterNoList2);
+        listOfRegulatorMeter.addAll(_meterNoList2);
         meterNoIdList2.addAll(_meterNoIdList2);
       });
     }
@@ -482,7 +483,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
     } else if (meterReadingDateController.text == '') {
       _toast('Select Meter Reading Date');
       return;
-    } else if (regulatorNoController.text == '') {
+    } else if (regulatorNumberController.text == '') {
       _toast('Enter Regulator No.');
       return;
     } else if (meterImgController.imagePath == null ||
@@ -801,7 +802,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       suggestions: meterNoList,
       textChanged: (text) => {
         currentMeterNo = text,
-        print("suggestions--->$meterNoList"),
+        print("suggestMeterNoList--->$meterNoList"),
       },
       clearOnSubmit: false,
       textSubmitted: (text) => setState(() {
@@ -830,8 +831,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
         contentPadding: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
       ),
-      controller: regulatorNoController,
-      suggestions: regulatorMeterNoList,
+      controller: regulatorNumberController,
+      suggestions: listOfRegulatorMeter,
       textChanged: (text) => {
         currentMeterNo2 = text,
       },
@@ -841,7 +842,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
           //addedMeterNo.clear();
           //addedMeterNo.add(text);
           try {
-            int i = regulatorMeterNoList
+            int i = listOfRegulatorMeter
                 .indexWhere((element) => element.contains(text));
             currentRegulatorList = meterNoIdList2.elementAt(i);
           } catch (e) {
@@ -850,6 +851,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
         }
       }),
     );
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
