@@ -152,14 +152,14 @@ class InstallationScreenPage extends State<InstallationScreen> {
     }
   }
 
-  Future<void> _getRegulators() async {
+  Future<void> _getRegulators(String currentMeterNo2) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var id = prefs.getString(GlobalConstants.id);
     var token = prefs.getString(GlobalConstants.token);
     var schema = prefs.getString(GlobalConstants.schema);
     var url =
      //   GlobalConstants.getMeters + schema + '&meterSerial=dia&user_id=$id';
-        GlobalConstants.getRegulators + schema + '&meterSerial=dia&user_id=$id';
+        GlobalConstants.getRegulators + schema + '&regulatorSerial=$currentMeterNo2&user_id=$id';
     print("urls--> $url");
     var res = await http.get(Uri.parse(url), headers: {
       "authorization": token,
@@ -762,7 +762,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
     _reasonIfDelay = reasonArrItems.first.value;
     _getLabelsData();
     _getMeters();
-    _getRegulators();
+    _getRegulators("");
     isRfcList();
     getReadyForNgc();
     _getTypeOfNr();
@@ -835,6 +835,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       suggestions: listOfRegulatorMeter,
       textChanged: (text) => {
         currentMeterNo2 = text,
+        _getRegulators(text),
       },
       clearOnSubmit: false,
       textSubmitted: (text) => setState(() {
