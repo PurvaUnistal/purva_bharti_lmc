@@ -180,6 +180,8 @@ class InstallationScreenPage extends State<InstallationScreen> {
         (i) => '${regulatorList.data[i].id}',
       );
       if (!mounted) return;
+      listOfRegulatorMeter.clear();
+      meterNoIdList2.clear();
       setState(() {
         listOfRegulatorMeter.addAll(_meterNoList2);
         meterNoIdList2.addAll(_meterNoIdList2);
@@ -824,7 +826,7 @@ class InstallationScreenPage extends State<InstallationScreen> {
       key: key2,
       decoration: new InputDecoration(
         labelStyle:
-            new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+        new TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         hintText: 'XYZ-000-00',
         hintMaxLines: 1,
         fillColor: Colors.black,
