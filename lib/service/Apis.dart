@@ -3,6 +3,10 @@ class Apis {
    static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
  // static String baseUrl = 'http://142.79.231.30:8097/api/';
    static String loginUrl = baseUrl + "auth";
+   static String getLMCFeasibility = baseUrl + "getlmcapi?";
+
+
+
   static String getLmcInstallationByNgc = baseUrl + 'getlmcInstallationbyNgc';
   static String forgotPassword = baseUrl + '/login';
   static String tableList = baseUrl + 'getlmcInstallationbyNgc';

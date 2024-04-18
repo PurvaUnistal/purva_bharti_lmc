@@ -16,13 +16,11 @@ class ApiHelper {
 
   static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async{
     try {
-      final response = await get(
-        Uri.parse(urlEndPoint),
-      ).timeout(const Duration(minutes: 1));
+      final response = await get(Uri.parse(urlEndPoint),).timeout(const Duration(minutes: 1));
       log("URL-->${urlEndPoint.toString()}");
       log(urlEndPoint + "==>" + response.body);
       if (response.statusCode == 200) {
-        //   return jsonDecode(response.body.toString());
+         //  return jsonDecode(response.body.toString());
         return response.body.toString();
       } else {
         log("Api.error-->${Api.error}");

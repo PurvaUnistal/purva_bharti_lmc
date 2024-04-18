@@ -4,6 +4,7 @@ import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 
 void main() async {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (BuildContext context) => NetworkBloc()),
           BlocProvider(create: (BuildContext context) => LoginBloc()),
+          BlocProvider(create: (BuildContext context) => LMCFeasibilityBloc()),
           // BlocProvider(create: (BuildContext context) => HomeBloc()),
           //  BlocProvider(create: (BuildContext context) => NGCFormBloc()),
         ],

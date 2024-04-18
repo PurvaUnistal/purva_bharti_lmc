@@ -27,3 +27,11 @@ class SearchBpNumberEvent extends LMCFeasibilityEvent {
   // TODO: implement props
   List<Object> get props => [context, searchBpNumber];
 }
+
+class LoadMoreTableEvent extends LMCFeasibilityEvent {
+  final BuildContext context;
+  LoadMoreTableEvent({required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context];
+}
