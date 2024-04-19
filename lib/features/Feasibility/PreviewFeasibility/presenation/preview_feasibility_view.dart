@@ -8,6 +8,7 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
@@ -118,7 +119,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      PreviewFeasibilityView()));
+                      FormFeasibilityView()));
         })
         : DottedLoaderWidget();
   }

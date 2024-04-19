@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -15,7 +13,6 @@ import 'package:collection/collection.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/Widgets/preview_pop_widget.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/presenation/preview_feasibility_view.dart';
 
 class FeasibilityView extends StatefulWidget {
@@ -136,6 +133,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
             rows: dataState.listOfFeasibilityRow
                 .mapIndexed((index, user) => DataRow(
               onSelectChanged: (newValue) async {
+                await SharedPref.setString(key: PrefsValue.bpNumber,value: user.bpNumber!);
                 await SharedPref.setString(key: PrefsValue.custRegNo,value: user.crn!);
                 await SharedPref.setString(key: PrefsValue.areaName,value: user.areaName!);
                 await SharedPref.setString(key: PrefsValue.firstName,value: user.firstName!);

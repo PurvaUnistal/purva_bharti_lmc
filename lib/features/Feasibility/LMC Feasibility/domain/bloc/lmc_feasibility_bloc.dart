@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/Widgets/preview_pop_widget.dart';
 
 class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
   LMCFeasibilityBloc() : super(LMCFeasibilityInitialState()){
     on<LMCFeasibilityPageLoadEvent>(_pageLoad);
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
-    on<PreviewPopEvent>(_previewPop);
   }
 
   bool isLoader = false;
@@ -53,14 +49,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
   _searchBpNumber(SearchBpNumberEvent event, emit) {
   }
 
-  _previewPop(PreviewPopEvent event, emit) {
-    return showDialog<void>(
-      context: event.context,
-      builder: (BuildContext context) {
-        return PreviewPopWidget(listOfFeasibilityRow: event.listOfFeasibilityRow);
-        },
-    );
-  }
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => LoginBloc()),
           BlocProvider(create: (BuildContext context) => LMCFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => PreviewFeasibilityBloc()),
+          BlocProvider(create: (BuildContext context) => FormFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => MeterInstallationBloc()),
           BlocProvider(create: (BuildContext context) => RFCSectionBloc()),
         ],

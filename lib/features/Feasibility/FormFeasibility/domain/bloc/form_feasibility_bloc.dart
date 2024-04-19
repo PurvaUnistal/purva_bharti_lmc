@@ -1,0 +1,106 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/CheckFeasibleModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
+
+class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState>{
+  FormFeasibilityBloc() : super(FormFeasibilityInitialState()){
+    on<FormFeasibilityPageLoadEvent>(_pageLoad);
+    on<SelectProposedDateEvent>(_selectProposedDate);
+    on<SelectFeasibilityDateEvent>(_selectFeasibilityDate);
+    on<SelectCheckFeasibilityValueEvent>(_selectCheckFeasibilityValue);
+    on<SubmitFormFeasibilityEvent>(_submit);
+  }
+
+
+  bool isLoader = false;
+  bool isBtnLoader = false;
+  CheckFeasibleModel? checkFeasibleValue;
+  CheckFeasibleModel? lmcReasonValue;
+  List<CheckFeasibleModel> listOfCheckFeasible = [];
+  List<CheckFeasibleModel> listOfLMCReason = [];
+  TextEditingController bpNumberController = TextEditingController();
+  TextEditingController proposedDateController = TextEditingController();
+  TextEditingController feasibilityDateController = TextEditingController();
+
+  _pageLoad(FormFeasibilityPageLoadEvent event, emit) async {
+    emit(FormFeasibilityInitialState());
+    isLoader = false;
+    isBtnLoader = false;
+    checkFeasibleValue = null;
+    lmcReasonValue = null;
+    listOfCheckFeasible = [];
+    listOfLMCReason = [];
+    proposedDateController.text = '';
+    feasibilityDateController.text = '';
+    bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
+    await fetchCheckFeasibilityApi(context: event.context);
+    await fetchLMCReasonApi(context: event.context);
+    _eventCompleted(emit);
+  }
+
+
+  _selectProposedDate(SelectProposedDateEvent event, emit) async {
+    DateTime? dateTime = await showDatePicker(
+        context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    if (dateTime != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+      proposedDateController.text = formattedDate.toString();
+      _eventCompleted(emit);
+    }
+  }
+
+  _selectFeasibilityDate(SelectFeasibilityDateEvent event, emit) async {
+    DateTime? dateTime = await showDatePicker(
+        context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    if (dateTime != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+      feasibilityDateController.text = formattedDate.toString();
+      _eventCompleted(emit);
+    }
+  }
+
+  _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
+  }
+
+  _submit(SubmitFormFeasibilityEvent event, emit) {
+  }
+
+  fetchCheckFeasibilityApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);
+    if(res != null){
+      listOfCheckFeasible = res;
+      return res;
+    }
+  }
+
+  fetchLMCReasonApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getLMCReasonApi(context: context);
+    if(res != null){
+      listOfLMCReason = res;
+      return res;
+    }
+  }
+
+  _eventCompleted(emit) {
+    emit(FormFeasibilityDataState(
+        isLoader: isLoader,
+        isBtnLoader: isBtnLoader,
+        checkFeasibleValue: checkFeasibleValue,
+        lmcReasonValue: lmcReasonValue,
+        listOfCheckFeasible: listOfCheckFeasible,
+        listOfLMCReason: listOfLMCReason,
+        bpNumberController: bpNumberController,
+        proposedDateController: proposedDateController,
+        feasibilityDateController: feasibilityDateController)
+    );
+  }
+
+}

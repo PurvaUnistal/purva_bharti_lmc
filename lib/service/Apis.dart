@@ -5,6 +5,7 @@ class Apis {
    static String loginUrl = baseUrl + "auth";
    static String getLMCFeasibility = baseUrl + "getlmcapi?";
    static String getLMCInstallation = baseUrl + "getlmcInstallationApi?";
+   static String getConstant = baseUrl + "getConstant?";
 
 
 
