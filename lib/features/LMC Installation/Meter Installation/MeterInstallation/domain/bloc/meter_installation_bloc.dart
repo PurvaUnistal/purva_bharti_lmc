@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_event.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_state.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/helper/meter_installation_helper.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/helper/meter_installation_helper.dart';
 
 class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallationState>{
   MeterInstallationBloc() : super(MeterInstallationInitialState()){

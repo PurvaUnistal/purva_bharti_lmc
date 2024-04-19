@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_event.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_state.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/helper/rfc_section_helper.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_event.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_state.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/helper/rfc_section_helper.dart';
 
 class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
   RFCSectionBloc() : super(RFCSectionInitialState()){

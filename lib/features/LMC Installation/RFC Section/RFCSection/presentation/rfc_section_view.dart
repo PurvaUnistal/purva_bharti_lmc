@@ -6,9 +6,9 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_event.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_state.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_event.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_state.dart';
 
 class RFCSectionView extends StatefulWidget {
   const RFCSectionView({super.key});

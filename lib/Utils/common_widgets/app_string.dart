@@ -12,6 +12,7 @@ class AppString {
   static String login = "Login";
   static String logout = "Logout";
   static String checkFea = "Check Feasibility";
+  static String meterInstallation = "Meter Installation";
   static String no = "No";
   static String logoutMsg = "Are you sure you want to logout? Once you logout, you will be return to login screen";
   static String star = "* ";

@@ -7,8 +7,9 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasib
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 
 void main() async {
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => PreviewFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => FormFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => MeterInstallationBloc()),
+          BlocProvider(create: (BuildContext context) => PreviewMeterInstallationBloc()),
           BlocProvider(create: (BuildContext context) => RFCSectionBloc()),
         ],
         child: MaterialApp(

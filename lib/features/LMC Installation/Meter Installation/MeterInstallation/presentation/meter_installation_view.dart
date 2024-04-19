@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:collection/collection.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_event.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/domain/bloc/meter_installation_state.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/presenation/preview_meter_installation_view.dart';
 
 class MeterInstallationView extends StatefulWidget {
   const MeterInstallationView({super.key});
@@ -123,6 +126,30 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
             ],
             rows: dataState.listOfFeasibilityRow
                 .mapIndexed((index, user) => DataRow(
+                onSelectChanged: (newValue) async {
+                  await SharedPref.setString(key: PrefsValue.lmcId,value: user.lmcId!);
+                  await SharedPref.setString(key: PrefsValue.dma,value: user.dma!);
+                  await SharedPref.setString(key: PrefsValue.bpNumber,value: user.bpNumber!);
+                  await SharedPref.setString(key: PrefsValue.custRegNo,value: user.crn!);
+                  await SharedPref.setString(key: PrefsValue.areaName,value: user.areaName!);
+                  await SharedPref.setString(key: PrefsValue.firstName,value: user.firstName!);
+                  await SharedPref.setString(key: PrefsValue.lastName,value: user.lastName!);
+                  await SharedPref.setString(key: PrefsValue.guardianName,value: user.guardianName!);
+                  await SharedPref.setString(key: PrefsValue.proCateName,value: user.propName!);
+                  await SharedPref.setString(key: PrefsValue.propClass,value: user.propClass!);
+                  await SharedPref.setString(key: PrefsValue.buildingNumber,value: user.buildingNumber!);
+                  await SharedPref.setString(key: PrefsValue.houseNumber,value: user.houseNumber!);
+                  await SharedPref.setString(key: PrefsValue.locality,value: user.locality!);
+                  await SharedPref.setString(key: PrefsValue.locality,value: user.state!);
+                  await SharedPref.setString(key: PrefsValue.town,value: user.town!);
+                  await SharedPref.setString(key: PrefsValue.district,value: user.district!);
+                  await SharedPref.setString(key: PrefsValue.pinCode,value: user.pinCode!);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PreviewMeterInstalView()));
+                },
                 cells: <DataCell>[
                   _dataCell(label: "${index + 1}"),
                   _dataCell(label: user.bpNumber.toString()),

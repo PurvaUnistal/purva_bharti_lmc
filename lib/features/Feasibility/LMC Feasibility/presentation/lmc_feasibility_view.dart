@@ -133,6 +133,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
             rows: dataState.listOfFeasibilityRow
                 .mapIndexed((index, user) => DataRow(
               onSelectChanged: (newValue) async {
+                await SharedPref.setString(key: PrefsValue.lmcId,value: user.lmcId!);
+                await SharedPref.setString(key: PrefsValue.dma,value: user.dma!);
                 await SharedPref.setString(key: PrefsValue.bpNumber,value: user.bpNumber!);
                 await SharedPref.setString(key: PrefsValue.custRegNo,value: user.crn!);
                 await SharedPref.setString(key: PrefsValue.areaName,value: user.areaName!);
