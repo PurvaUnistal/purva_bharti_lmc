@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 
-abstract class LMCFeasibilityState extends Equatable{}
+abstract class RFCSectionState extends Equatable{}
 
-class LMCFeasibilityInitialState extends LMCFeasibilityState {
+class RFCSectionInitialState extends RFCSectionState {
   @override
   List<Object> get props => [];
 }
 
-class LMCFeasibilityPageLoadState extends LMCFeasibilityState {
+class RFCSectionPageLoadState extends RFCSectionState {
   @override
   List<Object> get props => [];
 }
 
-class LMCFeasibilityDataState extends LMCFeasibilityState{
+class RFCSectionDataState extends RFCSectionState{
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
@@ -24,7 +24,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
   FeasibilityModel? feasibilityModel;
   final ScrollController scrollController;
 
-  LMCFeasibilityDataState({
+  RFCSectionDataState({
     required this.isLoader,
     required this.isLoadingMore,
     required this.allAreaValue,
@@ -33,7 +33,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
     required this.feasibilityModel,
     required this.scrollController,
 
-});
+  });
 
   @override
   // TODO: implement props

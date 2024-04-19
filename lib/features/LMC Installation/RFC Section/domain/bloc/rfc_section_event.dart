@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-abstract class LMCFeasibilityEvent extends Equatable{}
+abstract class RFCSectionEvent extends Equatable{}
 
-class LMCFeasibilityPageLoadEvent extends LMCFeasibilityEvent {
+class RFCSectionPageLoadEvent extends RFCSectionEvent {
   final BuildContext context;
-  LMCFeasibilityPageLoadEvent({required this.context});
+  RFCSectionPageLoadEvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];
 }
 
-class SelectAreaValueEvent extends LMCFeasibilityEvent {
+class SelectAreaValueEvent extends RFCSectionEvent {
   final dynamic allAreaValue;
   SelectAreaValueEvent({this.allAreaValue});
   @override
@@ -19,7 +19,7 @@ class SelectAreaValueEvent extends LMCFeasibilityEvent {
   List<Object> get props => [allAreaValue];
 }
 
-class SearchBpNumberEvent extends LMCFeasibilityEvent {
+class SearchBpNumberEvent extends RFCSectionEvent {
   final BuildContext context;
   final String searchBpNumber;
   SearchBpNumberEvent({required this.context, required this.searchBpNumber});
@@ -28,7 +28,7 @@ class SearchBpNumberEvent extends LMCFeasibilityEvent {
   List<Object> get props => [context, searchBpNumber];
 }
 
-class LoadMoreTableEvent extends LMCFeasibilityEvent {
+class LoadMoreTableEvent extends RFCSectionEvent {
   final BuildContext context;
   LoadMoreTableEvent({required this.context});
   @override

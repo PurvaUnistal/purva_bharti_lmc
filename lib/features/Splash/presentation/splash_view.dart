@@ -37,9 +37,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   );
 
   Future<void> toLogin() async {
-    await PreferenceUtil.init();
-    String email = await PreferenceUtil.getString(key: PrefsValue.emailVal);
-    String password = await PreferenceUtil.getString(key: PrefsValue.passwordVal);
+    String email = await SharedPref.getString(key: PrefsValue.emailVal);
+    String password = await SharedPref.getString(key: PrefsValue.passwordVal);
     Timer(
       const Duration(seconds: 2),
           () async {

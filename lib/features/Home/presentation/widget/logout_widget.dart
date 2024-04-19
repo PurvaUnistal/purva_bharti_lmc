@@ -37,7 +37,7 @@ class LogoutWidget extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => const LoginView()),
                                 (route) => false
                         );
-                        await PreferenceUtil.clearAll();
+                        await SharedPref.clearAll();
                       }
                   ),
                 ),

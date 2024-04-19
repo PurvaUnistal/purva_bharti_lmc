@@ -68,14 +68,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (res.user != null) {
             _loginModel = res;
             if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc')){
-              await PreferenceUtil.setString(key: PrefsValue.passwordVal,value: password);
-              await PreferenceUtil.setString(key: PrefsValue.emailVal,value: emailId);
-              await PreferenceUtil.setString(key: PrefsValue.id,value: res.user!.id!);
-              await PreferenceUtil.setString(key: PrefsValue.token,value: res.token!);
-              await PreferenceUtil.setString(key: PrefsValue.schema,value: res.user!.schema!);
-              await PreferenceUtil.setString(key: PrefsValue.userName,value: res.user!.name!);
-              await PreferenceUtil.setString(key: PrefsValue.userRole,value: res.user!.role!);
-              await PreferenceUtil.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
+              await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
+              await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
+              await SharedPref.setString(key: PrefsValue.id,value: res.user!.id!);
+              await SharedPref.setString(key: PrefsValue.token,value: res.token!);
+              await SharedPref.setString(key: PrefsValue.schema,value: res.user!.schema!);
+              await SharedPref.setString(key: PrefsValue.userName,value: res.user!.name!);
+              await SharedPref.setString(key: PrefsValue.userRole,value: res.user!.role!);
+              await SharedPref.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
               Navigator.pushReplacementNamed(event.context, RoutesName.home,);
             }
           }

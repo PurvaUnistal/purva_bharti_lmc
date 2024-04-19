@@ -1,29 +1,25 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferenceUtil {
-  static SharedPreferences? prefs;
-
-  static Future<void> init() async {
-    prefs = await SharedPreferences.getInstance();
+class SharedPref {
+  static getString({required String key}) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key) ?? "";
   }
 
-  static Future<dynamic> getString({ required String key}) async {
-    if (prefs!.getString(key) != null) {
-      return prefs!.getString(key);
-    } else {
-      return "";
-    }
+  static setString({required String key, required String value}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value);
   }
 
-  static Future<void> setString({ required String key,  required String value}) async {
-    await prefs?.setString(key, value);
+  static clearAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 
-  static Future<void> removeAll({ required String key}) async {
-    await prefs?.remove(key);
-  }
-
-  static Future<void> clearAll() async {
-    await prefs?.clear();
+  static remove({required String key}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
   }
 }

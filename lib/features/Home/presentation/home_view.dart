@@ -4,7 +4,7 @@ import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/features/Home/presentation/widget/card_widget.dart';
 import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
-import 'package:lmc/features/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/LMC%20Installation/presentation/installation_view.dart';
 
 class HomeView extends StatefulWidget {

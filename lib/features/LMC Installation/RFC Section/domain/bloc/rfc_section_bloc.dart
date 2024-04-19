@@ -1,16 +1,15 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
-import 'package:lmc/features/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
-import 'package:lmc/features/LMC%20Feasibility/helper/feasibility_helper.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_event.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/domain/bloc/rfc_section_state.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/helper/rfc_section_helper.dart';
 
-class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
-  LMCFeasibilityBloc() : super(LMCFeasibilityInitialState()){
-    on<LMCFeasibilityPageLoadEvent>(_pageLoad);
+class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
+  RFCSectionBloc() : super(RFCSectionInitialState()){
+    on<RFCSectionPageLoadEvent>(_pageLoad);
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
@@ -24,8 +23,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
   FeasibilityModel? feasibilityModel;
   ScrollController scrollController = ScrollController();
 
-  _pageLoad(LMCFeasibilityPageLoadEvent event, emit) async {
-    emit(LMCFeasibilityInitialState());
+  _pageLoad(RFCSectionPageLoadEvent event, emit) async {
+    emit(RFCSectionInitialState());
     isLoader = false;
     isLoadingMore = false;
     areaValue= null;
@@ -59,7 +58,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
 
   fetchFeasibility({required BuildContext context}) async {
     isLoadingMore = true;
-    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: "",page: pageNo.toString(), areaId:"" );
+    var res = await RFCSectionHelper.getLMCInstallationApi(context: context, bpNumber: "",page: pageNo.toString(), areaId:"" );
     if(res != null){
       isLoadingMore = false;
       feasibilityModel = res;
@@ -75,13 +74,13 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
           scrollController.position.maxScrollExtent) {
         pageNo++;
         await fetchFeasibility(context:context);
-       // _eventCompleted(emit);
+        // _eventCompleted(emit);
       }
     });
   }
 
-  _eventCompleted(Emitter<LMCFeasibilityState> emit) {
-    emit(LMCFeasibilityDataState(
+  _eventCompleted(Emitter<RFCSectionState> emit) {
+    emit(RFCSectionDataState(
         isLoader: isLoader,
         isLoadingMore: isLoadingMore,
         allAreaValue: areaValue,

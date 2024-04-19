@@ -35,4 +35,18 @@ class PrefsValue {
   static String noOfBurners = "No Of Burners";
   static String dateOfRegistration = "date Of Registration";
   static String dmaId = "dmaId";
+  static String custRegNo = "customerRegistrationNo";
+  static String areaName = "areaName";
+  static String firstName = "firstName";
+  static String lastName = "lastName";
+  static String guardianName = "guardianName";
+  static String proCateName = "propName";
+  static String propClass = "propClass";
+  static String buildingNumber = "buildingNumber";
+  static String houseNumber = "houseNumber";
+  static String state = "state";
+  static String locality = "locality";
+  static String town = "town";
+  static String district = "district";
+  static String pinCode = "pinCode";
 }
