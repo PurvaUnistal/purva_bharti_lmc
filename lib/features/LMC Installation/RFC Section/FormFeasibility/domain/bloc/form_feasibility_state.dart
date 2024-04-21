@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/CheckFeasibleModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 
-abstract class FormFeasibilityState extends Equatable{}
+abstract class FormFeasibilityState extends Equatable {}
 
 class FormFeasibilityInitialState extends FormFeasibilityState {
   @override
@@ -14,13 +14,13 @@ class FormFeasibilityPageLoadState extends FormFeasibilityState {
   List<Object> get props => [];
 }
 
-class FormFeasibilityDataState extends FormFeasibilityState{
+class FormFeasibilityDataState extends FormFeasibilityState {
   final bool isLoader;
   final bool isBtnLoader;
-  final CheckFeasibleModel? checkFeasibleValue;
-  final CheckFeasibleModel? lmcReasonValue;
-  final List<CheckFeasibleModel> listOfCheckFeasible;
-  final List<CheckFeasibleModel> listOfLMCReason;
+  final GetConstantModel? checkFeasibleValue;
+  final GetConstantModel? lmcReasonValue;
+  final List<GetConstantModel> listOfCheckFeasible;
+  final List<GetConstantModel> listOfLMCReason;
   final TextEditingController bpNumberController;
   final TextEditingController proposedDateController;
   final TextEditingController feasibilityDateController;
@@ -35,20 +35,19 @@ class FormFeasibilityDataState extends FormFeasibilityState{
     required this.bpNumberController,
     required this.proposedDateController,
     required this.feasibilityDateController,
-
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isBtnLoader,
-    checkFeasibleValue,
-    lmcReasonValue,
-    listOfCheckFeasible,
-    listOfLMCReason,
-    bpNumberController,
-    proposedDateController,
-    feasibilityDateController,
-  ];
+        isLoader,
+        isBtnLoader,
+        checkFeasibleValue,
+        lmcReasonValue,
+        listOfCheckFeasible,
+        listOfLMCReason,
+        bpNumberController,
+        proposedDateController,
+        feasibilityDateController,
+      ];
 }

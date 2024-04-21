@@ -4,9 +4,10 @@ import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
@@ -28,26 +29,22 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => FormFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => MeterInstallationBloc()),
           BlocProvider(create: (BuildContext context) => PreviewMeterInstallationBloc()),
+          BlocProvider(create: (BuildContext context) => FormMeterBloc()),
           BlocProvider(create: (BuildContext context) => RFCSectionBloc()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor:AppColor.primer,
+            primaryColor: AppColor.primer,
             hintColor: AppColor.primer,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor:AppColor.primer,),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColor.primer,
+            ),
           ),
           initialRoute: RoutesName.splash,
           onGenerateRoute: Routes.generateRoute,
-        )
-    );
+        ));
   }
 }
-
-
-
-
-
-

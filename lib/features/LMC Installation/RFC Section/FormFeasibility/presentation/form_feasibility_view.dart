@@ -12,23 +12,23 @@ import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/CheckFeasibleModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 
 class FormFeasibilityView extends StatefulWidget {
-  const FormFeasibilityView({super.key,});
+  const FormFeasibilityView({
+    super.key,
+  });
 
   @override
   State<FormFeasibilityView> createState() => _FormFeasibilityViewState();
 }
 
 class _FormFeasibilityViewState extends State<FormFeasibilityView> {
-
   @override
   void initState() {
     super.initState();
     BlocProvider.of<FormFeasibilityBloc>(context).add(FormFeasibilityPageLoadEvent(context: context));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         title: RoutesName.lmcFeasibility,
         boolLeading: true,
       ),
-      body:  BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
+      body: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
         builder: (context, state) {
           if (state is FormFeasibilityDataState) {
             return _itemBuilder(dataState: state);
@@ -49,7 +49,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  _itemBuilder({required FormFeasibilityDataState dataState}){
+  _itemBuilder({required FormFeasibilityDataState dataState}) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -70,27 +70,30 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget _feasibilityDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.lmcFeaDate,
-      label:AppString.lmcFeaDate,
+      label: AppString.lmcFeaDate,
       enabled: true,
       controller: stateData.feasibilityDateController,
       suffixIcon: IconButton(
-        icon: Icon(Icons.calendar_today, color: AppColor.primer,),
-        onPressed: (){
+        icon: Icon(
+          Icons.calendar_today,
+          color: AppColor.primer,
+        ),
+        onPressed: () {
           BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
         },
       ),
-      onTap: (){
+      onTap: () {
         BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
       },
     );
   }
 
   Widget _checkFeasibilityDropdown({required FormFeasibilityDataState stateData}) {
-    return DropdownWidget<CheckFeasibleModel>(
+    return DropdownWidget<GetConstantModel>(
       star: AppString.star,
-      label:AppString.checkFeasibility,
-      hint:AppString.checkFeasibility,
-     dropdownValue: stateData.checkFeasibleValue == null ? null : stateData.checkFeasibleValue,
+      label: AppString.checkFeasibility,
+      hint: AppString.checkFeasibility,
+      dropdownValue: stateData.checkFeasibleValue == null ? null : stateData.checkFeasibleValue,
       items: stateData.listOfCheckFeasible,
       onChanged: (val) {
         BlocProvider.of<FormFeasibilityBloc>(context).add(SelectCheckFeasibilityValueEvent(checkFeasibility: val));
@@ -101,10 +104,10 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget _button({required FormFeasibilityDataState dataState}) {
     return dataState.isBtnLoader == false
         ? ButtonWidget(
-        text: AppString.submit,
-        onPressed: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SubmitFormFeasibilityEvent(context: context));
-        })
+            text: AppString.submit,
+            onPressed: () {
+              BlocProvider.of<FormFeasibilityBloc>(context).add(SubmitFormFeasibilityEvent(context: context));
+            })
         : DottedLoaderWidget();
   }
 

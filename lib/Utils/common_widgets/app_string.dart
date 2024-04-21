@@ -1,4 +1,3 @@
-
 class AssetPath {
   static String appLogo = 'assets/icons/pbg_logo.png';
 }
@@ -42,6 +41,7 @@ class AppString {
   static String lmcProDate = "LMC Proposed Date";
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Check Feasibility";
-
-
+  static String typeOfNR = "Type Of NR";
+  static String actualWorkStart = "Actual Work Start";
+  static String reasonDelay = "Reason if Delay";
 }

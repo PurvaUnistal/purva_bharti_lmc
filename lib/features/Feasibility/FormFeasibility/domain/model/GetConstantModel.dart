@@ -1,20 +1,17 @@
-class CheckFeasibleModel {
+class GetConstantModel {
   String? key;
   String? value;
 
+  GetConstantModel({this.key, this.value});
 
-  CheckFeasibleModel({this.key, this.value});
-
-  CheckFeasibleModel.fromJson(Map<String, dynamic> json) {
+  GetConstantModel.fromJson(Map<String, dynamic> json) {
     key = json['key'];
     value = json['value'];
   }
 
-  static List<CheckFeasibleModel> mapToList(Map<String, dynamic> mapData) {
-    return mapData.entries.map((e) => CheckFeasibleModel(key: e.key, value: e.value)).toList();
+  static List<GetConstantModel> mapToList(Map<String, dynamic> mapData) {
+    return mapData.entries.map((e) => GetConstantModel(key: e.key, value: e.value)).toList();
   }
-
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

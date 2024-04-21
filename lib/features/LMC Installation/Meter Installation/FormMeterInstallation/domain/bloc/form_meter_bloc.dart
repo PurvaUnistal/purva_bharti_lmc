@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_state.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReason.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/TypeOfNrModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/helper/form_meter_helper.dart';
 
 class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   FormMeterBloc() : super(FormMeterInitialState()) {
@@ -26,12 +27,12 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   File meterImg = File("");
 
   ListOfMeterNo? meterNoValue;
-  TypeOfNrModel? typeOfNrValue;
-  DelayReason? delayReasonValue;
+  GetConstantModel? typeOfNrValue;
+  DelayReasonModel? delayReasonValue;
 
   List<ListOfMeterNo> listOfMeterNo = [];
-  List<TypeOfNrModel> listOfTypeOfNr = [];
-  List<DelayReason> listOfDelayReason = [];
+  List<GetConstantModel> listOfTypeOfNr = [];
+  List<DelayReasonModel> listOfDelayReason = [];
 
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
@@ -58,8 +59,8 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     meterIniReadingController.text = "";
     meterReadingDateController.text = "";
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
-    /* await fetchCheckMeterApi(context: event.context);
-    await fetchLMCReasonApi(context: event.context);*/
+    await fetchTypeOfNrApi(context: event.context);
+    listOfDelayReason = await DelayReasonModel.getCheckData();
     _eventCompleted(emit);
   }
 
@@ -103,22 +104,14 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     }
   }
 
-  /*fetchCheckMeterApi({required BuildContext context}) async {
-    var res = await FormMeterHelper.getCheckMeterApi(context: context);
+  fetchTypeOfNrApi({required BuildContext context}) async {
+    var res = await FormMeterHelper.getTypeOfNrApi(context: context);
     if (res != null) {
-      listOfCheckFeasible = res;
+      listOfTypeOfNr = res;
       return res;
     }
   }
 
-  fetchLMCReasonApi({required BuildContext context}) async {
-    var res = await FormMeterHelper.getLMCReasonApi(context: context);
-    if (res != null) {
-      listOfLMCReason = res;
-      return res;
-    }
-  }
-*/
   _eventCompleted(emit) {
     emit(FormMeterDataState(
         isLoader: isLoader,

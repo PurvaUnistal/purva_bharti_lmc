@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,11 +7,11 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/CheckFeasibleModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
 
-class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState>{
-  FormFeasibilityBloc() : super(FormFeasibilityInitialState()){
+class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
+  FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
     on<FormFeasibilityPageLoadEvent>(_pageLoad);
     on<SelectProposedDateEvent>(_selectProposedDate);
     on<SelectFeasibilityDateEvent>(_selectFeasibilityDate);
@@ -21,13 +19,12 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     on<SubmitFormFeasibilityEvent>(_submit);
   }
 
-
   bool isLoader = false;
   bool isBtnLoader = false;
-  CheckFeasibleModel? checkFeasibleValue;
-  CheckFeasibleModel? lmcReasonValue;
-  List<CheckFeasibleModel> listOfCheckFeasible = [];
-  List<CheckFeasibleModel> listOfLMCReason = [];
+  GetConstantModel? checkFeasibleValue;
+  GetConstantModel? lmcReasonValue;
+  List<GetConstantModel> listOfCheckFeasible = [];
+  List<GetConstantModel> listOfLMCReason = [];
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
   TextEditingController feasibilityDateController = TextEditingController();
@@ -48,10 +45,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     _eventCompleted(emit);
   }
 
-
   _selectProposedDate(SelectProposedDateEvent event, emit) async {
-    DateTime? dateTime = await showDatePicker(
-        context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
       proposedDateController.text = formattedDate.toString();
@@ -60,8 +55,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectFeasibilityDate(SelectFeasibilityDateEvent event, emit) async {
-    DateTime? dateTime = await showDatePicker(
-        context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
       feasibilityDateController.text = formattedDate.toString();
@@ -75,31 +69,31 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _submit(SubmitFormFeasibilityEvent event, emit) async {
-    try{
+    try {
       var validationCheck = await FormFeasibilityHelper.validationSubmit(
         context: event.context,
         feasibilityDate: feasibilityDateController.text.trim().toString(),
         isFeasible: checkFeasibleValue,
       );
-      if( validationCheck == true){
+      if (validationCheck == true) {
         isBtnLoader = true;
         _eventCompleted(emit);
-        var res = await FormFeasibilityHelper.saveLmcFeasibility(
-            context: event.context,
-          feasibilityDate: feasibilityDateController.text.toString(),
-          isFeasible: checkFeasibleValue!);
-        if (res != null ) {
+        var res =
+            await FormFeasibilityHelper.saveLmcFeasibility(context: event.context, feasibilityDate: feasibilityDateController.text.toString(), isFeasible: checkFeasibleValue!);
+        if (res != null) {
           isBtnLoader = false;
           _eventCompleted(emit);
           Utils.successSnackBar(msg: res.data!, context: event.context);
-          Navigator.pushReplacementNamed(event.context, RoutesName.lmcFeasibility,);
+          Navigator.pushReplacementNamed(
+            event.context,
+            RoutesName.lmcFeasibility,
+          );
         } else {
           isBtnLoader = false;
           _eventCompleted(emit);
         }
-
       }
-     }catch(e){
+    } catch (e) {
       print(e.toString());
       isBtnLoader = false;
       _eventCompleted(emit);
@@ -108,7 +102,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   fetchCheckFeasibilityApi({required BuildContext context}) async {
     var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);
-    if(res != null){
+    if (res != null) {
       listOfCheckFeasible = res;
       return res;
     }
@@ -116,7 +110,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   fetchLMCReasonApi({required BuildContext context}) async {
     var res = await FormFeasibilityHelper.getLMCReasonApi(context: context);
-    if(res != null){
+    if (res != null) {
       listOfLMCReason = res;
       return res;
     }
@@ -132,8 +126,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         listOfLMCReason: listOfLMCReason,
         bpNumberController: bpNumberController,
         proposedDateController: proposedDateController,
-        feasibilityDateController: feasibilityDateController)
-    );
+        feasibilityDateController: feasibilityDateController));
   }
-
 }

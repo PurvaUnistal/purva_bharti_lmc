@@ -10,33 +10,18 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasib
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
 
-class FormFeasibilityHelper {
-  static Future<List<GetConstantModel>?> getCheckFeasibilityApi({required BuildContext context}) async {
+class FormMeterHelper {
+  static Future<List<GetConstantModel>?> getTypeOfNrApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
-        "key": "is_feasible",
+        "key": "typeOfNr",
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
       List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
       return response;
     } catch (e) {
-      log("checkFeasibility-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<GetConstantModel>?> getLMCReasonApi({required BuildContext context}) async {
-    try {
-      Map<String, String> para = {
-        "key": "lmcReason",
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
-      return response;
-    } catch (e) {
-      log("lmcReason-->${e.toString()}");
+      log("typeOfNr-->${e.toString()}");
     }
     return null;
   }

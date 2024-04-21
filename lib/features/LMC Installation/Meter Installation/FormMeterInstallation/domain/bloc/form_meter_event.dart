@@ -35,6 +35,14 @@ class SelectMeterReadingDateEvent extends FormMeterEvent {
   List<Object> get props => [context];
 }
 
+class SelectTypeNRValueEvent extends FormMeterEvent {
+  final dynamic typeOfNRValue;
+  SelectTypeNRValueEvent({required this.typeOfNRValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [typeOfNRValue];
+}
+
 class SelectDelayReasonValueEvent extends FormMeterEvent {
   final dynamic delayReasonValue;
   SelectDelayReasonValueEvent({required this.delayReasonValue});

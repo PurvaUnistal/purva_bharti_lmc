@@ -8,6 +8,7 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/presentation/form_meter_view.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_state.dart';
@@ -77,16 +78,6 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
     );
   }
 
-  Widget _header({required BuildContext context}) {
-    return Padding(
-      padding: EdgeInsets.all(20.0),
-      child: Text(
-        "LMC MeterInstal",
-        style: Styles.stars,
-      ),
-    );
-  }
-
   Widget _rowItem({required String textName, required String textValue}) {
     return Column(
       children: [
@@ -120,11 +111,7 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
         ? ButtonWidget(
             text: AppString.meterInstallation,
             onPressed: () {
-              /* Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FormMeterInstalView()));*/
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FormMeterView()));
             })
         : DottedLoaderWidget();
   }

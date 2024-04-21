@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReason.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/TypeOfNrModel.dart';
 
 abstract class FormMeterState extends Equatable {}
 
@@ -23,11 +23,11 @@ class FormMeterDataState extends FormMeterState {
   final bool isBtnLoader;
   final File meterImg;
   final ListOfMeterNo? meterNoValue;
-  final TypeOfNrModel? typeOfNrValue;
-  final DelayReason? delayReasonValue;
+  final GetConstantModel? typeOfNrValue;
+  final DelayReasonModel? delayReasonValue;
   final List<ListOfMeterNo> listOfMeterNo;
-  final List<TypeOfNrModel> listOfTypeOfNr;
-  final List<DelayReason> listOfDelayReason;
+  final List<GetConstantModel> listOfTypeOfNr;
+  final List<DelayReasonModel> listOfDelayReason;
   final TextEditingController bpNumberController;
   final TextEditingController proposedDateController;
   final TextEditingController actualWorkDateController;
