@@ -20,20 +20,28 @@ class SelectProposedDateEvent extends FormMeterEvent {
   List<Object> get props => [context];
 }
 
-class SelectMeterDateEvent extends FormMeterEvent {
+class SelectActualWorkDateEvent extends FormMeterEvent {
   final BuildContext context;
-  SelectMeterDateEvent({required this.context});
+  SelectActualWorkDateEvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];
 }
 
-class SelectCheckMeterValueEvent extends FormMeterEvent {
-  final dynamic checkMeter;
-  SelectCheckMeterValueEvent({required this.checkMeter});
+class SelectMeterReadingDateEvent extends FormMeterEvent {
+  final BuildContext context;
+  SelectMeterReadingDateEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [checkMeter];
+  List<Object> get props => [context];
+}
+
+class SelectDelayReasonValueEvent extends FormMeterEvent {
+  final dynamic delayReasonValue;
+  SelectDelayReasonValueEvent({required this.delayReasonValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [delayReasonValue];
 }
 
 class SubmitFormMeterEvent extends FormMeterEvent {
