@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/Meter/LMC%20Meter/domain/model/MeterModel.dart';
 
 abstract class FormMeterEvent extends Equatable {}
 
