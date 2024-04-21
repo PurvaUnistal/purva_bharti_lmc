@@ -4,13 +4,14 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_state.dart';
 
-class PreviewMeterInstallationBloc extends Bloc<PreviewMeterInstallationEvent, PreviewMeterInstallationState>{
-  PreviewMeterInstallationBloc() : super(PreviewMeterInstallationInitialState()){
+class PreviewMeterInstallationBloc extends Bloc<PreviewMeterInstallationEvent, PreviewMeterInstallationState> {
+  PreviewMeterInstallationBloc() : super(PreviewMeterInstallationInitialState()) {
     on<PreviewMeterInstallationPageLoadEvent>(_pageLoad);
   }
 
   bool isLoader = false;
   String custRegNo = '';
+  String feasibilityVisitDate = '';
   String areaName = '';
   String firstName = '';
   String lastName = '';
@@ -28,10 +29,15 @@ class PreviewMeterInstallationBloc extends Bloc<PreviewMeterInstallationEvent, P
   _pageLoad(PreviewMeterInstallationPageLoadEvent event, emit) async {
     emit(PreviewMeterInstallationInitialState());
     isLoader = false;
-    custRegNo = await SharedPref.getString(key: PrefsValue.custRegNo,);
+    custRegNo = await SharedPref.getString(
+      key: PrefsValue.custRegNo,
+    );
+    feasibilityVisitDate = await SharedPref.getString(
+      key: PrefsValue.feasibilityVisitDate,
+    );
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
-    firstName =  await SharedPref.getString(key: PrefsValue.firstName);
-    lastName =  await SharedPref.getString(key: PrefsValue.lastName);
+    firstName = await SharedPref.getString(key: PrefsValue.firstName);
+    lastName = await SharedPref.getString(key: PrefsValue.lastName);
     guardianName = await SharedPref.getString(key: PrefsValue.guardianName);
     proCateName = await SharedPref.getString(key: PrefsValue.proCateName);
     propClass = await SharedPref.getString(key: PrefsValue.propClass);
@@ -45,25 +51,24 @@ class PreviewMeterInstallationBloc extends Bloc<PreviewMeterInstallationEvent, P
     _eventCompleted(emit);
   }
 
-
   _eventCompleted(Emitter<PreviewMeterInstallationState> emit) {
     emit(PreviewMeterInstallationDataState(
-        isLoader: isLoader,
-        custRegNo: custRegNo,
-        areaName: areaName,
-        firstName: firstName,
-        lastName: lastName,
-        guardianName: guardianName,
-        proCateName: proCateName,
-        propClass: propClass,
-        buildingNumber: buildingNumber,
-        houseNumber: houseNumber,
-        locality: locality,
-        town: town,
-        street: street,
-        district: district,
-        pinCode: pinCode,
-        )
-    );
+      isLoader: isLoader,
+      custRegNo: custRegNo,
+      feasibilityVisitDate: feasibilityVisitDate,
+      areaName: areaName,
+      firstName: firstName,
+      lastName: lastName,
+      guardianName: guardianName,
+      proCateName: proCateName,
+      propClass: propClass,
+      buildingNumber: buildingNumber,
+      houseNumber: houseNumber,
+      locality: locality,
+      town: town,
+      street: street,
+      district: district,
+      pinCode: pinCode,
+    ));
   }
 }

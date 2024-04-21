@@ -36,6 +36,7 @@ class PrefsValue {
   static String dateOfRegistration = "date Of Registration";
   static String dmaId = "dmaId";
   static String custRegNo = "customerRegistrationNo";
+  static String feasibilityVisitDate = "feasibilityVisitDate";
   static String areaName = "areaName";
   static String firstName = "firstName";
   static String lastName = "lastName";

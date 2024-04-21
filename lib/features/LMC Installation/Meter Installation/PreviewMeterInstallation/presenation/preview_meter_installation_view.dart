@@ -13,20 +13,20 @@ import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMete
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_state.dart';
 
 class PreviewMeterInstalView extends StatefulWidget {
-  const PreviewMeterInstalView({super.key,});
+  const PreviewMeterInstalView({
+    super.key,
+  });
 
   @override
   State<PreviewMeterInstalView> createState() => _PreviewMeterInstalViewState();
 }
 
 class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
-
   @override
   void initState() {
     super.initState();
     BlocProvider.of<PreviewMeterInstallationBloc>(context).add(PreviewMeterInstallationPageLoadEvent(context: context));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
         title: RoutesName.meterInstallation,
         boolLeading: true,
       ),
-      body:  BlocBuilder<PreviewMeterInstallationBloc, PreviewMeterInstallationState>(
+      body: BlocBuilder<PreviewMeterInstallationBloc, PreviewMeterInstallationState>(
         builder: (context, state) {
           if (state is PreviewMeterInstallationDataState) {
             return _itemBuilder(dataState: state, context: context);
@@ -47,26 +47,27 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
     );
   }
 
-  _itemBuilder({required PreviewMeterInstallationDataState dataState, required BuildContext context}){
+  _itemBuilder({required PreviewMeterInstallationDataState dataState, required BuildContext context}) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            _rowItem(textName: AppString.custReg,textValue: dataState.custRegNo),
-            _rowItem(textName: AppString.area,textValue: dataState.areaName),
-            _rowItem(textName: AppString.firstName,textValue: dataState.firstName),
-            _rowItem(textName: AppString.lastName,textValue: dataState.lastName),
-            _rowItem(textName: AppString.guardianName,textValue: dataState.guardianName),
-            _rowItem(textName: AppString.propertyCategory,textValue: dataState.proCateName),
-            _rowItem(textName: AppString.propertyClass,textValue: dataState.propClass),
-            _rowItem(textName: AppString.buildingNumber,textValue: dataState.buildingNumber),
-            _rowItem(textName: AppString.houseNumber,textValue: dataState.houseNumber),
-            _rowItem(textName: AppString.colony,textValue: dataState.locality),
-            _rowItem(textName: AppString.town,textValue: dataState.town),
-            _rowItem(textName: AppString.street,textValue: dataState.street),
-            _rowItem(textName: AppString.district,textValue: dataState.district),
-            _rowItem(textName: AppString.pinCode,textValue: dataState.pinCode),
+            _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
+            _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
+            _rowItem(textName: AppString.area, textValue: dataState.areaName),
+            _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
+            _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
+            _rowItem(textName: AppString.guardianName, textValue: dataState.guardianName),
+            _rowItem(textName: AppString.propertyCategory, textValue: dataState.proCateName),
+            _rowItem(textName: AppString.propertyClass, textValue: dataState.propClass),
+            _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
+            _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
+            _rowItem(textName: AppString.colony, textValue: dataState.locality),
+            _rowItem(textName: AppString.town, textValue: dataState.town),
+            _rowItem(textName: AppString.street, textValue: dataState.street),
+            _rowItem(textName: AppString.district, textValue: dataState.district),
+            _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
             _verticalSpace(),
             _verticalSpace(),
             _button(dataState: dataState),
@@ -80,7 +81,8 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Text(
-        "LMC MeterInstal",style: Styles.stars,
+        "LMC MeterInstal",
+        style: Styles.stars,
       ),
     );
   }
@@ -94,11 +96,15 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(child: Text("${textName} :",style: Styles.labels,)),
               Flexible(
                   child: Text(
-                    textValue,
-                  )),
+                "${textName} :",
+                style: Styles.labels,
+              )),
+              Flexible(
+                  child: Text(
+                textValue,
+              )),
             ],
           ),
         ),
@@ -112,14 +118,14 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
   Widget _button({required PreviewMeterInstallationDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.meterInstallation,
-        onPressed: () {
-         /* Navigator.push(
+            text: AppString.meterInstallation,
+            onPressed: () {
+              /* Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       FormMeterInstalView()));*/
-        })
+            })
         : DottedLoaderWidget();
   }
 

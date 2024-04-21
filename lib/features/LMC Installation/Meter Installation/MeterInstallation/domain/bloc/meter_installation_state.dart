@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/InstallationDoneModel.dart';
 
-abstract class MeterInstallationState extends Equatable{}
+abstract class MeterInstallationState extends Equatable {}
 
 class MeterInstallationInitialState extends MeterInstallationState {
   @override
@@ -15,13 +15,13 @@ class MeterInstallationPageLoadState extends MeterInstallationState {
   List<Object> get props => [];
 }
 
-class MeterInstallationDataState extends MeterInstallationState{
+class MeterInstallationDataState extends MeterInstallationState {
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
   final List<GetAllAreaModel> listOfAllArea;
-  List<FeasibilityRowsList> listOfFeasibilityRow;
-  FeasibilityModel? feasibilityModel;
+  List<InstallationDoneRows> listOfInstallationRow;
+  InstallationDoneModel? installationDoneModel;
   final ScrollController scrollController;
 
   MeterInstallationDataState({
@@ -29,21 +29,20 @@ class MeterInstallationDataState extends MeterInstallationState{
     required this.isLoadingMore,
     required this.allAreaValue,
     required this.listOfAllArea,
-    required this.listOfFeasibilityRow,
-    required this.feasibilityModel,
+    required this.listOfInstallationRow,
+    required this.installationDoneModel,
     required this.scrollController,
-
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isLoadingMore,
-    allAreaValue,
-    listOfAllArea,
-    listOfFeasibilityRow,
-    feasibilityModel,
-    scrollController,
-  ];
+        isLoader,
+        isLoadingMore,
+        allAreaValue,
+        listOfAllArea,
+        listOfInstallationRow,
+        installationDoneModel,
+        scrollController,
+      ];
 }

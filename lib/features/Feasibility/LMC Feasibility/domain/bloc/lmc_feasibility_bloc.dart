@@ -6,8 +6,8 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/Feasibil
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
 
-class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
-  LMCFeasibilityBloc() : super(LMCFeasibilityInitialState()){
+class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> {
+  LMCFeasibilityBloc() : super(LMCFeasibilityInitialState()) {
     on<LMCFeasibilityPageLoadEvent>(_pageLoad);
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
@@ -26,66 +26,61 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
   _pageLoad(LMCFeasibilityPageLoadEvent event, emit) async {
     emit(LMCFeasibilityInitialState());
     isLoader = false;
-    isLoadingMore = false;
-    areaValue= null;
+    isLoadingMore = true;
+    areaValue = null;
     listOfAllArea = [];
     listOfFeasibilityRow = [];
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
     feasibilityRowsModel = FeasibilityRowsList();
+    _eventCompleted();
     await fetchAllArea(context: event.context);
-    await loadDataTable(context: event.context, emit: emit);
-    await fetchFeasibility(context: event.context,);
-    _eventCompleted(emit);
+    await loadDataTable(context: event.context);
+    await fetchFeasibility(context: event.context, pageNumber: 1);
+    isLoadingMore = false;
+    _eventCompleted();
   }
-
-
 
   _selectAreaValue(SelectAreaValueEvent event, emit) {
     areaValue = event.allAreaValue;
-    _eventCompleted(emit);
+    _eventCompleted();
   }
 
-  _searchBpNumber(SearchBpNumberEvent event, emit) {
-  }
-
+  _searchBpNumber(SearchBpNumberEvent event, emit) {}
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
-    if(res != null){
+    if (res != null) {
       listOfAllArea = res;
       return res;
     }
   }
 
-  fetchFeasibility({required BuildContext context}) async {
+  fetchFeasibility({required BuildContext context, required int pageNumber}) async {
     isLoadingMore = true;
-    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: "",page: pageNo.toString(), areaId:"" );
-    if(res != null){
+    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: "", page: pageNumber.toString(), areaId: "");
+    if (res != null) {
       isLoadingMore = false;
       feasibilityModel = res;
-      if(feasibilityModel!.data!.rows != null){
-        feasibilityRowsModel = feasibilityModel!.data!.rows![0];
+      if (feasibilityModel!.data!.rows != null) {
         listOfFeasibilityRow = feasibilityModel!.data!.rows!;
-
       }
     }
   }
 
-  loadDataTable({required BuildContext context, emit}){
+  loadDataTable({required BuildContext context}) {
     scrollController.addListener(() async {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        isLoadingMore = true;
+        _eventCompleted();
         pageNo++;
-        await fetchFeasibility(context:context);
-       // _eventCompleted(emit);
+        await fetchFeasibility(context: context, pageNumber: pageNo);
+        _eventCompleted();
       }
     });
   }
 
-
-
-  _eventCompleted(Emitter<LMCFeasibilityState> emit) {
+  _eventCompleted() {
     emit(LMCFeasibilityDataState(
         isLoader: isLoader,
         isLoadingMore: isLoadingMore,
@@ -94,7 +89,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState>{
         feasibilityRowsModel: feasibilityRowsModel,
         listOfFeasibilityRow: listOfFeasibilityRow,
         feasibilityModel: feasibilityModel,
-        scrollController: scrollController
-    ));
+        scrollController: scrollController));
   }
 }

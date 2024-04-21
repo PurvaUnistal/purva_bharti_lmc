@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class PreviewMeterInstallationState extends Equatable{}
+abstract class PreviewMeterInstallationState extends Equatable {}
 
 class PreviewMeterInstallationInitialState extends PreviewMeterInstallationState {
   @override
@@ -12,9 +12,10 @@ class PreviewMeterInstallationPageLoadState extends PreviewMeterInstallationStat
   List<Object> get props => [];
 }
 
-class PreviewMeterInstallationDataState extends PreviewMeterInstallationState{
+class PreviewMeterInstallationDataState extends PreviewMeterInstallationState {
   final bool isLoader;
   String custRegNo;
+  String feasibilityVisitDate;
   String areaName;
   String firstName;
   String lastName;
@@ -31,40 +32,41 @@ class PreviewMeterInstallationDataState extends PreviewMeterInstallationState{
 
   PreviewMeterInstallationDataState({
     required this.isLoader,
-     required this.custRegNo,
-     required this.areaName,
-     required this.firstName,
-     required this.lastName,
-     required this.guardianName,
-     required this.proCateName,
-     required this.propClass,
-     required this.buildingNumber,
-     required this.houseNumber,
-     required this.locality,
-     required this.street,
-     required this.town,
-     required this.district,
-     required this.pinCode,
-
+    required this.custRegNo,
+    required this.feasibilityVisitDate,
+    required this.areaName,
+    required this.firstName,
+    required this.lastName,
+    required this.guardianName,
+    required this.proCateName,
+    required this.propClass,
+    required this.buildingNumber,
+    required this.houseNumber,
+    required this.locality,
+    required this.street,
+    required this.town,
+    required this.district,
+    required this.pinCode,
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    custRegNo,
-    areaName,
-    street,
-    firstName,
-    lastName,
-    guardianName,
-    proCateName,
-    propClass,
-    buildingNumber,
-    houseNumber,
-    locality,
-    town,
-    district,
-    pinCode,
-  ];
+        isLoader,
+        custRegNo,
+        feasibilityVisitDate,
+        areaName,
+        street,
+        firstName,
+        lastName,
+        guardianName,
+        proCateName,
+        propClass,
+        buildingNumber,
+        houseNumber,
+        locality,
+        town,
+        district,
+        pinCode,
+      ];
 }

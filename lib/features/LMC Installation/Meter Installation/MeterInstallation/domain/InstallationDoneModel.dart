@@ -1,14 +1,14 @@
-class FeasibilityModel {
+class InstallationDoneModel {
   int? success;
   bool? error;
-  Data? data;
+  InstallationDoneData? data;
 
-  FeasibilityModel({this.success, this.error, this.data});
+  InstallationDoneModel({this.success, this.error, this.data});
 
-  FeasibilityModel.fromJson(Map<String, dynamic> json) {
+  InstallationDoneModel.fromJson(Map<String, dynamic> json) {
     success = json['success'] ?? "";
     error = json['error'] ?? "";
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new InstallationDoneData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,18 +22,18 @@ class FeasibilityModel {
   }
 }
 
-class Data {
+class InstallationDoneData {
   Pager? pager;
-  List<FeasibilityRowsList>? rows;
+  List<InstallationDoneRows>? rows;
 
-  Data({this.pager, this.rows});
+  InstallationDoneData({this.pager, this.rows});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  InstallationDoneData.fromJson(Map<String, dynamic> json) {
     pager = json['pager'] != null ? new Pager.fromJson(json['pager']) : null;
     if (json['rows'] != null) {
-      rows = <FeasibilityRowsList>[];
+      rows = <InstallationDoneRows>[];
       json['rows'].forEach((v) {
-        rows!.add(new FeasibilityRowsList.fromJson(v));
+        rows!.add(new InstallationDoneRows.fromJson(v));
       });
     }
   }
@@ -65,7 +65,7 @@ class Pager {
   Pager({this.uri, this.hasMore, this.total, this.perPage, this.pageCount, this.pageSelector, this.currentPage, this.next, this.previous, this.segment});
 
   Pager.fromJson(Map<String, dynamic> json) {
-    uri = json['uri'] != null ? json['uri'] : null;
+    uri = json['uri'] ?? "";
     hasMore = json['hasMore'] ?? "";
     total = json['total'] ?? "";
     perPage = json['perPage'] ?? "";
@@ -79,9 +79,7 @@ class Pager {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.uri != null) {
-      data['uri'] = this.uri!.toJson();
-    }
+    data['uri'] = this.uri;
     data['hasMore'] = this.hasMore;
     data['total'] = this.total;
     data['perPage'] = this.perPage;
@@ -95,13 +93,13 @@ class Pager {
   }
 }
 
-class FeasibilityRowsList {
+class InstallationDoneRows {
   dynamic id;
   String? hplcprojectId;
   String? createdOn;
   String? status;
   String? lmcId;
-  dynamic dmaId;
+  String? dmaId;
   String? isReassigned;
   String? areaId;
   String? mobileNumber;
@@ -131,24 +129,24 @@ class FeasibilityRowsList {
   String? kycDocument2Number;
   String? kycDocument3;
   String? kycDocument3Number;
-  dynamic formStatus;
+  String? formStatus;
   String? dmaUserId;
   String? remarks;
   String? longitude;
   String? latitude;
-  dynamic cgs;
+  String? cgs;
   String? chargeAreaId;
   String? dateOfRegistration;
   String? nameOfBank;
   String? bankAccountNumber;
   String? bankIfscCode;
   String? bankAddress;
-  dynamic dmaFormStatus;
-  dynamic customerConsentStatus;
+  String? dmaFormStatus;
+  String? customerConsentStatus;
   String? reasonForHold;
-  dynamic initialDepositeDate;
+  String? initialDepositeDate;
   String? modeOfDeposite;
-  dynamic installmentNumber;
+  String? installmentNumber;
   String? payementBankName;
   String? paymentCreditStatus;
   String? dmaUserName;
@@ -170,7 +168,7 @@ class FeasibilityRowsList {
   String? kycDocument2Image;
   String? kycDocument3Image;
   String? buildingNumber;
-  dynamic address1;
+  String? address1;
   String? address2;
   String? backside1;
   String? backside2;
@@ -180,28 +178,28 @@ class FeasibilityRowsList {
   String? isGasDepositApplicable;
   String? marketingApproval;
   String? markStatusTime;
-  dynamic marketingRejectReason;
+  String? marketingRejectReason;
   String? accountingApproval;
   String? accountingTime;
-  dynamic accontingRejectReason;
+  String? accontingRejectReason;
   String? depositeType;
-  dynamic depositSlipDate;
-  dynamic depositSlip;
-  dynamic transactionId;
-  dynamic transactionTime;
+  String? depositSlipDate;
+  String? depositSlip;
+  String? transactionId;
+  String? transactionTime;
   String? transactionResponseTime;
   String? bpNumber;
   String? interested;
-  dynamic assignLmcId;
-  dynamic refundedAmount;
-  dynamic refundOrderid;
-  dynamic isGasdepositCollected;
+  String? assignLmcId;
+  String? refundedAmount;
+  String? refundOrderid;
+  String? isGasdepositCollected;
   String? guardianType;
   String? selfRegistration;
   String? customerStatus;
-  dynamic chequeBounceReason;
+  String? chequeBounceReason;
   String? micr;
-  dynamic mobileResponseTime;
+  String? mobileResponseTime;
   String? isEdited;
   String? inAccount;
   String? bounceAmount;
@@ -209,12 +207,12 @@ class FeasibilityRowsList {
   String? defermentAmount;
   String? districtId;
   String? disconnectionStatus;
-  dynamic refundableStatu;
+  String? refundableStatu;
   String? saleId;
   String? collectionId;
   String? ageingId;
   String? trNumber;
-  dynamic alternateMobile;
+  String? alternateMobile;
   String? dmaDirPath;
   String? refundableStatus;
   String? name;
@@ -222,154 +220,156 @@ class FeasibilityRowsList {
   String? phoneNumber;
   String? email;
   String? password;
-  dynamic userAreaMappingTable;
-  dynamic areaMappingId;
+  String? userAreaMappingTable;
+  String? areaMappingId;
   String? adminId;
-  dynamic userId;
+  String? userId;
   String? userIndentId;
   String? companyName;
   String? assigendGa;
-  dynamic assignedChargearea;
+  String? assignedChargearea;
   String? textpassword;
   String? craetedDate;
-  dynamic activatedDate;
-  dynamic deactivatedDate;
+  String? activatedDate;
+  String? deactivatedDate;
   String? cityTown;
   String? lead;
   String? isHo;
   String? level;
   String? pwdChanged;
   String? moduleId;
-  dynamic userTypeId;
-  dynamic userImage;
-  dynamic signImage;
+  String? userTypeId;
+  String? userImage;
+  String? signImage;
   String? gid;
-  dynamic objectid1;
-  dynamic objectid;
+  String? objectid1;
+  String? objectid;
   String? add;
-  dynamic shapeLeng;
+  String? shapeLeng;
   String? projectCode;
-  dynamic shapeLe1;
-  dynamic shapeArea;
+  String? shapeLe1;
+  String? shapeArea;
   String? dbname;
-  dynamic labelForDashboard;
+  String? labelForDashboard;
   String? gstNumber;
-  dynamic panNumber;
+  String? panNumber;
   String? gaAddress;
   String? cinNumber;
-  dynamic branchEmail;
+  String? branchEmail;
   String? customerCare;
   String? vat;
-  dynamic fax;
-  dynamic cst;
+  String? fax;
+  String? cst;
   String? website;
   String? billingAddress;
   String? gaLabel;
   String? projectLogo;
-  dynamic clientLogo;
-  dynamic pmcLogo;
-  dynamic contractorLogo;
+  String? clientLogo;
+  String? pmcLogo;
+  String? contractorLogo;
   String? client;
   String? projectDesc;
   String? businessObject;
-  dynamic pmc;
-  dynamic contractor;
+  String? pmc;
+  String? contractor;
   String? gaCustomCode;
   String? areaName;
   String? areacode;
-  dynamic cityId;
-  dynamic subareacod;
+  String? cityId;
+  String? subareacod;
   String? readyForConnection;
-  dynamic dmaRegId;
-  dynamic proposedDate;
-  dynamic feasibilityVisitDate;
-  dynamic additionalBom;
-  dynamic createdAt;
-  dynamic updatedAt;
-  dynamic isFeasible;
-  dynamic feasReason;
-  dynamic followUpDate;
-  dynamic deletedAt;
-  dynamic source;
-  dynamic extraPipePayment;
-  dynamic installationStatus;
-  dynamic modeOfDepositePayment;
-  dynamic bounceCharge;
-  dynamic bounceChargeTax;
-  dynamic paymentCreditStatusLmc;
-  dynamic invoiceNumber;
-  dynamic invoiceAmount;
-  dynamic extraPipe;
-  dynamic totPipeLength;
-  dynamic msgToCustomer;
-  dynamic extraPipeUserId;
-  dynamic invoiceDate;
-  dynamic extraPipeStatus;
-  dynamic meterNo;
-  dynamic regulatorNo;
-  dynamic lmcMeterReading;
-  dynamic lastMeterReading;
-  dynamic prevBalance;
-  dynamic paidInstallment;
-  dynamic actualLmcWorkStartedDate;
-  dynamic tpaInspectionDate;
-  dynamic ngcConversionDate;
-  dynamic actualWorkStart;
-  dynamic delayReason;
-  dynamic meterType;
-  dynamic meterMake;
-  dynamic meterNumber;
-  dynamic pipe;
-  dynamic fittings;
-  dynamic meterReading;
-  dynamic meterReadingDate;
-  dynamic meterPhoto;
-  dynamic tfNumber;
-  dynamic latitudeTf;
-  dynamic longitudeTf;
-  dynamic latitudeHg;
-  dynamic longitudeHg;
-  dynamic workCompletedDate;
-  dynamic workCompletedImage;
-  dynamic custAckImage;
-  dynamic custAckDate;
-  dynamic feasibilityId;
-  dynamic extraPrice;
-  dynamic cementingOfHoles;
-  dynamic clampingPvc;
-  dynamic claminngCopper;
-  dynamic meterTesting;
-  dynamic paintaingofGIpipe;
-  dynamic conversionDate;
-  dynamic typeOfNr;
-  dynamic ngc;
-  dynamic regulators;
-  dynamic extraPipeId;
-  dynamic isometricImage;
-  dynamic isometricDate;
-  dynamic pneumaticDate;
-  dynamic pneumaticImage;
-  dynamic rfcForm;
-  dynamic tpaStatus;
-  dynamic tpaRejectReason;
-  dynamic tpaUserId;
-  dynamic insExtraPipe;
-  dynamic insExtraPrice;
-  dynamic pipePaymentType;
-  dynamic oldMeterNumber;
-  dynamic meterReplacementDate;
-  dynamic previousInstalledStatus;
-  dynamic instDirPath;
+  String? dmaRegId;
+  String? proposedDate;
+  String? feasibilityVisitDate;
+  String? additionalBom;
+  String? createdAt;
+  String? updatedAt;
+  String? isFeasible;
+  String? feasReason;
+  String? followUpDate;
+  String? deletedAt;
+  String? source;
+  String? extraPipePayment;
+  String? installationStatus;
+  String? modeOfDepositePayment;
+  String? bounceCharge;
+  String? bounceChargeTax;
+  String? paymentCreditStatusLmc;
+  String? invoiceNumber;
+  String? invoiceAmount;
+  String? extraPipe;
+  String? totPipeLength;
+  String? msgToCustomer;
+  String? extraPipeUserId;
+  String? invoiceDate;
+  String? extraPipeStatus;
+  String? meterNo;
+  String? regulatorNo;
+  String? lmcMeterReading;
+  String? lastMeterReading;
+  String? prevBalance;
+  String? paidInstallment;
+  String? actualLmcWorkStartedDate;
+  String? tpaInspectionDate;
+  String? ngcConversionDate;
+  String? actualWorkStart;
+  String? delayReason;
+  String? meterType;
+  String? meterMake;
+  String? meterNumber;
+  String? pipe;
+  String? fittings;
+  String? meterReading;
+  String? meterReadingDate;
+  String? meterPhoto;
+  String? tfNumber;
+  String? latitudeTf;
+  String? longitudeTf;
+  String? latitudeHg;
+  String? longitudeHg;
+  String? workCompletedDate;
+  String? workCompletedImage;
+  String? custAckImage;
+  String? custAckDate;
+  String? feasibilityId;
+  String? extraPrice;
+  String? cementingOfHoles;
+  String? clampingPvc;
+  String? claminngCopper;
+  String? meterTesting;
+  String? paintaingofGIpipe;
+  String? conversionDate;
+  String? typeOfNr;
+  String? ngc;
+  String? regulators;
+  String? extraPipeId;
+  String? isometricImage;
+  String? isometricDate;
+  String? pneumaticDate;
+  String? pneumaticImage;
+  String? rfcForm;
+  String? tpaStatus;
+  String? tpaRejectReason;
+  String? tpaUserId;
+  String? insExtraPipe;
+  String? insExtraPrice;
+  String? pipePaymentType;
+  String? oldMeterNumber;
+  String? meterReplacementDate;
+  String? previousInstalledStatus;
+  String? instDirPath;
+  String? installationProcessStatus;
+  String? rfcProcessStatus;
   String? assignId;
-  dynamic isInstall;
-  dynamic lmcFeasId;
+  String? isInstall;
+  String? lmcFeasId;
   String? dma;
   String? states;
   String? dis;
   String? propName;
   String? propClass;
 
-  FeasibilityRowsList(
+  InstallationDoneRows(
       {this.id,
       this.hplcprojectId,
       this.createdOn,
@@ -634,6 +634,8 @@ class FeasibilityRowsList {
       this.meterReplacementDate,
       this.previousInstalledStatus,
       this.instDirPath,
+      this.installationProcessStatus,
+      this.rfcProcessStatus,
       this.assignId,
       this.isInstall,
       this.lmcFeasId,
@@ -643,7 +645,7 @@ class FeasibilityRowsList {
       this.propName,
       this.propClass});
 
-  FeasibilityRowsList.fromJson(Map<String, dynamic> json) {
+  InstallationDoneRows.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? "";
     hplcprojectId = json['hplcproject_id'] ?? "";
     createdOn = json['created_on'] ?? "";
@@ -908,6 +910,8 @@ class FeasibilityRowsList {
     meterReplacementDate = json['meter_replacement_date'] ?? "";
     previousInstalledStatus = json['previous_installed_status'] ?? "";
     instDirPath = json['inst_dir_path'] ?? "";
+    installationProcessStatus = json['installation_process_status'] ?? "";
+    rfcProcessStatus = json['rfc_process_status'] ?? "";
     assignId = json['assign_id'] ?? "";
     isInstall = json['is_install'] ?? "";
     lmcFeasId = json['lmc_feas_id'] ?? "";
@@ -1184,6 +1188,8 @@ class FeasibilityRowsList {
     data['meter_replacement_date'] = this.meterReplacementDate;
     data['previous_installed_status'] = this.previousInstalledStatus;
     data['inst_dir_path'] = this.instDirPath;
+    data['installation_process_status'] = this.installationProcessStatus;
+    data['rfc_process_status'] = this.rfcProcessStatus;
     data['assign_id'] = this.assignId;
     data['is_install'] = this.isInstall;
     data['lmc_feas_id'] = this.lmcFeasId;

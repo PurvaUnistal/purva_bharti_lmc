@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/InstallationDoneModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/helper/meter_installation_helper.dart';
 
-class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallationState>{
-  MeterInstallationBloc() : super(MeterInstallationInitialState()){
+class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallationState> {
+  MeterInstallationBloc() : super(MeterInstallationInitialState()) {
     on<MeterInstallationPageLoadEvent>(_pageLoad);
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
@@ -19,38 +19,37 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
   int pageNo = 1;
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
-  List<FeasibilityRowsList> listOfFeasibilityRow = [];
-  FeasibilityModel? feasibilityModel;
+  List<InstallationDoneRows> listOfInstallationRow = [];
+  InstallationDoneModel? installationDoneModel;
   ScrollController scrollController = ScrollController();
 
   _pageLoad(MeterInstallationPageLoadEvent event, emit) async {
     emit(MeterInstallationInitialState());
     isLoader = false;
     isLoadingMore = false;
-    areaValue= null;
+    areaValue = null;
     listOfAllArea = [];
-    listOfFeasibilityRow = [];
+    listOfInstallationRow = [];
     scrollController = ScrollController();
-    feasibilityModel = FeasibilityModel();
+    installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
     await loadDataTable(context: event.context, emit: emit);
-    await fetchFeasibility(context: event.context,);
+    await fetchFeasibility(
+      context: event.context,
+    );
     _eventCompleted(emit);
   }
-
-
 
   _selectAreaValue(SelectAreaValueEvent event, emit) {
     areaValue = event.allAreaValue;
     _eventCompleted(emit);
   }
 
-  _searchBpNumber(SearchBpNumberEvent event, emit) {
-  }
+  _searchBpNumber(SearchBpNumberEvent event, emit) {}
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
-    if(res != null){
+    if (res != null) {
       listOfAllArea = res;
       return res;
     }
@@ -58,22 +57,21 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
 
   fetchFeasibility({required BuildContext context}) async {
     isLoadingMore = true;
-    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: "",page: pageNo.toString(), areaId:"" );
-    if(res != null){
+    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: "", page: pageNo.toString(), areaId: "");
+    if (res != null) {
       isLoadingMore = false;
-      feasibilityModel = res;
-      if(feasibilityModel!.data!.rows != null){
-        listOfFeasibilityRow = feasibilityModel!.data!.rows!;
+      installationDoneModel = res;
+      if (installationDoneModel!.data!.rows != null) {
+        listOfInstallationRow = installationDoneModel!.data!.rows!;
       }
     }
   }
 
-  loadDataTable({required BuildContext context, emit}){
+  loadDataTable({required BuildContext context, emit}) {
     scrollController.addListener(() async {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         pageNo++;
-        await fetchFeasibility(context:context);
+        await fetchFeasibility(context: context);
         // _eventCompleted(emit);
       }
     });
@@ -85,9 +83,8 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         isLoadingMore: isLoadingMore,
         allAreaValue: areaValue,
         listOfAllArea: listOfAllArea,
-        listOfFeasibilityRow: listOfFeasibilityRow,
-        feasibilityModel: feasibilityModel,
-        scrollController: scrollController
-    ));
+        installationDoneModel: installationDoneModel,
+        listOfInstallationRow: listOfInstallationRow,
+        scrollController: scrollController));
   }
 }
