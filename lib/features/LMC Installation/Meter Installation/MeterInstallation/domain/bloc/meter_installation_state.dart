@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/InstallationDoneModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/model/InstallationDoneModel.dart';
 
 abstract class MeterInstallationState extends Equatable {}
 

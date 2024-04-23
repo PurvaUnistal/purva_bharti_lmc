@@ -28,7 +28,7 @@ class LMCFeasibilityHelper{
     required String bpNumber,
     required String areaId}) async {
     String schema =  await SharedPref.getString(key: PrefsValue.schema,);
-    String userId =  await SharedPref.getString(key: PrefsValue.id,);
+    String userId =  await SharedPref.getString(key: PrefsValue.userId,);
     Map<String, String> para = {
       "schema" : schema,
       "user_id" : userId,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/InstallationDoneModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/helper/meter_installation_helper.dart';
@@ -26,23 +26,22 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
   _pageLoad(MeterInstallationPageLoadEvent event, emit) async {
     emit(MeterInstallationInitialState());
     isLoader = false;
-    isLoadingMore = false;
+    isLoadingMore = true;
     areaValue = null;
     listOfAllArea = [];
     listOfInstallationRow = [];
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
+    _eventCompleted();
     await loadDataTable(context: event.context, emit: emit);
-    await fetchFeasibility(
-      context: event.context,
-    );
-    _eventCompleted(emit);
+    await fetchFeasibility(context: event.context,pageNumber: 1);
+    _eventCompleted();
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) {
     areaValue = event.allAreaValue;
-    _eventCompleted(emit);
+    _eventCompleted();
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) {}
@@ -55,9 +54,9 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     }
   }
 
-  fetchFeasibility({required BuildContext context}) async {
+  fetchFeasibility({required BuildContext context,required int pageNumber}) async {
     isLoadingMore = true;
-    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: "", page: pageNo.toString(), areaId: "");
+    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: "", page: pageNumber.toString(), areaId: "");
     if (res != null) {
       isLoadingMore = false;
       installationDoneModel = res;
@@ -69,15 +68,15 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
 
   loadDataTable({required BuildContext context, emit}) {
     scrollController.addListener(() async {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        pageNo++;
-        await fetchFeasibility(context: context);
-        // _eventCompleted(emit);
-      }
+      isLoadingMore = true;
+      _eventCompleted();
+      pageNo++;
+      await fetchFeasibility(context: context, pageNumber: pageNo);
+      _eventCompleted();
     });
   }
 
-  _eventCompleted(Emitter<MeterInstallationState> emit) {
+  _eventCompleted() {
     emit(MeterInstallationDataState(
         isLoader: isLoader,
         isLoadingMore: isLoadingMore,

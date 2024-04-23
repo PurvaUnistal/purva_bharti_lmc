@@ -8,24 +8,24 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/presentation/form_rfc_view.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_bloc.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_event.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_state.dart';
 
-class PreviewFeasibilityView extends StatefulWidget {
-  const PreviewFeasibilityView({super.key,});
+class PreviewRFCView extends StatefulWidget {
+  const PreviewRFCView({super.key,});
 
   @override
-  State<PreviewFeasibilityView> createState() => _PreviewFeasibilityViewState();
+  State<PreviewRFCView> createState() => _PreviewRFCViewState();
 }
 
-class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
+class _PreviewRFCViewState extends State<PreviewRFCView> {
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PreviewFeasibilityBloc>(context).add(PreviewFeasibilityPageLoadEvent(context: context));
+    BlocProvider.of<PreviewRFCBloc>(context).add(PreviewRFCPageLoadEvent(context: context));
   }
 
 
@@ -33,12 +33,12 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: RoutesName.lmcFeasibility,
+        title: RoutesName.rfcSection,
         boolLeading: true,
       ),
-      body:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
+      body:  BlocBuilder<PreviewRFCBloc, PreviewRFCState>(
         builder: (context, state) {
-          if (state is PreviewFeasibilityDataState) {
+          if (state is PreviewRFCDataState) {
             return _itemBuilder(dataState: state, context: context);
           } else {
             return Center(child: SpinLoader());
@@ -48,7 +48,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}){
+  _itemBuilder({required PreviewRFCDataState dataState, required BuildContext context}){
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -81,7 +81,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Text(
-        "LMC Feasibility",style: Styles.stars,
+        "LMC RFC",style: Styles.stars,
       ),
     );
   }
@@ -110,16 +110,16 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  Widget _button({required PreviewFeasibilityDataState dataState}) {
+  Widget _button({required PreviewRFCDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.checkFea,
+        text: AppString.installation,
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      FormFeasibilityView()));
+                      FormRFCView()));
         })
         : DottedLoaderWidget();
   }

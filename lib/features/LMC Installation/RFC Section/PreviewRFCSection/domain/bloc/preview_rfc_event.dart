@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-abstract class PreviewFeasibilityEvent extends Equatable{}
+abstract class PreviewRFCEvent extends Equatable{}
 
-class PreviewFeasibilityPageLoadEvent extends PreviewFeasibilityEvent {
+class PreviewRFCPageLoadEvent extends PreviewRFCEvent {
   final BuildContext context;
-  PreviewFeasibilityPageLoadEvent({required this.context});
+  PreviewRFCPageLoadEvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];

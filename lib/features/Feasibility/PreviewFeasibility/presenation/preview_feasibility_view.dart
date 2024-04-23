@@ -113,7 +113,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   Widget _button({required PreviewFeasibilityDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.checkFea,
+        text: AppString.installation,
         onPressed: () {
           Navigator.push(
               context,

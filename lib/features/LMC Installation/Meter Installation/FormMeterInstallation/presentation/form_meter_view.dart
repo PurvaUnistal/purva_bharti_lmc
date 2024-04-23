@@ -1,4 +1,8 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -6,8 +10,12 @@ import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
+import 'package:lmc/Utils/common_widgets/auto_suggestion_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
+import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
+import 'package:lmc/Utils/common_widgets/local_mg_widget.dart';
+import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
@@ -30,6 +38,8 @@ class _FormMeterViewState extends State<FormMeterView> {
     super.initState();
     BlocProvider.of<FormMeterBloc>(context).add(FormMeterPageLoadEvent(context: context));
   }
+
+  GlobalKey<AutoCompleteTextFieldState<String>> globalSearchKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +70,15 @@ class _FormMeterViewState extends State<FormMeterView> {
             _verticalSpace(),
             _typeOfNRDropdown(stateData: dataState),
             _verticalSpace(),
-            _actualWorkDateController(stateData: dataState),
+            _meterReadingDateController(stateData: dataState),
+            _verticalSpace(),
+            _meterNumberController(stateData: dataState),
+            _verticalSpace(),
+            _initialMeterReading(stateData: dataState),
             _verticalSpace(),
             _delayReasonDropdown(stateData: dataState),
+            _verticalSpace(),
+            _meterPhoto(stateData: dataState),
             _verticalSpace(),
             _verticalSpace(),
             _button(dataState: dataState),
@@ -94,24 +110,114 @@ class _FormMeterViewState extends State<FormMeterView> {
     );
   }
 
-  Widget _actualWorkDateController({required FormMeterDataState stateData}) {
+  Widget _meterNumberController({required FormMeterDataState stateData}) {
+    return AutoSuggestionTextFieldWidget(
+      globalKey: globalSearchKey,
+      star: AppString.star,
+      label: AppString.meterNumber,
+      hintText: AppString.meterNumber,
+      suggestions: stateData.listOfMeterNumber,
+      keyboardType:  TextInputType.number,
+      onChanged: (val) {
+        print(val);
+        BlocProvider.of<FormMeterBloc>(context).add(SelectMeterNumberValueEvent(
+            context: context,
+            meterReadingValue: val
+        ));
+      },
+    );
+  }
+  Widget _meterReadingDateController({required FormMeterDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.actualWorkStart,
-      label: AppString.actualWorkStart,
+      hintText: AppString.meterReadingDate,
+      label: AppString.meterReadingDate,
       enabled: true,
-      controller: stateData.actualWorkDateController,
+      controller: stateData.meterReadingDateController,
       suffixIcon: IconButton(
         icon: Icon(
           Icons.calendar_today,
           color: AppColor.primer,
         ),
         onPressed: () {
-          BlocProvider.of<FormMeterBloc>(context).add(SelectActualWorkDateEvent(context: context));
+          BlocProvider.of<FormMeterBloc>(context).add(SelectMeterReadingDateEvent(context: context));
         },
       ),
       onTap: () {
-        BlocProvider.of<FormMeterBloc>(context).add(SelectActualWorkDateEvent(context: context));
+        BlocProvider.of<FormMeterBloc>(context).add(SelectMeterReadingDateEvent(context: context));
       },
+    );
+  }
+
+  Widget _meterReading1Controller({required FormMeterDataState stateData}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.done,
+      controller: stateData.meterIniReading1Controller,
+      focusNode: stateData.meterIniReading1FocusNode,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(1),
+      ],
+      onFieldSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(stateData.meterIniReading1FocusNode);
+      },
+      onChanged: (val){
+        BlocProvider.of<FormMeterBloc>(context).add(MeterInitReadingEvent());
+      },
+    );
+  }
+  Widget _meterReading2Controller({required FormMeterDataState stateData}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.previous,
+      controller: stateData.meterIniReading2Controller,
+      focusNode: stateData.meterIniReading2FocusNode,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(1),
+      ],
+      onFieldSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(stateData.meterIniReading2FocusNode);
+      },
+      onChanged: (val){
+        BlocProvider.of<FormMeterBloc>(context).add(MeterInitReadingEvent());
+      },
+    );
+  }
+  Widget _meterReading3Controller({required FormMeterDataState stateData}) {
+    return TextFieldWidget(
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.previous,
+      controller: stateData.meterIniReading3Controller,
+      focusNode: stateData.meterIniReading3FocusNode,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(1),
+      ],
+      onFieldSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(stateData.meterIniReading3FocusNode);
+      },
+      onChanged: (val){
+        BlocProvider.of<FormMeterBloc>(context).add(MeterInitReadingEvent());
+      },
+    );
+  }
+
+  Widget _initialMeterReading({required FormMeterDataState stateData}){
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(AppString.meterInitNumber,style: Styles.labels,),
+        Row(
+          children: [
+            SizedBox(width:  w * 0.09, child: _meterReading1Controller(stateData: stateData)),
+            SizedBox(width: w * 0.02,),
+            SizedBox(width: w * 0.09, child: _meterReading2Controller(stateData: stateData)),
+            SizedBox(width: w * 0.02,),
+            SizedBox(width: w * 0.09, child: _meterReading3Controller(stateData: stateData)),
+          ],
+        ),
+      ],
     );
   }
 
@@ -128,13 +234,37 @@ class _FormMeterViewState extends State<FormMeterView> {
     );
   }
 
+  Widget _meterPhoto({required FormMeterDataState stateData}) {
+    return LocalImgWidget(
+      file: stateData.meterImg,
+      onTap: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<FormMeterBloc>(context).add(CaptureCameraMeterEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<FormMeterBloc>(context).add(CaptureGalleryMeterEvent());
+                },
+              );
+            });
+      },
+    );
+  }
+
   Widget _button({required FormMeterDataState dataState}) {
     return dataState.isBtnLoader == false
         ? ButtonWidget(
-            text: AppString.submit,
-            onPressed: () {
-              BlocProvider.of<FormMeterBloc>(context).add(SubmitFormMeterEvent(context: context));
-            })
+        text: AppString.submit,
+        onPressed: () {
+          BlocProvider.of<FormMeterBloc>(context).add(SubmitFormMeterEvent(context: context));
+        })
         : DottedLoaderWidget();
   }
 

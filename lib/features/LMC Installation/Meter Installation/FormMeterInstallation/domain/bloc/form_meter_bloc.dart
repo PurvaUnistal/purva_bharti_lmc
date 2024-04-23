@@ -1,8 +1,12 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lmc/Utils/Utils.dart';
+import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -19,27 +23,45 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     on<SelectActualWorkDateEvent>(_selectActualWorkDate);
     on<SelectMeterReadingDateEvent>(_selectMeterReadingDate);
     on<SelectDelayReasonValueEvent>(_selectDelayReasonValue);
+    on<SelectNGCValueEvent>(_selectNGCValue);
+    on<SelectTypeNRValueEvent>(_selectTypeNRValue);
+    on<SelectMeterNumberValueEvent>(_selectMeterNumberValue);
+    on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
+    on<CaptureCameraMeterEvent>(_captureCameraMeter);
+    on<MeterInitReadingEvent>(_meterInitReading);
     on<SubmitFormMeterEvent>(_submit);
   }
-
+  String materialId = '';
   bool isLoader = false;
   bool isBtnLoader = false;
   File meterImg = File("");
 
   ListOfMeterNo? meterNoValue;
   GetConstantModel? typeOfNrValue;
+  GetConstantModel? readyNGCValue;
   DelayReasonModel? delayReasonValue;
 
   List<ListOfMeterNo> listOfMeterNo = [];
   List<GetConstantModel> listOfTypeOfNr = [];
+  List<GetConstantModel> listOfReadyNGC = [];
   List<DelayReasonModel> listOfDelayReason = [];
+  List<String> listOfMeterNumber = [];
+  List<String> listOfMeterNumberId = [];
 
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
   TextEditingController actualWorkDateController = TextEditingController();
   TextEditingController meterNoController = TextEditingController();
-  TextEditingController meterIniReadingController = TextEditingController();
+  TextEditingController meterIniReading1Controller = TextEditingController();
+  TextEditingController meterIniReading2Controller = TextEditingController();
+  TextEditingController meterIniReading3Controller = TextEditingController();
+  TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController meterReadingDateController = TextEditingController();
+
+  FocusNode meterIniReading1FocusNode = FocusNode();
+  FocusNode meterIniReading2FocusNode = FocusNode();
+  FocusNode meterIniReading3FocusNode = FocusNode();
+
 
   _pageLoad(FormMeterPageLoadEvent event, emit) async {
     emit(FormMeterInitialState());
@@ -51,16 +73,28 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     delayReasonValue = null;
     listOfMeterNo = [];
     listOfTypeOfNr = [];
+    listOfReadyNGC = [];
     listOfDelayReason = [];
+    listOfMeterNumber = [];
+    listOfMeterNumberId = [];
+    materialId = '';
     bpNumberController.text = "";
     proposedDateController.text = "";
     actualWorkDateController.text = "";
     meterNoController.text = "";
-    meterIniReadingController.text = "";
-    meterReadingDateController.text = "";
+    meterIniReading1Controller.text = "";
+    meterIniReading2Controller.text = "";
+    meterIniReading3Controller.text = "";
+    meterInitialReadingController.text = "";
+    meterIniReading1FocusNode = FocusNode();
+    meterIniReading2FocusNode = FocusNode();
+    meterIniReading3FocusNode = FocusNode();
+    meterReadingDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     await fetchTypeOfNrApi(context: event.context);
-    listOfDelayReason = await DelayReasonModel.getCheckData();
+    await fetchReadyForNgcApi(context: event.context);
+    await fetchMetersApi(context: event.context);
+    await fetchDelayReasonApi(context: event.context);
     _eventCompleted(emit);
   }
 
@@ -96,10 +130,27 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     _eventCompleted(emit);
   }
 
-  _submit(SubmitFormMeterEvent event, emit) async {
-    try {} catch (e) {
-      print(e.toString());
-      isBtnLoader = false;
+  _selectNGCValue(SelectNGCValueEvent event, emit) {
+    readyNGCValue = event.readyNGCValue;
+    _eventCompleted(emit);
+  }
+
+  _selectTypeNRValue(SelectTypeNRValueEvent event, emit) {
+    typeOfNrValue = event.typeOfNRValue;
+    _eventCompleted(emit);
+  }
+
+  _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
+    if(event.meterReadingValue.isNotEmpty){
+      listOfMeterNo = listOfMeterNo
+          .where((element) => element.serialNumber == event.meterReadingValue.toString())
+          .toList();
+      listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
+      listOfMeterNumberId = await listOfMeterNo.map((e) => e.id!).toSet().toList();
+      int i  = await listOfMeterNumber.indexWhere((element) => element.contains(event.meterReadingValue.toString()));
+      meterNoController.text = await listOfMeterNumber.elementAt(i);
+      materialId = await listOfMeterNumberId.elementAt(i);
+      print("materialId-->${materialId}");
       _eventCompleted(emit);
     }
   }
@@ -108,26 +159,142 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     var res = await FormMeterHelper.getTypeOfNrApi(context: context);
     if (res != null) {
       listOfTypeOfNr = res;
+      typeOfNrValue = listOfTypeOfNr.first;
       return res;
     }
   }
+
+  fetchReadyForNgcApi({required BuildContext context}) async {
+    var res = await FormMeterHelper.getReadyForNgcApi(context: context);
+    if (res != null) {
+      listOfReadyNGC = res;
+      readyNGCValue = listOfReadyNGC.first;
+      return res;
+    }
+  }
+
+  fetchDelayReasonApi({required BuildContext context}) async {
+    var res = await DelayReasonModel.getCheckData();
+    if (res != null) {
+      listOfDelayReason = res;
+      delayReasonValue = listOfDelayReason.first;
+      return res;
+    }
+  }
+
+  fetchMetersApi({required BuildContext context}) async {
+    var res = await FormMeterHelper.getMetersApi(context: context);
+    if (res != null) {
+      listOfMeterNo = res;
+      listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
+      return res;
+    }
+  }
+  _captureGalleryMeter(CaptureGalleryMeterEvent event, emit) async {
+    var photoPath = await FormMeterHelper.galleryCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      meterImg = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+  _captureCameraMeter(CaptureCameraMeterEvent event, emit) async {
+    var photoPath = await FormMeterHelper.cameraCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      meterImg = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+ _meterInitReading(MeterInitReadingEvent event, emit) {
+   var meterIniReading1 = meterIniReading1Controller.text;
+   var meterIniReading2 = meterIniReading2Controller.text;
+   var meterIniReading3 = meterIniReading3Controller.text;
+   double meterIniReadingAdd = double.parse( meterIniReading1 + meterIniReading2 + meterIniReading3);
+   meterInitialReadingController.text = (meterIniReadingAdd / 1000).toString();
+   log("meterInitialReadingController--${meterInitialReadingController.text}");
+   _eventCompleted(emit);
+  }
+
+  _submit(SubmitFormMeterEvent event, emit) async {
+    try {
+      var validationCheck = await FormMeterHelper.validationSubmit(
+          context: event.context,
+          delayReason: delayReasonValue!.name!.toString(),
+          materialId: materialId,
+          meterInitReading: meterInitialReadingController.text.trim().toString(),
+          meterReading: meterNoController.text.trim().toString(),
+          meterPhoto: meterImg.path,
+          meterReadingDate: meterReadingDateController.text.trim().toString(),
+          ngc: readyNGCValue!.value.toString(),
+          typeOfNR: typeOfNrValue!.value.toString()
+      );
+      if (validationCheck == true) {
+        isBtnLoader = true;
+        _eventCompleted(emit);
+        var res = await FormMeterHelper.saveLMCInstallation(
+            context: event.context,
+            meterNo:listOfMeterNumber.toString(),
+            delayReason: delayReasonValue!.name.toString(),
+            meterReadingDate: meterReadingDateController.text.trim().toString(),
+            meterReading: meterInitialReadingController.text.trim().toString(),
+            materialId: materialId,
+            typeOfNR: typeOfNrValue!.value.toString(),
+            ngc: readyNGCValue!.value.toString(),
+            meterPhoto: meterImg.path);
+        if (res != null && res.error == false) {
+          isBtnLoader = false;
+          _eventCompleted(emit);
+          Utils.successSnackBar(msg: res.data!, context: event.context);
+          Navigator.pushReplacementNamed(
+            event.context,
+            RoutesName.lmcInstallation,
+          );
+        } else if (res != null && res.error == true) {
+          isBtnLoader = false;
+          _eventCompleted(emit);
+          Utils.errorSnackBar(msg: res.data!, context: event.context);
+        }else {
+          isBtnLoader = false;
+          _eventCompleted(emit);
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      isBtnLoader = false;
+      _eventCompleted(emit);
+    }
+  }
+
 
   _eventCompleted(emit) {
     emit(FormMeterDataState(
         isLoader: isLoader,
         isBtnLoader: isBtnLoader,
         meterImg: meterImg,
+        materialId: materialId,
         meterNoValue: meterNoValue,
         typeOfNrValue: typeOfNrValue,
         delayReasonValue: delayReasonValue,
         listOfMeterNo: listOfMeterNo,
         listOfTypeOfNr: listOfTypeOfNr,
+        listOfMeterNumber: listOfMeterNumber,
         listOfDelayReason: listOfDelayReason,
         bpNumberController: bpNumberController,
         proposedDateController: proposedDateController,
         actualWorkDateController: actualWorkDateController,
         meterNoController: meterNoController,
-        meterIniReadingController: meterIniReadingController,
-        meterReadingDateController: meterReadingDateController));
+        meterIniReading1Controller: meterIniReading1Controller,
+        meterIniReading2Controller: meterIniReading2Controller,
+        meterIniReading3Controller: meterIniReading3Controller,
+      meterInitialReadingController: meterInitialReadingController,
+        meterReadingDateController: meterReadingDateController,
+        meterIniReading1FocusNode: meterIniReading1FocusNode,
+        meterIniReading2FocusNode: meterIniReading2FocusNode,
+        meterIniReading3FocusNode: meterIniReading3FocusNode,
+    ));
   }
+
 }

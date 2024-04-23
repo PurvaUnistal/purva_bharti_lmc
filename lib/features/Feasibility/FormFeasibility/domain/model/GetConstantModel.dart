@@ -1,12 +1,14 @@
 class GetConstantModel {
   String? key;
   String? value;
+  bool? isSelected;
 
-  GetConstantModel({this.key, this.value});
+  GetConstantModel({this.key, this.value, this.isSelected = false});
 
   GetConstantModel.fromJson(Map<String, dynamic> json) {
     key = json['key'];
     value = json['value'];
+    isSelected = false;
   }
 
   static List<GetConstantModel> mapToList(Map<String, dynamic> mapData) {

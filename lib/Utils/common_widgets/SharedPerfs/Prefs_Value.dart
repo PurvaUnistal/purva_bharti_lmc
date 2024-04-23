@@ -1,4 +1,5 @@
 class PrefsValue {
+  static String isUserLogIn = "IsUserLogIn";
   static String emailVal = "Email";
   static String passwordVal = "Password";
   static String token = "token";
@@ -9,32 +10,9 @@ class PrefsValue {
   static String gaId = "gaId";
   static String cookies = "cookies";
   static String pwdChanged = "pwdChanged";
-  static String dmaUserId = "DMA User Id";
-  static String lmcInstallationId = "Lmc Installation Id";
-  static String isInstall = "Is Install";
+
   static String bpNumber = "bpNumber";
-  static String meterReading = "Meter Reading";
-  static String meterSerial = "Meter Serial";
-  static String mobileNumber = "Mobile Number";
-  static String alternateMobileNo = "Alternate Mobile No.";
-  static String email = "Email";
-  static String ngOfBurners = "NG Of Burners";
   static String workCompletedDate = "Work Completed Date";
-  static String ngChargeDate = "NG Charge Date";
-  bool isLoggedIn = false;
-  static const String Billing = "Billing";
-  static const String Complaint = "Complaint";
-  static String isUserLogIn = "IsUserLogIn";
-  static String username = "username";
-  static String password = "password";
-  static String id = "id";
-  static String role = "role";
-  static String changePassword = "Change Password";
-  static String name = "name";
-  static String phoneNumber = "Phone Number";
-  static String noOfBurners = "No Of Burners";
-  static String dateOfRegistration = "date Of Registration";
-  static String dmaId = "dmaId";
   static String custRegNo = "customerRegistrationNo";
   static String feasibilityVisitDate = "feasibilityVisitDate";
   static String areaName = "areaName";
@@ -52,4 +30,8 @@ class PrefsValue {
   static String pinCode = "pinCode";
   static String lmcId = "lmcId";
   static String dma = "dma";
+  static String meterDma = "meterDma";
+  static String rfcDma = "rfcDma";
+  static String lmcFeasId = "lmcFeasId";
+  static String installationId = "installationId";
 }

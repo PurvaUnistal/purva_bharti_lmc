@@ -5,8 +5,14 @@ class Apis {
    static String loginUrl = baseUrl + "auth";
    static String getLMCFeasibility = baseUrl + "getlmcapi?";
    static String getLMCInstallation = baseUrl + "getlmcInstallationApi?";
+   static String getRFCInstallation = baseUrl + "getlmcRFCInstallationApi?";
    static String getConstant = baseUrl + "getConstant?";
+   static String getMeters = baseUrl + "getMeters?";
+   static String getRegulators = baseUrl + "getRegulators?";
+   static String getAllFreeMaterial = baseUrl + "getAllFreeMaterial?";
    static String saveLmcFeasibility = baseUrl + "saveLmcFeasibility";
+   static String saveLmcInstallation = baseUrl + "saveLmcInstallation";
+   static String saveLmcRFCInstallation  = baseUrl + "saveLmcRFCInstallation ";
 
 
 

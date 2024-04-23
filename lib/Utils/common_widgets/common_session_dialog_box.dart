@@ -39,12 +39,12 @@ class SessionDialogUtils {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool(PrefsValue.isUserLogIn, false);
-      prefs.setString(PrefsValue.username, '');
-      prefs.setString(PrefsValue.password, '');
-      prefs.setString(PrefsValue.id, '');
+      prefs.setString(PrefsValue.userName, '');
+      prefs.setString(PrefsValue.passwordVal, '');
+      prefs.setString(PrefsValue.userId, '');
       prefs.setString(PrefsValue.token, '');
       prefs.setString(PrefsValue.schema, '');
-      prefs.setString(PrefsValue.name, '');
+      prefs.setString(PrefsValue.userName, '');
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginView()),

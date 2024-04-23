@@ -11,6 +11,7 @@ class AppString {
   static String login = "Login";
   static String logout = "Logout";
   static String checkFea = "Check Feasibility";
+  static String installation = "Installation";
   static String meterInstallation = "Meter Installation";
   static String no = "No";
   static String logoutMsg = "Are you sure you want to logout? Once you logout, you will be return to login screen";
@@ -44,4 +45,18 @@ class AppString {
   static String typeOfNR = "Type Of NR";
   static String actualWorkStart = "Actual Work Start";
   static String reasonDelay = "Reason if Delay";
+  static String meterReadingDate = "Meter Reading Date";
+  static String meterNumber = "Meter Reading";
+  static String regulator = "Regulators";
+  static String meterInitNumber = "Meter Initial Reading";
+  static String latOfSR = "Latitude Of SR";
+  static String longOfSR = "Longitude  Of SR";
+  static String latOfHouse  = "Latitude Of House";
+  static String longOfHouse  = "Longitude  Of House";
+  static String srNumber   = "SR Number";
+  static String rfcDeclarationDate   = "RFC Declaration Date";
+  static String proConDate  = "Proposed Conversion Date";
+  static String extraPrice  = "Extra Price";
+  static String extraPipe  = "Extra Pipe";
+  static String photo  = "Photo";
 }

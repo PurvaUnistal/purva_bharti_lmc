@@ -9,41 +9,41 @@ MeterNoModel meterNoModelFromJson(String str) => MeterNoModel.fromJson(json.deco
 String meterNoModelToJson(MeterNoModel data) => json.encode(data.toJson());
 
 class MeterNoModel {
-  final int success;
-  final bool error;
-  final List<ListOfMeterNo> data;
+  final int? success;
+  final bool? error;
+  final List<ListOfMeterNo>? data;
 
   MeterNoModel({
-    required this.success,
-    required this.error,
-    required this.data,
+     this.success,
+     this.error,
+     this.data,
   });
 
   factory MeterNoModel.fromJson(Map<String, dynamic> json) => MeterNoModel(
-        success: json["success"],
-        error: json["error"],
-        data: List<ListOfMeterNo>.from(json["data"].map((x) => ListOfMeterNo.fromJson(x))),
+        success: json["success"] ?? "",
+        error: json["error"] ?? "",
+        data: json["data"] == null ? [] :List<ListOfMeterNo>.from(json["data"].map((x) => ListOfMeterNo.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "error": error,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class ListOfMeterNo {
-  final String serialNumber;
-  final String id;
+  final String? serialNumber;
+  final String? id;
 
   ListOfMeterNo({
-    required this.serialNumber,
-    required this.id,
+     this.serialNumber,
+     this.id,
   });
 
   factory ListOfMeterNo.fromJson(Map<String, dynamic> json) => ListOfMeterNo(
-        serialNumber: json["serial_number"],
-        id: json["id"],
+        serialNumber: json["serial_number"] ?? "",
+        id: json["id"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

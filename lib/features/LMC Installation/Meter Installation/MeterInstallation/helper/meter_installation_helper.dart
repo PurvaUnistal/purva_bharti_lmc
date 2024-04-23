@@ -4,17 +4,17 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/InstallationDoneModel.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
 
 class MeterInstallationHelper {
+
   static Future<InstallationDoneModel?> getLMCInstallationApi({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
     String schema = await SharedPref.getString(
       key: PrefsValue.schema,
     );
-    String userId = await SharedPref.getString(
-      key: PrefsValue.id,
+    String userId = await SharedPref.getString(key: PrefsValue.userId,
     );
     Map<String, String> para = {
       "schema": schema,

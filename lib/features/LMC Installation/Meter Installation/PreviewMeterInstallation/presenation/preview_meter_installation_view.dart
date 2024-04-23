@@ -109,7 +109,7 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
   Widget _button({required PreviewMeterInstallationDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-            text: AppString.meterInstallation,
+            text: AppString.installation,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => FormMeterView()));
             })

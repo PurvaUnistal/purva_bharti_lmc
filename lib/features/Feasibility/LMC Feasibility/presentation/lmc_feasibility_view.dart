@@ -14,6 +14,7 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasi
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/presenation/preview_feasibility_view.dart';
+import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
 
 class FeasibilityView extends StatefulWidget {
   const FeasibilityView({super.key});
@@ -34,7 +35,17 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return Scaffold(
       appBar: AppBarWidget(
         title: RoutesName.lmcFeasibility,
-        boolLeading: true,
+        boolLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                showModalBottomSheet(context: context, builder: (context) => const LogoutWidget());
+              },
+              icon: Icon(
+                Icons.logout,
+                color: AppColor.white,
+              ))
+        ],
       ),
       body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
         builder: (context, state) {

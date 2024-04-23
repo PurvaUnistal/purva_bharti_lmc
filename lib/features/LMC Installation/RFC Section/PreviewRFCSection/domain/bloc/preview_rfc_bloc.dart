@@ -1,19 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_event.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_state.dart';
 
-class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasibilityState>{
-  PreviewFeasibilityBloc() : super(PreviewFeasibilityInitialState()){
-    on<PreviewFeasibilityPageLoadEvent>(_pageLoad);
+class PreviewRFCBloc extends Bloc<PreviewRFCEvent, PreviewRFCState>{
+  PreviewRFCBloc() : super(PreviewRFCInitialState()){
+    on<PreviewRFCPageLoadEvent>(_pageLoad);
   }
 
   bool isLoader = false;
-  List<FeasibilityRowsList> listOfFeasibilityRow = [];
-  FeasibilityModel? feasibilityModel;
-  FeasibilityRowsList feasibilityRowsModel = FeasibilityRowsList();
+
   String custRegNo = '';
   String areaName = '';
   String firstName = '';
@@ -29,10 +26,9 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   String district = '';
   String pinCode = '';
 
-  _pageLoad(PreviewFeasibilityPageLoadEvent event, emit) async {
-    emit(PreviewFeasibilityInitialState());
+  _pageLoad(PreviewRFCPageLoadEvent event, emit) async {
+    emit(PreviewRFCInitialState());
     isLoader = false;
-    feasibilityRowsModel = FeasibilityRowsList();
     custRegNo = await SharedPref.getString(key: PrefsValue.custRegNo,);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
     firstName =  await SharedPref.getString(key: PrefsValue.firstName);
@@ -51,26 +47,24 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   }
 
 
-  _eventCompleted(Emitter<PreviewFeasibilityState> emit) {
-    emit(PreviewFeasibilityDataState(
-        isLoader: isLoader,
-        custRegNo: custRegNo,
-        areaName: areaName,
-        firstName: firstName,
-        lastName: lastName,
-        guardianName: guardianName,
-        proCateName: proCateName,
-        propClass: propClass,
-        buildingNumber: buildingNumber,
-        houseNumber: houseNumber,
-        locality: locality,
-        town: town,
-        street: street,
-        district: district,
-        pinCode: pinCode,
-        feasibilityRowsModel: feasibilityRowsModel,
-        listOfFeasibilityRow: listOfFeasibilityRow,
-        feasibilityModel: feasibilityModel)
+  _eventCompleted(Emitter<PreviewRFCState> emit) {
+    emit(PreviewRFCDataState(
+      isLoader: isLoader,
+      custRegNo: custRegNo,
+      areaName: areaName,
+      firstName: firstName,
+      lastName: lastName,
+      guardianName: guardianName,
+      proCateName: proCateName,
+      propClass: propClass,
+      buildingNumber: buildingNumber,
+      houseNumber: houseNumber,
+      locality: locality,
+      town: town,
+      street: street,
+      district: district,
+      pinCode: pinCode,
+    )
     );
   }
 }

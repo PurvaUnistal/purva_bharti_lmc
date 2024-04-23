@@ -70,7 +70,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc')){
               await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
               await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
-              await SharedPref.setString(key: PrefsValue.id,value: res.user!.id!);
+              await SharedPref.setString(key: PrefsValue.userId,value: res.user!.id!);
               await SharedPref.setString(key: PrefsValue.token,value: res.token!);
               await SharedPref.setString(key: PrefsValue.schema,value: res.user!.schema!);
               await SharedPref.setString(key: PrefsValue.userName,value: res.user!.name!);

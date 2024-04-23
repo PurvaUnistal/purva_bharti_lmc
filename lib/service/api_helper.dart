@@ -62,19 +62,21 @@ class ApiHelper {
   }
 
   static Future<dynamic> postDataWithFile({
-    var endPoint,
+    var urlEndPoint,
     var body,
     required BuildContext context,
     required String filePath1,
     required String keyWord1,
     required String filePath2,
-    required String keyWord2
+    required String keyWord2,
+    required String filePath3,
+    required String keyWord3,
   }) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(PrefsValue.token) ?? "";
     try {
       Map<String, String> headers = {"Authorization": token};
-      var request = MultipartRequest("POST", Uri.parse(endPoint));
+      var request = MultipartRequest("POST", Uri.parse(urlEndPoint));
       if (filePath1.isNotEmpty) {
         final mimeTypeData = lookupMimeType(filePath1, headerBytes: [0xFF, 0xD8])!.split('/');
         var uploadFile1 = await MultipartFile.fromPath(keyWord1, filePath1, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
@@ -82,9 +84,15 @@ class ApiHelper {
       }
       if (filePath2.isNotEmpty) {
         final mimeTypeData = lookupMimeType(filePath2, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile2 = await MultipartFile.fromPath(keyWord2, filePath2, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile2);
+        var uploadFile1 = await MultipartFile.fromPath(keyWord2, filePath2, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+        request.files.add(uploadFile1);
       }
+      if (filePath3.isNotEmpty) {
+        final mimeTypeData = lookupMimeType(filePath3, headerBytes: [0xFF, 0xD8])!.split('/');
+        var uploadFile1 = await MultipartFile.fromPath(keyWord3, filePath3, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+        request.files.add(uploadFile1);
+      }
+
       request.fields.addAll(body);
       request.headers.addAll(headers);
       var response = await request.send();

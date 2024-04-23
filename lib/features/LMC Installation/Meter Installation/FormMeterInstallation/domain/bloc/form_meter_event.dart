@@ -51,6 +51,40 @@ class SelectDelayReasonValueEvent extends FormMeterEvent {
   List<Object> get props => [delayReasonValue];
 }
 
+class SelectNGCValueEvent extends FormMeterEvent {
+  final dynamic readyNGCValue;
+  SelectNGCValueEvent({required this.readyNGCValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [readyNGCValue];
+}
+
+class SelectMeterNumberValueEvent extends FormMeterEvent {
+  final BuildContext context;
+  final String meterReadingValue;
+  SelectMeterNumberValueEvent({required this.context, required this.meterReadingValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context,meterReadingValue];
+}
+
+class CaptureGalleryMeterEvent extends FormMeterEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureCameraMeterEvent extends FormMeterEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class MeterInitReadingEvent extends FormMeterEvent{
+  @override
+  List<Object?> get props => [];
+}
+
 class SubmitFormMeterEvent extends FormMeterEvent {
   final BuildContext context;
   SubmitFormMeterEvent({required this.context});

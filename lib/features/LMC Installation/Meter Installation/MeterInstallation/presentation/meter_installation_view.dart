@@ -128,12 +128,14 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
                   rows: dataState.listOfInstallationRow
                       .mapIndexed((index, user) => DataRow(
                               onSelectChanged: (newValue) async {
-                                await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId!);
-                                await SharedPref.setString(key: PrefsValue.dma, value: user.dma!);
+                               /* await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId!);
+                                await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);*/
+                                await SharedPref.setString(key: PrefsValue.lmcFeasId, value: user.lmcFeasId!);
                                 await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
-                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
+                                await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
+                              //  await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
                                 await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value: user.feasibilityVisitDate!);
-                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
+                               /* await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
                                 await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
                                 await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
                                 await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
@@ -145,7 +147,7 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
                                 await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
                                 await SharedPref.setString(key: PrefsValue.town, value: user.town!);
                                 await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
+                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);*/
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewMeterInstalView()));
                               },
                               cells: <DataCell>[

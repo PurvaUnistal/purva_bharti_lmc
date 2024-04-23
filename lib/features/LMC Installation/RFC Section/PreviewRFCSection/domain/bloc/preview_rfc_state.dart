@@ -1,19 +1,18 @@
 import 'package:equatable/equatable.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 
-abstract class PreviewFeasibilityState extends Equatable{}
+abstract class PreviewRFCState extends Equatable{}
 
-class PreviewFeasibilityInitialState extends PreviewFeasibilityState {
+class PreviewRFCInitialState extends PreviewRFCState {
   @override
   List<Object> get props => [];
 }
 
-class PreviewFeasibilityPageLoadState extends PreviewFeasibilityState {
+class PreviewRFCPageLoadState extends PreviewRFCState {
   @override
   List<Object> get props => [];
 }
 
-class PreviewFeasibilityDataState extends PreviewFeasibilityState{
+class PreviewRFCDataState extends PreviewRFCState{
   final bool isLoader;
   String custRegNo;
   String areaName;
@@ -29,11 +28,8 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   String town;
   String district;
   String pinCode;
-  FeasibilityRowsList? feasibilityRowsModel;
-  List<FeasibilityRowsList> listOfFeasibilityRow;
-  FeasibilityModel? feasibilityModel;
 
-  PreviewFeasibilityDataState({
+  PreviewRFCDataState({
     required this.isLoader,
      required this.custRegNo,
      required this.areaName,
@@ -49,9 +45,6 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
      required this.town,
      required this.district,
      required this.pinCode,
-    required this.feasibilityRowsModel,
-    required this.listOfFeasibilityRow,
-    required this.feasibilityModel,
 
   });
 
@@ -73,8 +66,5 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
     town,
     district,
     pinCode,
-    feasibilityRowsModel,
-    listOfFeasibilityRow,
-    feasibilityModel,
   ];
 }

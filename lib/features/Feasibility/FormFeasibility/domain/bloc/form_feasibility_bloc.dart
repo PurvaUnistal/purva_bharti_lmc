@@ -79,7 +79,11 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         isBtnLoader = true;
         _eventCompleted(emit);
         var res =
-            await FormFeasibilityHelper.saveLmcFeasibility(context: event.context, feasibilityDate: feasibilityDateController.text.toString(), isFeasible: checkFeasibleValue!);
+            await FormFeasibilityHelper.saveLmcFeasibility(
+                context: event.context,
+                feasibilityDate: feasibilityDateController.text.toString(),
+                isFeasible: checkFeasibleValue!
+            );
         if (res != null) {
           isBtnLoader = false;
           _eventCompleted(emit);
