@@ -112,7 +112,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.isLoadingMore == true
+    return dataState.listOfFeasibilityRow.length == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true
         ? SizedBox(height: h * 0.7, child: SpinLoader())
         : SingleChildScrollView(
             controller: dataState.scrollController,

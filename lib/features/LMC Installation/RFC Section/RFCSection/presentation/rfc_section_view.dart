@@ -95,7 +95,7 @@ class _RFCSectionViewState extends State<RFCSectionView> {
 
   Widget _dataTableWidget({required RFCSectionDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.isLoadingMore == true ? SizedBox(
+    return dataState.listOfRFCSectionRow.length == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true ? SizedBox(
         height: h * 0.7,
         child: SpinLoader()):SingleChildScrollView(
       controller: dataState.scrollController,

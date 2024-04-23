@@ -106,7 +106,7 @@ class FormRFCHelper {
     String dma = await SharedPref.getString(key: PrefsValue.rfcDma);
     String installationId = await SharedPref.getString(key: PrefsValue.installationId);
     try {
-      var para = {
+      Map<String, dynamic> para = {
         "dma_id": dma,
         "installation_id":installationId,
         "regulators": regulators,
@@ -121,8 +121,8 @@ class FormRFCHelper {
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context,
         keyWord1: "isometric_image",filePath1: isometricImg.toString(),
-        keyWord2: "",filePath2: installationImg.toString(),
-        keyWord3: "",filePath3: pneumaticImg.toString(),
+        keyWord2: "rfc_form",filePath2: installationImg.toString(),
+        keyWord3: "pneumatic_image",filePath3: pneumaticImg.toString(),
       );
       return SaveFeasibleModel.fromJson(res);
     } catch (e) {
