@@ -13,6 +13,7 @@ class Service implements DataRepository{
       _url = GlobalConstants.getlmcInstallationApi+'?schema=$schema&user_id=$id&page=$offSet&bp_number=$bpNumber&area_id=$area_id';
     else
       _url = GlobalConstants.getLmcApi+'?schema=$schema&user_id=$id&page=$offSet&area_id=$area_id';
+    print("frgbhjkuyhungtreq-->${_url}");
     return http.get(Uri.parse(_url),headers: {'Authorization':'$token'}).then((value) async {
       JsonDecoder _decoder = new JsonDecoder();
       final jsonData = _decoder.convert(value.body);
