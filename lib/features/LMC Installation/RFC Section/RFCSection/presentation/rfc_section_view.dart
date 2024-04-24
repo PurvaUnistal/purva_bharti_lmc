@@ -95,7 +95,7 @@ class _RFCSectionViewState extends State<RFCSectionView> {
 
   Widget _dataTableWidget({required RFCSectionDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.listOfRFCSectionRow.length == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true ? SizedBox(
+    return dataState.rfcInstallationModel?.data?.pager?.total == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true ? SizedBox(
         height: h * 0.7,
         child: SpinLoader()):SingleChildScrollView(
       controller: dataState.scrollController,
@@ -128,23 +128,8 @@ class _RFCSectionViewState extends State<RFCSectionView> {
                 .mapIndexed((index, user) => DataRow(
                 onSelectChanged: (newValue) async {
                   await SharedPref.setString(key: PrefsValue.installationId, value: user.installationId!);
+                  await SharedPref.setString(key: PrefsValue.rfcLMCFeasId, value: user.lmcFeasId!);
                   await SharedPref.setString(key: PrefsValue.rfcDma, value: user.dma!);
-                 /* await SharedPref.setString(key: PrefsValue.dma, value: user.dma!);
-                  await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
-                  await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
-                  await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
-                  await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
-                  await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
-                  await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
-                  await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
-                  await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
-                  await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber!);
-                  await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber!);
-                  await SharedPref.setString(key: PrefsValue.locality, value: user.locality!);
-                  await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
-                  await SharedPref.setString(key: PrefsValue.town, value: user.town!);
-                  await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                  await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);*/
                   Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewRFCView()));
                 },
                 cells: <DataCell>[

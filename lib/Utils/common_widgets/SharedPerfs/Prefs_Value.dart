@@ -33,5 +33,7 @@ class PrefsValue {
   static String meterDma = "meterDma";
   static String rfcDma = "rfcDma";
   static String lmcFeasId = "lmcFeasId";
+  static String rfcLMCFeasId = "rfcLMCFeasId";
   static String installationId = "installationId";
+  static String meterLMCFeasId = "meterLMCFeasId";
 }

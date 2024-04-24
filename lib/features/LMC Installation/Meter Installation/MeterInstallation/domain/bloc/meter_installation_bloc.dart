@@ -20,8 +20,10 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
   List<InstallationDoneRows> listOfInstallationRow = [];
+  List<InstallationDoneRows> listOfFilterInstallationRow = [];
   InstallationDoneModel? installationDoneModel;
   ScrollController scrollController = ScrollController();
+  TextEditingController bpNumberController = TextEditingController();
 
   _pageLoad(MeterInstallationPageLoadEvent event, emit) async {
     emit(MeterInstallationInitialState());
@@ -35,7 +37,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     await fetchAllArea(context: event.context);
     _eventCompleted();
     await loadDataTable(context: event.context, emit: emit);
-    await fetchFeasibility(context: event.context,pageNumber: 1);
+    await fetchFeasibility(context: event.context,pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     _eventCompleted();
   }
 
@@ -44,7 +46,18 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     _eventCompleted();
   }
 
-  _searchBpNumber(SearchBpNumberEvent event, emit) {}
+  _searchBpNumber(SearchBpNumberEvent event, emit) async {
+    bpNumberController.text = event.searchBpNumber;
+    if (event.searchBpNumber.length > 9) {
+      listOfFilterInstallationRow = listOfInstallationRow
+          .where(
+              (element) => element.bpNumber.toString() == bpNumberController.text)
+          .toList();
+      await fetchFeasibility(
+      context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
+      _eventCompleted();
+    }
+  }
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
@@ -54,14 +67,15 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     }
   }
 
-  fetchFeasibility({required BuildContext context,required int pageNumber}) async {
+  fetchFeasibility({required BuildContext context,required int pageNumber,required String bpNumber}) async {
     isLoadingMore = true;
-    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: "", page: pageNumber.toString(), areaId: "");
+    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: "");
     if (res != null) {
       isLoadingMore = false;
       installationDoneModel = res;
       if (installationDoneModel!.data!.rows != null) {
         listOfInstallationRow = installationDoneModel!.data!.rows!;
+        listOfFilterInstallationRow = listOfInstallationRow;
       }
     }
   }
@@ -71,7 +85,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
       isLoadingMore = true;
       _eventCompleted();
       pageNo++;
-      await fetchFeasibility(context: context, pageNumber: pageNo);
+      await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber:  bpNumberController.text);
       _eventCompleted();
     });
   }

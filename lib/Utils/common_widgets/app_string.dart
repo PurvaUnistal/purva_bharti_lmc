@@ -3,6 +3,8 @@ class AssetPath {
 }
 
 class AppString {
+  static String release = "Release";
+  static String reDate = "24/4/2024";
   static String emailLabel = "Enter User Email";
   static String passwordLabel = "Enter User Password";
   static String emailValidation = "Please enter email id";

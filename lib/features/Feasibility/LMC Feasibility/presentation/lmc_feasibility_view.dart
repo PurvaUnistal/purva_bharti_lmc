@@ -7,6 +7,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
+import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
@@ -36,6 +37,14 @@ class _FeasibilityViewState extends State<FeasibilityView> {
       appBar: AppBarWidget(
         title: RoutesName.lmcFeasibility,
         boolLeading: false,
+        leadingWidget: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(AppString.release,style: Styles.rel,),
+            Text(AppString.reDate,style: Styles.rel,),
+          ],
+        ),
         actions: [
           IconButton(
               onPressed: () async {
@@ -112,7 +121,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.listOfFeasibilityRow.length == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true
+    return dataState.feasibilityModel?.data?.pager?.total == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true
         ? SizedBox(height: h * 0.7, child: SpinLoader())
         : SingleChildScrollView(
             controller: dataState.scrollController,

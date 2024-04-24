@@ -115,32 +115,18 @@ class FormMeterHelper {
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
-    String lmcFeasId = await SharedPref.getString(key: PrefsValue.lmcFeasId);
+    String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
     try {
       Map<String, String> para = {
         "schema": schema,
         "dma_id": meterDma,
-        "actual_work_start": "",
-        "proposed_date": "",
         "meter_number": meterNo,
         "delay_reason": delayReason,
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading,
-        "tf_number": "",
-        "latitude_tf": "",
-        "longitude_tf": "",
-        "latitude_hg": "",
-        "longitude_hg": "",
-        "work_completed_date": "",
         "material_id": materialId,
-        "material_id_lmc": "",
-        "qty_lmc": "",
-        "extra_pipe": "",
-        "extra_price": "",
-        "conversion_date": "",
         "type_of_nr": typeOfNR,
         "ngc": ngc,
-        "regulators": "",
         "feasibility_id": lmcFeasId,
       };
       log("para-->${para}");

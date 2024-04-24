@@ -6,12 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/helper/form_meter_helper.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_state.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/helper/form_rfc_helper.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/presentation/rfc_section_view.dart';
 
 class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   FormRFCBloc() : super(FormRFCInitialState()) {
@@ -255,10 +257,12 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
           isBtnLoader = false;
           _eventCompleted();
           Utils.successSnackBar(msg: res.data!, context: event.context);
-          Navigator.pushReplacementNamed(
-            event.context,
-            RoutesName.lmcInstallation,
-          );
+          Navigator.pushAndRemoveUntil(
+              event.context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      FeasibilityView()),
+                  (Route<dynamic> route) => false);
         } else if (res != null && res.error == true) {
           isBtnLoader = false;
           _eventCompleted();

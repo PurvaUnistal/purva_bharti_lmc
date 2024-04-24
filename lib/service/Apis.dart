@@ -12,7 +12,7 @@ class Apis {
    static String getAllFreeMaterial = baseUrl + "getAllFreeMaterial?";
    static String saveLmcFeasibility = baseUrl + "saveLmcFeasibility";
    static String saveLmcInstallation = baseUrl + "saveLmcInstallation";
-   static String saveLmcRFCInstallation  = baseUrl + "saveLmcRFCInstallation ";
+   static String saveLmcRFCInstallation  = baseUrl + "saveLmcRFCInstallation";
 
 
 

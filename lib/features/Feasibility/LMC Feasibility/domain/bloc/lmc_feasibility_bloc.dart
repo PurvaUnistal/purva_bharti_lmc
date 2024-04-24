@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
@@ -19,9 +20,11 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
   List<FeasibilityRowsList> listOfFeasibilityRow = [];
+  List<FeasibilityRowsList> listOfFilterFeasibilityRow = [];
   FeasibilityModel? feasibilityModel;
   FeasibilityRowsList? feasibilityRowsModel;
   ScrollController scrollController = ScrollController();
+  TextEditingController bpNumberController = TextEditingController();
 
   _pageLoad(LMCFeasibilityPageLoadEvent event, emit) async {
     emit(LMCFeasibilityInitialState());
@@ -36,7 +39,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     _eventCompleted();
     await fetchAllArea(context: event.context);
     await loadDataTable(context: event.context);
-    await fetchFeasibility(context: event.context, pageNumber: 1);
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     isLoadingMore = false;
     _eventCompleted();
   }
@@ -46,7 +49,18 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     _eventCompleted();
   }
 
-  _searchBpNumber(SearchBpNumberEvent event, emit) {}
+  _searchBpNumber(SearchBpNumberEvent event, emit) async {
+    bpNumberController.text = event.searchBpNumber;
+    if (event.searchBpNumber.length > 9) {
+      listOfFilterFeasibilityRow = listOfFeasibilityRow
+          .where(
+              (element) => element.bpNumber.toString() == bpNumberController.text)
+          .toList();
+      await fetchFeasibility(
+      context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
+      _eventCompleted();
+    }
+  }
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
@@ -56,14 +70,15 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     }
   }
 
-  fetchFeasibility({required BuildContext context, required int pageNumber}) async {
+  fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber}) async {
     isLoadingMore = true;
-    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: "", page: pageNumber.toString(), areaId: "");
+    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: "");
     if (res != null) {
       isLoadingMore = false;
       feasibilityModel = res;
       if (feasibilityModel!.data!.rows != null) {
         listOfFeasibilityRow = feasibilityModel!.data!.rows!;
+        listOfFilterFeasibilityRow = listOfFeasibilityRow;
       }
     }
   }
@@ -74,7 +89,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         isLoadingMore = true;
         _eventCompleted();
         pageNo++;
-        await fetchFeasibility(context: context, pageNumber: pageNo);
+        await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
         _eventCompleted();
       }
     });

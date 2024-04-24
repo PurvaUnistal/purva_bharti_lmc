@@ -9,6 +9,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasib
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 
 class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
   FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
@@ -88,10 +89,12 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           isBtnLoader = false;
           _eventCompleted(emit);
           Utils.successSnackBar(msg: res.data!, context: event.context);
-          Navigator.pushReplacementNamed(
-            event.context,
-            RoutesName.lmcFeasibility,
-          );
+          Navigator.pushAndRemoveUntil(
+              event.context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      FeasibilityView()),
+                  (Route<dynamic> route) => false);
         } else {
           isBtnLoader = false;
           _eventCompleted(emit);
