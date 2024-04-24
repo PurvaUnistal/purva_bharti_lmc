@@ -84,9 +84,15 @@ class FormFeasibilityHelper {
         "follow_up_date": "",
       };
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, body: para, context: context);
-      return SaveFeasibleModel.fromJson(res);
+      if(res != null && res["error"] == false){
+        Utils.successSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      } else if(res != null && res["error"] == true){
+          Utils.errorSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      }
     } catch (e) {
-      log("lmcReason-->${e.toString()}");
+      log("saveLmcFeasibility-->${e.toString()}");
     }
     return null;
   }

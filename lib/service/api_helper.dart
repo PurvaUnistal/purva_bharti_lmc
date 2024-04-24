@@ -53,6 +53,8 @@ class ApiHelper {
         return SessionDialogUtils.logOut(context: context);
       } else if (res.statusCode == 401) {
         return jsonDecode(res.body);
+      } else if (res.statusCode == 415) {
+        return jsonDecode(res.body);
       }
     } catch (e) {
       print("catch--->" + e.toString());

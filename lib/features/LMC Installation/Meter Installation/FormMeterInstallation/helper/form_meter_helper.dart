@@ -137,7 +137,13 @@ class FormMeterHelper {
           keyWord2: "",filePath2: "",
           keyWord3: "",filePath3: "",
       );
-      return SaveFeasibleModel.fromJson(res);
+      if(res != null && res["error"] == false){
+        Utils.successSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      } else if(res != null && res["error"] == true){
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      }
     } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
     }

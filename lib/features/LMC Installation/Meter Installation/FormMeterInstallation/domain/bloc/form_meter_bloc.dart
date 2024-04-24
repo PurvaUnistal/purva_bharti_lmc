@@ -1,22 +1,18 @@
-import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
+import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_state.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/helper/form_meter_helper.dart';
-import 'package:lmc/features/LMC%20Installation/presentation/installation_view.dart';
 
 class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   FormMeterBloc() : super(FormMeterInitialState()) {
@@ -254,12 +250,12 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      FeasibilityView()),
+                      HomeView()),
                   (Route<dynamic> route) => false);
         } else if (res != null && res.error == true) {
           isBtnLoader = false;
           _eventCompleted(emit);
-          Utils.errorSnackBar(msg: res.data!, context: event.context);
+        //  Utils.errorSnackBar(msg: res.data!, context: event.context);
         }else {
           isBtnLoader = false;
           _eventCompleted(emit);

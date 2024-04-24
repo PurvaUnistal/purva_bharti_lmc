@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
+import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 
 class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
   FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
@@ -39,7 +38,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     listOfCheckFeasible = [];
     listOfLMCReason = [];
     proposedDateController.text = '';
-    feasibilityDateController.text = '';
+    feasibilityDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     await fetchCheckFeasibilityApi(context: event.context);
     await fetchLMCReasonApi(context: event.context);
@@ -80,12 +79,12 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         isBtnLoader = true;
         _eventCompleted(emit);
         var res =
-            await FormFeasibilityHelper.saveLmcFeasibility(
-                context: event.context,
-                feasibilityDate: feasibilityDateController.text.toString(),
-                isFeasible: checkFeasibleValue!
-            );
-        if (res != null) {
+        await FormFeasibilityHelper.saveLmcFeasibility(
+            context: event.context,
+            feasibilityDate: feasibilityDateController.text.toString(),
+            isFeasible: checkFeasibleValue!
+        );
+        if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted(emit);
           Utils.successSnackBar(msg: res.data!, context: event.context);
@@ -93,9 +92,10 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      FeasibilityView()),
+                      HomeView()),
                   (Route<dynamic> route) => false);
-        } else {
+        }
+        else {
           isBtnLoader = false;
           _eventCompleted(emit);
         }
@@ -111,6 +111,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);
     if (res != null) {
       listOfCheckFeasible = res;
+      checkFeasibleValue = listOfCheckFeasible.first;
       return res;
     }
   }

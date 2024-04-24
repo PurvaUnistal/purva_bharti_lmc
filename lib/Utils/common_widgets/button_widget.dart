@@ -13,11 +13,11 @@ class ButtonWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.green.shade800,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(25),
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(15.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
         child: Text(
           text, style: Styles.login,
         ),

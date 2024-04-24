@@ -113,7 +113,7 @@ class _PreviewRFCViewState extends State<PreviewRFCView> {
   Widget _button({required PreviewRFCDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.installation,
+        text: AppString.checkRFC,
         onPressed: () {
           Navigator.push(
               context,

@@ -125,7 +125,13 @@ class FormRFCHelper {
         keyWord2: "rfc_form",filePath2: installationImg.toString(),
         keyWord3: "pneumatic_image",filePath3: pneumaticImg.toString(),
       );
-      return SaveFeasibleModel.fromJson(res);
+      if(res != null && res["error"] == false){
+        Utils.successSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      } else if(res != null && res["error"] == true){
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return SaveFeasibleModel.fromJson(res);
+      }
     } catch (e) {
       log("saveLmcRFCInstallation-->${e.toString()}");
     }

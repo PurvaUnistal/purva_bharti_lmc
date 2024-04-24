@@ -77,15 +77,6 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  Widget _header({required BuildContext context}) {
-    return Padding(
-      padding: EdgeInsets.all(20.0),
-      child: Text(
-        "LMC Feasibility",style: Styles.stars,
-      ),
-    );
-  }
-
   Widget _rowItem({required String textName, required String textValue}) {
     return Column(
       children: [
@@ -113,7 +104,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   Widget _button({required PreviewFeasibilityDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.installation,
+        text: AppString.checkFea,
         onPressed: () {
           Navigator.push(
               context,
