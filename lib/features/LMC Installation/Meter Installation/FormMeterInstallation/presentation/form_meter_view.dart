@@ -18,6 +18,8 @@ import 'package:lmc/Utils/common_widgets/local_mg_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_state.dart';
@@ -35,8 +37,10 @@ class FormMeterView extends StatefulWidget {
 class _FormMeterViewState extends State<FormMeterView> {
   @override
   void initState() {
-    super.initState();
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<FormMeterBloc>(context).add(FormMeterPageLoadEvent(context: context));
+    super.initState();
   }
 
   GlobalKey<AutoCompleteTextFieldState<String>> globalSearchKey = GlobalKey();

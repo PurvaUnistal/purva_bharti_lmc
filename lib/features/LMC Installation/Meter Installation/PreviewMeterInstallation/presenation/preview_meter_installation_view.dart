@@ -8,6 +8,8 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/presentation/form_meter_view.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_event.dart';
@@ -25,8 +27,10 @@ class PreviewMeterInstalView extends StatefulWidget {
 class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
   @override
   void initState() {
-    super.initState();
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<PreviewMeterInstallationBloc>(context).add(PreviewMeterInstallationPageLoadEvent(context: context));
+    super.initState();
   }
 
   @override

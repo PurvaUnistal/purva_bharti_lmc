@@ -8,6 +8,8 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/presentation/form_rfc_view.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_event.dart';
@@ -25,6 +27,8 @@ class _PreviewRFCViewState extends State<PreviewRFCView> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<PreviewRFCBloc>(context).add(PreviewRFCPageLoadEvent(context: context));
   }
 

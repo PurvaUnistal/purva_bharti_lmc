@@ -8,6 +8,8 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/presenation/preview_rfc_view.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_event.dart';
@@ -26,6 +28,8 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   void initState() {
     super.initState();
     BlocProvider.of<RFCSectionBloc>(context).add(RFCSectionPageLoadEvent(context: context));
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
   }
 
   @override

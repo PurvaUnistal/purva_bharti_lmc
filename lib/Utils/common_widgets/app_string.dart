@@ -4,7 +4,7 @@ class AssetPath {
 
 class AppString {
   static String release = "Release";
-  static String reDate = "24/4/2024";
+  static String reDate = "25/4/2024";
   static String emailLabel = "Enter User Email";
   static String passwordLabel = "Enter User Password";
   static String emailValidation = "Please enter email id";
@@ -20,8 +20,6 @@ class AppString {
   static String logoutMsg = "Are you sure you want to logout? Once you logout, you will be return to login screen";
   static String star = "* ";
 
-  static String rel = "Rel Date";
-  static String relDate = "16-04-2024";
 
   static String search = "Search";
   static String selectArea = "Select Area";

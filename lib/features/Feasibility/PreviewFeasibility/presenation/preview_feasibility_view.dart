@@ -12,6 +12,8 @@ import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasi
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 
 class PreviewFeasibilityView extends StatefulWidget {
   const PreviewFeasibilityView({super.key,});
@@ -24,8 +26,10 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
 
   @override
   void initState() {
-    super.initState();
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<PreviewFeasibilityBloc>(context).add(PreviewFeasibilityPageLoadEvent(context: context));
+    super.initState();
   }
 
 

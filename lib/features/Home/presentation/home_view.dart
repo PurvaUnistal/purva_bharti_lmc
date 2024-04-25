@@ -65,6 +65,8 @@ import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
 import 'package:lmc/features/Home/domain/bloc/home_event.dart';
 import 'package:lmc/features/Home/domain/bloc/home_state.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
+import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 
 
 class HomeView extends StatefulWidget {
@@ -75,12 +77,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
 
-
-
   @override
   void initState() {
-    super.initState();
+    BlocProvider.of<NetworkBloc>(context)
+        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<HomeBloc>(context).add(HomeLoadEvent(context: context));
+    super.initState();
   }
 
 
