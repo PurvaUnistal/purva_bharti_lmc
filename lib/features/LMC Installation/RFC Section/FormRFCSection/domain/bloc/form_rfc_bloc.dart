@@ -89,8 +89,9 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial,}) async {
     var res = await FormRFCHelper.getRegulatorsApi(context: context,regulatorSerial: regulatorSerial);
     if (res != null) {
+      listOfRegulatorNo.clear();
       listOfRegulatorNo = res;
-      listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
+       listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
       return res;
     }
   }
@@ -112,14 +113,15 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   }
   
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    if(event.regulatorsValue.isNotEmpty){
-      listOfRegulatorNo = listOfRegulatorNo
-          .where((element) => element.serialNumber == event.regulatorsValue.toString())
-          .toList();
-      listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
-      int i  = await listOfRegulator.indexWhere((element) => element.contains(event.regulatorsValue.toString()));
-      regulatorController.text = await listOfRegulator.elementAt(i);
-      _eventCompleted();
+    if(event.regulatorsValue.isNotEmpty && event.regulatorsValue.length > 1){
+      //  await fetchRegulatorsApi(context: event.context,regulatorSerial: event.regulatorsValue);
+        listOfRegulatorNo = listOfRegulatorNo
+            .where((element) => element.serialNumber == event.regulatorsValue.toString())
+            .toList();
+        listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
+        int i  = await listOfRegulator.indexWhere((element) => element.contains(event.regulatorsValue.toString()));
+        regulatorController.text = await listOfRegulator.elementAt(i);
+        _eventCompleted();
     }
   }
 

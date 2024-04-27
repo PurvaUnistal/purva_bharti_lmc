@@ -44,7 +44,7 @@ class SelectLocationOfHouseEvent extends FormRFCEvent {
 }
 
 class SelectRegulatorsValueEvent extends FormRFCEvent {
-  final dynamic regulatorsValue;
+  final String regulatorsValue;
   final BuildContext context;
   SelectRegulatorsValueEvent({required this.regulatorsValue, required this.context});
   @override

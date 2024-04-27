@@ -47,7 +47,7 @@ class AppString {
   static String actualWorkStart = "Actual Work Start";
   static String reasonDelay = "Reason if Delay";
   static String meterReadingDate = "Meter Reading Date";
-  static String meterNumber = "Meter Reading";
+  static String meterNumber = "Meter Number";
   static String regulator = "Regulators";
   static String meterInitNumber = "Meter Initial Reading";
   static String latOfSR = "Latitude Of SR";
