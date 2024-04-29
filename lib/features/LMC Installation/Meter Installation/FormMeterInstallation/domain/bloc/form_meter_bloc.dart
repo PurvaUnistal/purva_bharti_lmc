@@ -75,7 +75,6 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     listOfDelayReason = [];
     listOfMeterNumber = [];
     listOfMeterNumberId = [];
-    materialId = '';
     bpNumberController.text = "";
     proposedDateController.text = "";
     actualWorkDateController.text = "";
@@ -273,7 +272,6 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
         isLoader: isLoader,
         isBtnLoader: isBtnLoader,
         meterImg: meterImg,
-        materialId: materialId,
         meterNoValue: meterNoValue,
         typeOfNrValue: typeOfNrValue,
         delayReasonValue: delayReasonValue,

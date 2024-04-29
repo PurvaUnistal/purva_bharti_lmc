@@ -38,6 +38,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   bool isBtnLoader = false;
   bool isRegulator = false;
   bool isSelected= false;
+  var listOfRegulatorId;
   File rfcCardImg = File("");
   File pneumaticTestReportImg = File("");
   File installationImg = File("");
@@ -95,15 +96,18 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial,}) async {
     List<String>  regulatorList= [];
+    var regulatorId;
     var res = await FormRFCHelper.getRegulatorsApi(context: context,regulatorSerial: regulatorSerial);
     if (res != null) {
       listOfRegulatorNo.clear();
       listOfRegulator.clear();
       listOfRegulatorNo = res;
-      regulatorList = List.generate(listOfRegulatorNo.length,
-              (i) => ('${listOfRegulatorNo[i].serialNumber}'));
+      regulatorList = List.generate(listOfRegulatorNo.length, (i) => ('${listOfRegulatorNo[i].serialNumber}'));
+      regulatorId = List.generate(listOfRegulatorNo.length, (i) => ('${listOfRegulatorNo[i].id}'));
+      listOfRegulatorId = regulatorId.toString().replaceAll('[', '').replaceAll(']', '');
       listOfRegulator.addAll(regulatorList);
       listOfRegulator.sort();
+
       return listOfRegulator;
     }
   }
@@ -269,7 +273,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     try {
       var validationCheck = await FormRFCHelper.validationSubmit(
           context: event.context,
-          regulators: regulatorController.text.trim().toString(),
+          regulators: listOfRegulatorId.toString(),
           latitudeTF: latOfSRController.text.trim().toString(),
           longitudeTF: longOfSRController.text.trim().toString(),
           latitudeHG: latOfHouseController.text.trim().toString(),
@@ -284,14 +288,14 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
         _eventCompleted();
         var res = await FormRFCHelper.saveRFCInstallation(
             context: event.context,
-            regulators: regulatorController.text.trim().toString(),
+            regulators: listOfRegulatorId.toString(),
             latitudeTF: latOfSRController.text.trim().toString(),
             longitudeTF: longOfSRController.text.trim().toString(),
             latitudeHG: latOfHouseController.text.trim().toString(),
             longitudeHG: longOfHouseController.text.trim().toString(),
             workCompletedDate: rfcConDateController.text.trim().toString(),
-            materialIdLMC: listOfAllMaterialId.toList().toString(),
-            qtyLMC: listOfQtyLMC.toList().toString(),
+            materialIdLMC: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+            qtyLMC: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
             extraPipe: extraPipeController.text.trim().toString(),
             extraPrice: extraPriceController.text.trim().toString(),
             isometricImg: rfcCardImg.path.toString(),

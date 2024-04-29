@@ -136,7 +136,8 @@ class FormRFCHelper {
       if(res != null && res["error"] == false){
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){
-        return SaveFeasibleModel.fromJson(res);
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return null;
       }
     } catch (e) {
       log("saveLmcRFCInstallation-->${e.toString()}");

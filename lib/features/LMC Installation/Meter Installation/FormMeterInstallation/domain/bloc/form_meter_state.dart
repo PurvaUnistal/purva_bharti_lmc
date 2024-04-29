@@ -22,7 +22,6 @@ class FormMeterDataState extends FormMeterState {
   final bool isLoader;
   final bool isBtnLoader;
   final File meterImg;
-  final String materialId;
   final ListOfMeterNo? meterNoValue;
   final GetConstantModel? typeOfNrValue;
   final DelayReasonModel? delayReasonValue;
@@ -48,7 +47,6 @@ class FormMeterDataState extends FormMeterState {
     required this.isLoader,
     required this.isBtnLoader,
     required this.meterImg,
-    required this.materialId,
     required this.meterNoValue,
     required this.typeOfNrValue,
     required this.delayReasonValue,
@@ -77,7 +75,6 @@ class FormMeterDataState extends FormMeterState {
     isLoader,
     isBtnLoader,
     meterImg,
-    materialId,
     meterNoValue,
     typeOfNrValue,
     delayReasonValue,

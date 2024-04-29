@@ -221,6 +221,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           child: TextFieldWidget(
             hintText: AppString.extraPrice,
             label: AppString.extraPrice,
+            enabled: false,
             controller: stateData.extraPriceController,
           ),
         ),
@@ -230,6 +231,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           child: TextFieldWidget(
             hintText: AppString.extraPrice,
             label: AppString.extraPrice,
+            enabled: false,
             controller: stateData.extraPriceController,
           ),
         )
