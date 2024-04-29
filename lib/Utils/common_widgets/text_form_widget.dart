@@ -5,11 +5,14 @@ import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
+  final String? initialValue;
   final String? star;
   final String? label;
   final FocusNode? focusNode;
   final Iterable<String>? autofillHints;
   final String? hintText;
+  final String? labelText;
+  final String? counterText;
   final ValueChanged<String>? onChanged;
   final bool? obscureText;
   final TextInputType? inputType;
@@ -30,9 +33,12 @@ class TextFieldWidget extends StatelessWidget {
   TextFieldWidget({
     Key? key,
     this.focusNode,
+    this.initialValue,
     this.star,
     this.label,
     this.hintText,
+    this.labelText,
+    this.counterText,
     this.autofillHints,
     this.controller,
     this.obscureText,
@@ -68,6 +74,7 @@ class TextFieldWidget extends StatelessWidget {
       onChanged: onChanged,
       keyboardType: keyboardType ?? TextInputType.text,
       controller: controller,
+      initialValue: initialValue,
       obscureText: obscureText ?? false,
       validator: validator == null ? null : validator,
       textCapitalization: textCapitalization ?? TextCapitalization.words,
@@ -78,6 +85,8 @@ class TextFieldWidget extends StatelessWidget {
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
         hintText: hintText,
+       // labelText: "${star ?? ""}${label ?? ""}",
+        counterText: counterText,
         label: Padding(
           padding: const EdgeInsets.only(left: 2.0),
           child: Row(

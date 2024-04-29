@@ -87,15 +87,13 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted(emit);
-          Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => false);
-        }
-        else {
+                  (Route<dynamic> route) => true);
+        } else {
           isBtnLoader = false;
           _eventCompleted(emit);
         }

@@ -53,7 +53,7 @@ class _InstallationViewState extends State<InstallationView> {
               ),
             ),
             body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
+           //   physics: NeverScrollableScrollPhysics(),
             //  controller: _tabController,
               children: <Widget>[
                 MeterInstallationView(),

@@ -16,7 +16,8 @@ class ApiHelper {
 
   static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async{
     try {
-      final response = await get(Uri.parse(urlEndPoint),).timeout(const Duration(minutes: 1));
+    //  final response = await get(Uri.parse(urlEndPoint),).timeout(const Duration(minutes: 1));
+      final response = await get(Uri.parse(urlEndPoint));
       log("URL-->${urlEndPoint.toString()}");
       log(urlEndPoint + "==>" + response.body);
       if (response.statusCode == 200) {

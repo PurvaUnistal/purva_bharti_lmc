@@ -90,7 +90,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if(state is HomePageLoadState) {

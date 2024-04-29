@@ -139,7 +139,7 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   }
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
-    if(event.meterReadingValue.isNotEmpty){
+    if(event.meterReadingValue.isNotEmpty && event.meterReadingValue.length > 1){
       listOfMeterNo = listOfMeterNo
           .where((element) => element.serialNumber == event.meterReadingValue.toString())
           .toList();
@@ -148,9 +148,11 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
       int i  = await listOfMeterNumber.indexWhere((element) => element.contains(event.meterReadingValue.toString()));
       meterNoController.text = await listOfMeterNumber.elementAt(i);
       materialId = await listOfMeterNumberId.elementAt(i);
-      print("materialId-->${materialId}");
-      _eventCompleted(emit);
+    }else if(event.meterReadingValue.length > 0){
+      listOfMeterNumber = [];
     }
+    print("materialId-->${materialId}");
+    _eventCompleted(emit);
   }
 
   fetchTypeOfNrApi({required BuildContext context}) async {
@@ -184,7 +186,9 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     var res = await FormMeterHelper.getMetersApi(context: context);
     if (res != null) {
       listOfMeterNo = res;
-      listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
+      if(listOfMeterNo.length > 1){
+        listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
+      }
       return res;
     }
   }
@@ -245,17 +249,12 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
         if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted(emit);
-          Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => false);
-        } else if (res != null && res.error == true) {
-          isBtnLoader = false;
-          _eventCompleted(emit);
-        //  Utils.errorSnackBar(msg: res.data!, context: event.context);
+                  (Route<dynamic> route) => true);
         }else {
           isBtnLoader = false;
           _eventCompleted(emit);

@@ -122,7 +122,7 @@ class _FormMeterViewState extends State<FormMeterView> {
       hintText: AppString.meterNumber,
       suggestions: stateData.listOfMeterNumber,
       keyboardType:  TextInputType.number,
-      onChanged: (val) {
+      textSubmitted: (val) {
         print(val);
         BlocProvider.of<FormMeterBloc>(context).add(SelectMeterNumberValueEvent(
             context: context,
@@ -154,6 +154,7 @@ class _FormMeterViewState extends State<FormMeterView> {
 
   Widget _meterReading1Controller({required FormMeterDataState stateData}) {
     return TextFieldWidget(
+      hintText: "0",
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.done,
       controller: stateData.meterIniReading1Controller,
@@ -171,6 +172,8 @@ class _FormMeterViewState extends State<FormMeterView> {
   }
   Widget _meterReading2Controller({required FormMeterDataState stateData}) {
     return TextFieldWidget(
+      hintText: "0",
+      labelText: "0",
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.previous,
       controller: stateData.meterIniReading2Controller,
@@ -188,6 +191,8 @@ class _FormMeterViewState extends State<FormMeterView> {
   }
   Widget _meterReading3Controller({required FormMeterDataState stateData}) {
     return TextFieldWidget(
+      hintText: "0",
+      labelText: "0",
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.previous,
       controller: stateData.meterIniReading3Controller,

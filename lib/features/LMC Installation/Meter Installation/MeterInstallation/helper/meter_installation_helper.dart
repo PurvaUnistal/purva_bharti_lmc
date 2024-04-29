@@ -26,7 +26,11 @@ class MeterInstallationHelper {
     String json = Uri(queryParameters: para).query;
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
-      return InstallationDoneModel.fromJson(jsonDecode(res));
+      if(res != null){
+        return InstallationDoneModel.fromJson(jsonDecode(res));
+      }else{
+
+      }
     } catch (e) {
       log("getLMCInstallationApi-->${e.toString()}");
     }

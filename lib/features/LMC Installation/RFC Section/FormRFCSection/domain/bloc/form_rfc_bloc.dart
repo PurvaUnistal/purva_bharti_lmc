@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterIn
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_state.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/MaterialItem.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/helper/form_rfc_helper.dart';
 
 class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
@@ -28,6 +30,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     on<CaptureGalleryInstallationEvent>(_captureGalleryInstallation);
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
     on<SelectRFCCheckValueEvent>(_selectRFCCheckValue);
+    on<SelectQTYLMCEvent>(_selectQTYLMC);
     on<SubmitFormRFCEvent>(_submit);
   }
 
@@ -41,6 +44,9 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   List<ListOfMeterNo> listOfRegulatorNo = [];
   List<String> listOfRegulator = [];
   List<FreeMaterialData> listOfAllMaterial = [];
+  List<MaterialItem> materialList = [];
+  List<String> listOfAllMaterialId = [];
+  List<String> listOfQtyLMC = [];
   List<GetConstantModel> listOfAllRFC = [];
   TextEditingController srNumberController = TextEditingController();
   TextEditingController regulatorController = TextEditingController();
@@ -50,7 +56,6 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   TextEditingController longOfHouseController = TextEditingController();
   TextEditingController rfcConDateController = TextEditingController();
   TextEditingController  proConDateController = TextEditingController();
-  TextEditingController  materialController = TextEditingController(text: "0");
   TextEditingController extraPipeController= TextEditingController(text: "0");
   TextEditingController extraPriceController= TextEditingController(text: "0");
 
@@ -66,6 +71,9 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     listOfRegulatorNo = [];
     listOfRegulator = [];
     listOfAllMaterial = [];
+    listOfAllMaterialId = [];
+    materialList = [];
+    listOfQtyLMC = [];
     listOfAllRFC = [];
     srNumberController.text = "";
     regulatorController.text = "";
@@ -75,33 +83,69 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     longOfHouseController.text = "";
     rfcConDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());;
     proConDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());;
-    materialController.text = "0";
     extraPipeController.text = "0";
     extraPriceController.text = "0";
-    await fetchRegulatorsApi(context: event.context,regulatorSerial: "2");
     await fetchFreeMaterialApi(context: event.context,);
     await fetchRFCApi(context: event.context,);
+    await fetchRegulatorsApi(context: event.context,regulatorSerial: "2");
     await _setSRLocation();
     await _setHouseLocation();
     _eventCompleted();
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial,}) async {
+    List<String>  regulatorList= [];
     var res = await FormRFCHelper.getRegulatorsApi(context: context,regulatorSerial: regulatorSerial);
     if (res != null) {
       listOfRegulatorNo.clear();
+      listOfRegulator.clear();
       listOfRegulatorNo = res;
-       listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
-      return res;
+      regulatorList = List.generate(listOfRegulatorNo.length,
+              (i) => ('${listOfRegulatorNo[i].serialNumber}'));
+      listOfRegulator.addAll(regulatorList);
+      listOfRegulator.sort();
+      return listOfRegulator;
     }
   }
 
   fetchFreeMaterialApi({required BuildContext context}) async {
+    List<String> tempList = [];
+    List<MaterialItem> _materialList = [];
     var res = await FormRFCHelper.getAllFreeMaterialApi(context: context,);
     if (res != null) {
       listOfAllMaterial = res;
+      tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
+      listOfAllMaterialId.addAll(tempList);
+      _materialList = List.generate(
+        listOfAllMaterial.length,
+            (i) => MaterialItem(
+            value: '0',
+            id: '${listOfAllMaterial[i].id}',
+            name: '${listOfAllMaterial[i].materialName}',
+            unit: '${listOfAllMaterial[i].materialUnit}',
+            controller: TextEditingController(text: '0')),
+      );
+      materialList.addAll(_materialList);
+      listOfQtyLMC = _materialList.asMap().values.map((e) => e.controller.text).toList();
       return res;
     }
+  }
+
+  _selectQTYLMC(SelectQTYLMCEvent event,  emit) {
+    double quantity = 0.00;
+    for (int i = 0; i < listOfAllMaterial.length; i++) {
+      MaterialItem e = materialList[i];
+      if (e.name.toLowerCase().contains('pipe')) {
+        if (e.controller.text != '') {
+          quantity = quantity + double.parse(e.controller.text);
+          quantity = quantity;
+        } else {
+          e.controller.text = '0';
+          quantity = 0.00;
+        }
+      }
+    }
+    _eventCompleted();
   }
 
   fetchRFCApi({required BuildContext context}) async {
@@ -111,18 +155,14 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       return res;
     }
   }
-  
+
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    if(event.regulatorsValue.isNotEmpty && event.regulatorsValue.length > 1){
-      //  await fetchRegulatorsApi(context: event.context,regulatorSerial: event.regulatorsValue);
-        listOfRegulatorNo = listOfRegulatorNo
-            .where((element) => element.serialNumber == event.regulatorsValue.toString())
-            .toList();
-        listOfRegulator = await listOfRegulatorNo.map((e) => e.serialNumber!).toSet().toList();
-        int i  = await listOfRegulator.indexWhere((element) => element.contains(event.regulatorsValue.toString()));
-        regulatorController.text = await listOfRegulator.elementAt(i);
-        _eventCompleted();
+    if(event.regulatorsValue != '' && event.regulatorsValue.length > 1){
+      await fetchRegulatorsApi(context: event.context,regulatorSerial: event.regulatorsValue);
+    }else if(event.regulatorsValue.length > 0){
+      listOfRegulator = [];
     }
+    _eventCompleted();
   }
 
   _selectProposedDate(SelectProposedConDateEvent event,emit) async {
@@ -250,23 +290,22 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
             latitudeHG: latOfHouseController.text.trim().toString(),
             longitudeHG: longOfHouseController.text.trim().toString(),
             workCompletedDate: rfcConDateController.text.trim().toString(),
+            materialIdLMC: listOfAllMaterialId.toList().toString(),
+            qtyLMC: listOfQtyLMC.toList().toString(),
+            extraPipe: extraPipeController.text.trim().toString(),
+            extraPrice: extraPriceController.text.trim().toString(),
             isometricImg: rfcCardImg.path.toString(),
             installationImg: installationImg.path.toString(),
             pneumaticImg: pneumaticTestReportImg.path.toString());
         if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted();
-          Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => false);
-        } else if (res != null && res.error == true) {
-          isBtnLoader = false;
-          _eventCompleted();
-         // Utils.errorSnackBar(msg: res.data!, context: event.context);
+                  (Route<dynamic> route) => true);
         }else {
           isBtnLoader = false;
           _eventCompleted();
@@ -290,6 +329,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       listOfRegulator :listOfRegulator,
       listOfAllMaterial :listOfAllMaterial,
       listOfAllRFC :listOfAllRFC,
+      materialList :materialList,
       srNumberController :srNumberController,
       regulatorController :regulatorController,
       latOfSRController :latOfSRController,
@@ -298,10 +338,8 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       longOfHouseController:longOfHouseController,
       rfcConDateController : rfcConDateController,
       proConDateController : proConDateController,
-      materialController : materialController,
       extraPipeController: extraPipeController,
       extraPriceController: extraPriceController,
     ));
   }
-
 }

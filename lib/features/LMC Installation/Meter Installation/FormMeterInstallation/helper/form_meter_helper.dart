@@ -83,7 +83,7 @@ class FormMeterHelper {
         Utils.errorSnackBar(msg: "The Meter Reading Date field is required.", context: context);
         return false;
       }  else  if (meterReading.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Reading field is required.", context: context);
+        Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
         return false;
       } else  if (meterInitReading.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
@@ -142,10 +142,11 @@ class FormMeterHelper {
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){
         Utils.errorSnackBar(msg: res["data"], context: context);
-        return SaveFeasibleModel.fromJson(res);
+        return null;
       }
     } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
+      return null;
     }
     return null;
   }

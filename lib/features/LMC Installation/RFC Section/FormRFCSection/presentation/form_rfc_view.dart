@@ -115,7 +115,7 @@ class _FormRFCViewState extends State<FormRFCView> {
       controller: stateData.regulatorController,
       suggestions: stateData.listOfRegulator,
       keyboardType:  TextInputType.number,
-      onChanged: (val) {
+      textSubmitted: (val) {
         print(val);
         BlocProvider.of<FormRFCBloc>(context).add(SelectRegulatorsValueEvent(
             context: context,
@@ -176,7 +176,7 @@ class _FormRFCViewState extends State<FormRFCView> {
 
   Widget _materialList({required FormRFCDataState stateData}){
     return Column(
-      children: stateData.listOfAllMaterial.map((e) {
+      children: stateData.materialList.map((e) {
         return Column(
           children: [
             Row(
@@ -184,8 +184,9 @@ class _FormRFCViewState extends State<FormRFCView> {
                 Flexible(
                   flex: 7,
                   child: TextFieldWidget(
-                    hintText: e.materialName!,
-                    label: e.materialName!,
+                    hintText: AppString.material,
+                    label: AppString.material,
+                    initialValue : e.name,
                     enabled: false,
                   ),
                 ),
@@ -193,11 +194,13 @@ class _FormRFCViewState extends State<FormRFCView> {
                 Flexible(
                   flex: 3,
                   child: TextFieldWidget(
-                    hintText: e.materialUnit!,
-                    label: e.materialUnit!,
+                    hintText: e.unit,
+                    label: e.unit,
                     enabled: true,
-                    controller: stateData.materialController,
-
+                    controller: e.controller,
+                    onChanged: (val){
+                      BlocProvider.of<FormRFCBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
+                    },
                   ),
                 )
               ],
@@ -301,7 +304,7 @@ class _FormRFCViewState extends State<FormRFCView> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ImageWidget(
-          title: "RFC",
+          title: AppString.rfc,
           imgFile: stateData.rfcCardImg,
           onPressed: (){
             showModalBottomSheet(
@@ -325,7 +328,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           },
         ),
         ImageWidget(
-          title: "Pneumatic",
+          title: AppString.pneumatic,
           imgFile: stateData.pneumaticTestReportImg,
           onPressed: (){
             showModalBottomSheet(
@@ -349,7 +352,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           },
         ),
         ImageWidget(
-          title: "Installation",
+          title: AppString.installation,
           imgFile: stateData.installationImg,
           onPressed: (){
             showModalBottomSheet(
@@ -378,21 +381,21 @@ class _FormRFCViewState extends State<FormRFCView> {
 
   Widget _checkListRFC({required FormRFCDataState stateData}){
     return Column(
-      children: List.generate(
-          stateData.listOfAllRFC.length,
-              (index) => CheckboxListTile(
-                value: stateData.listOfAllRFC[index].isSelected!,
-                title: Text(stateData.listOfAllRFC[index].value!, style: Styles.labels,),
-                onChanged: (val){
-                  BlocProvider.of<FormRFCBloc>(context).add(
-                      SelectRFCCheckValueEvent(
+        children: List.generate(
+            stateData.listOfAllRFC.length,
+                (index) => CheckboxListTile(
+              value: stateData.listOfAllRFC[index].isSelected!,
+              title: Text(stateData.listOfAllRFC[index].value!, style: Styles.labels,),
+              onChanged: (val){
+                BlocProvider.of<FormRFCBloc>(context).add(
+                    SelectRFCCheckValueEvent(
                         context: context,
                         isSelected: val!,
                         index: index
-                      ));
-                },
+                    ));
+              },
 
-              ))
+            ))
     );
   }
 

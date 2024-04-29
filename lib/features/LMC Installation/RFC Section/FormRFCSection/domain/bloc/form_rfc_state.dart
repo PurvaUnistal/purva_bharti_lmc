@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/MaterialItem.dart';
 
 abstract class FormRFCState extends Equatable {}
 
@@ -29,6 +30,7 @@ class FormRFCDataState extends FormRFCState {
   List<String> listOfRegulator;
   List<FreeMaterialData> listOfAllMaterial;
   List<GetConstantModel> listOfAllRFC;
+  List<MaterialItem> materialList;
   TextEditingController srNumberController;
   TextEditingController regulatorController;
   TextEditingController latOfSRController;
@@ -37,7 +39,6 @@ class FormRFCDataState extends FormRFCState {
   TextEditingController longOfHouseController;
   TextEditingController rfcConDateController;
   TextEditingController proConDateController;
-  TextEditingController materialController;
   TextEditingController extraPipeController;
   TextEditingController extraPriceController;
 
@@ -52,6 +53,7 @@ class FormRFCDataState extends FormRFCState {
   required this.listOfRegulator,
   required this.listOfAllMaterial,
   required this.listOfAllRFC,
+  required this.materialList,
   required this.srNumberController,
   required this.regulatorController,
   required this.latOfSRController,
@@ -60,7 +62,6 @@ class FormRFCDataState extends FormRFCState {
   required this.longOfHouseController,
   required this.rfcConDateController,
   required this.proConDateController,
-  required this.materialController,
   required this.extraPipeController,
   required this.extraPriceController,
 });
@@ -78,6 +79,7 @@ List<Object?> get props => [
     listOfRegulator,
     listOfAllMaterial,
     listOfAllRFC,
+    materialList,
     srNumberController,
     regulatorController,
     latOfSRController,
@@ -86,7 +88,6 @@ List<Object?> get props => [
     longOfHouseController,
     rfcConDateController,
     proConDateController,
-    materialController,
     extraPipeController,
     extraPriceController,
 ];

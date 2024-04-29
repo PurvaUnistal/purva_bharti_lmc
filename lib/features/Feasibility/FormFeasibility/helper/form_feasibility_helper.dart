@@ -88,11 +88,12 @@ class FormFeasibilityHelper {
         Utils.successSnackBar(msg: res["data"], context: context);
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){
-          Utils.errorSnackBar(msg: res["data"], context: context);
-        return SaveFeasibleModel.fromJson(res);
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return null;
       }
     } catch (e) {
       log("saveLmcFeasibility-->${e.toString()}");
+      return null;
     }
     return null;
   }

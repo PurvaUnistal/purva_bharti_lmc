@@ -11,7 +11,7 @@ class AutoSuggestionTextFieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final Iterable<String>? autofillHints;
   final String? hintText;
-  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? textSubmitted;
   final ValueChanged<String>? textChanged;
   final bool? obscureText;
   final TextInputType? inputType;
@@ -39,7 +39,7 @@ class AutoSuggestionTextFieldWidget extends StatelessWidget {
     this.autofillHints,
     this.controller,
     this.obscureText,
-    this.onChanged,
+    this.textSubmitted,
     this.textChanged,
     this.inputType,
     this.maxLength,
@@ -69,7 +69,7 @@ class AutoSuggestionTextFieldWidget extends StatelessWidget {
       autofocus: autofocus?? false,
       keyboardType: keyboardType ?? TextInputType.text,
       controller: controller,
-      textSubmitted: onChanged,
+      textSubmitted: textSubmitted,
       textChanged: textChanged,
       clearOnSubmit: false,
       textCapitalization: textCapitalization ?? TextCapitalization.words,

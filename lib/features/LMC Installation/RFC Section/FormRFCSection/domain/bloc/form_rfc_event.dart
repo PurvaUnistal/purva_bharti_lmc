@@ -43,6 +43,15 @@ class SelectLocationOfHouseEvent extends FormRFCEvent {
   List<Object> get props => [context];
 }
 
+class SelectQTYLMCEvent extends FormRFCEvent {
+  final String qtyValue;
+  final BuildContext context;
+  SelectQTYLMCEvent({required this.qtyValue,required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [qtyValue,context];
+}
+
 class SelectRegulatorsValueEvent extends FormRFCEvent {
   final String regulatorsValue;
   final BuildContext context;
@@ -97,6 +106,7 @@ class SelectRFCCheckValueEvent extends FormRFCEvent {
   // TODO: implement props
   List<Object> get props => [isSelected,context];
 }
+
 class SubmitFormRFCEvent extends FormRFCEvent {
   final BuildContext context;
   SubmitFormRFCEvent({required this.context});

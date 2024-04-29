@@ -48,7 +48,8 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 9) {
+   // if (event.searchBpNumber.length > 9) {
+    if (event.searchBpNumber.length > 1) {
       listOfFilterInstallationRow = listOfInstallationRow
           .where(
               (element) => element.bpNumber.toString() == bpNumberController.text)
@@ -77,6 +78,8 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         listOfInstallationRow = installationDoneModel!.data!.rows!;
         listOfFilterInstallationRow = listOfInstallationRow;
       }
+    } else{
+      isLoadingMore = false;
     }
   }
 

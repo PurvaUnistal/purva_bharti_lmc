@@ -80,6 +80,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         listOfFeasibilityRow = feasibilityModel!.data!.rows!;
         listOfFilterFeasibilityRow = listOfFeasibilityRow;
       }
+    }else{
+      isLoadingMore = false;
     }
   }
 

@@ -101,6 +101,10 @@ class FormRFCHelper {
     required String isometricImg,
     required String installationImg,
     required String pneumaticImg,
+    required String materialIdLMC,
+    required String qtyLMC,
+    required String extraPipe,
+    required String extraPrice,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String dma = await SharedPref.getString(key: PrefsValue.rfcDma);
@@ -117,6 +121,10 @@ class FormRFCHelper {
         "latitude_hg": latitudeHG,
         "longitude_hg": longitudeHG,
         "work_completed_date": workCompletedDate,
+        "material_id_lmc": materialIdLMC,
+        "qty_lmc": qtyLMC,
+        "extra_pipe": extraPipe,
+        "extra_price": extraPrice,
       };
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
@@ -126,14 +134,13 @@ class FormRFCHelper {
         keyWord3: "pneumatic_image",filePath3: pneumaticImg.toString(),
       );
       if(res != null && res["error"] == false){
-        Utils.successSnackBar(msg: res["data"], context: context);
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){
-        Utils.errorSnackBar(msg: res["data"], context: context);
         return SaveFeasibleModel.fromJson(res);
       }
     } catch (e) {
       log("saveLmcRFCInstallation-->${e.toString()}");
+      return null;
     }
     return null;
   }
