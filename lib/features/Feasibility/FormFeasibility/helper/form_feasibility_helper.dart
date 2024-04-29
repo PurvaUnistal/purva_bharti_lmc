@@ -67,7 +67,7 @@ class FormFeasibilityHelper {
     required GetConstantModel isFeasible,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
-    String lmcId = await SharedPref.getString(key: PrefsValue.lmcId);
+    String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
     String dma = await SharedPref.getString(key: PrefsValue.dma);
     try {
       Map<String, String> para = {
