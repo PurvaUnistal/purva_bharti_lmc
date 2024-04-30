@@ -64,4 +64,5 @@ class AppString {
   static String rfc  = "RFC";
   static String installation  = "Installation";
   static String material  = "Material";
+  static String meter  = "Meter Installation";
 }

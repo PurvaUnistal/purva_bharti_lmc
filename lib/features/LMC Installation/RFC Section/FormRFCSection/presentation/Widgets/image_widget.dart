@@ -7,14 +7,23 @@ import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 class ImageWidget extends StatelessWidget {
   final File imgFile;
   final String title;
+  final String? star;
   final void Function() onPressed;
-  const ImageWidget({super.key, required this.imgFile,required  this.title, required this.onPressed});
-
+  const ImageWidget({super.key, required this.imgFile, this.star, required this.title, required this.onPressed});
   @override
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        Text(title,style: Styles.subTitle,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(flex : 1,child: Text(star ??"",  style:Styles.subStar)),
+            Flexible(flex : 6,child: Text(title  ?? "", style:Styles.subTitle),
+            ),
+          ],
+        ),
         SizedBox(
             width: MediaQuery.of(context).size.width *0.23,
             height:MediaQuery.of(context).size.height* 0.12,

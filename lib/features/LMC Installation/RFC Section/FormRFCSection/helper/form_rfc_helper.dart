@@ -65,6 +65,7 @@ class FormRFCHelper {
   }
   static Future<dynamic> validationSubmit({
     required BuildContext context,
+    required String srNumber,
     required String regulators,
     required String latitudeTF,
     required String longitudeTF,
@@ -76,11 +77,20 @@ class FormRFCHelper {
     required String pneumaticImg,
   }) async {
     try {
-      if (regulators == "null") {
+      if (srNumber.isEmpty) {
+        Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+        return false;
+      }else if (regulators.isEmpty) {
         Utils.errorSnackBar(msg: "The Regulators field is required.", context: context);
         return false;
       } else if (workCompletedDate.isEmpty) {
         Utils.errorSnackBar(msg: "The Work Completed Date field is required.", context: context);
+        return false;
+      }else if (isometricImg.isEmpty) {
+        Utils.errorSnackBar(msg: "The RFC card/Isometric graph field is required.", context: context);
+        return false;
+      }else if (installationImg.isEmpty) {
+        Utils.errorSnackBar(msg: "The Installation Photo field is required.", context: context);
         return false;
       }
       return true;
@@ -92,6 +102,7 @@ class FormRFCHelper {
 
   static Future<SaveFeasibleModel?> saveRFCInstallation({
     required BuildContext context,
+    required String srNumber,
     required String regulators,
     required String latitudeTF,
     required String longitudeTF,

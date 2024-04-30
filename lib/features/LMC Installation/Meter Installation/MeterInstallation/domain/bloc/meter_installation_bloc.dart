@@ -36,7 +36,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
     _eventCompleted();
-    await loadDataTable(context: event.context, emit: emit);
+    await loadDataTable(context: event.context,);
     await fetchFeasibility(context: event.context,pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     _eventCompleted();
   }
@@ -83,13 +83,15 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     }
   }
 
-  loadDataTable({required BuildContext context, emit}) {
+  loadDataTable({required BuildContext context}) {
     scrollController.addListener(() async {
-      isLoadingMore = true;
-      _eventCompleted();
-      pageNo++;
-      await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber:  bpNumberController.text);
-      _eventCompleted();
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        isLoadingMore = true;
+        _eventCompleted();
+        pageNo++;
+        await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
+        _eventCompleted();
+      }
     });
   }
 
@@ -99,6 +101,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         isLoadingMore: isLoadingMore,
         allAreaValue: areaValue,
         listOfAllArea: listOfAllArea,
+        pageNo : pageNo,
         installationDoneModel: installationDoneModel,
         listOfInstallationRow: listOfInstallationRow,
         scrollController: scrollController));

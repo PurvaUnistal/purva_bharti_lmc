@@ -19,6 +19,7 @@ class MeterInstallationDataState extends MeterInstallationState {
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
+  final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
   List<InstallationDoneRows> listOfInstallationRow;
   InstallationDoneModel? installationDoneModel;
@@ -28,6 +29,7 @@ class MeterInstallationDataState extends MeterInstallationState {
     required this.isLoader,
     required this.isLoadingMore,
     required this.allAreaValue,
+    required this.pageNo,
     required this.listOfAllArea,
     required this.listOfInstallationRow,
     required this.installationDoneModel,
@@ -40,6 +42,7 @@ class MeterInstallationDataState extends MeterInstallationState {
         isLoader,
         isLoadingMore,
         allAreaValue,
+    pageNo,
         listOfAllArea,
         listOfInstallationRow,
         installationDoneModel,

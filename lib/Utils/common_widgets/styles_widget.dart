@@ -7,6 +7,7 @@ class Styles {
   static TextStyle title = TextStyle(fontSize: 12, color:Colors.green.shade800, fontWeight: FontWeight.bold);
 
   static TextStyle subTitle = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800);
+  static TextStyle subStar = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800, color: Colors.red);
 
   static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.red);
   static TextStyle table = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);

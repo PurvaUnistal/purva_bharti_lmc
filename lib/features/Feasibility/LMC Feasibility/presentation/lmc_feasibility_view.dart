@@ -134,26 +134,22 @@ class _FeasibilityViewState extends State<FeasibilityView> {
               child: Theme(
                 data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
                 child: DataTable(
+                  sortAscending: true,
+                  columnSpacing: 12,
+                  horizontalMargin: 0,
                   showCheckboxColumn: false,
                   headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  //    dataRowHeight: 50,
                   dividerThickness: 1,
                   columns: [
                     _dataColumn(label: "S.No"),
-                    _dataColumn(label: "BP Number"),
-                    _dataColumn(label: "Installation Date"),
-                    _dataColumn(label: "Conversion date"),
-                    _dataColumn(label: "Area"),
                     _dataColumn(label: "Mobile Number"),
-                    _dataColumn(label: "First Name"),
-                    _dataColumn(label: "Surname"),
-                    _dataColumn(label: "Property Category"),
-                    _dataColumn(label: "Property Class"),
-                    _dataColumn(label: "House Number"),
-                    _dataColumn(label: "Locality"),
+                    _dataColumn(label: "BP Number"),
+                    _dataColumn(label: "Area"),
+                    _dataColumn(label: "Name"),
+                  //  _dataColumn(label: "Proposed Date"),
                   ],
                   rows: dataState.listOfFeasibilityRow
                       .mapIndexed((index, user) => DataRow(
@@ -179,18 +175,11 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                               },
                               cells: <DataCell>[
-                                _dataCell(label: "${index + 1}"),
-                                _dataCell(label: user.bpNumber.toString()),
-                                _dataCell(label: user.dateOfRegistration.toString()),
-                                _dataCell(label: user.conversionDate.toString()),
-                                _dataCell(label: user.areaName.toString()),
+                                _dataCell(label:(dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
                                 _dataCell(label: user.mobileNumber.toString()),
+                                _dataCell(label: user.bpNumber.toString()),
+                                _dataCell(label: user.areaName.toString()),
                                 _dataCell(label: user.firstName.toString()),
-                                _dataCell(label: user.lastName.toString()),
-                                _dataCell(label: user.propName.toString()),
-                                _dataCell(label: user.propClass.toString()),
-                                _dataCell(label: user.houseNumber.toString()),
-                                _dataCell(label: user.locality.toString()),
                               ]))
                       .toList(),
                 ),

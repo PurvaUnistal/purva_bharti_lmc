@@ -1,7 +1,6 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -11,11 +10,9 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/auto_suggestion_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
-import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_bloc.dart';
@@ -96,6 +93,7 @@ class _FormRFCViewState extends State<FormRFCView> {
   }
   Widget _srNumberController({required FormRFCDataState stateData}) {
     return TextFieldWidget(
+      star: AppString.star,
       hintText: AppString.srNumber,
       label: AppString.srNumber,
       keyboardType: TextInputType.number,
@@ -219,6 +217,7 @@ class _FormRFCViewState extends State<FormRFCView> {
         Flexible(
           flex: 3,
           child: TextFieldWidget(
+            star: AppString.star,
             hintText: AppString.extraPrice,
             label: AppString.extraPrice,
             enabled: false,
@@ -229,6 +228,7 @@ class _FormRFCViewState extends State<FormRFCView> {
         Flexible(
           flex: 3,
           child: TextFieldWidget(
+            star: AppString.star,
             hintText: AppString.extraPrice,
             label: AppString.extraPrice,
             enabled: false,
@@ -245,6 +245,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
+            star: AppString.star,
             hintText: AppString.latOfSR,
             label: AppString.latOfSR,
             controller: stateData.latOfSRController,
@@ -255,6 +256,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
+            star: AppString.star,
             hintText: AppString.longOfSR,
             label: AppString.longOfSR,
             controller: stateData.longOfSRController,
@@ -276,6 +278,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
+            star: AppString.star,
             hintText: AppString.latOfHouse,
             label: AppString.latOfHouse,
             controller: stateData.latOfHouseController,
@@ -286,6 +289,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
+            star: AppString.star,
             hintText: AppString.longOfHouse,
             label: AppString.longOfHouse,
             controller: stateData.longOfHouseController,
@@ -306,6 +310,7 @@ class _FormRFCViewState extends State<FormRFCView> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ImageWidget(
+          star: AppString.star,
           title: AppString.rfc,
           imgFile: stateData.rfcCardImg,
           onPressed: (){
@@ -354,6 +359,7 @@ class _FormRFCViewState extends State<FormRFCView> {
           },
         ),
         ImageWidget(
+          star: AppString.star,
           title: AppString.installation,
           imgFile: stateData.installationImg,
           onPressed: (){
@@ -383,21 +389,19 @@ class _FormRFCViewState extends State<FormRFCView> {
 
   Widget _checkListRFC({required FormRFCDataState stateData}){
     return Column(
-        children: List.generate(
-            stateData.listOfAllRFC.length,
-                (index) => CheckboxListTile(
-              value: stateData.listOfAllRFC[index].isSelected!,
-              title: Text(stateData.listOfAllRFC[index].value!, style: Styles.labels,),
-              onChanged: (val){
-                BlocProvider.of<FormRFCBloc>(context).add(
-                    SelectRFCCheckValueEvent(
-                        context: context,
-                        isSelected: val!,
-                        index: index
-                    ));
-              },
-
-            ))
+        children: stateData.listOfAllRFC.mapIndexed((index, e) {
+          return CheckboxListTile(
+            value: e.isSelected,
+            title: Text(e.value!, style: Styles.labels,),
+            onChanged: (val){
+              BlocProvider.of<FormRFCBloc>(context).add(
+                  SelectRFCCheckValueEvent(
+                      context: context,
+                      isSelected: val==false ? false :true,
+                     index: index
+                  ));},
+          );
+        }).toList()
     );
   }
 

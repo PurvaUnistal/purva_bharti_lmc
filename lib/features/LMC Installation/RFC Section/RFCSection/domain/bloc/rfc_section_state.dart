@@ -20,6 +20,7 @@ class RFCSectionDataState extends RFCSectionState{
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
+  final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
   List<RFCInstallationRows> listOfRFCSectionRow;
   RFCInstallationModel? rfcInstallationModel;
@@ -29,6 +30,7 @@ class RFCSectionDataState extends RFCSectionState{
     required this.isLoader,
     required this.isLoadingMore,
     required this.allAreaValue,
+    required this.pageNo,
     required this.listOfAllArea,
     required this.listOfRFCSectionRow,
     required this.rfcInstallationModel,
@@ -42,6 +44,7 @@ class RFCSectionDataState extends RFCSectionState{
     isLoader,
     isLoadingMore,
     allAreaValue,
+    pageNo,
     listOfAllArea,
     listOfRFCSectionRow,
     rfcInstallationModel,

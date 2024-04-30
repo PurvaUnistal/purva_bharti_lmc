@@ -19,6 +19,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
+  final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
   FeasibilityRowsList? feasibilityRowsModel;
   List<FeasibilityRowsList> listOfFeasibilityRow;
@@ -28,6 +29,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
   LMCFeasibilityDataState({
     required this.isLoader,
     required this.isLoadingMore,
+    required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
     required this.feasibilityRowsModel,
@@ -43,6 +45,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
     isLoader,
     isLoadingMore,
     allAreaValue,
+    pageNo,
     listOfAllArea,
     feasibilityRowsModel,
     listOfFeasibilityRow,

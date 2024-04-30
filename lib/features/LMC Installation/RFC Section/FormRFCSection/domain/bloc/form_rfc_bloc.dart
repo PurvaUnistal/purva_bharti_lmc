@@ -37,7 +37,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   bool isLoader = false;
   bool isBtnLoader = false;
   bool isRegulator = false;
-  bool isSelected= false;
+  bool isSelected = false;
   var listOfRegulatorId;
   File rfcCardImg = File("");
   File pneumaticTestReportImg = File("");
@@ -163,6 +163,8 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
     if(event.regulatorsValue != '' && event.regulatorsValue.length > 1){
       await fetchRegulatorsApi(context: event.context,regulatorSerial: event.regulatorsValue);
+      int i  = await listOfRegulator.indexWhere((element) => element.contains(event.regulatorsValue.toString()));
+      regulatorController.text = await listOfRegulator.elementAt(i);
     }else if(event.regulatorsValue.length > 0){
       listOfRegulator = [];
     }
@@ -267,13 +269,16 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   _selectRFCCheckValue(SelectRFCCheckValueEvent event, emit) {
     isSelected = event.isSelected;
     listOfAllRFC[event.index].isSelected = isSelected;
+    log("${listOfAllRFC[event.index]}-->${listOfAllRFC[event.index].isSelected}");
     _eventCompleted();
   }
+
   _submit(SubmitFormRFCEvent event, emit) async {
     try {
       var validationCheck = await FormRFCHelper.validationSubmit(
           context: event.context,
-          regulators: listOfRegulatorId.toString(),
+          srNumber: srNumberController.text.trim().toString(),
+          regulators: regulatorController.text.trim().toString(),
           latitudeTF: latOfSRController.text.trim().toString(),
           longitudeTF: longOfSRController.text.trim().toString(),
           latitudeHG: latOfHouseController.text.trim().toString(),
@@ -288,6 +293,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
         _eventCompleted();
         var res = await FormRFCHelper.saveRFCInstallation(
             context: event.context,
+            srNumber: srNumberController.text.trim().toString(),
             regulators: listOfRegulatorId.toString(),
             latitudeTF: latOfSRController.text.trim().toString(),
             longitudeTF: longOfSRController.text.trim().toString(),
@@ -296,8 +302,8 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
             workCompletedDate: rfcConDateController.text.trim().toString(),
             materialIdLMC: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
             qtyLMC: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-            extraPipe: extraPipeController.text.trim().toString(),
-            extraPrice: extraPriceController.text.trim().toString(),
+           extraPipe: extraPipeController.text.trim().toString(),
+           extraPrice: extraPriceController.text.trim().toString(),
             isometricImg: rfcCardImg.path.toString(),
             installationImg: installationImg.path.toString(),
             pneumaticImg: pneumaticTestReportImg.path.toString());

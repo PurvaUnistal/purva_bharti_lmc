@@ -102,6 +102,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         isLoader: isLoader,
         isLoadingMore: isLoadingMore,
         allAreaValue: areaValue,
+        pageNo: pageNo,
         listOfAllArea: listOfAllArea,
         feasibilityRowsModel: feasibilityRowsModel,
         listOfFeasibilityRow: listOfFeasibilityRow,

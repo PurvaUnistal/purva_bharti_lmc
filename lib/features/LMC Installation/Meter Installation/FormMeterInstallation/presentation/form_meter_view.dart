@@ -24,6 +24,7 @@ import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterIn
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_state.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
+import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/presentation/Widgets/image_widget.dart';
 
 class FormMeterView extends StatefulWidget {
   const FormMeterView({
@@ -244,7 +245,31 @@ class _FormMeterViewState extends State<FormMeterView> {
   }
 
   Widget _meterPhoto({required FormMeterDataState stateData}) {
-    return LocalImgWidget(
+    return ImageWidget(
+      star: AppString.star,
+      title: AppString.meter,
+      imgFile: stateData.meterImg,
+      onPressed: (){
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<FormMeterBloc>(context).add(CaptureCameraMeterEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<FormMeterBloc>(context).add(CaptureGalleryMeterEvent());
+                },
+              );
+            });
+      },
+    );
+   /* return LocalImgWidget(
+      star: AppString.star,
       file: stateData.meterImg,
       onTap: () {
         showModalBottomSheet(
@@ -264,7 +289,7 @@ class _FormMeterViewState extends State<FormMeterView> {
               );
             });
       },
-    );
+    );*/
   }
 
   Widget _button({required FormMeterDataState dataState}) {

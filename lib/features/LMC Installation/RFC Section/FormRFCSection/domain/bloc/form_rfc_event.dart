@@ -104,7 +104,7 @@ class SelectRFCCheckValueEvent extends FormRFCEvent {
   SelectRFCCheckValueEvent({required this.isSelected, required this.context, required this.index});
   @override
   // TODO: implement props
-  List<Object> get props => [isSelected,context];
+  List<Object> get props => [isSelected,context, index];
 }
 
 class SubmitFormRFCEvent extends FormRFCEvent {
