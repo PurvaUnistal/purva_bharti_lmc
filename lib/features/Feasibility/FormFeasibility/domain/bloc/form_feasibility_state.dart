@@ -24,6 +24,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   final TextEditingController bpNumberController;
   final TextEditingController proposedDateController;
   final TextEditingController feasibilityDateController;
+  final TextEditingController reasonController;
+  final TextEditingController followUpDateController;
 
   FormFeasibilityDataState({
     required this.isLoader,
@@ -35,6 +37,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
     required this.bpNumberController,
     required this.proposedDateController,
     required this.feasibilityDateController,
+    required this.reasonController,
+    required this.followUpDateController,
   });
 
   @override
@@ -49,5 +53,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
         bpNumberController,
         proposedDateController,
         feasibilityDateController,
+    reasonController,
+    followUpDateController,
       ];
 }

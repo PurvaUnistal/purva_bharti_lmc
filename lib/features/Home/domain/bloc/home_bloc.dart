@@ -56,7 +56,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _setPageIndex(HomeSetPageIndex event, emit) {
     _pageIndex =  event.pageIndex;
     _currentIndex = event.pageIndex;
-    print("Current Pagev Ons  ==== > ${currentIndex}");
+    print("Current Page No  ==== > ${currentIndex}");
     _eventCompleted(emit);
   }
 

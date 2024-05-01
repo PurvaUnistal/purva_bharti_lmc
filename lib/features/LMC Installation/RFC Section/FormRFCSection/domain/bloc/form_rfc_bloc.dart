@@ -91,7 +91,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     await fetchRegulatorsApi(context: event.context,regulatorSerial: "2");
     await _setSRLocation();
     await _setHouseLocation();
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial,}) async {
@@ -149,7 +149,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
         }
       }
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   fetchRFCApi({required BuildContext context}) async {
@@ -168,7 +168,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     }else if(event.regulatorsValue.length > 0){
       listOfRegulator = [];
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _selectProposedDate(SelectProposedConDateEvent event,emit) async {
@@ -176,7 +176,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (dateTime != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
       proConDateController.text = formattedDate.toString();
-      _eventCompleted();
+       _eventCompleted(emit);
     }
   }
 
@@ -185,7 +185,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (dateTime != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
       rfcConDateController.text = formattedDate.toString();
-      _eventCompleted();
+       _eventCompleted(emit);
     }
   }
 
@@ -204,12 +204,12 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
 
   _selectLocationOfSR(SelectLocationOfSREvent event,emit) {
     _setSRLocation();
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _selectLocationOfHouse(SelectLocationOfHouseEvent event,emit) {
     _setHouseLocation();
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureGalleryRFCCard(CaptureGalleryRFCCardEvent event,emit) async {
@@ -218,7 +218,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       rfcCardImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureCameraRFCCard(CaptureCameraRFCCardEvent event,emit) async {
@@ -227,7 +227,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       rfcCardImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureGalleryPneumatic(CaptureGalleryPneumaticEvent event,emit) async {
@@ -236,7 +236,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       pneumaticTestReportImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureCameraPneumatic(CaptureCameraPneumaticEvent event,emit) async {
@@ -245,7 +245,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       pneumaticTestReportImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureGalleryInstallation(CaptureGalleryInstallationEvent event,emit) async {
@@ -254,7 +254,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       installationImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _captureCameraInstallation(CaptureCameraInstallationEvent event,emit) async {
@@ -263,14 +263,15 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (photoPath.path.isNotEmpty) {
       installationImg = photoPath;
     }
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _selectRFCCheckValue(SelectRFCCheckValueEvent event, emit) {
+    emit(FormRFCInitialState());
     isSelected = event.isSelected;
     listOfAllRFC[event.index].isSelected = isSelected;
     log("${listOfAllRFC[event.index]}-->${listOfAllRFC[event.index].isSelected}");
-    _eventCompleted();
+     _eventCompleted(emit);
   }
 
   _submit(SubmitFormRFCEvent event, emit) async {
@@ -290,7 +291,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       );
       if (validationCheck == true) {
         isBtnLoader = true;
-        _eventCompleted();
+         _eventCompleted(emit);
         var res = await FormRFCHelper.saveRFCInstallation(
             context: event.context,
             srNumber: srNumberController.text.trim().toString(),
@@ -309,25 +310,27 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
             pneumaticImg: pneumaticTestReportImg.path.toString());
         if (res != null && res.error == false) {
           isBtnLoader = false;
-          _eventCompleted();
+           _eventCompleted(emit);
+          await Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => true);
+                  (Route<dynamic> route) => false);
         }else {
           isBtnLoader = false;
-          _eventCompleted();
+           _eventCompleted(emit);
         }
       }
     } catch (e) {
       print(e.toString());
       isBtnLoader = false;
-      _eventCompleted();
+      _eventCompleted(emit);
     }
   }
-  _eventCompleted() {
+  
+  _eventCompleted(emit) {
     emit(FormRFCDataState(
       isLoader : isLoader,
       isBtnLoader : isBtnLoader,

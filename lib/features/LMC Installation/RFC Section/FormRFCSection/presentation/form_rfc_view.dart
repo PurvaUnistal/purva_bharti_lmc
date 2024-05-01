@@ -1,5 +1,6 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
@@ -11,6 +12,7 @@ import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/auto_suggestion_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
+import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
@@ -42,23 +44,35 @@ class _FormRFCViewState extends State<FormRFCView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        title: RoutesName.rfcSection,
-        boolLeading: true,
-      ),
-      body: BlocBuilder<FormRFCBloc, FormRFCState>(
-        builder: (context, state) {
-          if (state is FormRFCDataState) {
-            return _itemBuilder(dataState: state);
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBarWidget(
+          title: RoutesName.rfcSection,
+          boolLeading: true,
+        ),
+        body: BlocBuilder<FormRFCBloc, FormRFCState>(
+          builder: (context, state) {
+            if (state is FormRFCDataState) {
+              return _itemBuilder(dataState: state);
+            } else {
+              return Center(child: SpinLoader());
+            }
+          },
+        ),
       ),
     );
   }
-
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+        context: context,
+        builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+            message: "Do you want to RFC Installation?",
+            okButtonText: "Exit",
+            onPressed: () =>  Navigator.of(context).pop(true)
+        ))
+    ) ?? false;
+  }
   _itemBuilder({required FormRFCDataState dataState}) {
     return SingleChildScrollView(
       child: Padding(
@@ -197,6 +211,7 @@ class _FormRFCViewState extends State<FormRFCView> {
                     enabled: true,
                     controller: e.controller,
                     onChanged: (val){
+                      print(e.controller);
                       BlocProvider.of<FormRFCBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
                     },
                   ),
@@ -388,20 +403,23 @@ class _FormRFCViewState extends State<FormRFCView> {
   }
 
   Widget _checkListRFC({required FormRFCDataState stateData}){
-    return Column(
-        children: stateData.listOfAllRFC.mapIndexed((index, e) {
-          return CheckboxListTile(
-            value: e.isSelected,
-            title: Text(e.value!, style: Styles.labels,),
-            onChanged: (val){
-              BlocProvider.of<FormRFCBloc>(context).add(
-                  SelectRFCCheckValueEvent(
-                      context: context,
-                      isSelected: val==false ? false :true,
-                     index: index
-                  ));},
-          );
-        }).toList()
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+      itemCount : stateData.listOfAllRFC.length,
+      itemBuilder: (context, index){
+        return CheckboxListTile(
+          value: stateData.listOfAllRFC[index].isSelected,
+          title: Text( stateData.listOfAllRFC[index].value, style: Styles.labels,),
+          onChanged: (newVal){
+            BlocProvider.of<FormRFCBloc>(context).add(
+                SelectRFCCheckValueEvent(
+                    context: context,
+                    isSelected: newVal!,
+                    index: index
+                ));},
+        );
+    }
     );
   }
 

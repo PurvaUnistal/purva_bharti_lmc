@@ -28,12 +28,28 @@ class SelectFeasibilityDateEvent extends FormFeasibilityEvent {
   List<Object> get props => [context];
 }
 
+class SelectFollowUpDateEvent extends FormFeasibilityEvent {
+  final BuildContext context;
+  SelectFollowUpDateEvent({required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context];
+}
+
 class SelectCheckFeasibilityValueEvent extends FormFeasibilityEvent {
   final dynamic checkFeasibility;
   SelectCheckFeasibilityValueEvent({required this.checkFeasibility});
   @override
   // TODO: implement props
   List<Object> get props => [checkFeasibility];
+}
+
+class SelectLMCReasonValueEvent extends FormFeasibilityEvent {
+  final dynamic lmcReasonValue;
+  SelectLMCReasonValueEvent({required this.lmcReasonValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [lmcReasonValue];
 }
 
 class SubmitFormFeasibilityEvent extends FormFeasibilityEvent {

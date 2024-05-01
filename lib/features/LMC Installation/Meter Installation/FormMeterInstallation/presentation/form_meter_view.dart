@@ -15,6 +15,7 @@ import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/local_mg_widget.dart';
+import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -48,23 +49,35 @@ class _FormMeterViewState extends State<FormMeterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        title: RoutesName.meterInstallation,
-        boolLeading: true,
-      ),
-      body: BlocBuilder<FormMeterBloc, FormMeterState>(
-        builder: (context, state) {
-          if (state is FormMeterDataState) {
-            return _itemBuilder(dataState: state);
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBarWidget(
+          title: RoutesName.meterInstallation,
+          boolLeading: true,
+        ),
+        body: BlocBuilder<FormMeterBloc, FormMeterState>(
+          builder: (context, state) {
+            if (state is FormMeterDataState) {
+              return _itemBuilder(dataState: state);
+            } else {
+              return Center(child: SpinLoader());
+            }
+          },
+        ),
       ),
     );
   }
-
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+        context: context,
+        builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+            message: "Do you want to Meter Installation?",
+            okButtonText: "Exit",
+            onPressed: () =>  Navigator.of(context).pop(true)
+        ))
+    ) ?? false;
+  }
   _itemBuilder({required FormMeterDataState dataState}) {
     return SingleChildScrollView(
       child: Padding(

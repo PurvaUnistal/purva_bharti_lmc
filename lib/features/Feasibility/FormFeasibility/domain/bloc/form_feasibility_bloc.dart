@@ -15,7 +15,9 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     on<FormFeasibilityPageLoadEvent>(_pageLoad);
     on<SelectProposedDateEvent>(_selectProposedDate);
     on<SelectFeasibilityDateEvent>(_selectFeasibilityDate);
+    on<SelectFollowUpDateEvent>(_selectFollowUpDate);
     on<SelectCheckFeasibilityValueEvent>(_selectCheckFeasibilityValue);
+    on<SelectLMCReasonValueEvent>(_selectLMCReasonValue);
     on<SubmitFormFeasibilityEvent>(_submit);
   }
 
@@ -28,6 +30,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
   TextEditingController feasibilityDateController = TextEditingController();
+  TextEditingController followUpDateController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   _pageLoad(FormFeasibilityPageLoadEvent event, emit) async {
     emit(FormFeasibilityInitialState());
@@ -38,10 +42,12 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     listOfCheckFeasible = [];
     listOfLMCReason = [];
     proposedDateController.text = '';
+    reasonController.text = '';
+    followUpDateController.text = '';
     feasibilityDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     await fetchCheckFeasibilityApi(context: event.context);
-  //  await fetchLMCReasonApi(context: event.context);
+    await fetchLMCReasonApi(context: event.context);
     _eventCompleted(emit);
   }
 
@@ -62,9 +68,23 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       _eventCompleted(emit);
     }
   }
-
+  _selectFollowUpDate(SelectFollowUpDateEvent event, emit) async {
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    if (dateTime != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+      followUpDateController.text = formattedDate.toString();
+      _eventCompleted(emit);
+    }
+  }
   _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
     checkFeasibleValue = event.checkFeasibility;
+    print(checkFeasibleValue!.key);
+    _eventCompleted(emit);
+  }
+
+  _selectLMCReasonValue(SelectLMCReasonValueEvent event, emit) {
+    lmcReasonValue = event.lmcReasonValue;
+    print(lmcReasonValue);
     _eventCompleted(emit);
   }
 
@@ -81,18 +101,22 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         var res =
         await FormFeasibilityHelper.saveLmcFeasibility(
             context: event.context,
-            feasibilityDate: feasibilityDateController.text.toString(),
-            isFeasible: checkFeasibleValue!
+            feasibilityDate: feasibilityDateController.text..trim().toString(),
+            isFeasible: checkFeasibleValue!,
+            comment: reasonController.text..trim().toString(),
+          followUpDate: followUpDateController.text..trim().toString(),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted(emit);
+        await Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => true);
+                //  InstallationView()),
+                  (Route<dynamic> route) => false);
         } else {
           isBtnLoader = false;
           _eventCompleted(emit);
@@ -132,6 +156,10 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         listOfLMCReason: listOfLMCReason,
         bpNumberController: bpNumberController,
         proposedDateController: proposedDateController,
-        feasibilityDateController: feasibilityDateController));
+        feasibilityDateController: feasibilityDateController,
+        reasonController: reasonController,
+        followUpDateController: followUpDateController,
+    ));
   }
+
 }

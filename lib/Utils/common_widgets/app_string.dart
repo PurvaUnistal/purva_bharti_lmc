@@ -4,7 +4,7 @@ class AssetPath {
 
 class AppString {
   static String release = "Release";
-  static String reDate = "29/4/2024";
+  static String reDate = "1/5/2024";
   static String emailLabel = "Enter User Email";
   static String passwordLabel = "Enter User Password";
   static String emailValidation = "Please enter email id";
@@ -43,6 +43,7 @@ class AppString {
   static String lmcProDate = "LMC Proposed Date";
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Check Feasibility";
+  static String lmcReason = "LMC Reason";
   static String typeOfNR = "Type Of NR";
   static String actualWorkStart = "Actual Work Start";
   static String reasonDelay = "Reason if Delay";
@@ -65,4 +66,6 @@ class AppString {
   static String installation  = "Installation";
   static String material  = "Material";
   static String meter  = "Meter Installation";
+  static String reason  = "Reason";
+  static String followUpDate  = "Follow Up Date";
 }

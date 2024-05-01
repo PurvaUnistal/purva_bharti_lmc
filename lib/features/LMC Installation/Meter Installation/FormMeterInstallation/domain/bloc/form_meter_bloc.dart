@@ -249,12 +249,13 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
         if (res != null && res.error == false) {
           isBtnLoader = false;
           _eventCompleted(emit);
+          await Utils.successSnackBar(msg: res.data!, context: event.context);
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
                       HomeView()),
-                  (Route<dynamic> route) => true);
+                  (Route<dynamic> route) => false);
         }else {
           isBtnLoader = false;
           _eventCompleted(emit);

@@ -64,6 +64,8 @@ class FormFeasibilityHelper {
   static Future<SaveFeasibleModel?> saveLmcFeasibility({
     required BuildContext context,
     required String feasibilityDate,
+    required String comment,
+    required String followUpDate,
     required GetConstantModel isFeasible,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
@@ -76,16 +78,13 @@ class FormFeasibilityHelper {
         "proposed_date": "",
         "feasibility_visit_date": feasibilityDate,
         "schema": schema,
-        "bom": "",
-        "material_id": "",
-        "qty": "",
-        "is_feasible": isFeasible.key!,
-        "comment": "",
-        "follow_up_date": "",
+        "is_feasible": isFeasible.key,
+        "comment":comment,
+        "follow_up_date": followUpDate,
       };
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, body: para, context: context);
       if(res != null && res["error"] == false){
-        Utils.successSnackBar(msg: res["data"], context: context);
+       // Utils.successSnackBar(msg: res["data"], context: context);
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){
         Utils.errorSnackBar(msg: res["data"], context: context);

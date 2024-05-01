@@ -40,25 +40,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return Scaffold(
       appBar: AppBarWidget(
         title: RoutesName.lmcFeasibility,
-        boolLeading: false,
-        leadingWidget: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppString.release,style: Styles.rel,),
-            Text(AppString.reDate,style: Styles.rel,),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                showModalBottomSheet(context: context, builder: (context) => const LogoutWidget());
-              },
-              icon: Icon(
-                Icons.logout,
-                color: AppColor.white,
-              ))
-        ],
+        boolLeading: true,
       ),
       body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
         builder: (context, state) {
