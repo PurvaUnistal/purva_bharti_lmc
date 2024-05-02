@@ -61,6 +61,7 @@ class _HomeViewState extends State<HomeView> {
               text: "LMC Installation",
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => InstallationView()));
+              //  Navigator.pushReplacementNamed(context, RoutesName.lmcInstallation,);
               },
             ),
           ],

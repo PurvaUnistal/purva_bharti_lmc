@@ -34,16 +34,17 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     on<SubmitFormRFCEvent>(_submit);
   }
 
+  String regulatorId = '';
   bool isLoader = false;
   bool isBtnLoader = false;
   bool isRegulator = false;
   bool isSelected = false;
-  var listOfRegulatorId;
   File rfcCardImg = File("");
   File pneumaticTestReportImg = File("");
   File installationImg = File("");
   List<ListOfMeterNo> listOfRegulatorNo = [];
   List<String> listOfRegulator = [];
+  List<String> listOfRegulatorId = [];
   List<FreeMaterialData> listOfAllMaterial = [];
   List<MaterialItem> materialList = [];
   List<String> listOfAllMaterialId = [];
@@ -76,6 +77,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     materialList = [];
     listOfQtyLMC = [];
     listOfAllRFC = [];
+    listOfRegulatorId = [];
     srNumberController.text = "";
     regulatorController.text = "";
     latOfSRController.text = "";
@@ -95,20 +97,17 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial,}) async {
-    List<String>  regulatorList= [];
-    var regulatorId;
     var res = await FormRFCHelper.getRegulatorsApi(context: context,regulatorSerial: regulatorSerial);
     if (res != null) {
-      listOfRegulatorNo.clear();
-      listOfRegulator.clear();
       listOfRegulatorNo = res;
-      regulatorList = List.generate(listOfRegulatorNo.length, (i) => ('${listOfRegulatorNo[i].serialNumber}'));
-      regulatorId = List.generate(listOfRegulatorNo.length, (i) => ('${listOfRegulatorNo[i].id}'));
-      listOfRegulatorId = regulatorId.toString().replaceAll('[', '').replaceAll(']', '');
-      listOfRegulator.addAll(regulatorList);
-      listOfRegulator.sort();
-
-      return listOfRegulator;
+      listOfRegulator = listOfRegulatorNo.map((e) => e.serialNumber!).toList();
+      listOfRegulatorId = listOfRegulatorNo.map((e) => e.id!).toList();
+      regulatorController.clear();
+      regulatorController.text = await listOfRegulatorId[0];
+      regulatorId = await regulatorController.text;
+      print("hello---->${regulatorId}");
+      print("hello---->${regulatorController.text}");
+      return res;
     }
   }
 
@@ -123,11 +122,11 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       _materialList = List.generate(
         listOfAllMaterial.length,
             (i) => MaterialItem(
-            value: '0',
+            value: '',
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
             unit: '${listOfAllMaterial[i].materialUnit}',
-            controller: TextEditingController(text: '0')),
+            controller: TextEditingController(text: "0")),
       );
       materialList.addAll(_materialList);
       listOfQtyLMC = _materialList.asMap().values.map((e) => e.controller.text).toList();
@@ -161,14 +160,10 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   }
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    if(event.regulatorsValue != '' && event.regulatorsValue.length > 1){
-      await fetchRegulatorsApi(context: event.context,regulatorSerial: event.regulatorsValue);
-      int i  = await listOfRegulator.indexWhere((element) => element.contains(event.regulatorsValue.toString()));
-      regulatorController.text = await listOfRegulator.elementAt(i);
-    }else if(event.regulatorsValue.length > 0){
-      listOfRegulator = [];
+    if(event.regulatorsValue.isNotEmpty && event.regulatorsValue.length > 1){
+     await fetchRegulatorsApi(context: event.context, regulatorSerial: event.regulatorsValue);
+    _eventCompleted(emit);
     }
-     _eventCompleted(emit);
   }
 
   _selectProposedDate(SelectProposedConDateEvent event,emit) async {
@@ -279,7 +274,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       var validationCheck = await FormRFCHelper.validationSubmit(
           context: event.context,
           srNumber: srNumberController.text.trim().toString(),
-          regulators: regulatorController.text.trim().toString(),
+          regulators: regulatorId.toString(),
           latitudeTF: latOfSRController.text.trim().toString(),
           longitudeTF: longOfSRController.text.trim().toString(),
           latitudeHG: latOfHouseController.text.trim().toString(),
@@ -295,7 +290,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
         var res = await FormRFCHelper.saveRFCInstallation(
             context: event.context,
             srNumber: srNumberController.text.trim().toString(),
-            regulators: listOfRegulatorId.toString(),
+            regulators: regulatorId.toString(),
             latitudeTF: latOfSRController.text.trim().toString(),
             longitudeTF: longOfSRController.text.trim().toString(),
             latitudeHG: latOfHouseController.text.trim().toString(),
@@ -329,11 +324,12 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       _eventCompleted(emit);
     }
   }
-  
+
   _eventCompleted(emit) {
     emit(FormRFCDataState(
       isLoader : isLoader,
       isBtnLoader : isBtnLoader,
+      listOfQtyLMC : listOfQtyLMC,
       isSelected : isSelected,
       rfcCardImg : rfcCardImg,
       pneumaticTestReportImg : pneumaticTestReportImg,

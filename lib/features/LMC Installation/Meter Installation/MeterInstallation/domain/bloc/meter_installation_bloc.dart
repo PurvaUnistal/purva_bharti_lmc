@@ -30,16 +30,17 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     isLoader = false;
     isLoadingMore = true;
     areaValue = null;
+    pageNo = 1;
     listOfAllArea = [];
     listOfInstallationRow = [];
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
-    _eventCompleted();
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     await loadDataTable(context: event.context,);
-    await fetchFeasibility(context: event.context,pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     _eventCompleted();
   }
+
 
   _selectAreaValue(SelectAreaValueEvent event, emit) {
     areaValue = event.allAreaValue;
@@ -48,14 +49,13 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-   // if (event.searchBpNumber.length > 9) {
     if (event.searchBpNumber.length > 1) {
       listOfFilterInstallationRow = listOfInstallationRow
           .where(
               (element) => element.bpNumber.toString() == bpNumberController.text)
           .toList();
       await fetchFeasibility(
-      context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
+          context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
       _eventCompleted();
     }
   }
@@ -83,16 +83,19 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     }
   }
 
-  loadDataTable({required BuildContext context}) {
+  loadDataTable({required BuildContext context}) async {
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;
         _eventCompleted();
         pageNo++;
-        await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
+       if(pageNo == 1){}else{
+         await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
+       }
         _eventCompleted();
       }
     });
+
   }
 
   _eventCompleted() {

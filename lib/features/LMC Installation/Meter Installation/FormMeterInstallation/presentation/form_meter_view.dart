@@ -281,28 +281,6 @@ class _FormMeterViewState extends State<FormMeterView> {
             });
       },
     );
-   /* return LocalImgWidget(
-      star: AppString.star,
-      file: stateData.meterImg,
-      onTap: () {
-        showModalBottomSheet(
-            enableDrag: true,
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext context) {
-              return ImagePopWidget(
-                onTapCamera: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<FormMeterBloc>(context).add(CaptureCameraMeterEvent());
-                },
-                onTapGallery: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<FormMeterBloc>(context).add(CaptureGalleryMeterEvent());
-                },
-              );
-            });
-      },
-    );*/
   }
 
   Widget _button({required FormMeterDataState dataState}) {

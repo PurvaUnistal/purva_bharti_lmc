@@ -31,6 +31,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     isLoader = false;
     isLoadingMore = true;
     areaValue = null;
+    pageNo = 1;
     listOfAllArea = [];
     listOfFeasibilityRow = [];
     scrollController = ScrollController();
@@ -38,7 +39,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     feasibilityRowsModel = FeasibilityRowsList();
     _eventCompleted();
     await fetchAllArea(context: event.context);
-    await loadDataTable(context: event.context);
+    await loadDataTable(context: event.context, emit:emit);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     isLoadingMore = false;
     _eventCompleted();
@@ -51,7 +52,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 9) {
+    if (event.searchBpNumber.length > 1) {
       listOfFilterFeasibilityRow = listOfFeasibilityRow
           .where(
               (element) => element.bpNumber.toString() == bpNumberController.text)
@@ -85,7 +86,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     }
   }
 
-  loadDataTable({required BuildContext context}) {
+  loadDataTable({required BuildContext context, emit}) {
+    emit(LMCFeasibilityInitialState());
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;

@@ -30,12 +30,13 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
     isLoader = false;
     isLoadingMore = true;
     areaValue= null;
+    pageNo = 1;
     listOfAllArea = [];
     listOfRFCSectionRow = [];
     scrollController = ScrollController();
     rfcInstallationModel = RFCInstallationModel();
     await fetchAllArea(context: event.context);
-    await loadDataTable(context: event.context);
+    await loadDataTable(context: event.context, emit:emit);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
     _eventCompleted();
   }
@@ -80,7 +81,8 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
     }
   }
 
-  loadDataTable({required BuildContext context}) {
+  loadDataTable({required BuildContext context, emit}) {
+    emit(RFCSectionInitialState());
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;

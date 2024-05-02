@@ -140,9 +140,7 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     if(event.meterReadingValue.isNotEmpty && event.meterReadingValue.length > 1){
-      listOfMeterNo = listOfMeterNo
-          .where((element) => element.serialNumber == event.meterReadingValue.toString())
-          .toList();
+      listOfMeterNo = listOfMeterNo.where((element) => element.serialNumber == event.meterReadingValue.toString()).toList();
       listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
       listOfMeterNumberId = await listOfMeterNo.map((e) => e.id!).toSet().toList();
       int i  = await listOfMeterNumber.indexWhere((element) => element.contains(event.meterReadingValue.toString()));
@@ -224,13 +222,15 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     try {
       var validationCheck = await FormMeterHelper.validationSubmit(
           context: event.context,
-          delayReason: delayReasonValue!.name!.toString(),
           materialId: materialId,
-          meterInitReading: meterInitialReadingController.text.trim().toString(),
+          meterInit1: meterIniReading1Controller.text.trim().toString(),
+          meterInit2: meterIniReading2Controller.text.trim().toString(),
+          meterInit3: meterIniReading3Controller.text.trim().toString(),
           meterReading: meterNoController.text.trim().toString(),
           meterPhoto: meterImg.path,
           meterReadingDate: meterReadingDateController.text.trim().toString(),
           ngc: readyNGCValue!.value.toString(),
+          delayReason: delayReasonValue!,
           typeOfNR: typeOfNrValue!.value.toString()
       );
       if (validationCheck == true) {

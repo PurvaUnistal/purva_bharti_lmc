@@ -92,8 +92,6 @@ class _FormRFCViewState extends State<FormRFCView> {
             _verticalSpace(),
             _materialList(stateData: dataState),
             _verticalSpace(),
-            _extraPipePrice(stateData: dataState),
-            _verticalSpace(),
             _checkListRFC(stateData: dataState),
             _verticalSpace(),
             _image(stateData: dataState),
@@ -113,6 +111,7 @@ class _FormRFCViewState extends State<FormRFCView> {
       keyboardType: TextInputType.number,
       enabled: true,
       maxLength: 10,
+      textInputAction: TextInputAction.done,
       controller: stateData.srNumberController,
     );
   }
@@ -124,18 +123,9 @@ class _FormRFCViewState extends State<FormRFCView> {
       star: AppString.star,
       label: AppString.regulator,
       hintText: AppString.regulator,
-      controller: stateData.regulatorController,
       suggestions: stateData.listOfRegulator,
       keyboardType:  TextInputType.number,
       textSubmitted: (val) {
-        print(val);
-        BlocProvider.of<FormRFCBloc>(context).add(SelectRegulatorsValueEvent(
-            context: context,
-            regulatorsValue: val
-        ));
-      },
-      textChanged: (val) {
-        print(val);
         BlocProvider.of<FormRFCBloc>(context).add(SelectRegulatorsValueEvent(
             context: context,
             regulatorsValue: val
@@ -208,10 +198,12 @@ class _FormRFCViewState extends State<FormRFCView> {
                   child: TextFieldWidget(
                     hintText: e.unit,
                     label: e.unit,
+                    initialValue : e.controller.text,
                     enabled: true,
-                    controller: e.controller,
+                   keyboardType: TextInputType.number,
+                   // controller: e.controller,
                     onChanged: (val){
-                      print(e.controller);
+                      print("controller-->${e.controller.text}");
                       BlocProvider.of<FormRFCBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
                     },
                   ),

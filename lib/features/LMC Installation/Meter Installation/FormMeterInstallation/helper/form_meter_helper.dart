@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:image_picker/image_picker.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
@@ -67,8 +68,10 @@ class FormMeterHelper {
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String meterReading,
-    required String meterInitReading,
-    required String delayReason,
+    required String meterInit1,
+    required String meterInit2,
+    required String meterInit3,
+    required DelayReasonModel delayReason,
     required String meterReadingDate,
     required String materialId,
     required String typeOfNR,
@@ -85,10 +88,10 @@ class FormMeterHelper {
       }  else  if (meterReading.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
         return false;
-      } else  if (meterInitReading.isEmpty) {
+      } else if (meterInit1.isEmpty && meterInit2.isEmpty && meterInit3.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
         return false;
-      } else if (delayReason == "null") {
+      } else if (delayReason == "null" || delayReason.id == "1") {
         Utils.errorSnackBar(msg: "The Delay Reason field is required.", context: context);
         return false;
       } else  if (meterPhoto.isEmpty) {

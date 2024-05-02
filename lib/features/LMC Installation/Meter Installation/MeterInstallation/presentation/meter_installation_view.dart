@@ -31,6 +31,7 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +102,8 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
     var h = MediaQuery.of(context).size.height * 0.20;
     return dataState.installationDoneModel?.data?.pager?.total == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true
         ? SizedBox(height: h * 0.7, child: SpinLoader())
-        : SingleChildScrollView(
+        :  dataState.listOfInstallationRow.isEmpty
+        ? Center(child: Text("No Data Found",style: Styles.labels,)) :SingleChildScrollView(
             controller: dataState.scrollController,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,

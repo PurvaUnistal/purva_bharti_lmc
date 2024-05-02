@@ -4,7 +4,7 @@ class AssetPath {
 
 class AppString {
   static String release = "Release";
-  static String reDate = "1/5/2024";
+  static String reDate = "2/5/2024";
   static String emailLabel = "Enter User Email";
   static String passwordLabel = "Enter User Password";
   static String emailValidation = "Please enter email id";

@@ -28,6 +28,7 @@ class FormRFCDataState extends FormRFCState {
   File installationImg;
   List<ListOfMeterNo> listOfRegulatorNo;
   List<String> listOfRegulator;
+  List<String> listOfQtyLMC;
   List<FreeMaterialData> listOfAllMaterial;
   List<GetConstantModel> listOfAllRFC;
   List<MaterialItem> materialList;
@@ -47,6 +48,7 @@ class FormRFCDataState extends FormRFCState {
   required this.isBtnLoader,
   required this.isSelected,
   required this.rfcCardImg,
+  required this.listOfQtyLMC,
   required this.pneumaticTestReportImg,
   required this.installationImg,
   required this.listOfRegulatorNo,
@@ -72,6 +74,7 @@ List<Object?> get props => [
     isLoader,
     isBtnLoader,
     isSelected,
+    listOfQtyLMC,
     rfcCardImg,
     pneumaticTestReportImg,
     installationImg,
