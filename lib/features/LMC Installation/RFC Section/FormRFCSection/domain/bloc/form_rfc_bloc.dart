@@ -122,7 +122,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       _materialList = List.generate(
         listOfAllMaterial.length,
             (i) => MaterialItem(
-            value: '',
+            value: '0',
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
             unit: '${listOfAllMaterial[i].materialUnit}',
@@ -135,19 +135,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   }
 
   _selectQTYLMC(SelectQTYLMCEvent event,  emit) {
-    double quantity = 0.00;
-    for (int i = 0; i < listOfAllMaterial.length; i++) {
-      MaterialItem e = materialList[i];
-      if (e.name.toLowerCase().contains('pipe')) {
-        if (e.controller.text != '') {
-          quantity = quantity + double.parse(e.controller.text);
-          quantity = quantity;
-        } else {
-          e.controller.text = '0';
-          quantity = 0.00;
-        }
-      }
-    }
+    listOfQtyLMC[event.index] = event.qtyValue;
      _eventCompleted(emit);
   }
 

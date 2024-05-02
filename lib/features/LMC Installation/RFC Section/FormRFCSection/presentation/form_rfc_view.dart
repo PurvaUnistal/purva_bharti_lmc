@@ -116,7 +116,6 @@ class _FormRFCViewState extends State<FormRFCView> {
     );
   }
 
-
   Widget _regulatorController({required FormRFCDataState stateData}) {
     return AutoSuggestionTextFieldWidget(
       globalKey: globalSearchKey,
@@ -178,7 +177,7 @@ class _FormRFCViewState extends State<FormRFCView> {
 
   Widget _materialList({required FormRFCDataState stateData}){
     return Column(
-      children: stateData.materialList.map((e) {
+      children: stateData.materialList.mapIndexed((index, e) {
         return Column(
           children: [
             Row(
@@ -201,10 +200,8 @@ class _FormRFCViewState extends State<FormRFCView> {
                     initialValue : e.controller.text,
                     enabled: true,
                    keyboardType: TextInputType.number,
-                   // controller: e.controller,
                     onChanged: (val){
-                      print("controller-->${e.controller.text}");
-                      BlocProvider.of<FormRFCBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
+                      BlocProvider.of<FormRFCBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val, index: index));
                     },
                   ),
                 )

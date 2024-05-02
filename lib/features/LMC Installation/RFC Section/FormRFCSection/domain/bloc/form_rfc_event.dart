@@ -46,10 +46,11 @@ class SelectLocationOfHouseEvent extends FormRFCEvent {
 class SelectQTYLMCEvent extends FormRFCEvent {
   final String qtyValue;
   final BuildContext context;
-  SelectQTYLMCEvent({required this.qtyValue,required this.context});
+  final int index;
+  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
   @override
   // TODO: implement props
-  List<Object> get props => [qtyValue,context];
+  List<Object> get props => [qtyValue,context, index];
 }
 
 class SelectRegulatorsValueEvent extends FormRFCEvent {
