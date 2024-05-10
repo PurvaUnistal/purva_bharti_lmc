@@ -41,8 +41,13 @@ class LMCFeasibilityHelper{
       var res = await ApiHelper.getData(
           urlEndPoint: Apis.getLMCFeasibility + json, context: context);
       if(res != null){
-        return FeasibilityModel.fromJson(jsonDecode(res));
-      }else{}
+        if(res.toString().startsWith("[")) {
+          return FeasibilityModel.fromJson(jsonDecode(res));
+        } else {
+          return null;
+        }
+      }
+
     } catch (e) {
       log("FeasibilityModel-->${e.toString()}");
     }

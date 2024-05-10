@@ -24,6 +24,7 @@ class MeterInstallationDataState extends MeterInstallationState {
   List<InstallationDoneRows> listOfInstallationRow;
   InstallationDoneModel? installationDoneModel;
   final ScrollController scrollController;
+  final TextEditingController bpNumberController;
 
   MeterInstallationDataState({
     required this.isLoader,
@@ -34,18 +35,20 @@ class MeterInstallationDataState extends MeterInstallationState {
     required this.listOfInstallationRow,
     required this.installationDoneModel,
     required this.scrollController,
+    required this.bpNumberController,
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-        isLoader,
-        isLoadingMore,
-        allAreaValue,
+    isLoader,
+    isLoadingMore,
+    allAreaValue,
     pageNo,
-        listOfAllArea,
-        listOfInstallationRow,
-        installationDoneModel,
-        scrollController,
-      ];
+    listOfAllArea,
+    listOfInstallationRow,
+    installationDoneModel,
+    scrollController,
+    bpNumberController,
+  ];
 }

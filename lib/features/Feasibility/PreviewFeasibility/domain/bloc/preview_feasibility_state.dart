@@ -29,8 +29,8 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   String town;
   String district;
   String pinCode;
-  FeasibilityRowsList? feasibilityRowsModel;
-  List<FeasibilityRowsList> listOfFeasibilityRow;
+  FeasibilityData? feasibilityRowsModel;
+  List<FeasibilityData> listOfFeasibilityRow;
   FeasibilityModel? feasibilityModel;
 
   PreviewFeasibilityDataState({

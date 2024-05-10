@@ -107,6 +107,8 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         pageNo : pageNo,
         installationDoneModel: installationDoneModel,
         listOfInstallationRow: listOfInstallationRow,
-        scrollController: scrollController));
+        scrollController: scrollController,
+      bpNumberController: bpNumberController,
+    ));
   }
 }

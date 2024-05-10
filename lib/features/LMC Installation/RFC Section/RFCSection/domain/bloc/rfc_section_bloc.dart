@@ -103,7 +103,8 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
         pageNo: pageNo,
         listOfRFCSectionRow: listOfRFCSectionRow,
         rfcInstallationModel: rfcInstallationModel,
-        scrollController: scrollController
+        scrollController: scrollController,
+      bpNumberController: bpNumberController,
     ));
   }
 }

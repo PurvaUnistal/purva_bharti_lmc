@@ -25,6 +25,7 @@ class RFCSectionDataState extends RFCSectionState{
   List<RFCInstallationRows> listOfRFCSectionRow;
   RFCInstallationModel? rfcInstallationModel;
   final ScrollController scrollController;
+  final TextEditingController bpNumberController;
 
   RFCSectionDataState({
     required this.isLoader,
@@ -35,6 +36,7 @@ class RFCSectionDataState extends RFCSectionState{
     required this.listOfRFCSectionRow,
     required this.rfcInstallationModel,
     required this.scrollController,
+    required this.bpNumberController,
 
   });
 
@@ -49,5 +51,6 @@ class RFCSectionDataState extends RFCSectionState{
     listOfRFCSectionRow,
     rfcInstallationModel,
     scrollController,
+    bpNumberController,
   ];
 }

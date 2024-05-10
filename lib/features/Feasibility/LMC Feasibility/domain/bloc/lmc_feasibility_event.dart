@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 
 abstract class LMCFeasibilityEvent extends Equatable{}
 
@@ -13,11 +14,12 @@ class LMCFeasibilityPageLoadEvent extends LMCFeasibilityEvent {
 }
 
 class SelectAreaValueEvent extends LMCFeasibilityEvent {
-  final dynamic allAreaValue;
-  SelectAreaValueEvent({this.allAreaValue});
+  final GetAllAreaModel allAreaValue;
+  final BuildContext context;
+  SelectAreaValueEvent({ required this.allAreaValue, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [allAreaValue];
+  List<Object> get props => [allAreaValue, context];
 }
 
 class SearchBpNumberEvent extends LMCFeasibilityEvent {
@@ -31,7 +33,7 @@ class SearchBpNumberEvent extends LMCFeasibilityEvent {
 
 class PreviewPopEvent extends LMCFeasibilityEvent {
   final BuildContext context;
-  final List<FeasibilityRowsList> listOfFeasibilityRow;
+  final List<FeasibilityData> listOfFeasibilityRow;
   PreviewPopEvent({required this.context,required this.listOfFeasibilityRow});
   @override
   // TODO: implement props

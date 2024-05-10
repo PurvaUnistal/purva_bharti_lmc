@@ -39,6 +39,7 @@ class AppString {
   static String town = "Town";
   static String district = "District";
   static String pinCode = "Pin Code";
+  static String searchBPNumber = "Search BP Number...";
   static String bpNumber = "BP Number";
   static String lmcProDate = "LMC Proposed Date";
   static String lmcFeasibilityDate = "LMC Feasibility Date";

@@ -11,9 +11,9 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   }
 
   bool isLoader = false;
-  List<FeasibilityRowsList> listOfFeasibilityRow = [];
+  List<FeasibilityData> listOfFeasibilityRow = [];
   FeasibilityModel? feasibilityModel;
-  FeasibilityRowsList feasibilityRowsModel = FeasibilityRowsList();
+  FeasibilityData feasibilityRowsModel = FeasibilityData();
   String custRegNo = '';
   String areaName = '';
   String firstName = '';
@@ -32,7 +32,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   _pageLoad(PreviewFeasibilityPageLoadEvent event, emit) async {
     emit(PreviewFeasibilityInitialState());
     isLoader = false;
-    feasibilityRowsModel = FeasibilityRowsList();
+    feasibilityRowsModel = FeasibilityData();
     custRegNo = await SharedPref.getString(key: PrefsValue.custRegNo,);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
     firstName =  await SharedPref.getString(key: PrefsValue.firstName);

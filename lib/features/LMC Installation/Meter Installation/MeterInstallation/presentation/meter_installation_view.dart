@@ -5,6 +5,7 @@ import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
+import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
@@ -81,9 +82,9 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
 
   Widget _searchTextField({required MeterInstallationDataState dataState}) {
     return TextFieldWidget(
-      label: "Search",
-      hintText: "Search",
-      // controller: dataState.bpNumberController,
+      label: AppString.searchBPNumber,
+      hintText: AppString.searchBPNumber,
+       controller: dataState.bpNumberController,
       keyboardType: TextInputType.text,
       suffixIcon: Icon(
         Icons.search_rounded,
