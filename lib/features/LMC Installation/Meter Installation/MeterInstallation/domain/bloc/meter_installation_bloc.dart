@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
+import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/helper/meter_installation_helper.dart';
 
 class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallationState> {
@@ -36,26 +36,22 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
-    await loadDataTable(context: event.context,);
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
     _eventCompleted();
   }
 
-
-  _selectAreaValue(SelectAreaValueEvent event, emit) {
+  _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
     _eventCompleted();
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfFilterInstallationRow = listOfInstallationRow
-          .where(
-              (element) => element.bpNumber.toString() == bpNumberController.text)
-          .toList();
-      await fetchFeasibility(
-          context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
+      listOfInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString() == bpNumberController.text).toList();
+      print("listOfFeasibilityRow${listOfInstallationRow}");
+      print("bpNumberController${bpNumberController.text}");
       _eventCompleted();
     }
   }
@@ -68,19 +64,16 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     }
   }
 
-  fetchFeasibility({required BuildContext context,required int pageNumber,required String bpNumber}) async {
+  fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber, required String areaId}) async {
     isLoadingMore = true;
-    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: "");
+    var res = await MeterInstallationHelper.getLMCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
     if (res != null) {
-      isLoadingMore = false;
       installationDoneModel = res;
-      if (installationDoneModel!.data!.rows != null) {
-        listOfInstallationRow = installationDoneModel!.data!.rows!;
-        listOfFilterInstallationRow = listOfInstallationRow;
+      if (installationDoneModel?.success != 400) {
+        listOfInstallationRow = installationDoneModel!.data!;
       }
-    } else{
-      isLoadingMore = false;
     }
+    _eventCompleted();
   }
 
   loadDataTable({required BuildContext context}) async {
@@ -89,25 +82,25 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         isLoadingMore = true;
         _eventCompleted();
         pageNo++;
-       if(pageNo == 1){}else{
-         await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
-       }
+        if (pageNo == 1) {
+        } else {
+          //  await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
+        }
         _eventCompleted();
       }
     });
-
   }
 
   _eventCompleted() {
     emit(MeterInstallationDataState(
-        isLoader: isLoader,
-        isLoadingMore: isLoadingMore,
-        allAreaValue: areaValue,
-        listOfAllArea: listOfAllArea,
-        pageNo : pageNo,
-        installationDoneModel: installationDoneModel,
-        listOfInstallationRow: listOfInstallationRow,
-        scrollController: scrollController,
+      isLoader: isLoader,
+      isLoadingMore: isLoadingMore,
+      allAreaValue: areaValue,
+      listOfAllArea: listOfAllArea,
+      pageNo: pageNo,
+      installationDoneModel: installationDoneModel,
+      listOfInstallationRow: listOfInstallationRow,
+      scrollController: scrollController,
       bpNumberController: bpNumberController,
     ));
   }

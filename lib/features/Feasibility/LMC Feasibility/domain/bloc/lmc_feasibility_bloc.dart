@@ -36,27 +36,20 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
     await fetchAllArea(context: event.context);
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(),areaId: "");
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
     _eventCompleted();
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
-    await fetchFeasibility(
-        context: event.context,
-        pageNumber: 1,
-        bpNumber: bpNumberController.text.trim().toString(),
-        areaId:areaValue!.gid!);
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
     _eventCompleted();
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfFeasibilityRow = listOfFilterFeasibilityRow
-          .where(
-              (element) => element.bpNumber.toString() == bpNumberController.text)
-          .toList();
+      listOfFeasibilityRow = listOfFilterFeasibilityRow.where((element) => element.bpNumber.toString() == bpNumberController.text).toList();
       print("listOfFeasibilityRow${listOfFeasibilityRow}");
       print("bpNumberController${bpNumberController.text}");
       _eventCompleted();
@@ -72,13 +65,14 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   }
 
   fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber, required String areaId}) async {
-    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId:areaId);
+    var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
     if (res != null) {
       feasibilityModel = res;
-      if (feasibilityModel?.data!= null) {
+      if (feasibilityModel?.success != 400) {
         listOfFeasibilityRow = feasibilityModel!.data!;
       }
     }
+    _eventCompleted();
   }
 
   loadDataTable({required BuildContext context, emit}) {
@@ -88,7 +82,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         isLoadingMore = true;
         _eventCompleted();
         pageNo++;
-        await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: '');
+        // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: '');
         _eventCompleted();
       }
     });

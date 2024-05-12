@@ -1,7 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:collection/collection.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
@@ -9,6 +9,7 @@ import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/presenation/preview_rfc_view.dart';
@@ -24,19 +25,17 @@ class RFCSectionView extends StatefulWidget {
 }
 
 class _RFCSectionViewState extends State<RFCSectionView> {
-
   @override
   void initState() {
     super.initState();
     BlocProvider.of<RFCSectionBloc>(context).add(RFCSectionPageLoadEvent(context: context));
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
+    BlocProvider.of<NetworkBloc>(context).add(NetworkObserveEvent(context: context));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  BlocBuilder<RFCSectionBloc, RFCSectionState>(
+      body: BlocBuilder<RFCSectionBloc, RFCSectionState>(
         builder: (context, state) {
           if (state is RFCSectionDataState) {
             return _itemBuilder(dataState: state);
@@ -49,6 +48,7 @@ class _RFCSectionViewState extends State<RFCSectionView> {
       ),
     );
   }
+
   Widget _itemBuilder({required RFCSectionDataState dataState}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
@@ -66,15 +66,13 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   }
 
   Widget _areaDropDown({required RFCSectionDataState dataState}) {
-    return DropdownWidget(
+    return DropdownWidget<GetAllAreaModel>(
       label: "Select Area",
       hint: "Select Area",
       dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
-        BlocProvider.of<RFCSectionBloc>(context).add(SelectAreaValueEvent(
-          allAreaValue: newVal,
-        ));
+        BlocProvider.of<RFCSectionBloc>(context).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
       },
     );
   }
@@ -82,9 +80,10 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   Widget _searchTextField({required RFCSectionDataState dataState}) {
     return TextFieldWidget(
       label: AppString.searchBPNumber,
-      hintText:AppString.searchBPNumber,
+      hintText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
+      maxLength: 10,
       suffixIcon: Icon(
         Icons.search_rounded,
         color: Colors.green.shade800,
@@ -100,69 +99,65 @@ class _RFCSectionViewState extends State<RFCSectionView> {
 
   Widget _dataTableWidget({required RFCSectionDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.rfcInstallationModel?.data?.pager?.total == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true ? SizedBox(
-        height: h * 0.7,
-        child: SpinLoader()):
-    dataState.listOfRFCSectionRow.isEmpty
-        ? Center(child: Text("No Data Found",style: Styles.labels,)) :SingleChildScrollView(
-      controller: dataState.scrollController,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
-          child:DataTable(
-            sortAscending: true,
-            columnSpacing: 12,
-            horizontalMargin: 0,
-            showCheckboxColumn: false,
-            headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+    return dataState.rfcInstallationModel?.success == 400
+        ? Center(child: Text("No records found"))
+        : SingleChildScrollView(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
+                child: DataTable(
+                  sortAscending: true,
+                  columnSpacing: 12,
+                  horizontalMargin: 0,
+                  showCheckboxColumn: false,
+                  headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  dividerThickness: 1,
+                  columns: [
+                    _dataColumn(label: "S.No"),
+                    _dataColumn(label: "Mobile Number"),
+                    _dataColumn(label: "BP Number"),
+                    _dataColumn(label: "Area"),
+                    _dataColumn(label: "Name"),
+                  ],
+                  rows: dataState.listOfRFCSectionRow
+                      .mapIndexed((index, user) => DataRow(
+                              onSelectChanged: (newValue) async {
+                                await SharedPref.setString(key: PrefsValue.installationId, value: user.installationId!);
+                                await SharedPref.setString(key: PrefsValue.rfcLMCFeasId, value: user.lmcFeasId!);
+                                await SharedPref.setString(key: PrefsValue.rfcDma, value: user.dma!);
+                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
+                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
+                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
+                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
+                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
+                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
+                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
+                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber!);
+                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber!);
+                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality!);
+                                await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
+                                await SharedPref.setString(key: PrefsValue.town, value: user.town!);
+                                await SharedPref.setString(key: PrefsValue.district, value: user.district!);
+                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewRFCView()));
+                              },
+                              cells: <DataCell>[
+                                _dataCell(label: (dataState.listOfRFCSectionRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                _dataCell(label: user.mobileNumber.toString()),
+                                _dataCell(label: user.bpNumber.toString()),
+                                _dataCell(label: user.areaName.toString()),
+                                _dataCell(label: user.firstName.toString()),
+                                // _dataCell(label: user.feasibilityVisitDate.toString()),
+                              ]))
+                      .toList(),
+                ),
+              ),
             ),
-            dividerThickness: 1,
-            columns: [
-              _dataColumn(label: "S.No"),
-              _dataColumn(label: "Mobile Number"),
-              _dataColumn(label: "BP Number"),
-              _dataColumn(label: "Area"),
-              _dataColumn(label: "Name"),
-           //   _dataColumn(label: "Proposed Date"),
-            ],
-            rows: dataState.listOfRFCSectionRow
-                .mapIndexed((index, user) => DataRow(
-                onSelectChanged: (newValue) async {
-                  await SharedPref.setString(key: PrefsValue.installationId, value: user.installationId!);
-                  await SharedPref.setString(key: PrefsValue.rfcLMCFeasId, value: user.lmcFeasId!);
-                  await SharedPref.setString(key: PrefsValue.rfcDma, value: user.dma!);
-                  await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
-                  await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
-                  await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
-                  await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
-                  await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
-                  await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
-                  await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
-                  await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber!);
-                  await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber!);
-                  await SharedPref.setString(key: PrefsValue.locality, value: user.locality!);
-                  await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
-                  await SharedPref.setString(key: PrefsValue.town, value: user.town!);
-                  await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                  await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewRFCView()));
-                },
-                cells: <DataCell>[
-                  _dataCell(label:(dataState.listOfRFCSectionRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                  _dataCell(label: user.mobileNumber.toString()),
-                  _dataCell(label: user.bpNumber.toString()),
-                  _dataCell(label: user.areaName.toString()),
-                  _dataCell(label: user.firstName.toString()),
-                 // _dataCell(label: user.feasibilityVisitDate.toString()),
-                ]))
-                .toList(),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   DataColumn _dataColumn({required String label}) {
@@ -172,10 +167,10 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   DataCell _dataCell({required String label}) {
     return DataCell(Text(label ?? ""));
   }
+
   Widget _verticalSpace() {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.02,
     );
   }
 }
-

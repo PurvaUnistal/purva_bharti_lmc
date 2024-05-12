@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 
-abstract class MeterInstallationEvent extends Equatable{}
+abstract class MeterInstallationEvent extends Equatable {}
 
 class MeterInstallationPageLoadEvent extends MeterInstallationEvent {
   final BuildContext context;
@@ -12,11 +13,12 @@ class MeterInstallationPageLoadEvent extends MeterInstallationEvent {
 }
 
 class SelectAreaValueEvent extends MeterInstallationEvent {
-  final dynamic allAreaValue;
-  SelectAreaValueEvent({this.allAreaValue});
+  final GetAllAreaModel allAreaValue;
+  final BuildContext context;
+  SelectAreaValueEvent({required this.allAreaValue, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [allAreaValue];
+  List<Object> get props => [allAreaValue, context];
 }
 
 class SearchBpNumberEvent extends MeterInstallationEvent {

@@ -9,6 +9,7 @@ import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
@@ -26,12 +27,10 @@ class MeterInstallationView extends StatefulWidget {
 class _MeterInstallationViewState extends State<MeterInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
+    BlocProvider.of<NetworkBloc>(context).add(NetworkObserveEvent(context: context));
     BlocProvider.of<MeterInstallationBloc>(context).add(MeterInstallationPageLoadEvent(context: context));
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +66,13 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
   }
 
   Widget _areaDropDown({required MeterInstallationDataState dataState}) {
-    return DropdownWidget(
+    return DropdownWidget<GetAllAreaModel>(
       label: "Select Area",
       hint: "Select Area",
       dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
-        BlocProvider.of<MeterInstallationBloc>(context).add(SelectAreaValueEvent(
-          allAreaValue: newVal,
-        ));
+        BlocProvider.of<MeterInstallationBloc>(context).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
       },
     );
   }
@@ -84,8 +81,9 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
     return TextFieldWidget(
       label: AppString.searchBPNumber,
       hintText: AppString.searchBPNumber,
-       controller: dataState.bpNumberController,
-      keyboardType: TextInputType.text,
+      controller: dataState.bpNumberController,
+      keyboardType: TextInputType.number,
+      maxLength: 10,
       suffixIcon: Icon(
         Icons.search_rounded,
         color: Colors.green.shade800,
@@ -101,11 +99,9 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
 
   Widget _dataTableWidget({required MeterInstallationDataState dataState}) {
     var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.installationDoneModel?.data?.pager?.total == 0 ? Center(child: Text("No Data Found",style: Styles.labels,)):dataState.isLoadingMore == true
-        ? SizedBox(height: h * 0.7, child: SpinLoader())
-        :  dataState.listOfInstallationRow.isEmpty
-        ? Center(child: Text("No Data Found",style: Styles.labels,)) :SingleChildScrollView(
-            controller: dataState.scrollController,
+    return dataState.installationDoneModel?.success == 400
+        ? Center(child: Text("No records found"))
+        : SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Theme(
@@ -126,7 +122,7 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
                     _dataColumn(label: "BP Number"),
                     _dataColumn(label: "Area"),
                     _dataColumn(label: "Name"),
-                  //  _dataColumn(label: "Proposed Date"),
+                    //  _dataColumn(label: "Proposed Date"),
                   ],
                   rows: dataState.listOfInstallationRow
                       .mapIndexed((index, user) => DataRow(
@@ -152,12 +148,13 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewMeterInstalView()));
                               },
                               cells: <DataCell>[
-                                _dataCell(label:(dataState.listOfInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                _dataCell(label: (dataState.listOfInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
                                 _dataCell(label: user.mobileNumber.toString()),
                                 _dataCell(label: user.bpNumber.toString()),
                                 _dataCell(label: user.areaName.toString()),
                                 _dataCell(label: user.firstName.toString()),
-                              ///  _dataCell(label: user.feasibilityVisitDate.toString()),
+
+                                ///  _dataCell(label: user.feasibilityVisitDate.toString()),
                               ]))
                       .toList(),
                 ),

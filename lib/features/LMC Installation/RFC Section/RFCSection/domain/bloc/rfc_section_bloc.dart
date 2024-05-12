@@ -7,8 +7,8 @@ import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/model/RFCInstallationModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/helper/rfc_section_helper.dart';
 
-class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
-  RFCSectionBloc() : super(RFCSectionInitialState()){
+class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
+  RFCSectionBloc() : super(RFCSectionInitialState()) {
     on<RFCSectionPageLoadEvent>(_pageLoad);
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
@@ -28,57 +28,51 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
   _pageLoad(RFCSectionPageLoadEvent event, emit) async {
     emit(RFCSectionInitialState());
     isLoader = false;
-    isLoadingMore = true;
-    areaValue= null;
+    isLoadingMore = false;
+    areaValue = null;
     pageNo = 1;
     listOfAllArea = [];
     listOfRFCSectionRow = [];
-    scrollController = ScrollController();
     rfcInstallationModel = RFCInstallationModel();
     await fetchAllArea(context: event.context);
-    await loadDataTable(context: event.context, emit:emit);
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString());
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
     _eventCompleted();
   }
 
-
-
-  _selectAreaValue(SelectAreaValueEvent event, emit) {
+  _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
+    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
     _eventCompleted();
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 9) {
-      listOfFilterRFCSectionRow = listOfRFCSectionRow
-          .where(
-              (element) => element.bpNumber.toString() == bpNumberController.text)
-          .toList();
-      await fetchFeasibility(
-      context: event.context, bpNumber: event.searchBpNumber, pageNumber: pageNo);
+    if (event.searchBpNumber.length > 1) {
+      listOfRFCSectionRow = listOfFilterRFCSectionRow.where((element) => element.bpNumber.toString() == bpNumberController.text).toList();
+      print("listOfFeasibilityRow${listOfRFCSectionRow}");
+      print("bpNumberController${bpNumberController.text}");
       _eventCompleted();
     }
   }
 
   fetchAllArea({required BuildContext context}) async {
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
-    if(res != null){
+    if (res != null) {
       listOfAllArea = res;
       return res;
     }
   }
 
-  fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber}) async {
+  fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber, required String areaId}) async {
     isLoadingMore = true;
-    var res = await RFCSectionHelper.getRFCInstallationApi(context: context, bpNumber: bpNumber,page: pageNumber.toString(), areaId:"" );
-    if(res != null){
-      isLoadingMore = false;
+    var res = await RFCSectionHelper.getRFCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
+    if (res != null) {
       rfcInstallationModel = res;
-      if(rfcInstallationModel!.data!.rows != null){
-        listOfRFCSectionRow = rfcInstallationModel!.data!.rows!;
+      if (rfcInstallationModel?.success != 400) {
+        listOfRFCSectionRow = rfcInstallationModel!.data!;
       }
     }
+    _eventCompleted();
   }
 
   loadDataTable({required BuildContext context, emit}) {
@@ -88,7 +82,7 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
         isLoadingMore = true;
         _eventCompleted();
         pageNo++;
-        await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
+        // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: );
         _eventCompleted();
       }
     });
@@ -96,14 +90,14 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState>{
 
   _eventCompleted() {
     emit(RFCSectionDataState(
-        isLoader: isLoader,
-        isLoadingMore: isLoadingMore,
-        allAreaValue: areaValue,
-        listOfAllArea: listOfAllArea,
-        pageNo: pageNo,
-        listOfRFCSectionRow: listOfRFCSectionRow,
-        rfcInstallationModel: rfcInstallationModel,
-        scrollController: scrollController,
+      isLoader: isLoader,
+      isLoadingMore: isLoadingMore,
+      allAreaValue: areaValue,
+      listOfAllArea: listOfAllArea,
+      pageNo: pageNo,
+      listOfRFCSectionRow: listOfRFCSectionRow,
+      rfcInstallationModel: rfcInstallationModel,
+      scrollController: scrollController,
       bpNumberController: bpNumberController,
     ));
   }

@@ -9,12 +9,12 @@ import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
 
 class MeterInstallationHelper {
-
   static Future<InstallationDoneModel?> getLMCInstallationApi({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
     String schema = await SharedPref.getString(
       key: PrefsValue.schema,
     );
-    String userId = await SharedPref.getString(key: PrefsValue.userId,
+    String userId = await SharedPref.getString(
+      key: PrefsValue.userId,
     );
     Map<String, String> para = {
       "schema": schema,
@@ -26,10 +26,8 @@ class MeterInstallationHelper {
     String json = Uri(queryParameters: para).query;
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
-      if(res != null){
+      if (res != null) {
         return InstallationDoneModel.fromJson(jsonDecode(res));
-      }else{
-
       }
     } catch (e) {
       log("getLMCInstallationApi-->${e.toString()}");
