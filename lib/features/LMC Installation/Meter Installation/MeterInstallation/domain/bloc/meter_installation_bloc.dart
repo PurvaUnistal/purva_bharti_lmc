@@ -49,7 +49,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString() == bpNumberController.text).toList();
+      listOfInstallationRow = listOfInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       print("listOfFeasibilityRow${listOfInstallationRow}");
       print("bpNumberController${bpNumberController.text}");
       _eventCompleted();

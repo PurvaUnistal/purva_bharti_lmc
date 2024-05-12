@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
@@ -11,40 +12,38 @@ import 'package:lmc/Utils/common_widgets/common_session_dialog_box.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class ApiHelper {
-
-  static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async{
+  static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
     try {
       final response = await get(Uri.parse(urlEndPoint));
       log("URL-->${urlEndPoint.toString()}");
-      log(urlEndPoint + "==>" + response.body);
+      log(urlEndPoint + "==> " + response.body);
       if (response.statusCode == 200) {
         return response.body.toString();
-      } if (response.statusCode == 400) {
+      }
+      if (response.statusCode == 400) {
         return response.body.toString();
       } else {
         log("Api.error-->${Api.error}");
         return null;
       }
-    } catch (e){
+    } catch (e) {
       log("ApiServer-->${e.toString()}");
       if (e is SocketException) {
         log("SocketException : ${e.toString()}");
-        Utils.warningSnackBar(msg:"No Internet",context:context);
+        Utils.warningSnackBar(msg: "No Internet", context: context);
       } else if (e is TimeoutException) {
         log("TimeoutException : ${e.toString()}");
-        Utils.warningSnackBar(msg:"Timeout, Please try again",context:context);
+        Utils.warningSnackBar(msg: "Timeout, Please try again", context: context);
       } else {
         log("Unhandled exception : ${e.toString()}");
-        Utils.warningSnackBar(msg:e.toString(),context:context);
+        Utils.warningSnackBar(msg: e.toString(), context: context);
       }
       return null;
     }
   }
 
-  static Future<dynamic> postData(
-      {required String urlEndPoint, var body, required BuildContext context}) async {
+  static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context}) async {
     try {
       var res = await post(Uri.parse(urlEndPoint), body: body);
       print(res.body);
@@ -59,7 +58,7 @@ class ApiHelper {
       }
     } catch (e) {
       print("catch--->" + e.toString());
-      Utils.errorSnackBar(msg: e.toString(),context: context);
+      Utils.errorSnackBar(msg: e.toString(), context: context);
       return null;
     }
   }
@@ -105,7 +104,7 @@ class ApiHelper {
         log("result-->${result.toString()}");
         return result;
       } else if (response.statusCode == 401) {
-      /*  await PreferenceUtil.clearAll();
+        /*  await PreferenceUtil.clearAll();
         return Navigator.of(context).pushNamedAndRemoveUntil(RoutesName.splashView, (Route<dynamic> route) => false);*/
       } else if (response.statusCode == 415) {
         var responseData = await response.stream.toBytes();
@@ -137,9 +136,6 @@ class ApiHelper {
 
     return isConnect;
   }
-
-
-
 }
 
 enum Api { error }

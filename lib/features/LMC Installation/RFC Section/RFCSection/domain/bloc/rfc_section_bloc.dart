@@ -48,7 +48,7 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfRFCSectionRow = listOfFilterRFCSectionRow.where((element) => element.bpNumber.toString() == bpNumberController.text).toList();
+      listOfRFCSectionRow = listOfRFCSectionRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       print("listOfFeasibilityRow${listOfRFCSectionRow}");
       print("bpNumberController${bpNumberController.text}");
       _eventCompleted();
