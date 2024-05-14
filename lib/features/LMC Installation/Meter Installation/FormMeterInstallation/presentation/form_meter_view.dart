@@ -1,8 +1,6 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -14,13 +12,10 @@ import 'package:lmc/Utils/common_widgets/auto_suggestion_text_field_widget.dart'
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
-import 'package:lmc/Utils/common_widgets/local_mg_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_state.dart';
@@ -39,8 +34,6 @@ class FormMeterView extends StatefulWidget {
 class _FormMeterViewState extends State<FormMeterView> {
   @override
   void initState() {
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<FormMeterBloc>(context).add(FormMeterPageLoadEvent(context: context));
     super.initState();
   }
@@ -225,7 +218,6 @@ class _FormMeterViewState extends State<FormMeterView> {
 
   Widget _initialMeterReading({required FormMeterDataState stateData}){
     var w = MediaQuery.of(context).size.width;
-    var h = MediaQuery.of(context).size.height;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

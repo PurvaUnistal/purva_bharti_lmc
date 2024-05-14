@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/model/RFCInstallationModel.dart';
 
@@ -16,6 +15,7 @@ class RFCSectionPageLoadState extends RFCSectionState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class RFCSectionDataState extends RFCSectionState{
   final bool isLoader;
   final bool isLoadingMore;

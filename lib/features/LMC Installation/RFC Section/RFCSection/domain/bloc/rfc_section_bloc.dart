@@ -36,13 +36,13 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
     rfcInstallationModel = RFCInstallationModel();
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
@@ -51,7 +51,7 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
       listOfRFCSectionRow = listOfRFCSectionRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       print("listOfFeasibilityRow${listOfRFCSectionRow}");
       print("bpNumberController${bpNumberController.text}");
-      _eventCompleted();
+      _eventCompleted(emit);
     }
   }
 
@@ -72,7 +72,6 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
         listOfRFCSectionRow = rfcInstallationModel!.data!;
       }
     }
-    _eventCompleted();
   }
 
   loadDataTable({required BuildContext context, emit}) {
@@ -80,15 +79,15 @@ class RFCSectionBloc extends Bloc<RFCSectionEvent, RFCSectionState> {
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;
-        _eventCompleted();
+        _eventCompleted(emit);
         pageNo++;
         // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: );
-        _eventCompleted();
+        _eventCompleted(emit);
       }
     });
   }
 
-  _eventCompleted() {
+  _eventCompleted(emit) {
     emit(RFCSectionDataState(
       isLoader: isLoader,
       isLoadingMore: isLoadingMore,

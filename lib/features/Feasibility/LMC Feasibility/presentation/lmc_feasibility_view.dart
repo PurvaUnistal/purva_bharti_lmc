@@ -16,8 +16,6 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasi
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/presenation/preview_feasibility_view.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 
 class FeasibilityView extends StatefulWidget {
   const FeasibilityView({super.key});
@@ -29,7 +27,6 @@ class FeasibilityView extends StatefulWidget {
 class _FeasibilityViewState extends State<FeasibilityView> {
   @override
   void initState() {
-    BlocProvider.of<NetworkBloc>(context).add(NetworkObserveEvent(context: context));
     BlocProvider.of<LMCFeasibilityBloc>(context).add(LMCFeasibilityPageLoadEvent(context: context));
     super.initState();
   }
@@ -134,24 +131,25 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                   rows: dataState.listOfFeasibilityRow
                       .mapIndexed((index, user) => DataRow(
                               onSelectChanged: (newValue) async {
-                                await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId!);
-                                await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId!);
-                                await SharedPref.setString(key: PrefsValue.dma, value: user.dma!);
-                                await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
-                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
-                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
-                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
-                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
-                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
-                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
-                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
-                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber!);
-                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber!);
-                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality!);
-                                await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
-                                await SharedPref.setString(key: PrefsValue.town, value: user.town!);
-                                await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
+                                await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
+                                await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");
+                                await SharedPref.setString(key: PrefsValue.dma, value: user.dma ?? "");
+                                await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber ?? "");
+                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn ?? "");
+                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName ?? "");
+                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName ?? "");
+                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName ?? "");
+                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName ?? "");
+                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName ?? "");
+                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName ?? "");
+                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass ?? "");
+                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
+                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
+                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
+                                await SharedPref.setString(key: PrefsValue.locality, value: user.state ?? "");
+                                await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
+                                await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
+                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                               },
                               cells: <DataCell>[
@@ -173,7 +171,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   }
 
   DataCell _dataCell({required String label}) {
-    return DataCell(Text(label ?? ""));
+    return DataCell(Text(label));
   }
 
   Widget _verticalSpace() {

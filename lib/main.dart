@@ -7,7 +7,6 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasib
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (BuildContext context) => NetworkBloc()),
           BlocProvider(create: (BuildContext context) => LoginBloc()),
           BlocProvider(create: (BuildContext context) => HomeBloc()),
           BlocProvider(create: (BuildContext context) => LMCFeasibilityBloc()),

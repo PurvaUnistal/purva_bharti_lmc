@@ -14,8 +14,6 @@ import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_state.dart';
@@ -34,8 +32,6 @@ class _FormRFCViewState extends State<FormRFCView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<FormRFCBloc>(context).add(FormRFCPageLoadEvent(context: context));
   }
 
@@ -214,33 +210,6 @@ class _FormRFCViewState extends State<FormRFCView> {
   }
 
 
-  Widget _extraPipePrice({required FormRFCDataState stateData}){
-    return Row(
-      children: [
-        Flexible(
-          flex: 3,
-          child: TextFieldWidget(
-            star: AppString.star,
-            hintText: AppString.extraPrice,
-            label: AppString.extraPrice,
-            enabled: false,
-            controller: stateData.extraPriceController,
-          ),
-        ),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-        Flexible(
-          flex: 3,
-          child: TextFieldWidget(
-            star: AppString.star,
-            hintText: AppString.extraPrice,
-            label: AppString.extraPrice,
-            enabled: false,
-            controller: stateData.extraPriceController,
-          ),
-        )
-      ],
-    );
-  }
   Widget _locationOfSR({required FormRFCDataState stateData}){
     return Row(
       children: [

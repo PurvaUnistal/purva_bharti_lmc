@@ -120,7 +120,6 @@ class FormRFCHelper {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String dma = await SharedPref.getString(key: PrefsValue.rfcDma);
     String installationId = await SharedPref.getString(key: PrefsValue.installationId);
-    String lmcFeasId = await SharedPref.getString(key: PrefsValue.rfcLMCFeasId);
     try {
       Map<String, String> para = {
         "dma_id": dma,

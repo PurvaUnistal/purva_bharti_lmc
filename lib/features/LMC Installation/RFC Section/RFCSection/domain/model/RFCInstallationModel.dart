@@ -22,7 +22,7 @@ class RFCInstallationModel {
   factory RFCInstallationModel.fromJson(Map<String?, dynamic> json) => RFCInstallationModel(
       success: json["success"],
       error: json["error"],
-      data: json['data'] is String ? json['data'] : List<RFCInstallationRows>.from(json["data"].map((x) => RFCInstallationRows.fromJson(x))) ?? "");
+      data: json['data'] is String ? json['data'] : List<RFCInstallationRows>.from(json["data"].map((x) => RFCInstallationRows.fromJson(x))));
 
   Map<String?, dynamic> toJson() => {
         "success": success,

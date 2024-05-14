@@ -37,13 +37,13 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     feasibilityModel = FeasibilityModel();
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
@@ -52,7 +52,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
       listOfFeasibilityRow = listOfFeasibilityRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       print("listOfFeasibilityRow${listOfFeasibilityRow}");
       print("bpNumberController${bpNumberController.text}");
-      _eventCompleted();
+      _eventCompleted(emit);
     }
   }
 
@@ -73,7 +73,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         listOfFilterFeasibilityRow = listOfFeasibilityRow;
       }
     }
-    _eventCompleted();
   }
 
   loadDataTable({required BuildContext context, emit}) {
@@ -81,15 +80,15 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;
-        _eventCompleted();
+        _eventCompleted(emit);
         pageNo++;
         // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: '');
-        _eventCompleted();
+        _eventCompleted(emit);
       }
     });
   }
 
-  _eventCompleted() {
+  _eventCompleted(Emitter<LMCFeasibilityState> emit) {
     emit(LMCFeasibilityDataState(
         isLoader: isLoader,
         isLoadingMore: isLoadingMore,

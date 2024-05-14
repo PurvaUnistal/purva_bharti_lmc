@@ -37,13 +37,13 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
     installationDoneModel = InstallationDoneModel();
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
-    _eventCompleted();
+    _eventCompleted(emit);
   }
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
@@ -52,7 +52,7 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
       listOfInstallationRow = listOfInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       print("listOfFeasibilityRow${listOfInstallationRow}");
       print("bpNumberController${bpNumberController.text}");
-      _eventCompleted();
+      _eventCompleted(emit);
     }
   }
 
@@ -73,25 +73,24 @@ class MeterInstallationBloc extends Bloc<MeterInstallationEvent, MeterInstallati
         listOfInstallationRow = installationDoneModel!.data!;
       }
     }
-    _eventCompleted();
   }
 
-  loadDataTable({required BuildContext context}) async {
+  loadDataTable({required BuildContext context, emit}) async {
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         isLoadingMore = true;
-        _eventCompleted();
+        _eventCompleted(emit);
         pageNo++;
         if (pageNo == 1) {
         } else {
           //  await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
         }
-        _eventCompleted();
+        _eventCompleted(emit);
       }
     });
   }
 
-  _eventCompleted() {
+  _eventCompleted(emit) {
     emit(MeterInstallationDataState(
       isLoader: isLoader,
       isLoadingMore: isLoadingMore,

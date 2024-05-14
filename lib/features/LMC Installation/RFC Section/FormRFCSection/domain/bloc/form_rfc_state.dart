@@ -19,6 +19,7 @@ class FormRFCPageLoadState extends FormRFCState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class FormRFCDataState extends FormRFCState {
   bool isLoader;
   bool isBtnLoader;

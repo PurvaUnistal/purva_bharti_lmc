@@ -9,12 +9,16 @@ import 'package:http_parser/http_parser.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/common_session_dialog_box.dart';
+import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiHelper {
   static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
     try {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+        return null;
+      }
       final response = await get(Uri.parse(urlEndPoint));
       log("URL-->${urlEndPoint.toString()}");
       log(urlEndPoint + "==> " + response.body);
@@ -45,6 +49,9 @@ class ApiHelper {
 
   static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context}) async {
     try {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+        return null;
+      }
       var res = await post(Uri.parse(urlEndPoint), body: body);
       print(res.body);
       if (res.statusCode == 200) {
@@ -77,6 +84,9 @@ class ApiHelper {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(PrefsValue.token) ?? "";
     try {
+      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+        return null;
+      }
       Map<String, String> headers = {"Authorization": token};
       var request = MultipartRequest("POST", Uri.parse(urlEndPoint));
       if (filePath1.isNotEmpty) {
@@ -104,9 +114,8 @@ class ApiHelper {
         log("result-->${result.toString()}");
         return result;
       } else if (response.statusCode == 401) {
-        /*  await PreferenceUtil.clearAll();
-        return Navigator.of(context).pushNamedAndRemoveUntil(RoutesName.splashView, (Route<dynamic> route) => false);*/
-      } else if (response.statusCode == 415) {
+
+    } else if (response.statusCode == 415) {
         var responseData = await response.stream.toBytes();
         var result = json.decode(String.fromCharCodes(responseData));
         log(result.toString());

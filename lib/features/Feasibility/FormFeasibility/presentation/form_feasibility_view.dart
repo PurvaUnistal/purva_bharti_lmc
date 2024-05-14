@@ -14,8 +14,6 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasib
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 
 class FormFeasibilityView extends StatefulWidget {
   const FormFeasibilityView({
@@ -29,8 +27,6 @@ class FormFeasibilityView extends StatefulWidget {
 class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   @override
   void initState() {
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
     BlocProvider.of<FormFeasibilityBloc>(context).add(FormFeasibilityPageLoadEvent(context: context));
     super.initState();
   }

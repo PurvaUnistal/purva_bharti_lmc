@@ -10,8 +10,6 @@ import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/presenation/preview_rfc_view.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_event.dart';
@@ -29,7 +27,6 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   void initState() {
     super.initState();
     BlocProvider.of<RFCSectionBloc>(context).add(RFCSectionPageLoadEvent(context: context));
-    BlocProvider.of<NetworkBloc>(context).add(NetworkObserveEvent(context: context));
   }
 
   @override
@@ -98,7 +95,6 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   }
 
   Widget _dataTableWidget({required RFCSectionDataState dataState}) {
-    var h = MediaQuery.of(context).size.height * 0.20;
     return dataState.rfcInstallationModel?.success == 400
         ? Center(child: Text("No records found"))
         : SingleChildScrollView(
@@ -165,7 +161,7 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   }
 
   DataCell _dataCell({required String label}) {
-    return DataCell(Text(label ?? ""));
+    return DataCell(Text(label));
   }
 
   Widget _verticalSpace() {

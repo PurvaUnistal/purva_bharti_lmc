@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +7,6 @@ import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_event.dart';
 import 'package:lmc/features/Login/domain/bloc/login_state.dart';
@@ -28,8 +25,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     BlocProvider.of<LoginBloc>(context).add(LoginPageLoadingEvent());
-    BlocProvider.of<NetworkBloc>(context)
-        .add(NetworkObserveEvent(context: context));
     super.initState();
   }
 
@@ -58,7 +53,6 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _buildLayout({required LoginFetchDataState dataState}) {
     var h = MediaQuery.of(context).size.height;
-    log("MediaQuery-->${h * 0.6}");
     return SingleChildScrollView(
       child: Stack(
         clipBehavior: Clip.none,

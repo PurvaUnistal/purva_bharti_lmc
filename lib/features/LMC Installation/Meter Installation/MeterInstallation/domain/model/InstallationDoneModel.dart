@@ -22,7 +22,7 @@ class InstallationDoneModel {
   factory InstallationDoneModel.fromJson(Map<String?, dynamic> json) => InstallationDoneModel(
       success: json["success"],
       error: json["error"],
-      data: json['data'] is String ? json['data'] : List<InstallationDoneRows>.from(json["data"].map((x) => InstallationDoneRows.fromJson(x))) ?? "");
+      data: json['data'] is String ? json['data'] : List<InstallationDoneRows>.from(json["data"].map((x) => InstallationDoneRows.fromJson(x))));
 
   Map<String?, dynamic> toJson() => {
         "success": success,

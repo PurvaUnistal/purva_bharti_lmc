@@ -62,7 +62,7 @@ class MessageBoxTwoButtonPopWidget extends StatelessWidget {
                           Expanded(
                             child: TextButton(
                               onPressed:  onPressed,
-                              child: Text(okButtonText ?? "OK",
+                              child: Text(okButtonText,
                             ),
                           ),
 

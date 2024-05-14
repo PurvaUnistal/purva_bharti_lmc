@@ -12,6 +12,7 @@ class PreviewMeterInstallationPageLoadState extends PreviewMeterInstallationStat
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class PreviewMeterInstallationDataState extends PreviewMeterInstallationState {
   final bool isLoader;
   String custRegNo;

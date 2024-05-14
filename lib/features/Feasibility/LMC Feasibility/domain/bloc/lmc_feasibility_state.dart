@@ -16,6 +16,7 @@ class LMCFeasibilityPageLoadState extends LMCFeasibilityState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class LMCFeasibilityDataState extends LMCFeasibilityState{
   final bool isLoader;
   final bool isLoadingMore;

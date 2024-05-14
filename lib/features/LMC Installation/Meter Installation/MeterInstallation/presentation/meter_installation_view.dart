@@ -10,8 +10,6 @@ import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_bloc.dart';
-import 'package:lmc/features/InternetConnection/domain/bloc/network_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_event.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_state.dart';
@@ -27,7 +25,6 @@ class MeterInstallationView extends StatefulWidget {
 class _MeterInstallationViewState extends State<MeterInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<NetworkBloc>(context).add(NetworkObserveEvent(context: context));
     BlocProvider.of<MeterInstallationBloc>(context).add(MeterInstallationPageLoadEvent(context: context));
     super.initState();
   }
@@ -98,7 +95,6 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
   }
 
   Widget _dataTableWidget({required MeterInstallationDataState dataState}) {
-    var h = MediaQuery.of(context).size.height * 0.20;
     return dataState.installationDoneModel?.success == 400
         ? Center(child: Text("No records found"))
         : SingleChildScrollView(
@@ -168,7 +164,7 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
   }
 
   DataCell _dataCell({required String label}) {
-    return DataCell(Text(label ?? ""));
+    return DataCell(Text(label));
   }
 
   Widget _verticalSpace() {

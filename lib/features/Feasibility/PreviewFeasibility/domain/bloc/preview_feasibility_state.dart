@@ -13,6 +13,7 @@ class PreviewFeasibilityPageLoadState extends PreviewFeasibilityState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   final bool isLoader;
   String custRegNo;

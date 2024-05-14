@@ -6,8 +6,8 @@ class CheckFeasibleModel {
   CheckFeasibleModel({this.key, this.value});
 
   CheckFeasibleModel.fromJson(Map<String, dynamic> json) {
-    key = json['key'];
-    value = json['value'];
+    key = json['key'] ?? "";
+    value = json['value'] ?? "";
   }
 
   static List<CheckFeasibleModel> mapToList(Map<String, dynamic> mapData) {

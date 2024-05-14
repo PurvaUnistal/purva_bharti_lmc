@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 
+//ignore: must_be_immutable
 class AutoSuggestionTextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final String? star;

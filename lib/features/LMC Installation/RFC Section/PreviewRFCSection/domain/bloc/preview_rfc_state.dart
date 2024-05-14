@@ -12,6 +12,7 @@ class PreviewRFCPageLoadState extends PreviewRFCState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class PreviewRFCDataState extends PreviewRFCState{
   final bool isLoader;
   String custRegNo;

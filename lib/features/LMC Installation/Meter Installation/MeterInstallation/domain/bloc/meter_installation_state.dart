@@ -15,6 +15,7 @@ class MeterInstallationPageLoadState extends MeterInstallationState {
   List<Object> get props => [];
 }
 
+//ignore: must_be_immutable
 class MeterInstallationDataState extends MeterInstallationState {
   final bool isLoader;
   final bool isLoadingMore;

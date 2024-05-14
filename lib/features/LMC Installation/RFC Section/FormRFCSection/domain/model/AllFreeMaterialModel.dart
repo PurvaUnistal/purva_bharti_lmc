@@ -61,9 +61,9 @@ class FreeMaterialData {
 
   factory FreeMaterialData.fromJson(Map<String, dynamic> json) => FreeMaterialData(
     id: json["id"] ?? "",
-    materialUnit: json["material_unit"]!,
+    materialUnit: json["material_unit"] ?? "",
     status: json["status"] ?? "",
-    createdOn: DateTime.parse(json["created_on"]),
+    createdOn: json["created_on"] == null ? DateTime.now() : DateTime.parse(json["created_on"]),
     make: json["make"] ?? "",
     materialCategory:json["material_category"] ?? "",
     materialName: json["material_name"] ?? "",
