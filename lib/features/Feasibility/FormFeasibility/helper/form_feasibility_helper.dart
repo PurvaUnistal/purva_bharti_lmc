@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
@@ -39,6 +40,25 @@ class FormFeasibilityHelper {
       log("lmcReason-->${e.toString()}");
     }
     return null;
+  }
+
+ static Future<void> clearCache() async {
+    Directory path = Directory("/data/user/0/com.app.pbg.lmc/cache/");
+
+    if(await path.exists()) {
+      List<FileSystemEntity> files = path.listSync();
+      for(FileSystemEntity f in files) {
+        if(f is File) {
+          await f.delete();
+        }
+      }
+    }
+
+    Directory path2 = Directory("/data/user/0/com.app.pbg.lmc/cache/file_picker/");
+
+    if(await path2.exists()) {
+      path2.deleteSync(recursive: true);
+    }
   }
 
   static Future<dynamic> validationSubmit({

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -110,6 +112,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           isBtnLoader = false;
           _eventCompleted(emit);
         await Utils.successSnackBar(msg: res.data!, context: event.context);
+          await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
@@ -128,6 +131,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       _eventCompleted(emit);
     }
   }
+
 
   fetchCheckFeasibilityApi({required BuildContext context}) async {
     var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);

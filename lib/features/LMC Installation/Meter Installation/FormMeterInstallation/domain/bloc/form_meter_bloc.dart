@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
 import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
@@ -13,6 +14,7 @@ import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterIn
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/helper/form_meter_helper.dart';
+import 'package:path_provider/path_provider.dart';
 
 class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   FormMeterBloc() : super(FormMeterInitialState()) {
@@ -249,6 +251,7 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
           isBtnLoader = false;
           _eventCompleted(emit);
           await Utils.successSnackBar(msg: res.data!, context: event.context);
+          await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(

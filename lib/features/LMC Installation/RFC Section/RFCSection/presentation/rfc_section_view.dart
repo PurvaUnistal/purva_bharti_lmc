@@ -47,18 +47,22 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   }
 
   Widget _itemBuilder({required RFCSectionDataState dataState}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
-      child: Column(
-        children: [
-          _verticalSpace(),
-          _areaDropDown(dataState: dataState),
-          _verticalSpace(),
-          _searchTextField(dataState: dataState),
-          _verticalSpace(),
-          Flexible(child: _dataTableWidget(dataState: dataState)),
-        ],
-      ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
+          child: Column(
+            children: [
+              _verticalSpace(),
+              _areaDropDown(dataState: dataState),
+              _verticalSpace(),
+              _searchTextField(dataState: dataState),
+            ],
+          ),
+        ),
+        _verticalSpace(),
+        Flexible(child: _dataTableWidget(dataState: dataState)),
+      ],
     );
   }
 
@@ -104,7 +108,7 @@ class _RFCSectionViewState extends State<RFCSectionView> {
                 data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
                 child: DataTable(
                   sortAscending: true,
-                  columnSpacing: 12,
+                  columnSpacing: 0,
                   horizontalMargin: 0,
                   showCheckboxColumn: false,
                   headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
@@ -157,11 +161,17 @@ class _RFCSectionViewState extends State<RFCSectionView> {
   }
 
   DataColumn _dataColumn({required String label}) {
-    return DataColumn(label: Text(label, style: Styles.table));
+    return DataColumn(label: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Text(label, style: Styles.table),
+    ));
   }
 
   DataCell _dataCell({required String label}) {
-    return DataCell(Text(label));
+    return DataCell(Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Text(label),
+    ));
   }
 
   Widget _verticalSpace() {

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
 import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/helper/form_meter_helper.dart';
@@ -13,6 +14,7 @@ import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/dom
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/MaterialItem.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/helper/form_rfc_helper.dart';
+import 'package:path_provider/path_provider.dart';
 
 class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   FormRFCBloc() : super(FormRFCInitialState()) {
@@ -294,6 +296,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
           isBtnLoader = false;
            _eventCompleted(emit);
           await Utils.successSnackBar(msg: res.data!, context: event.context);
+          await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(
               event.context,
               MaterialPageRoute(
