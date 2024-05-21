@@ -46,13 +46,14 @@ class FormMeterHelper {
     }
     return null;
   }
-  static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context}) async {
+
+  static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context, required String meterSerial}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
         "schema":schema,
-        "meterSerial":"dia",
+        "meterSerial":meterSerial,
         "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;

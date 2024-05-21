@@ -100,7 +100,7 @@ class _FormRFCViewState extends State<FormRFCView> {
   }
   Widget _srNumberController({required FormRFCDataState stateData}) {
     return TextFieldWidget(
-      star: AppString.star,
+    //  star: AppString.star,
       hintText: AppString.srNumber,
       label: AppString.srNumber,
       keyboardType: TextInputType.number,

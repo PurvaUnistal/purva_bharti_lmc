@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
+import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 
 
 class ImagePopWidget extends StatelessWidget {
@@ -29,11 +30,17 @@ class ImagePopWidget extends StatelessWidget {
             children: <Widget>[
               Align(
                 alignment: Alignment.center,
-                child: Text('Choose One',textAlign: TextAlign.center,
-                  style: TextStyle(color:Colors.green.shade800,fontSize: 18, fontWeight: FontWeight.bold),),
+                child: Text('Choose One',textAlign: TextAlign.center, style:Styles.title),),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Gallery'),
+                onTap: onTapGallery,
               ),
-              TextButton(child: Text('Gallery'), onPressed: onTapGallery),
-              TextButton(child: Text('Camera',), onPressed: onTapCamera,),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: onTapCamera,
+              ),
               ButtonWidget(
                 text: 'Dismiss',
                 onPressed: () {

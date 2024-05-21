@@ -92,7 +92,7 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     await fetchTypeOfNrApi(context: event.context);
     await fetchReadyForNgcApi(context: event.context);
-    await fetchMetersApi(context: event.context);
+    await fetchMetersApi(context: event.context,meterSerial: "");
     await fetchDelayReasonApi(context: event.context);
     _eventCompleted(emit);
   }
@@ -141,14 +141,8 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     if(event.meterReadingValue.isNotEmpty && event.meterReadingValue.length > 1){
-      listOfMeterNo = listOfMeterNo.where((element) => element.serialNumber == event.meterReadingValue.toString()).toList();
-      listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
-      listOfMeterNumberId = await listOfMeterNo.map((e) => e.id!).toSet().toList();
-      int i  = await listOfMeterNumber.indexWhere((element) => element.contains(event.meterReadingValue.toString()));
-      meterNoController.text = await listOfMeterNumber.elementAt(i);
-      materialId = await listOfMeterNumberId.elementAt(i);
-    }else if(event.meterReadingValue.length > 0){
-      listOfMeterNumber = [];
+      await fetchMetersApi(context: event.context, meterSerial: event.meterReadingValue);
+      _eventCompleted(emit);
     }
     print("materialId-->${materialId}");
     _eventCompleted(emit);
@@ -181,16 +175,25 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     }
   }
 
-  fetchMetersApi({required BuildContext context}) async {
-    var res = await FormMeterHelper.getMetersApi(context: context);
+  fetchMetersApi({required BuildContext context, required String meterSerial}) async {
+    var res = await FormMeterHelper.getMetersApi(context: context,meterSerial: meterSerial);
     if (res != null) {
       listOfMeterNo = res;
+      listOfMeterNumber = listOfMeterNo.map((e) => e.serialNumber!).toList();
+      listOfMeterNumberId = listOfMeterNo.map((e) => e.id!).toList();
+      meterNoController.clear();
+      meterNoController.text = await listOfMeterNumberId[0];
+      materialId = await meterNoController.text;
+      print("hello---->${materialId}");
+      print("hello---->${meterNoController.text}");
+      return res;
+    }
       if(listOfMeterNo.length > 1){
         listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
       }
       return res;
     }
-  }
+
   _captureGalleryMeter(CaptureGalleryMeterEvent event, emit) async {
     var photoPath = await FormMeterHelper.galleryCapture();
     log("photo-->$photoPath");

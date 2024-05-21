@@ -65,7 +65,7 @@ class FormRFCHelper {
   }
   static Future<dynamic> validationSubmit({
     required BuildContext context,
-    required String srNumber,
+  //  required String srNumber,
     required String regulators,
     required String latitudeTF,
     required String longitudeTF,
@@ -77,10 +77,7 @@ class FormRFCHelper {
     required String pneumaticImg,
   }) async {
     try {
-      if (srNumber.isEmpty) {
-        Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
-        return false;
-      }else if (regulators.isEmpty) {
+      if (regulators.isEmpty) {
         Utils.errorSnackBar(msg: "The Regulators field is required.", context: context);
         return false;
       } else if (workCompletedDate.isEmpty) {
