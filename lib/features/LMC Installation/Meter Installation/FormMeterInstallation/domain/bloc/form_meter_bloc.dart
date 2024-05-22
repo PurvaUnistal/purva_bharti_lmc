@@ -51,7 +51,6 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
   TextEditingController actualWorkDateController = TextEditingController();
-  TextEditingController meterNoController = TextEditingController();
   TextEditingController meterIniReading1Controller = TextEditingController();
   TextEditingController meterIniReading2Controller = TextEditingController();
   TextEditingController meterIniReading3Controller = TextEditingController();
@@ -80,7 +79,6 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     bpNumberController.text = "";
     proposedDateController.text = "";
     actualWorkDateController.text = "";
-    meterNoController.text = "";
     meterIniReading1Controller.text = "";
     meterIniReading2Controller.text = "";
     meterIniReading3Controller.text = "";
@@ -142,9 +140,12 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     if(event.meterReadingValue.isNotEmpty && event.meterReadingValue.length > 1){
       await fetchMetersApi(context: event.context, meterSerial: event.meterReadingValue);
-      _eventCompleted(emit);
+      for(int i = 0; i< listOfMeterNo.length; i++){
+        listOfMeterNumberId = listOfMeterNo.map((e) => e.id!).toList();
+        materialId = await listOfMeterNumberId[i].toString();
+        print("hello---->${materialId}");
+      }
     }
-    print("materialId-->${materialId}");
     _eventCompleted(emit);
   }
 
@@ -180,19 +181,9 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     if (res != null) {
       listOfMeterNo = res;
       listOfMeterNumber = listOfMeterNo.map((e) => e.serialNumber!).toList();
-      listOfMeterNumberId = listOfMeterNo.map((e) => e.id!).toList();
-      meterNoController.clear();
-      meterNoController.text = await listOfMeterNumberId[0];
-      materialId = await meterNoController.text;
-      print("hello---->${materialId}");
-      print("hello---->${meterNoController.text}");
       return res;
     }
-      if(listOfMeterNo.length > 1){
-        listOfMeterNumber = await listOfMeterNo.map((e) => e.serialNumber!).toSet().toList();
-      }
-      return res;
-    }
+  }
 
   _captureGalleryMeter(CaptureGalleryMeterEvent event, emit) async {
     var photoPath = await FormMeterHelper.galleryCapture();
@@ -212,14 +203,14 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
     _eventCompleted(emit);
   }
 
- _meterInitReading(MeterInitReadingEvent event, emit) {
-   var meterIniReading1 = meterIniReading1Controller.text;
-   var meterIniReading2 = meterIniReading2Controller.text;
-   var meterIniReading3 = meterIniReading3Controller.text;
-   double meterIniReadingAdd = double.parse( meterIniReading1 + meterIniReading2 + meterIniReading3);
-   meterInitialReadingController.text = (meterIniReadingAdd / 1000).toString();
-   log("meterInitialReadingController--${meterInitialReadingController.text}");
-   _eventCompleted(emit);
+  _meterInitReading(MeterInitReadingEvent event, emit) {
+    var meterIniReading1 = meterIniReading1Controller.text;
+    var meterIniReading2 = meterIniReading2Controller.text;
+    var meterIniReading3 = meterIniReading3Controller.text;
+    double meterIniReadingAdd = double.parse( meterIniReading1 + meterIniReading2 + meterIniReading3);
+    meterInitialReadingController.text = (meterIniReadingAdd / 1000).toString();
+    log("meterInitialReadingController--${meterInitialReadingController.text}");
+    _eventCompleted(emit);
   }
 
   _submit(SubmitFormMeterEvent event, emit) async {
@@ -230,7 +221,7 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
           meterInit1: meterIniReading1Controller.text.trim().toString(),
           meterInit2: meterIniReading2Controller.text.trim().toString(),
           meterInit3: meterIniReading3Controller.text.trim().toString(),
-          meterReading: meterNoController.text.trim().toString(),
+          meterReading: materialId.toString(),
           meterPhoto: meterImg.path,
           meterReadingDate: meterReadingDateController.text.trim().toString(),
           ngc: readyNGCValue!.value.toString(),
@@ -276,28 +267,27 @@ class FormMeterBloc extends Bloc<FormMeterEvent, FormMeterState> {
 
   _eventCompleted(emit) {
     emit(FormMeterDataState(
-        isLoader: isLoader,
-        isBtnLoader: isBtnLoader,
-        meterImg: meterImg,
-        meterNoValue: meterNoValue,
-        typeOfNrValue: typeOfNrValue,
-        delayReasonValue: delayReasonValue,
-        listOfMeterNo: listOfMeterNo,
-        listOfTypeOfNr: listOfTypeOfNr,
-        listOfMeterNumber: listOfMeterNumber,
-        listOfDelayReason: listOfDelayReason,
-        bpNumberController: bpNumberController,
-        proposedDateController: proposedDateController,
-        actualWorkDateController: actualWorkDateController,
-        meterNoController: meterNoController,
-        meterIniReading1Controller: meterIniReading1Controller,
-        meterIniReading2Controller: meterIniReading2Controller,
-        meterIniReading3Controller: meterIniReading3Controller,
+      isLoader: isLoader,
+      isBtnLoader: isBtnLoader,
+      meterImg: meterImg,
+      meterNoValue: meterNoValue,
+      typeOfNrValue: typeOfNrValue,
+      delayReasonValue: delayReasonValue,
+      listOfMeterNo: listOfMeterNo,
+      listOfTypeOfNr: listOfTypeOfNr,
+      listOfMeterNumber: listOfMeterNumber,
+      listOfDelayReason: listOfDelayReason,
+      bpNumberController: bpNumberController,
+      proposedDateController: proposedDateController,
+      actualWorkDateController: actualWorkDateController,
+      meterIniReading1Controller: meterIniReading1Controller,
+      meterIniReading2Controller: meterIniReading2Controller,
+      meterIniReading3Controller: meterIniReading3Controller,
       meterInitialReadingController: meterInitialReadingController,
-        meterReadingDateController: meterReadingDateController,
-        meterIniReading1FocusNode: meterIniReading1FocusNode,
-        meterIniReading2FocusNode: meterIniReading2FocusNode,
-        meterIniReading3FocusNode: meterIniReading3FocusNode,
+      meterReadingDateController: meterReadingDateController,
+      meterIniReading1FocusNode: meterIniReading1FocusNode,
+      meterIniReading2FocusNode: meterIniReading2FocusNode,
+      meterIniReading3FocusNode: meterIniReading3FocusNode,
     ));
   }
 

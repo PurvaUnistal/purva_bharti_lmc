@@ -32,7 +32,6 @@ class FormMeterDataState extends FormMeterState {
   final TextEditingController bpNumberController;
   final TextEditingController proposedDateController;
   final TextEditingController actualWorkDateController;
-  final TextEditingController meterNoController;
   final TextEditingController meterIniReading1Controller;
   final TextEditingController meterIniReading2Controller;
   final TextEditingController meterIniReading3Controller;
@@ -57,7 +56,6 @@ class FormMeterDataState extends FormMeterState {
     required this.bpNumberController,
     required this.proposedDateController,
     required this.actualWorkDateController,
-    required this.meterNoController,
     required this.meterIniReading1Controller,
     required this.meterIniReading2Controller,
     required this.meterIniReading3Controller,
@@ -85,7 +83,6 @@ class FormMeterDataState extends FormMeterState {
     bpNumberController,
     proposedDateController,
     actualWorkDateController,
-    meterNoController,
     meterIniReading1Controller,
     meterIniReading2Controller,
     meterIniReading3Controller,

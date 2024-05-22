@@ -63,8 +63,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         _isPageLoader = true;
         _eventCompleted(emit);
-        var res = await LoginHelper.loginData(
-            emailId: emailId, password: password, context: event.context);
+        var res = await LoginHelper.loginData(emailId: emailId, password: password, context: event.context);
         if (res != null) {
           _isPageLoader = false;
           _eventCompleted(emit);

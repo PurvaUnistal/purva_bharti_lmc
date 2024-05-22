@@ -34,7 +34,6 @@ class FormRFCDataState extends FormRFCState {
   List<GetConstantModel> listOfAllRFC;
   List<MaterialItem> materialList;
   TextEditingController srNumberController;
-  TextEditingController regulatorController;
   TextEditingController latOfSRController;
   TextEditingController longOfSRController;
   TextEditingController latOfHouseController;
@@ -58,7 +57,6 @@ class FormRFCDataState extends FormRFCState {
   required this.listOfAllRFC,
   required this.materialList,
   required this.srNumberController,
-  required this.regulatorController,
   required this.latOfSRController,
   required this.longOfSRController,
   required this.latOfHouseController,
@@ -85,7 +83,6 @@ List<Object?> get props => [
     listOfAllRFC,
     materialList,
     srNumberController,
-    regulatorController,
     latOfSRController,
     longOfSRController,
     latOfHouseController,

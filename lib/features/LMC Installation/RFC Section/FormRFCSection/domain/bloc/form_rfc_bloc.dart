@@ -14,7 +14,6 @@ import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/dom
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/model/MaterialItem.dart';
 import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/helper/form_rfc_helper.dart';
-import 'package:path_provider/path_provider.dart';
 
 class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   FormRFCBloc() : super(FormRFCInitialState()) {
@@ -52,7 +51,6 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   List<String> listOfQtyLMC = [];
   List<GetConstantModel> listOfAllRFC = [];
   TextEditingController srNumberController = TextEditingController();
-  TextEditingController regulatorController = TextEditingController();
   TextEditingController latOfSRController = TextEditingController();
   TextEditingController longOfSRController = TextEditingController();
   TextEditingController latOfHouseController = TextEditingController();
@@ -80,7 +78,6 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     listOfAllRFC = [];
     listOfRegulatorId = [];
     srNumberController.text = "";
-    regulatorController.text = "";
     latOfSRController.text = "";
     longOfSRController.text = "";
     latOfHouseController.text = "";
@@ -102,12 +99,6 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     if (res != null) {
       listOfRegulatorNo = res;
       listOfRegulator = listOfRegulatorNo.map((e) => e.serialNumber!).toList();
-      listOfRegulatorId = listOfRegulatorNo.map((e) => e.id!).toList();
-      regulatorController.clear();
-      regulatorController.text = await listOfRegulatorId[0];
-      regulatorId = await regulatorController.text;
-      print("hello---->${regulatorId}");
-      print("hello---->${regulatorController.text}");
       return res;
     }
   }
@@ -149,10 +140,16 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
   }
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    if(event.regulatorsValue.isNotEmpty && event.regulatorsValue.length > 1){
+    if(event.regulatorsValue.isNotEmpty){
      await fetchRegulatorsApi(context: event.context, regulatorSerial: event.regulatorsValue);
-    _eventCompleted(emit);
+     for(int i = 0; i< listOfRegulatorNo.length; i++){
+       listOfRegulator = listOfRegulatorNo.map((e) => e.serialNumber!).toList();
+       listOfRegulatorId = listOfRegulatorNo.map((e) => e.id!).toList();
+       regulatorId = await listOfRegulatorId[i].toString();
+       print("hello---->${regulatorId}");
+     }
     }
+    _eventCompleted(emit);
   }
 
   _selectProposedDate(SelectProposedConDateEvent event,emit) async {
@@ -330,7 +327,6 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
       listOfAllRFC :listOfAllRFC,
       materialList :materialList,
       srNumberController :srNumberController,
-      regulatorController :regulatorController,
       latOfSRController :latOfSRController,
       longOfSRController :longOfSRController,
       latOfHouseController : latOfHouseController,

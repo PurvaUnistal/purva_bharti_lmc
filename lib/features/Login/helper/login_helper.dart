@@ -51,7 +51,12 @@ class LoginHelper {
     try {
       var res = await ApiHelper.postData(
           urlEndPoint: Apis.loginUrl, body: jsonEncode(para), context: context);
-      return LoginModel.fromJson(res);
+      if(res != null && res["error"] == false){
+        return LoginModel.fromJson(res);
+      } else if(res != null && res["error"] == true){
+       await Utils.errorSnackBar(msg: res["messages"], context: context);
+        return null;
+      }
     } catch (e) {
       log("catchLoginHelper-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(),context: context);

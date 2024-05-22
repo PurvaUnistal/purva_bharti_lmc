@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 
@@ -32,12 +33,12 @@ class ImagePopWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text('Choose One',textAlign: TextAlign.center, style:Styles.title),),
               ListTile(
-                leading: const Icon(Icons.photo_library),
+                leading: Icon(Icons.photo_library,color: AppColor.primer),
                 title: const Text('Gallery'),
                 onTap: onTapGallery,
               ),
               ListTile(
-                leading: const Icon(Icons.photo_camera),
+                leading: Icon(Icons.photo_camera,color: AppColor.primer),
                 title: const Text('Camera'),
                 onTap: onTapCamera,
               ),
