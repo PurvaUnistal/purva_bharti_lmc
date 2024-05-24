@@ -12,7 +12,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(50);
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +52,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(20.0),
-        child: SizedBox(
-          height: 29,
-            child: tabBar ?? Container()),
+        child: tabBar ?? Container(),
       ),
     );
   }

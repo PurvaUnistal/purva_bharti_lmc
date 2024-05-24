@@ -50,6 +50,7 @@ class FeasibilityData {
   final dynamic guardianName;
   final dynamic houseNumber;
   final dynamic locality;
+  final dynamic address2;
   final dynamic town;
   final String? district;
   final String? state;
@@ -85,6 +86,7 @@ class FeasibilityData {
     this.guardianName,
     this.houseNumber,
     this.locality,
+    this.address2,
     this.town,
     this.district,
     this.state,
@@ -121,6 +123,7 @@ class FeasibilityData {
         guardianName: json["guardian_name"] ?? "",
         houseNumber: json["house_number"] ?? "",
         locality: json["locality"] ?? "",
+    address2: json["address2"] ?? "",
         town: json["town"] ?? "",
         district: json["district"] ?? "",
         state: json["state"] ?? "",
@@ -157,6 +160,7 @@ class FeasibilityData {
         "guardian_name": guardianName,
         "house_number": houseNumber,
         "locality": locality,
+        "address2": address2,
         "town": town,
         "district": district,
         "state": state,

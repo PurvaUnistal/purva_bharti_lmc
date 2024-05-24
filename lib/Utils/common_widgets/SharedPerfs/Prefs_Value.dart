@@ -25,6 +25,7 @@ class PrefsValue {
   static String houseNumber = "houseNumber";
   static String state = "state";
   static String locality = "locality";
+  static String address2 = "address2";
   static String town = "town";
   static String district = "district";
   static String pinCode = "pinCode";

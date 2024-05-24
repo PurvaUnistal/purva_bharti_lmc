@@ -128,7 +128,7 @@ class _FormMeterViewState extends State<FormMeterView> {
       label: AppString.meterNumber,
       hintText: AppString.meterNumber,
       suggestions: stateData.listOfMeterNumber,
-      keyboardType:  TextInputType.number,
+      keyboardType: TextInputType.text,
       textSubmitted: (val) {
         print(val);
         BlocProvider.of<FormMeterBloc>(context).add(SelectMeterNumberValueEvent(

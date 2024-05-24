@@ -24,6 +24,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   String buildingNumber = '';
   String houseNumber = '';
   String locality = '';
+  String colony = '';
   String town = '';
   String street = '';
   String district = '';
@@ -43,6 +44,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     buildingNumber = await SharedPref.getString(key: PrefsValue.buildingNumber);
     houseNumber = await SharedPref.getString(key: PrefsValue.houseNumber);
     locality = await SharedPref.getString(key: PrefsValue.locality);
+    colony = await SharedPref.getString(key: PrefsValue.address2);
     town = await SharedPref.getString(key: PrefsValue.town);
     street = await SharedPref.getString(key: PrefsValue.state);
     district = await SharedPref.getString(key: PrefsValue.district);
@@ -70,7 +72,9 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
         pinCode: pinCode,
         feasibilityRowsModel: feasibilityRowsModel,
         listOfFeasibilityRow: listOfFeasibilityRow,
-        feasibilityModel: feasibilityModel)
+        feasibilityModel: feasibilityModel,
+      colony: colony,
+    )
     );
   }
 }

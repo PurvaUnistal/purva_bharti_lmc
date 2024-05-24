@@ -118,7 +118,7 @@ class _FormRFCViewState extends State<FormRFCView> {
       label: AppString.regulator,
       hintText: AppString.regulator,
       suggestions: stateData.listOfRegulator,
-      keyboardType:  TextInputType.number,
+      keyboardType:  TextInputType.text,
       textSubmitted: (val) {
         BlocProvider.of<FormRFCBloc>(context).add(SelectRegulatorsValueEvent(
             context: context,

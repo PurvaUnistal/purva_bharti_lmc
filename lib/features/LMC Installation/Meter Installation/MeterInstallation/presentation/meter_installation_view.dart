@@ -138,10 +138,10 @@ class _MeterInstallationViewState extends State<MeterInstallationView> {
                                 await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
                                 await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
                                 await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
-                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber!);
-                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber!);
-                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality!);
-                                await SharedPref.setString(key: PrefsValue.locality, value: user.state!);
+                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
+                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
+                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
+                                await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
                                 await SharedPref.setString(key: PrefsValue.town, value: user.town!);
                                 await SharedPref.setString(key: PrefsValue.district, value: user.district!);
                                 await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);

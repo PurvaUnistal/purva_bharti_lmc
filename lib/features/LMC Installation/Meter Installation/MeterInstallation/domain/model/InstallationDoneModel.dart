@@ -81,6 +81,7 @@ class InstallationDoneRows {
   String? guardianName;
   String? houseNumber;
   String? locality;
+  String? address2;
   String? town;
   String? district;
   String? state;
@@ -148,6 +149,7 @@ class InstallationDoneRows {
       this.guardianName,
       this.houseNumber,
       this.locality,
+      this.address2,
       this.town,
       this.district,
       this.state,
@@ -215,6 +217,7 @@ class InstallationDoneRows {
     guardianName = json['guardian_name'] ?? "";
     houseNumber = json['house_number'] ?? "";
     locality = json['locality'] ?? "";
+    address2 = json['address2'] ?? "";
     town = json['town'] ?? "";
     district = json['district'] ?? "";
     state = json['state'] ?? "";
@@ -285,6 +288,7 @@ class InstallationDoneRows {
     data['guardian_name'] = this.guardianName;
     data['house_number'] = this.houseNumber;
     data['locality'] = this.locality;
+    data['address2'] = this.address2;
     data['town'] = this.town;
     data['district'] = this.district;
     data['state'] = this.state;

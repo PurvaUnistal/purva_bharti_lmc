@@ -25,6 +25,7 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   String propClass;
   String buildingNumber;
   String houseNumber;
+  String colony;
   String locality;
   String street;
   String town;
@@ -40,6 +41,7 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
      required this.areaName,
      required this.firstName,
      required this.lastName,
+     required this.colony,
      required this.guardianName,
      required this.proCateName,
      required this.propClass,
@@ -65,6 +67,7 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
     street,
     firstName,
     lastName,
+    colony,
     guardianName,
     proCateName,
     propClass,
