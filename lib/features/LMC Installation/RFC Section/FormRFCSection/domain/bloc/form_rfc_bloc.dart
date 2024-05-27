@@ -88,7 +88,7 @@ class FormRFCBloc extends Bloc<FormRFCEvent, FormRFCState> {
     extraPriceController.text = "0";
     await fetchFreeMaterialApi(context: event.context,);
     await fetchRFCApi(context: event.context,);
-    await fetchRegulatorsApi(context: event.context,regulatorSerial: "2");
+    await fetchRegulatorsApi(context: event.context,regulatorSerial: "");
     await _setSRLocation();
     await _setHouseLocation();
      _eventCompleted(emit);

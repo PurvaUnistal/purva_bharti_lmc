@@ -16,14 +16,27 @@ class HomePageLoadState extends HomeState {
 
 class FetchHomeDataState extends HomeState {
   final bool isLoader;
+  final String scheme;
+  final String userName;
   final int pageIndex;
   final int currentIndex;
   final List<Widget> pageWidgets;
   final List<BottomNavigationBarItem> bottomNavyBarItemList;
-  FetchHomeDataState({required this.isLoader, required this.pageIndex,
+  FetchHomeDataState({
+    required this.isLoader,
+    required this.scheme,
+    required this.userName,
+    required this.pageIndex,
     required this.pageWidgets,
     required this.currentIndex,
     required this.bottomNavyBarItemList});
   @override
-  List<Object> get props => [isLoader, pageIndex, currentIndex, bottomNavyBarItemList, pageWidgets];
+  List<Object> get props => [
+    isLoader,
+    scheme,
+    userName,
+    pageIndex,
+    currentIndex,
+    bottomNavyBarItemList,
+    pageWidgets];
 }
