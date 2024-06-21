@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiHelper {
   static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
     try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
       final response = await get(Uri.parse(urlEndPoint));

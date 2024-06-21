@@ -106,8 +106,8 @@ class FormRFCHelper {
     required String latitudeHG,
     required String longitudeHG,
     required String workCompletedDate,
-    required String isometricImg,
     required String installationImg,
+    required String rfcImg,
     required String pneumaticImg,
     required String materialIdLMC,
     required String qtyLMC,
@@ -136,8 +136,8 @@ class FormRFCHelper {
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
           urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context,
-        keyWord1: "isometric_image",filePath1: isometricImg.toString(),
-        keyWord2: "rfc_form",filePath2: installationImg.toString(),
+        keyWord1: "isometric_image",filePath1: installationImg.toString(),
+        keyWord2: "rfc_form",filePath2: rfcImg.toString(),
         keyWord3: "pneumatic_image",filePath3: pneumaticImg.toString(),
       );
       if(res != null && res["error"] == false){

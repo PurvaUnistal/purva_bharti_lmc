@@ -112,7 +112,7 @@ class _LoginViewState extends State<LoginView> {
     return TextFieldWidget(
       label:  AppString.emailLabel,
       hintText: AppString.emailLabel,
-      autofillHints: [AutofillHints.email],
+      autofillHints: [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
       prefixIcon: Icon(
         Icons.email,
@@ -129,7 +129,7 @@ class _LoginViewState extends State<LoginView> {
     return TextFieldWidget(
       label: AppString.passwordLabel,
       hintText:  AppString.passwordLabel,
-      autofillHints: const [AutofillHints.password],
+      autofillHints: const [AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
       prefixIcon: Icon(
         Icons.password,
