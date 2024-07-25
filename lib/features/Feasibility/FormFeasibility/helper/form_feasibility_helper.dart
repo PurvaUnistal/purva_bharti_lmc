@@ -102,6 +102,8 @@ class FormFeasibilityHelper {
         "comment":comment,
         "follow_up_date": followUpDate,
       };
+      log("para-->${para}");
+      log("Url-->${Apis.saveLmcFeasibility}");
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, body: para, context: context);
       if(res != null && res["error"] == false){
         return SaveFeasibleModel.fromJson(res);
