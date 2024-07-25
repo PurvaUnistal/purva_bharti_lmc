@@ -138,6 +138,7 @@ class _FormMeterViewState extends State<FormMeterView> {
       },
     );
   }
+
   Widget _meterReadingDateController({required FormMeterDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.meterReadingDate,
