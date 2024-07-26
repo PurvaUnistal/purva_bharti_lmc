@@ -423,6 +423,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       ],
     );
   }
+
   Widget _locationOfHouse({required FormInstallationDataState stateData}){
     return Row(
       children: [
