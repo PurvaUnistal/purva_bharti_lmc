@@ -34,6 +34,7 @@ class FeasibilityModel {
 class FeasibilityData {
   final dynamic buildingNumber;
   final String? areaId;
+  final String? chargeAreaName;
   final String? areaName;
   final String? mobileNumber;
   final String? id;
@@ -69,6 +70,7 @@ class FeasibilityData {
 
   FeasibilityData({
     this.buildingNumber,
+    this.chargeAreaName,
     this.areaId,
     this.areaName,
     this.mobileNumber,
@@ -106,6 +108,7 @@ class FeasibilityData {
 
   factory FeasibilityData.fromJson(Map<String?, dynamic> json) => FeasibilityData(
         buildingNumber: json["building_number"] ?? "",
+        chargeAreaName: json["charge_area_name"] ?? "",
         areaId: json["area_id"] ?? "",
         areaName: json["area_name"] ?? "",
         mobileNumber: json["mobile_number"] ?? "",
@@ -143,6 +146,7 @@ class FeasibilityData {
 
   Map<String?, dynamic> toJson() => {
         "building_number": buildingNumber,
+        "charge_area_name": chargeAreaName,
         "area_id": areaId,
         "area_name": areaName,
         "mobile_number": mobileNumber,

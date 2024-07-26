@@ -1,0 +1,55 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
+
+abstract class LMCInstallationState extends Equatable {}
+
+class LMCInstallationInitialState extends LMCInstallationState {
+  @override
+  List<Object> get props => [];
+}
+
+class LMCInstallationPageLoadState extends LMCInstallationState {
+  @override
+  List<Object> get props => [];
+}
+
+//ignore: must_be_immutable
+class LMCInstallationDataState extends LMCInstallationState {
+  final bool isLoader;
+  final bool isLoadingMore;
+  final dynamic allAreaValue;
+  final int pageNo;
+  final List<GetAllAreaModel> listOfAllArea;
+  List<InstallationDoneRows> listOfInstallationRow;
+  InstallationDoneModel? installationDoneModel;
+  final ScrollController scrollController;
+  final TextEditingController bpNumberController;
+
+  LMCInstallationDataState({
+    required this.isLoader,
+    required this.isLoadingMore,
+    required this.allAreaValue,
+    required this.pageNo,
+    required this.listOfAllArea,
+    required this.listOfInstallationRow,
+    required this.installationDoneModel,
+    required this.scrollController,
+    required this.bpNumberController,
+  });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    isLoader,
+    isLoadingMore,
+    allAreaValue,
+    pageNo,
+    listOfAllArea,
+    listOfInstallationRow,
+    installationDoneModel,
+    scrollController,
+    bpNumberController,
+  ];
+}

@@ -11,23 +11,23 @@ import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/presenation/preview_feasibility_view.dart';
+import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_bloc.dart';
+import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_event.dart';
+import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_state.dart';
+import 'package:lmc/features/Installation/PreviewInstallation/presentation/preview_installation_view.dart';
 
-class FeasibilityView extends StatefulWidget {
-  const FeasibilityView({super.key});
+class LMCInstallationView extends StatefulWidget {
+  const LMCInstallationView({super.key});
 
   @override
-  State<FeasibilityView> createState() => _FeasibilityViewState();
+  State<LMCInstallationView> createState() => _LMCInstallationViewState();
 }
 
-class _FeasibilityViewState extends State<FeasibilityView> {
+class _LMCInstallationViewState extends State<LMCInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<LMCFeasibilityBloc>(context).add(LMCFeasibilityPageLoadEvent(context: context));
+    BlocProvider.of<LMCInstallationBloc>(context).add(LMCInstallationPageLoadEvent(context: context));
     super.initState();
   }
 
@@ -35,12 +35,12 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: RoutesName.lmcFeasibility,
+        title: RoutesName.installation,
         boolLeading: true,
       ),
-      body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
+      body: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
         builder: (context, state) {
-          if (state is LMCFeasibilityDataState) {
+          if (state is LMCInstallationDataState) {
             return _itemBuilder(dataState: state);
           } else {
             return const Center(
@@ -52,7 +52,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     );
   }
 
-  Widget _itemBuilder({required LMCFeasibilityDataState dataState}) {
+  Widget _itemBuilder({required LMCInstallationDataState dataState}) {
     return Column(
       children: [
         Padding(
@@ -72,22 +72,19 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     );
   }
 
-  Widget _areaDropDown({required LMCFeasibilityDataState dataState}) {
+  Widget _areaDropDown({required LMCInstallationDataState dataState}) {
     return DropdownWidget<GetAllAreaModel>(
       label: "Select Area",
       hint: "Select Area",
       dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
-        BlocProvider.of<LMCFeasibilityBloc>(context).add(SelectAreaValueEvent(
-          allAreaValue: newVal!,
-          context: context,
-        ));
+        BlocProvider.of<LMCInstallationBloc>(context).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
       },
     );
   }
 
-  Widget _searchTextField({required LMCFeasibilityDataState dataState}) {
+  Widget _searchTextField({required LMCInstallationDataState dataState}) {
     return TextFieldWidget(
       label: AppString.searchBPNumber,
       hintText: AppString.searchBPNumber,
@@ -99,7 +96,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
         color: Colors.green.shade800,
       ),
       onChanged: (val) {
-        BlocProvider.of<LMCFeasibilityBloc>(context).add(SearchBpNumberEvent(
+        BlocProvider.of<LMCInstallationBloc>(context).add(SearchBpNumberEvent(
           context: context,
           searchBpNumber: val,
         ));
@@ -107,8 +104,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     );
   }
 
-  Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
-    return dataState.feasibilityModel?.success == 400
+  Widget _dataTableWidget({required LMCInstallationDataState dataState}) {
+    return dataState.installationDoneModel?.success == 400
         ? Center(child: Text("No records found"))
         : SingleChildScrollView(
             child: SingleChildScrollView(
@@ -131,39 +128,41 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                     _dataColumn(label: "BP Number"),
                     _dataColumn(label: "Area"),
                     _dataColumn(label: "Name"),
+                    //  _dataColumn(label: "Proposed Date"),
                   ],
-                  rows: dataState.listOfFeasibilityRow
+                  rows: dataState.listOfInstallationRow
                       .mapIndexed((index, user) => DataRow(
                               onSelectChanged: (newValue) async {
-                                await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
-                                await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");
-                                await SharedPref.setString(key: PrefsValue.dma, value: user.dma ?? "");
-                                await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn ?? "");
-                                await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName ?? "");
-                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName ?? "");
-                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName ?? "");
-                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName ?? "");
-                                await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName ?? "");
-                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName ?? "");
-                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass ?? "");
+                                await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
+                                await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
+                                await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
+                                await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value: user.feasibilityVisitDate!);
+                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
+                                await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeArea!);
+                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
+                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
+                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
+                                await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber!);
+                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
+                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
+                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
                                 await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
                                 await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
                                 await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
                                 await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
-                                await SharedPref.setString(key: PrefsValue.state, value: user.state ?? "");
-                                await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
-                                await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
-                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
+                                await SharedPref.setString(key: PrefsValue.town, value: user.town!);
+                                await SharedPref.setString(key: PrefsValue.district, value: user.district!);
+                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewInstallationView()));
                               },
                               cells: <DataCell>[
-                                _dataCell(label: (dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                _dataCell(label: (dataState.listOfInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
                                 _dataCell(label: user.mobileNumber.toString()),
                                 _dataCell(label: user.bpNumber.toString()),
                                 _dataCell(label: user.areaName.toString()),
                                 _dataCell(label: user.firstName.toString()),
+
+                                ///  _dataCell(label: user.feasibilityVisitDate.toString()),
                               ]))
                       .toList(),
                 ),

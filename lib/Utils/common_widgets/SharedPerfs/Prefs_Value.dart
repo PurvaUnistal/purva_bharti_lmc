@@ -15,9 +15,11 @@ class PrefsValue {
   static String workCompletedDate = "Work Completed Date";
   static String custRegNo = "customerRegistrationNo";
   static String feasibilityVisitDate = "feasibilityVisitDate";
+  static String chargeArea = "chargeArea";
   static String areaName = "areaName";
   static String firstName = "firstName";
   static String lastName = "lastName";
+  static String mobileNumber = "mobileNumber";
   static String guardianName = "guardianName";
   static String proCateName = "propName";
   static String propClass = "propClass";

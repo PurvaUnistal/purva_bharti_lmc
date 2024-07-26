@@ -12,6 +12,7 @@ import 'package:lmc/features/Home/domain/bloc/home_state.dart';
 import 'package:lmc/features/Home/presentation/widget/card_widget.dart';
 import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
+import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
 import 'package:lmc/features/LMC%20Installation/presentation/installation_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -92,8 +93,8 @@ class _HomeViewState extends State<HomeView> {
             icon: Icons.arrow_circle_down_outlined,
             text: "LMC Installation",
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => InstallationView()));
-              //  Navigator.pushReplacementNamed(context, RoutesName.lmcInstallation,);
+             // Navigator.push(context, MaterialPageRoute(builder: (context) => InstallationView()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LMCInstallationView()));
             },
           ),
         ],

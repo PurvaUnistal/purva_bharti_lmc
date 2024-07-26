@@ -56,6 +56,7 @@ class _PreviewMeterInstalViewState extends State<PreviewMeterInstalView> {
           children: [
             _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
             _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
+            _rowItem(textName: AppString.chargeArea, textValue: dataState.areaName),
             _rowItem(textName: AppString.area, textValue: dataState.areaName),
             _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
             _rowItem(textName: AppString.lastName, textValue: dataState.lastName),

@@ -8,37 +8,37 @@ import 'package:lmc/Utils/common_widgets/app_color.dart';
 import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/styles_widget.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
+import 'package:lmc/features/Installation/FormInstallation/presentation/form_installation_view.dart';
+import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
+import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_event.dart';
+import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_state.dart';
 
-class PreviewFeasibilityView extends StatefulWidget {
-  const PreviewFeasibilityView({super.key,});
+class PreviewInstallationView extends StatefulWidget {
+  const PreviewInstallationView({
+    super.key,
+  });
 
   @override
-  State<PreviewFeasibilityView> createState() => _PreviewFeasibilityViewState();
+  State<PreviewInstallationView> createState() => _PreviewInstallationViewState();
 }
 
-class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
-
+class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<PreviewFeasibilityBloc>(context).add(PreviewFeasibilityPageLoadEvent(context: context));
+    BlocProvider.of<PreviewInstallationBloc>(context).add(PreviewInstallationPageLoadEvent(context: context));
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: RoutesName.lmcFeasibility,
+        title: RoutesName.installation,
         boolLeading: true,
       ),
-      body:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
+      body: BlocBuilder<PreviewInstallationBloc, PreviewInstallationState>(
         builder: (context, state) {
-          if (state is PreviewFeasibilityDataState) {
+          if (state is PreviewInstallationDataState) {
             return _itemBuilder(dataState: state, context: context);
           } else {
             return Center(child: SpinLoader());
@@ -48,18 +48,19 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}){
+  _itemBuilder({required PreviewInstallationDataState dataState, required BuildContext context}) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            _rowItem(textName: AppString.custReg,textValue: dataState.custRegNo),
-            _rowItem(textName: AppString.chargeArea,textValue: dataState.chargeArea),
-            _rowItem(textName: AppString.area,textValue: dataState.areaName),
-            _rowItem(textName: AppString.firstName,textValue: dataState.firstName),
-            _rowItem(textName: AppString.lastName,textValue: dataState.lastName),
-            _rowItem(textName: AppString.mobileNumber,textValue: dataState.mobileNumber),
+            _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
+            _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
+            _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
+            _rowItem(textName: AppString.area, textValue: dataState.areaName),
+            _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
+            _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
+            _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
             _rowItem(textName: AppString.buildingNumber,textValue: dataState.buildingNumber),
             _rowItem(textName: AppString.houseNumber,textValue: dataState.houseNumber),
             _rowItem(textName: AppString.street,textValue: dataState.locality),
@@ -83,11 +84,15 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(child: Text("${textName} :",style: Styles.labels,)),
               Flexible(
                   child: Text(
-                    textValue,
-                  )),
+                "${textName} :",
+                style: Styles.labels,
+              )),
+              Flexible(
+                  child: Text(
+                textValue,
+              )),
             ],
           ),
         ),
@@ -98,17 +103,13 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  Widget _button({required PreviewFeasibilityDataState dataState}) {
+  Widget _button({required PreviewInstallationDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-        text: AppString.checkFea,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FormFeasibilityView()));
-        })
+            text: AppString.installation,
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FormInstallationView()));
+            })
         : DottedLoaderWidget();
   }
 

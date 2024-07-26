@@ -14,8 +14,7 @@ class ImagePopWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child:
         Container(
           padding: const EdgeInsets.all(20),
@@ -26,8 +25,8 @@ class ImagePopWidget extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Align(
                 alignment: Alignment.center,
@@ -37,16 +36,11 @@ class ImagePopWidget extends StatelessWidget {
                 title: const Text('Gallery'),
                 onTap: onTapGallery,
               ),
+              Divider(color: AppColor.primer1,),
               ListTile(
                 leading: Icon(Icons.photo_camera,color: AppColor.primer),
                 title: const Text('Camera'),
                 onTap: onTapCamera,
-              ),
-              ButtonWidget(
-                text: 'Dismiss',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
               ),
             ],
           ),

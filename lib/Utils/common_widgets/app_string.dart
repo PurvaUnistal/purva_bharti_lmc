@@ -26,9 +26,11 @@ class AppString {
   static String custReg = "Customer Registration";
   static String lmcFeaDate = "LMC Feasibility Date";
   static String lmcProposed = "LMC Proposed Date";
+  static String chargeArea = "Charge Area";
   static String area = "Area";
   static String firstName = "First Name";
   static String lastName = "Last Name";
+  static String mobileNumber = "Mobile Number";
   static String guardianName = "Guardian Name";
   static String propertyCategory = "Property Category";
   static String propertyClass = "Property Class";

@@ -15,9 +15,11 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   FeasibilityModel? feasibilityModel;
   FeasibilityData feasibilityRowsModel = FeasibilityData();
   String custRegNo = '';
+  String chargeArea = '';
   String areaName = '';
   String firstName = '';
   String lastName = '';
+  String mobileNumber = '';
   String guardianName = '';
   String proCateName = '';
   String propClass = '';
@@ -35,9 +37,11 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     isLoader = false;
     feasibilityRowsModel = FeasibilityData();
     custRegNo = await SharedPref.getString(key: PrefsValue.custRegNo,);
+    chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
     firstName =  await SharedPref.getString(key: PrefsValue.firstName);
     lastName =  await SharedPref.getString(key: PrefsValue.lastName);
+    mobileNumber =  await SharedPref.getString(key: PrefsValue.mobileNumber);
     guardianName = await SharedPref.getString(key: PrefsValue.guardianName);
     proCateName = await SharedPref.getString(key: PrefsValue.proCateName);
     propClass = await SharedPref.getString(key: PrefsValue.propClass);
@@ -57,9 +61,11 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     emit(PreviewFeasibilityDataState(
         isLoader: isLoader,
         custRegNo: custRegNo,
+        chargeArea: chargeArea,
         areaName: areaName,
         firstName: firstName,
         lastName: lastName,
+        mobileNumber: mobileNumber,
         guardianName: guardianName,
         proCateName: proCateName,
         propClass: propClass,

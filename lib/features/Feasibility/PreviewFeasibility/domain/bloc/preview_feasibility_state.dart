@@ -17,9 +17,11 @@ class PreviewFeasibilityPageLoadState extends PreviewFeasibilityState {
 class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   final bool isLoader;
   String custRegNo;
+  String chargeArea;
   String areaName;
   String firstName;
   String lastName;
+  String mobileNumber;
   String guardianName;
   String proCateName;
   String propClass;
@@ -38,9 +40,11 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   PreviewFeasibilityDataState({
     required this.isLoader,
      required this.custRegNo,
+     required this.chargeArea,
      required this.areaName,
      required this.firstName,
      required this.lastName,
+     required this.mobileNumber,
      required this.colony,
      required this.guardianName,
      required this.proCateName,
@@ -63,10 +67,12 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
   List<Object?> get props => [
     isLoader,
     custRegNo,
+    chargeArea,
     areaName,
     street,
     firstName,
     lastName,
+    mobileNumber,
     colony,
     guardianName,
     proCateName,
