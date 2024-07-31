@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
@@ -10,12 +11,6 @@ import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_bloc.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_bloc.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/FormMeterInstallation/domain/bloc/form_meter_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/domain/bloc/meter_installation_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/PreviewMeterInstallation/domain/bloc/preview_meter_installation_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/FormRFCSection/domain/bloc/form_rfc_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/PreviewRFCSection/domain/bloc/preview_rfc_bloc.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/domain/bloc/rfc_section_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 
 void main() async {
@@ -25,6 +20,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+            statusBarColor: AppColor.primer
+        ));
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => LoginBloc()),
@@ -32,12 +31,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => LMCFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => PreviewFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => FormFeasibilityBloc()),
-          BlocProvider(create: (BuildContext context) => MeterInstallationBloc()),
-          BlocProvider(create: (BuildContext context) => PreviewMeterInstallationBloc()),
-          BlocProvider(create: (BuildContext context) => FormMeterBloc()),
-          BlocProvider(create: (BuildContext context) => RFCSectionBloc()),
-          BlocProvider(create: (BuildContext context) => PreviewRFCBloc()),
-          BlocProvider(create: (BuildContext context) => FormRFCBloc()),
           BlocProvider(create: (BuildContext context) => LMCInstallationBloc()),
           BlocProvider(create: (BuildContext context) => PreviewInstallationBloc()),
           BlocProvider(create: (BuildContext context) => FormInstallationBloc()),

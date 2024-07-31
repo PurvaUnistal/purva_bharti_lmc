@@ -5,11 +5,12 @@ import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
+import 'package:lmc/Utils/common_widgets/icon_button.dart';
+import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
@@ -56,7 +57,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             children: [
               _verticalSpace(),
@@ -94,10 +95,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,
-      suffixIcon: Icon(
-        Icons.search_rounded,
-        color: Colors.green.shade800,
-      ),
+      suffixIcon: IconButtonWidget(iconData:  Icons.search_rounded,onPressed: (){},),
       onChanged: (val) {
         BlocProvider.of<LMCFeasibilityBloc>(context).add(SearchBpNumberEvent(
           context: context,
@@ -121,9 +119,6 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                   horizontalMargin: 0,
                   showCheckboxColumn: false,
                   headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
                   dividerThickness: 1,
                   columns: [
                     _dataColumn(label: "S.No"),
@@ -135,6 +130,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                   rows: dataState.listOfFeasibilityRow
                       .mapIndexed((index, user) => DataRow(
                               onSelectChanged: (newValue) async {
+                                await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
+                                await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate ?? "");
                                 await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
                                 await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");
                                 await SharedPref.setString(key: PrefsValue.dma, value: user.dma ?? "");

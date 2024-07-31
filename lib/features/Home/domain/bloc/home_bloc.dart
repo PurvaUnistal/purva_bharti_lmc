@@ -5,7 +5,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/Home/domain/bloc/home_event.dart';
 import 'package:lmc/features/Home/domain/bloc/home_state.dart';
-import 'package:lmc/features/LMC%20Installation/presentation/installation_view.dart';
+import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitialState()) {
@@ -33,7 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       FeasibilityView(),
     );
     pageWidgets.add(
-      InstallationView(),
+      LMCInstallationView(),
     );
     bottomNavyBarItemList.add(
         BottomNavigationBarItem(

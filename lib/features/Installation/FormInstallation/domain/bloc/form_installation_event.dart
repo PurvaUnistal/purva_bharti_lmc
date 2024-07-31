@@ -117,7 +117,7 @@ class SelectLocationOfHouseEvent extends FormInstallationEvent {
   List<Object> get props => [context];
 }
 
-class SelectQTYLMCEvent extends FormInstallationEvent {
+/*class SelectQTYLMCEvent extends FormInstallationEvent {
   final String qtyValue;
   final BuildContext context;
   final int index;
@@ -125,7 +125,7 @@ class SelectQTYLMCEvent extends FormInstallationEvent {
   @override
   // TODO: implement props
   List<Object> get props => [qtyValue,context, index];
-}
+}*/
 
 class SelectRegulatorsValueEvent extends FormInstallationEvent {
   final String regulatorsValue;

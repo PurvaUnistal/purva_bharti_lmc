@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/DelayReasonModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/MaterialItem.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 
 abstract class FormInstallationState extends Equatable {}

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/Home/presentation/home_view.dart';
-import 'package:lmc/features/LMC%20Installation/Meter%20Installation/MeterInstallation/presentation/meter_installation_view.dart';
-import 'package:lmc/features/LMC%20Installation/RFC%20Section/RFCSection/presentation/rfc_section_view.dart';
-import 'package:lmc/features/LMC%20Installation/presentation/installation_view.dart';
 import 'package:lmc/features/Login/presentation/login_view.dart';
 import 'package:lmc/features/Splash/presentation/splash_view.dart';
 
@@ -23,15 +20,6 @@ class Routes {
       case RoutesName.lmcFeasibility:
         return MaterialPageRoute(
             builder: (BuildContext context) => const FeasibilityView());
-      case RoutesName.lmcInstallation:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const InstallationView());
-      case RoutesName.meterInstallation:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const MeterInstallationView());
-      case RoutesName.rfcSection:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const RFCSectionView());
         default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(

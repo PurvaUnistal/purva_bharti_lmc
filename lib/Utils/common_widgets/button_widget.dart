@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
 class ButtonWidget extends StatelessWidget {
   final Function() onPressed;
@@ -11,7 +12,7 @@ class ButtonWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green.shade800,
+        backgroundColor: AppColor.primer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
@@ -19,7 +20,7 @@ class ButtonWidget extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
         child: Text(
-          text, style: Styles.login,
+          text, style: Styles.btnText,
         ),
       ),
     );

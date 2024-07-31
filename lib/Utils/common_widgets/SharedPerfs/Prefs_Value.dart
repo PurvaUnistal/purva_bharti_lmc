@@ -40,4 +40,6 @@ class PrefsValue {
   static String rfcLMCFeasId = "rfcLMCFeasId";
   static String installationId = "installationId";
   static String meterLMCFeasId = "meterLMCFeasId";
+  static String proposedDate = "proposedDate";
+  static String assignLmcDate = "assignLmcDate";
 }

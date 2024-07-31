@@ -8,7 +8,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/service/Apis.dart';
@@ -126,37 +126,6 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({required BuildContext context,}) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    try {
-      Map<String, String> para = {
-        "schema":schema,
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);
-      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(jsonDecode(res));
-      return materialModel.data;
-    } catch (e) {
-      log("getRegulators-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<GetConstantModel>?> getRFCApi({required BuildContext context}) async {
-    try {
-      Map<String, String> para = {
-        "key": "rfc",
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
-      return response;
-    } catch (e) {
-      log("getRFCApi-->${e.toString()}");
-    }
-
-    return null;
-  }
 
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,

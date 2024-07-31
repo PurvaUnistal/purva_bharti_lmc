@@ -11,9 +11,9 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_event.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_state.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/DelayReasonModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/MaterialItem.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
 
@@ -41,7 +41,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureGalleryInstallationEvent>(_captureGalleryInstallation);
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
     on<SelectRFCCheckValueEvent>(_selectRFCCheckValue);
-    on<SelectQTYLMCEvent>(_selectQTYLMC);
     on<SubmitFormInstallationEvent>(_submit);
   }
   String materialId = '';
@@ -151,11 +150,10 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     proConDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());;
     extraPipeController.text = "0";
     extraPriceController.text = "0";
-    await fetchFreeMaterialApi(context: event.context,);
-    await fetchRFCApi(context: event.context,);
     await fetchRegulatorsApi(context: event.context,regulatorSerial: "");
     await _setSRLocation();
     await _setHouseLocation();
+    await fetchRFCApi(context: event.context,);
     _eventCompleted(emit);
   }
 
@@ -226,7 +224,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     var res = await FormInstallationHelper.getReadyForNgcApi(context: context);
     if (res != null) {
       listOfReadyNGC = res;
-      readyNGCValue = listOfReadyNGC.first;
       return res;
     }
   }
@@ -235,7 +232,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     var res = await DelayReasonModel.getCheckData();
     if (res != null) {
       listOfDelayReason = res;
-      delayReasonValue = listOfDelayReason.first;
       return res;
     }
   }
@@ -287,41 +283,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
   }
 
-  fetchFreeMaterialApi({required BuildContext context}) async {
-    List<String> tempList = [];
-    List<MaterialItem> _materialList = [];
-    var res = await FormInstallationHelper.getAllFreeMaterialApi(context: context,);
-    if (res != null) {
-      listOfAllMaterial = res;
-      tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
-      listOfAllMaterialId.addAll(tempList);
-      _materialList = List.generate(
-        listOfAllMaterial.length,
-            (i) => MaterialItem(
-            value: '0',
-            id: '${listOfAllMaterial[i].id}',
-            name: '${listOfAllMaterial[i].materialName}',
-            unit: '${listOfAllMaterial[i].materialUnit}',
-            controller: TextEditingController(text: "0")),
-      );
-      materialList.addAll(_materialList);
-      listOfQtyLMC = _materialList.asMap().values.map((e) => e.controller.text).toList();
-      return res;
-    }
-  }
 
-  _selectQTYLMC(SelectQTYLMCEvent event,  emit) {
-    listOfQtyLMC[event.index] = event.qtyValue;
-    _eventCompleted(emit);
-  }
-
-  fetchRFCApi({required BuildContext context}) async {
-    var res = await FormInstallationHelper.getRFCApi(context: context,);
-    if (res != null) {
-      listOfAllRFC = res;
-      return res;
-    }
-  }
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
     if(event.regulatorsValue.isNotEmpty){
@@ -421,6 +383,14 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       installationImg = photoPath;
     }
     _eventCompleted(emit);
+  }
+
+  fetchRFCApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getRFCApi(context: context,);
+    if (res != null) {
+      listOfAllRFC = res;
+      return res;
+    }
   }
 
   _selectRFCCheckValue(SelectRFCCheckValueEvent event, emit) {

@@ -67,6 +67,8 @@ class FeasibilityData {
   final String? propName;
   final String? propClass;
   final String? bpNumber;
+  final String? proposedDate;
+  final String? assignLmcDate;
 
   FeasibilityData({
     this.buildingNumber,
@@ -104,6 +106,8 @@ class FeasibilityData {
     this.propName,
     this.propClass,
     this.bpNumber,
+    this.proposedDate,
+    this.assignLmcDate,
   });
 
   factory FeasibilityData.fromJson(Map<String?, dynamic> json) => FeasibilityData(
@@ -142,6 +146,8 @@ class FeasibilityData {
         propName: json["prop_name"] ?? "",
         propClass: json["prop_class"] ?? "",
         bpNumber: json["bp_number"] ?? "",
+        proposedDate: json["proposed_date"] ?? "",
+        assignLmcDate: json["assign_lmc_date"] ?? "",
       );
 
   Map<String?, dynamic> toJson() => {
@@ -180,5 +186,7 @@ class FeasibilityData {
         "prop_name": propName,
         "prop_class": propClass,
         "bp_number": bpNumber,
+        "proposed_date": proposedDate,
+        "assign_lmc_date": assignLmcDate,
       };
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});

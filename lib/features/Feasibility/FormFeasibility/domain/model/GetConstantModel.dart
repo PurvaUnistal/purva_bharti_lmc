@@ -1,11 +1,11 @@
 class GetConstantModel {
   final dynamic key;
-  final String value;
+  final String? value;
   bool isSelected;
 
   GetConstantModel({
-    required this.key,
-    required this.value,
+     this.key,
+     this.value,
     this.isSelected = false,
   });
 
@@ -24,6 +24,6 @@ class GetConstantModel {
 
   @override
   String toString() {
-    return this.value;
+    return this.value ?? "";
   }
 }

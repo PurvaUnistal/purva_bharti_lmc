@@ -1,5 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+
+
 class MessageBoxTwoButtonPopWidget extends StatelessWidget {
   final String message;
   final String? subMessage;
@@ -24,53 +28,41 @@ class MessageBoxTwoButtonPopWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _closeButton(context: context),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-
                   Padding(
-                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05,
-                        right: MediaQuery.of(context).size.width * 0.05),
+                    padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05,),
                     child: Column(
                       children: [
-                        Text(message,),
+                        _vertical(context: context),
+                        Text(
+                          "Alert !",textAlign: TextAlign.center,style: Styles.stars,
+                        ),
+                        _vertical(context: context),
+                        Text(message,textAlign: TextAlign.center,),
                         Text(subMessage?? "",),
+                        Divider(color: AppColor.grey,),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed:  () {
+                                  Navigator.pop(context);
+                                }, child: Text("Cancel",
+                              ),
+                              ),),
+                            Expanded(
+                              child: TextButton(
+                                onPressed:  onPressed,
+                                child: Text(okButtonText,
+                                ),
+                              ),
+
+                            )
+
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-
-                  Container(
-                    height: 1.0,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.grey[350],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed:  () {
-                              Navigator.pop(context);
-                            }, child: Text("Cancel",
-                          ),
-                        ),),
-                          Expanded(
-                            child: TextButton(
-                              onPressed:  onPressed,
-                              child: Text(okButtonText,
-                            ),
-                          ),
-
-                          )
-
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
@@ -79,22 +71,10 @@ class MessageBoxTwoButtonPopWidget extends StatelessWidget {
       ),
     );
   }
-
-
-  Widget _closeButton({ required BuildContext context}) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05,
-                right: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05,),
-            child: Text(
-              "Alert !",textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ],
+  _vertical({required BuildContext context}){
+    return  SizedBox(
+      height: MediaQuery.of(context).size.height * 0.02,
     );
   }
+
 }

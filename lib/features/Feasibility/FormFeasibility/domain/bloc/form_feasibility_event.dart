@@ -19,6 +19,7 @@ class SelectProposedDateEvent extends FormFeasibilityEvent {
   List<Object> get props => [context];
 }
 
+
 class SelectFeasibilityDateEvent extends FormFeasibilityEvent {
   final BuildContext context;
   SelectFeasibilityDateEvent({required this.context});
@@ -49,6 +50,26 @@ class SelectLMCReasonValueEvent extends FormFeasibilityEvent {
   @override
   // TODO: implement props
   List<Object> get props => [lmcReasonValue];
+}
+
+class SelectQTYLMCEvent extends FormFeasibilityEvent {
+  final String qtyValue;
+  final BuildContext context;
+  final int index;
+  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
+  @override
+  // TODO: implement props
+  List<Object> get props => [qtyValue,context, index];
+}
+
+class SelectRFCCheckValueEvent extends FormFeasibilityEvent {
+  final bool isSelected;
+  final BuildContext context;
+  final int index;
+  SelectRFCCheckValueEvent({required this.isSelected, required this.context, required this.index});
+  @override
+  // TODO: implement props
+  List<Object> get props => [isSelected,context, index];
 }
 
 class SubmitFormFeasibilityEvent extends FormFeasibilityEvent {

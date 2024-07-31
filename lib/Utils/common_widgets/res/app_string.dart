@@ -1,0 +1,75 @@
+
+
+class AppString {
+  static String release = "Release";
+  static String reDate = "21/6/2024";
+  static String dateFormat = "dd-MM-yyyy";
+  static String emailLabel = "Enter User Email";
+  static String passwordLabel = "Enter User Password";
+  static String emailValidation = "Please enter email id";
+  static String passwordValidation = "Please enter password";
+  static String submit = "Submit";
+  static String login = "Login";
+  static String logout = "Logout";
+  static String checkFea = "Check Feasibility";
+  static String checkRFC = "Check RFC";
+  static String meterInstal = "Meter Installation";
+  static String meterInstallation = "Meter Installation";
+  static String no = "No";
+  static String logoutMsg = "Are you sure you want to logout? Once you logout, you will be return to login screen";
+  static String star = "* ";
+
+
+  static String search = "Search";
+  static String selectArea = "Select Area";
+  static String custReg = "Customer Registration";
+  static String lmcAssignedDate = "LMC assigned Date";
+  static String lmcFeaDate = "Date of Feasibility";
+  static String lmcProposed = "Proposed Installation Date";
+  static String chargeArea = "Charge Area";
+  static String area = "Area";
+  static String firstName = "First Name";
+  static String lastName = "Last Name";
+  static String mobileNumber = "Mobile Number";
+  static String guardianName = "Guardian Name";
+  static String propertyCategory = "Property Category";
+  static String propertyClass = "Property Class";
+  static String buildingNumber = "Building Number";
+  static String houseNumber = "House Number";
+  static String colony = "Colony/Society/Apartment";
+  static String street = "Street Name";
+  static String town = "Town";
+  static String district = "District";
+  static String pinCode = "Pin Code";
+  static String searchBPNumber = "Search BP Number...";
+  static String bpNumber = "BP Number";
+  static String lmcProDate = "LMC Proposed Date";
+  static String lmcFeasibilityDate = "LMC Feasibility Date";
+  static String checkFeasibility = "Is Feasible? ";
+  static String lmcReason = "LMC Reason";
+  static String typeOfNR = "Type Of NR";
+  static String actualWorkStart = "Actual Work Start";
+  static String reasonDelay = "Reason if Delay";
+  static String meterReadingDate = "Meter Reading Date";
+  static String meterNumber = "Meter Number";
+  static String regulator = "Regulators";
+  static String meterInitNumber = "Meter Initial Reading";
+  static String latOfSR = "Latitude Of SR";
+  static String longOfSR = "Longitude  Of SR";
+  static String latOfHouse  = "Latitude Of House";
+  static String longOfHouse  = "Longitude  Of House";
+  static String srNumber   = "SR Number";
+  static String rfcDeclarationDate   = "RFC Declaration Date";
+  static String proConDate  = "Proposed Conversion Date";
+  static String extraPrice  = "Extra Price";
+  static String extraPipe  = "Extra Pipe";
+  static String photo  = "Photo";
+  static String pneumatic  = "Pneumatic Test Report";
+  static String rfc  = "RFC Form";
+  static String installation  = "Installation";
+  static String material  = "Material";
+  static String meter  = "Meter Installation";
+  static String reason  = "Reason";
+  static String remarks  = "Remarks";
+  static String followUpDate  = "Follow Up Date";
+}

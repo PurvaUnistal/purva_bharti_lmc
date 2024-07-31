@@ -1,20 +1,19 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:lmc/Utils/common_widgets/app_bar_widget.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
+import 'package:lmc/Utils/common_widgets/icon_button.dart';
+import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/auto_suggestion_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_bloc.dart';
@@ -81,6 +80,10 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           children: [
             _bpNumberController(stateData: dataState),
             _verticalSpace(),
+            _proposedDateController(stateData: dataState),
+            _verticalSpace(),
+            _delayReasonDropdown(stateData: dataState),
+            _verticalSpace(),
             _typeOfNRDropdown(stateData: dataState),
             _verticalSpace(),
             _meterReadingDateController(stateData: dataState),
@@ -89,9 +92,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             _verticalSpace(),
             _initialMeterReading(stateData: dataState),
             _verticalSpace(),
-            _delayReasonDropdown(stateData: dataState),
-            _verticalSpace(),
             _srNumberController(stateData: dataState),
+            _verticalSpace(),
             _regulatorController(stateData: dataState),
             _verticalSpace(),
             _rfcConDateController(stateData: dataState),
@@ -101,8 +103,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             _locationOfSR(stateData: dataState),
             _verticalSpace(),
             _locationOfHouse(stateData: dataState),
-            _verticalSpace(),
-            _materialList(stateData: dataState),
             _verticalSpace(),
             _checkListRFC(stateData: dataState),
             _verticalSpace(),
@@ -122,6 +122,36 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       label: AppString.bpNumber,
       enabled: false,
       controller: stateData.bpNumberController,
+    );
+  }
+
+  Widget _proposedDateController({required FormInstallationDataState stateData}) {
+    return TextFieldWidget(
+      hintText: AppString.lmcProDate,
+      label: AppString.lmcProDate,
+      enabled: false,
+      controller: stateData.proposedDateController,
+      suffixIcon:IconButtonWidget(
+          iconData:  Icons.calendar_today,
+          onPressed:(){
+        BlocProvider.of<FormInstallationBloc>(context).add(SelectProposedDateEvent(context: context));
+      }),
+      onTap: () {
+        BlocProvider.of<FormInstallationBloc>(context).add(SelectProposedDateEvent(context: context));
+      },
+    );
+  }
+
+  Widget _delayReasonDropdown({required FormInstallationDataState stateData}) {
+    return DropdownWidget<DelayReasonModel>(
+      star: AppString.star,
+      label: AppString.reasonDelay,
+      hint: AppString.reasonDelay,
+      dropdownValue: stateData.delayReasonValue == null ? null : stateData.delayReasonValue,
+      items: stateData.listOfDelayReason,
+      onChanged: (val) {
+        BlocProvider.of<FormInstallationBloc>(context).add(SelectDelayReasonValueEvent(delayReasonValue: val));
+      },
     );
   }
 
@@ -162,11 +192,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       label: AppString.meterReadingDate,
       enabled: true,
       controller: stateData.meterReadingDateController,
-      suffixIcon: IconButton(
-        icon: Icon(
-          Icons.calendar_today,
-          color: AppColor.primer,
-        ),
+      suffixIcon: IconButtonWidget(
+        iconData:  Icons.calendar_today,
         onPressed: () {
           BlocProvider.of<FormInstallationBloc>(context).add(SelectMeterReadingDateEvent(context: context));
         },
@@ -254,18 +281,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _delayReasonDropdown({required FormInstallationDataState stateData}) {
-    return DropdownWidget<DelayReasonModel>(
-      star: AppString.star,
-      label: AppString.reasonDelay,
-      hint: AppString.reasonDelay,
-      dropdownValue: stateData.delayReasonValue == null ? null : stateData.delayReasonValue,
-      items: stateData.listOfDelayReason,
-      onChanged: (val) {
-        BlocProvider.of<FormInstallationBloc>(context).add(SelectDelayReasonValueEvent(delayReasonValue: val));
-      },
-    );
-  }
 
 
   Widget _button({required FormInstallationDataState dataState}) {
@@ -314,11 +329,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       label: AppString.rfcDeclarationDate,
       enabled: true,
       controller: stateData.rfcConDateController,
-      suffixIcon: IconButton(
-        icon: Icon(
-          Icons.calendar_today,
-          color: AppColor.primer,
-        ),
+      suffixIcon:IconButtonWidget(
+        iconData:  Icons.calendar_today,
         onPressed: () {
           BlocProvider.of<FormInstallationBloc>(context).add(SelectRFCDeclarationDateEvent(context: context));
         },
@@ -335,11 +347,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       label: AppString.proConDate,
       enabled: true,
       controller: stateData.proConDateController,
-      suffixIcon: IconButton(
-        icon: Icon(
-          Icons.calendar_today,
-          color: AppColor.primer,
-        ),
+      suffixIcon: IconButtonWidget(
+        iconData:  Icons.calendar_today,
         onPressed: () {
           BlocProvider.of<FormInstallationBloc>(context).add(SelectProposedConDateEvent(context: context));
         },
@@ -349,46 +358,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       },
     );
   }
-
-  Widget _materialList({required FormInstallationDataState stateData}){
-    return Column(
-      children: stateData.materialList.mapIndexed((index, e) {
-        return Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 7,
-                  child: TextFieldWidget(
-                    hintText: AppString.material,
-                    label: AppString.material,
-                    initialValue : e.name,
-                    enabled: false,
-                  ),
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                Flexible(
-                  flex: 3,
-                  child: TextFieldWidget(
-                    hintText: e.unit,
-                    label: e.unit,
-                    initialValue : e.controller.text,
-                    enabled: true,
-                    keyboardType: TextInputType.number,
-                    onChanged: (val){
-                      BlocProvider.of<FormInstallationBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val, index: index));
-                    },
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
 
   Widget _locationOfSR({required FormInstallationDataState stateData}){
     return Row(
@@ -415,8 +384,9 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           ),
         ),
         SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-        IconButton(
-          icon: Icon(Icons.location_on, color: AppColor.primer,),
+
+    IconButtonWidget(
+    iconData:Icons.location_on,
           onPressed: (){
             BlocProvider.of<FormInstallationBloc>(context).add(SelectLocationOfSREvent(context: context));
           }, )
@@ -449,8 +419,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           ),
         ),
         SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-        IconButton(
-          icon: Icon(Icons.location_on, color: AppColor.primer,),
+        IconButtonWidget(
+          iconData:  Icons.location_on,
           onPressed: (){
             BlocProvider.of<FormInstallationBloc>(context).add(SelectLocationOfSREvent(context: context));
           }, )
@@ -582,7 +552,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         itemBuilder: (context, index){
           return CheckboxListTile(
             value: stateData.listOfAllRFC[index].isSelected,
-            title: Text( stateData.listOfAllRFC[index].value, style: Styles.labels,),
+            title: Text( stateData.listOfAllRFC[index].value!, style: Styles.labels,),
             onChanged: (newVal){
               BlocProvider.of<FormInstallationBloc>(context).add(
                   SelectRFCCheckValueEvent(

@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
 class ImageWidget extends StatelessWidget {
   final File imgFile;

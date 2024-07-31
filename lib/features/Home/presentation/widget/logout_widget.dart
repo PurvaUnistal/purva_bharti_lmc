@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/features/Login/presentation/login_view.dart';
 
 class LogoutWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class LogoutWidget extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
             ),
-            Text(AppString.logoutMsg,textAlign: TextAlign.center, style: Styles.title,),
+            Text(AppString.logoutMsg,textAlign: TextAlign.center, style: Styles.text,),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),

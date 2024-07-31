@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';

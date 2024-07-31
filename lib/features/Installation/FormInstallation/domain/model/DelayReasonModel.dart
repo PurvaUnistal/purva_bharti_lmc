@@ -5,11 +5,10 @@ class DelayReasonModel {
 
   static getCheckData() {
     List<DelayReasonModel> delayReasonList = [];
-    delayReasonList.add(DelayReasonModel(id: "1", name: "Select Delay Reason"));
-    delayReasonList.add(DelayReasonModel(id: "2", name: "Pipeline not charged"));
-    delayReasonList.add(DelayReasonModel(id: "3", name: "Contractor not available"));
-    delayReasonList.add(DelayReasonModel(id: "4", name: "Customer hold"));
-    delayReasonList.add(DelayReasonModel(id: "5", name: "Customer unavailable"));
+    delayReasonList.add(DelayReasonModel(id: "1", name: "Pipeline not charged"));
+    delayReasonList.add(DelayReasonModel(id: "2", name: "Contractor not available"));
+    delayReasonList.add(DelayReasonModel(id: "3", name: "Customer hold"));
+    delayReasonList.add(DelayReasonModel(id: "4", name: "Customer unavailable"));
 
     return delayReasonList;
   }

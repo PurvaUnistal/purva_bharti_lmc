@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
-import 'package:lmc/Utils/common_widgets/styles_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
 class DropdownWidget<T> extends StatelessWidget {
   final T? dropdownValue;
@@ -23,12 +23,21 @@ class DropdownWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+        hint: Text(hint, style: Styles.labels),
+        style: Styles.texts,
+        isExpanded: true,
+        isDense: true,
+        elevation: 16,
         borderRadius: BorderRadius.circular(5),
         decoration: InputDecoration(
-          fillColor: AppColor.black,
-          // labelText: label,
-          isDense: false,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+          filled: true,
+          fillColor: AppColor.white,
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
+          suffixIconConstraints: const BoxConstraints(
+            maxWidth: 25,
+            maxHeight: 25,
+          ),
           enabledBorder: _border(),
           disabledBorder:_border(),
           border: _border(),
@@ -40,24 +49,18 @@ class DropdownWidget<T> extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(child: Text(star??"",  style:Styles.stars)),
+                Flexible(child: Text(star ?? "",  style:Styles.stars)),
                 Flexible(child: Text(label  ?? "", style:Styles.labels),
                 ),
               ],
             ),
           ),
         ),
-        hint: Text(hint, style: Styles.labels),
-        style: Styles.texts,
-        isExpanded: true,
         value: dropdownValue != null ? dropdownValue : null,
         items: items.map<DropdownMenuItem<T>>((T value) {
           return DropdownMenuItem<T>(
             value: value,
-            child: Text(
-              value.toString(),
-              style: Styles.texts,
-            ),
+            child: Text(value.toString(), style: Styles.texts,),
           );
         }).toList(),
         onChanged: onChanged

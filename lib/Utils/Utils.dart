@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 
 class Utils {
