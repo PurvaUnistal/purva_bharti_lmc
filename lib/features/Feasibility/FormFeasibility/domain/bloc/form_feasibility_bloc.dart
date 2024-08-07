@@ -84,7 +84,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectFeasibilityDate(SelectFeasibilityDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(assignedDateController.text);
-    print(assignDate);
     DateTime? dateTime = await showDatePicker(context: event.context,
         initialDate: DateTime.now(),
         firstDate: assignDate,
@@ -125,7 +124,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
     checkFeasibleValue = event.checkFeasibility;
-    print(checkFeasibleValue!.key);
     _eventCompleted(emit);
   }
 
@@ -165,7 +163,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
 
   _submit(SubmitFormFeasibilityEvent event, emit) async {
-   // try {
+    try {
       var validationCheck = await FormFeasibilityHelper.validationSubmit(
         context: event.context,
         feasibilityDate: feasibilityDateController.text.trim().toString(),
@@ -206,11 +204,11 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           _eventCompleted(emit);
         }
       }
-   /* } catch (e) {
+    } catch (e) {
       print("_submit-->${e.toString()}");
       isBtnLoader = false;
       _eventCompleted(emit);
-    }*/
+    }
   }
 
 

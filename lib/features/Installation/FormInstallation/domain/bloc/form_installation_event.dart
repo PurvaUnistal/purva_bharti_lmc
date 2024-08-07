@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 
 abstract class FormInstallationEvent extends Equatable {}
 
@@ -11,25 +12,9 @@ class FormInstallationPageLoadEvent extends FormInstallationEvent {
   List<Object> get props => [context];
 }
 
-class SelectProposedDateEvent extends FormInstallationEvent {
+class SelectInstallationDateEvent extends FormInstallationEvent {
   final BuildContext context;
-  SelectProposedDateEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
-
-class SelectActualWorkDateEvent extends FormInstallationEvent {
-  final BuildContext context;
-  SelectActualWorkDateEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
-
-class SelectMeterReadingDateEvent extends FormInstallationEvent {
-  final BuildContext context;
-  SelectMeterReadingDateEvent({required this.context});
+  SelectInstallationDateEvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];
@@ -49,6 +34,27 @@ class SelectDelayReasonValueEvent extends FormInstallationEvent {
   @override
   // TODO: implement props
   List<Object> get props => [delayReasonValue];
+}
+
+class SelectRegulatorTypeValueEvent extends FormInstallationEvent {
+  final BuildContext context;
+  final LmcReasonModel regulatorTypeValue;
+  SelectRegulatorTypeValueEvent({
+    required this.context,
+    required this.regulatorTypeValue,
+  });
+  @override
+  // TODO: implement props
+  List<Object> get props => [regulatorTypeValue,context];
+}
+
+class SelectRegulatorsValueEvent extends FormInstallationEvent {
+  final String regulatorsValue;
+  final BuildContext context;
+  SelectRegulatorsValueEvent({required this.regulatorsValue, required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [regulatorsValue,context];
 }
 
 class SelectNGCValueEvent extends FormInstallationEvent {
@@ -93,6 +99,16 @@ class SelectProposedConDateEvent extends FormInstallationEvent {
   List<Object> get props => [context];
 }
 
+class SelectQTYLMCEvent extends FormInstallationEvent {
+  final String qtyValue;
+  final BuildContext context;
+  final int index;
+  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
+  @override
+  // TODO: implement props
+  List<Object> get props => [qtyValue,context, index];
+}
+
 class SelectRFCDeclarationDateEvent extends FormInstallationEvent {
   final BuildContext context;
   SelectRFCDeclarationDateEvent({required this.context});
@@ -115,25 +131,6 @@ class SelectLocationOfHouseEvent extends FormInstallationEvent {
   @override
   // TODO: implement props
   List<Object> get props => [context];
-}
-
-/*class SelectQTYLMCEvent extends FormInstallationEvent {
-  final String qtyValue;
-  final BuildContext context;
-  final int index;
-  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
-  @override
-  // TODO: implement props
-  List<Object> get props => [qtyValue,context, index];
-}*/
-
-class SelectRegulatorsValueEvent extends FormInstallationEvent {
-  final String regulatorsValue;
-  final BuildContext context;
-  SelectRegulatorsValueEvent({required this.regulatorsValue, required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [regulatorsValue,context];
 }
 
 class CaptureGalleryRFCCardEvent extends FormInstallationEvent{

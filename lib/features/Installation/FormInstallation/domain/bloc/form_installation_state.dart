@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/DelayReasonModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
+import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 
 abstract class FormInstallationState extends Equatable {}
@@ -21,38 +20,33 @@ class FormInstallationPageLoadState extends FormInstallationState {
 }
 
 class FormInstallationDataState extends FormInstallationState {
-  final bool isLoader;
-  final bool isBtnLoader;
-  final File meterImg;
-  final ListOfMeterNo? meterNoValue;
-  final GetConstantModel? typeOfNrValue;
-  final DelayReasonModel? delayReasonValue;
-  final List<ListOfMeterNo> listOfMeterNo;
-  final List<GetConstantModel> listOfTypeOfNr;
-  final List<DelayReasonModel> listOfDelayReason;
-  final List<String> listOfMeterNumber;
-  final TextEditingController bpNumberController;
-  final TextEditingController proposedDateController;
-  final TextEditingController actualWorkDateController;
-  final TextEditingController meterIniReading1Controller;
-  final TextEditingController meterIniReading2Controller;
-  final TextEditingController meterIniReading3Controller;
-  final TextEditingController meterInitialReadingController;
-  final TextEditingController meterReadingDateController;
-  final FocusNode meterIniReading1FocusNode;
-  final FocusNode meterIniReading2FocusNode;
-  final FocusNode meterIniReading3FocusNode;
+  bool isLoader;
+  bool isBtnLoader;
+  bool isDelayReason;
+  bool isRegulator;
   bool isSelected;
   File rfcCardImg;
   File pneumaticTestReportImg;
   File installationImg;
+  File meterImg;
+  ListOfMeterNo? meterNoValue;
+  LmcReasonModel? delayReasonValue;
+  GetConstantModel? typeOfNrValue;
+  LmcReasonModel? regulatorTypeValue;
+  List<ListOfMeterNo> listOfMeterNo;
+  List<GetConstantModel> listOfTypeOfNr;
+  List<LmcReasonModel> listOfDelayReason;
+  List<LmcReasonModel> listOfRegulatorType;
+  List<String> listOfMeterNumber;
   List<ListOfMeterNo> listOfRegulatorNo;
   List<String> listOfRegulator;
   List<String> listOfQtyLMC;
   List<FreeMaterialData> listOfAllMaterial;
   List<GetConstantModel> listOfAllRFC;
   List<MaterialItem> materialList;
-  TextEditingController srNumberController;
+  FocusNode meterIniReading1FocusNode;
+  FocusNode meterIniReading2FocusNode;
+  FocusNode meterIniReading3FocusNode;
   TextEditingController latOfSRController;
   TextEditingController longOfSRController;
   TextEditingController latOfHouseController;
@@ -61,41 +55,50 @@ class FormInstallationDataState extends FormInstallationState {
   TextEditingController proConDateController;
   TextEditingController extraPipeController;
   TextEditingController extraPriceController;
+  TextEditingController bpNumberController;
+  TextEditingController proposedDateController;
+  TextEditingController installationDateController;
+  TextEditingController meterIniReading1Controller;
+  TextEditingController meterIniReading2Controller;
+  TextEditingController meterIniReading3Controller;
+  TextEditingController meterInitialReadingController;
 
 
   FormInstallationDataState({
     required this.isLoader,
     required this.isBtnLoader,
+    required this.isDelayReason,
+    required this.isRegulator,
     required this.meterImg,
+    required this.isSelected,
+    required this.rfcCardImg,
+    required this.pneumaticTestReportImg,
+    required this.installationImg,
     required this.meterNoValue,
     required this.typeOfNrValue,
     required this.delayReasonValue,
+    required this.regulatorTypeValue,
     required this.listOfMeterNo,
     required this.listOfTypeOfNr,
     required this.listOfDelayReason,
     required this.listOfMeterNumber,
-    required this.bpNumberController,
-    required this.proposedDateController,
-    required this.actualWorkDateController,
-    required this.meterIniReading1Controller,
-    required this.meterIniReading2Controller,
-    required this.meterIniReading3Controller,
-    required this.meterInitialReadingController,
-    required this.meterReadingDateController,
-    required this.meterIniReading1FocusNode,
-    required this.meterIniReading2FocusNode,
-    required this.meterIniReading3FocusNode,
-    required this.isSelected,
-    required this.rfcCardImg,
-    required this.listOfQtyLMC,
-    required this.pneumaticTestReportImg,
-    required this.installationImg,
+    required this.listOfRegulatorType,
     required this.listOfRegulatorNo,
     required this.listOfRegulator,
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
     required this.materialList,
-    required this.srNumberController,
+    required this.listOfQtyLMC,
+    required this.meterIniReading1FocusNode,
+    required this.meterIniReading2FocusNode,
+    required this.meterIniReading3FocusNode,
+    required this.bpNumberController,
+    required this.proposedDateController,
+    required this.installationDateController,
+    required this.meterIniReading1Controller,
+    required this.meterIniReading2Controller,
+    required this.meterIniReading3Controller,
+    required this.meterInitialReadingController,
     required this.latOfSRController,
     required this.longOfSRController,
     required this.latOfHouseController,
@@ -112,6 +115,8 @@ class FormInstallationDataState extends FormInstallationState {
   List<Object?> get props => [
     isLoader,
     isBtnLoader,
+    isDelayReason,
+    isRegulator,
     meterImg,
     meterNoValue,
     typeOfNrValue,
@@ -120,14 +125,15 @@ class FormInstallationDataState extends FormInstallationState {
     listOfTypeOfNr,
     listOfDelayReason,
     listOfMeterNumber,
+    regulatorTypeValue,
+    listOfRegulatorType,
     bpNumberController,
     proposedDateController,
-    actualWorkDateController,
+    installationDateController,
     meterIniReading1Controller,
     meterIniReading2Controller,
     meterIniReading3Controller,
     meterInitialReadingController,
-    meterReadingDateController,
     meterIniReading1FocusNode,
     meterIniReading2FocusNode,
     meterIniReading3FocusNode,
@@ -141,7 +147,6 @@ class FormInstallationDataState extends FormInstallationState {
     listOfAllMaterial,
     listOfAllRFC,
     materialList,
-    srNumberController,
     latOfSRController,
     longOfSRController,
     latOfHouseController,

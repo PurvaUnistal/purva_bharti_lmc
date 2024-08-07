@@ -10,7 +10,7 @@ class IconButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(onPressed: onPressed, icon: Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Icon(iconData, color: AppColor.primer, size: 12,),
+      child: Icon(iconData, color: AppColor.primer, size: 15,),
     ));
   }
 }

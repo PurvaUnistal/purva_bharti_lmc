@@ -15,6 +15,11 @@ class Styles {
   static TextStyle table = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
 
   static TextStyle labels =  TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.primer);
+  static TextStyle labelGrey =  TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.grey);
+  static TextStyle title = TextStyle(fontSize: 12, color:Colors.green.shade800, fontWeight: FontWeight.bold);
+  static TextStyle status({required color }) {
+    return TextStyle(fontSize: 12, color:color, fontWeight: FontWeight.bold);
+  }
 
   static TextStyle texts = const TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.black);
 }

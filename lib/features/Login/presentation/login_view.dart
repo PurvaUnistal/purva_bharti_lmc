@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
+import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
@@ -60,14 +61,14 @@ class _LoginViewState extends State<LoginView> {
         alignment: AlignmentDirectional.topCenter,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Align(
               alignment: Alignment.center,
               child: Container(
                 height:h * 0.6,
                 child: Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(18.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,10 +116,7 @@ class _LoginViewState extends State<LoginView> {
       hintText: AppString.emailLabel,
       autofillHints: [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
-      prefixIcon: Icon(
-        Icons.email,
-        color: Colors.green.shade800,
-      ),
+      prefixIcon: IconButtonWidget(iconData: Icons.email,onPressed: (){}),
       onChanged: (val) {
         BlocProvider.of<LoginBloc>(context).add(
             LoginSetEmailIdEvent(emailId: val.toString().replaceAll(" ", "")));
@@ -132,20 +130,13 @@ class _LoginViewState extends State<LoginView> {
       hintText:  AppString.passwordLabel,
       autofillHints: const [AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
-      prefixIcon: Icon(
-        Icons.password,
-        color: Colors.green.shade800,
-      ),
-      suffixIcon: IconButton(
-        icon: Icon(
-          dataState.isPassword ? Icons.visibility_off : Icons.visibility,
-          color: Colors.green.shade800,
-        ),
-        onPressed: () {
-          BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(
-              isHideShow: dataState.isPassword == true ? false : true));
-        },
-      ),
+      prefixIcon:  IconButtonWidget(iconData: Icons.password,onPressed: (){}),
+      suffixIcon: IconButtonWidget(
+          iconData: dataState.isPassword ? Icons.visibility_off : Icons.visibility,
+          onPressed: (){
+            BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(
+                isHideShow: dataState.isPassword == true ? false : true));
+          }),
       obscureText: dataState.isPassword,
       onChanged: (val) {
         BlocProvider.of<LoginBloc>(context).add(LoginSetPasswordEvent(
@@ -157,13 +148,13 @@ class _LoginViewState extends State<LoginView> {
   Widget _loginBtnWidget({required LoginFetchDataState dataState}) {
     return dataState.isPageLoader == false
         ? ButtonWidget(
-            text: AppString.login,
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              TextInput.finishAutofillContext();
-              BlocProvider.of<LoginBloc>(context).add(
-                  LoginSubmitDataEvent(context: context, isLoginLoading: true));
-            })
+        text: AppString.login,
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          TextInput.finishAutofillContext();
+          BlocProvider.of<LoginBloc>(context).add(
+              LoginSubmitDataEvent(context: context, isLoginLoading: true));
+        })
         : DottedLoaderWidget();
   }
 

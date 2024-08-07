@@ -32,6 +32,7 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green.shade50,
       appBar: AppBarWidget(
         title: RoutesName.installation,
         boolLeading: true,
@@ -67,8 +68,8 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
             _rowItem(textName: AppString.town,textValue: dataState.town),
             _rowItem(textName: AppString.pinCode,textValue: dataState.pinCode),
             _verticalSpace(),
-            _verticalSpace(),
             _button(dataState: dataState),
+            _verticalSpace(),
           ],
         ),
       ),
@@ -76,30 +77,19 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   }
 
   Widget _rowItem({required String textName, required String textValue}) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                  child: Text(
-                "${textName} :",
-                style: Styles.labels,
-              )),
-              Flexible(
-                  child: Text(
-                textValue,
-              )),
-            ],
-          ),
+    return Card(
+      color: AppColor.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(child: Text("${textName} :",style: Styles.labels,)),
+            Flexible(child: Text(textValue,style:Styles.texts,textAlign: TextAlign.right)),
+          ],
         ),
-        Divider(
-          color: AppColor.primer1,
-        )
-      ],
+      ),
     );
   }
 

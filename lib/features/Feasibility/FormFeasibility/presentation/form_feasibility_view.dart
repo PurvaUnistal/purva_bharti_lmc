@@ -147,7 +147,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-
   Widget _materialList({required FormFeasibilityDataState dataState}){
     return dataState.checkFeasibleValue?.key == "1" ? Column(
       children: dataState.materialList.mapIndexed((index, e) {
@@ -188,7 +187,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         : Container();
   }
 
-
   Widget _proposedDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       star: AppString.star,
@@ -207,7 +205,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       },
     );
   }
-
 
   Widget _lmcReasonDropdown({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3" ? _col(

@@ -31,7 +31,8 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
     BlocProvider.of<LMCInstallationBloc>(context).add(LMCInstallationPageLoadEvent(context: context));
     super.initState();
   }
-
+  ScrollController _horizontalScrollController = ScrollController();
+  ScrollController _verticalScrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,80 +104,107 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
   }
 
   Widget _dataTableWidget({required LMCInstallationDataState dataState}) {
+    var h = MediaQuery.of(context).size.height * 0.026;
+    print("hh${h}");
     return dataState.installationDoneModel?.success == 400
         ? Center(child: Text("No records found"))
-        : SingleChildScrollView(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
-              child: DataTable(
-                sortAscending: true,
-                columnSpacing: 0,
-                horizontalMargin: 0,
-                showCheckboxColumn: false,
-                headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
-                dividerThickness: 1,
-                columns: [
-                  _dataColumn(label: "S.No"),
-                  _dataColumn(label: "Mobile Number"),
-                  _dataColumn(label: "BP Number"),
-                  _dataColumn(label: "Area"),
-                  _dataColumn(label: "Name"),
-                  //  _dataColumn(label: "Proposed Date"),
-                ],
-                rows: dataState.listOfInstallationRow
-                    .mapIndexed((index, user) => DataRow(
-                            onSelectChanged: (newValue) async {
-                              await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
-                              await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
-                              await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
-                              await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value: user.feasibilityVisitDate!);
-                              await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
-                              await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeArea!);
-                              await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
-                              await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
-                              await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
-                              await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber!);
-                              await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName!);
-                              await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName!);
-                              await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass!);
-                              await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
-                              await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
-                              await SharedPref.setString(key: PrefsValue.town, value: user.town!);
-                              await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                              await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewInstallationView()));
-                            },
-                            cells: <DataCell>[
-                              _dataCell(label: (dataState.listOfInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                              _dataCell(label: user.mobileNumber.toString()),
-                              _dataCell(label: user.bpNumber.toString()),
-                              _dataCell(label: user.areaName.toString()),
-                              _dataCell(label: user.firstName.toString()),
+        : Theme(
+      data: ThemeData(
+        highlightColor: AppColor.primer1,
+      ),
+      child: Scrollbar(
+        controller: _verticalScrollController,
+        thickness: 3.0,
+        scrollbarOrientation: ScrollbarOrientation.right,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          controller: _verticalScrollController,
+          child: Theme(
+            data: ThemeData(
+              highlightColor: AppColor.primer1,
+            ),
+            child: Scrollbar(
+              controller: _horizontalScrollController,
+              thickness: 3.0,
+              scrollbarOrientation: ScrollbarOrientation.top,
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                controller: _horizontalScrollController,
+                scrollDirection: Axis.horizontal,
+                child: Theme(
+                  data: Theme.of(context).copyWith(dividerColor:AppColor.primer),
+                  child: DataTable(
+                    sortAscending: true,
+                    columnSpacing: 0,
+                    horizontalMargin: 0,
+                    showCheckboxColumn: false,
+                    dataTextStyle: Styles.texts,
+                    dataRowHeight: MediaQuery.of(context).size.height * 0.04,
+                    headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
+                    dividerThickness: 1,
+                    columns: [
+                      _dataColumn(label: "S.No"),
+                      _dataColumn(label: "Mobile Number"),
+                      _dataColumn(label: "BP Number"),
+                      _dataColumn(label: "Area"),
+                      _dataColumn(label: "Name"),
+                      //  _dataColumn(label: "Proposed Date"),
+                    ],
+                    rows: dataState.listOfInstallationRow
+                        .mapIndexed((index, user) => DataRow(
+                        onSelectChanged: (newValue) async {
+                          await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
+                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate!);
+                          await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
+                          await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
+                          await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value: user.feasibilityVisitDate!);
+                          await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
+                          await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName!);
+                          await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
+                          await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
+                          await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
+                          await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber!);
+                          await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
+                          await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
+                          await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
+                          //   await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
+                          await SharedPref.setString(key: PrefsValue.town, value: user.town!);
+                          await SharedPref.setString(key: PrefsValue.district, value: user.district!);
+                          await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewInstallationView()));
+                        },
+                        cells: <DataCell>[
+                          _dataCell(label: (dataState.listOfInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                          _dataCell(label: user.mobileNumber.toString()),
+                          _dataCell(label: user.bpNumber.toString()),
+                          _dataCell(label: user.areaName.toString()),
+                          _dataCell(label: user.firstName.toString()),
 
-                              ///  _dataCell(label: user.feasibilityVisitDate.toString()),
-                            ]))
-                    .toList(),
+                          ///  _dataCell(label: user.feasibilityVisitDate.toString()),
+                        ]))
+                        .toList(),
+                  ),
+                ),
               ),
             ),
           ),
-        );
+        ),
+      ),
+    );
   }
 
   DataColumn _dataColumn({required String label}) {
     return DataColumn(label: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label, style: Styles.table),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Text(label, style: Styles.table, textAlign: TextAlign.center,),
     ));
   }
 
   DataCell _dataCell({required String label}) {
     return DataCell(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Text(label, textAlign: TextAlign.center,),
     ));
   }
 

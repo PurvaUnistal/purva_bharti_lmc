@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/service/Apis.dart';
@@ -51,9 +53,13 @@ class LoginHelper {
     try {
       var res = await ApiHelper.postData(
           urlEndPoint: Apis.loginUrl, body: jsonEncode(para), context: context);
+
       if(res != null && res["error"] == false){
+        String str = Apis.loginUrl;
+        await SharedPref.setString(key: PrefsValue.baseUrl,value:  str.replaceAll("auth", ""));
+        print(str.replaceAll("auth", ""));
         return LoginModel.fromJson(res);
-      } else if(res != null && res["error"] == true){
+      } else if(res != null && res["  error"] == true){
        await Utils.errorSnackBar(msg: res["messages"], context: context);
         return null;
       }

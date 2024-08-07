@@ -81,40 +81,43 @@ class TextFieldWidget extends StatelessWidget {
       inputFormatters: inputFormatters,
       style: Styles.texts,
       decoration: InputDecoration(
+        counterText: "",
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        suffixIconConstraints: const BoxConstraints(
-          maxWidth: 25,
+        suffixIconConstraints: suffixIcon != null ? const BoxConstraints(
+          maxWidth: 30,
           maxHeight: 25,
-        ),
+        ) : null,
+        prefixIconConstraints: prefixIcon != null ? const BoxConstraints(
+          maxWidth: 30,
+          maxHeight: 25,
+        ) : null,
+        filled: true,
+        fillColor: AppColor.white,
+        isDense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical:prefixIcon != null || suffixIcon != null ? 10: 10),
+        border: enabled == false ? border1 : border,
+        focusedBorder: enabled == false ? border1 : border,
+        disabledBorder:enabled == false ? border1 : border,
+        enabledBorder: enabled == false ? border1 : border,
         hintText: hintText,
-        counterText: "",
+        hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
         label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2.0,),
+          padding: const EdgeInsets.only(left: 2.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(flex : 1,child: Text(star??"",  style:Styles.stars)),
-              Flexible(flex : 6,child: Text(label  ?? "", style:Styles.labels),
+              Flexible(flex : 1,child: Text(star ?? "",  style: Styles.stars)),
+              Flexible(flex : 6,child: Text(label  ?? "", style: enabled == false ? Styles.labelGrey : Styles.labels),
               ),
             ],
           ),
         ),
-        hintStyle: Styles.labels,
-        filled: true,
-        fillColor: enabled == false ? AppColor.white05 : AppColor.white,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: suffixIcon!= null ?  8 : 5),
-        isDense: true,
-        border: enabled == false ? border1 : border,
-        focusedBorder: enabled == false ? border1 : border,
-        disabledBorder:enabled == false ? border1 : border,
-        enabledBorder: enabled == false ? border1 : border,
       ),
     );
   }
-
   OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),

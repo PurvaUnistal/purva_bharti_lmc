@@ -30,12 +30,15 @@ class InstallationDoneModel {
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
-
 class InstallationDoneRows {
-  String? areaId;
-  String? chargeArea;
-  String? buildingNumber;
+  String? chargeAreaName;
   String? areaName;
+  String? feasTpaRemarks;
+  String? feasTpaApprovalDate;
+  String? feasTpaStatus;
+  String? bpNumber;
+  String? areaId;
+  String? buildingNumber;
   String? mobileNumber;
   String? id;
   String? dmaRegId;
@@ -60,7 +63,7 @@ class InstallationDoneRows {
   dynamic paymentCreditStatusLmc;
   dynamic invoiceNumber;
   dynamic invoiceAmount;
-  String? extraPipe;
+  dynamic extraPipe;
   dynamic totPipeLength;
   dynamic msgToCustomer;
   dynamic extraPipeUserId;
@@ -75,6 +78,8 @@ class InstallationDoneRows {
   dynamic actualLmcWorkStartedDate;
   dynamic tpaInspectionDate;
   dynamic ngcConversionDate;
+  String? feasTpaApproval;
+  dynamic remarks;
   String? crn;
   String? firstName;
   String? middleName;
@@ -82,10 +87,9 @@ class InstallationDoneRows {
   String? guardianName;
   String? houseNumber;
   String? locality;
-  String? address2;
   String? town;
-  String? district;
-  String? state;
+  dynamic district;
+  dynamic state;
   String? pinCode;
   String? propertyCategoryId;
   String? propertyClassId;
@@ -98,82 +102,89 @@ class InstallationDoneRows {
   String? propName;
   String? propClass;
   String? dmaId;
-  String? bpNumber;
 
   InstallationDoneRows(
-      {this.areaId,
-      this.chargeArea,
-      this.buildingNumber,
-      this.areaName,
-      this.mobileNumber,
-      this.id,
-      this.dmaRegId,
-      this.assignLmcId,
-      this.proposedDate,
-      this.feasibilityVisitDate,
-      this.additionalBom,
-      this.createdAt,
-      this.updatedAt,
-      this.isFeasible,
-      this.feasReason,
-      this.followUpDate,
-      this.deletedAt,
-      this.source,
-      this.extraPipePayment,
-      this.installationStatus,
-      this.transactionId,
-      this.transactionTime,
-      this.modeOfDepositePayment,
-      this.bounceCharge,
-      this.bounceChargeTax,
-      this.paymentCreditStatusLmc,
-      this.invoiceNumber,
-      this.invoiceAmount,
-      this.extraPipe,
-      this.totPipeLength,
-      this.msgToCustomer,
-      this.extraPipeUserId,
-      this.invoiceDate,
-      this.extraPipeStatus,
-      this.meterNo,
-      this.regulatorNo,
-      this.lmcMeterReading,
-      this.lastMeterReading,
-      this.prevBalance,
-      this.paidInstallment,
-      this.actualLmcWorkStartedDate,
-      this.tpaInspectionDate,
-      this.ngcConversionDate,
-      this.crn,
-      this.firstName,
-      this.middleName,
-      this.lastName,
-      this.guardianName,
-      this.houseNumber,
-      this.locality,
-      this.address2,
-      this.town,
-      this.district,
-      this.state,
-      this.pinCode,
-      this.propertyCategoryId,
-      this.propertyClassId,
-      this.assignId,
-      this.isInstall,
-      this.lmcFeasId,
-      this.dma,
-      this.states,
-      this.dis,
-      this.propName,
-      this.propClass,
-      this.bpNumber,
-      this.dmaId});
+      {this.chargeAreaName,
+        this.areaName,
+        this.feasTpaRemarks,
+        this.feasTpaApprovalDate,
+        this.feasTpaStatus,
+        this.bpNumber,
+        this.areaId,
+        this.buildingNumber,
+        this.mobileNumber,
+        this.id,
+        this.dmaRegId,
+        this.assignLmcId,
+        this.proposedDate,
+        this.feasibilityVisitDate,
+        this.additionalBom,
+        this.createdAt,
+        this.updatedAt,
+        this.isFeasible,
+        this.feasReason,
+        this.followUpDate,
+        this.deletedAt,
+        this.source,
+        this.extraPipePayment,
+        this.installationStatus,
+        this.transactionId,
+        this.transactionTime,
+        this.modeOfDepositePayment,
+        this.bounceCharge,
+        this.bounceChargeTax,
+        this.paymentCreditStatusLmc,
+        this.invoiceNumber,
+        this.invoiceAmount,
+        this.extraPipe,
+        this.totPipeLength,
+        this.msgToCustomer,
+        this.extraPipeUserId,
+        this.invoiceDate,
+        this.extraPipeStatus,
+        this.meterNo,
+        this.regulatorNo,
+        this.lmcMeterReading,
+        this.lastMeterReading,
+        this.prevBalance,
+        this.paidInstallment,
+        this.actualLmcWorkStartedDate,
+        this.tpaInspectionDate,
+        this.ngcConversionDate,
+        this.feasTpaApproval,
+        this.remarks,
+        this.crn,
+        this.firstName,
+        this.middleName,
+        this.lastName,
+        this.guardianName,
+        this.houseNumber,
+        this.locality,
+        this.town,
+        this.district,
+        this.state,
+        this.pinCode,
+        this.propertyCategoryId,
+        this.propertyClassId,
+        this.assignId,
+        this.isInstall,
+        this.lmcFeasId,
+        this.dma,
+        this.states,
+        this.dis,
+        this.propName,
+        this.propClass,
+        this.dmaId});
 
   InstallationDoneRows.fromJson(Map<String, dynamic> json) {
-    chargeArea = json['charge_area_name'] ?? "";
+    chargeAreaName = json['charge_area_name'] ?? "";
+    areaName = json['area_name'] ?? "";
+    feasTpaRemarks = json['feas_tpa_remarks'] ?? "";
+    feasTpaApprovalDate = json['feas_tpa_approval_date'] ?? "";
+    feasTpaStatus = json['feas_tpa_status'] ?? "";
+    bpNumber = json['bp_number'] ?? "";
     areaId = json['area_id'] ?? "";
     buildingNumber = json['building_number'] ?? "";
-    areaName = json['area_name'] ?? "";
     mobileNumber = json['mobile_number'] ?? "";
     id = json['id'] ?? "";
     dmaRegId = json['dma_reg_id'] ?? "";
@@ -213,6 +224,8 @@ class InstallationDoneRows {
     actualLmcWorkStartedDate = json['actual_lmc_work_started_date'] ?? "";
     tpaInspectionDate = json['tpa_inspection_date'] ?? "";
     ngcConversionDate = json['ngc_conversion_date'] ?? "";
+    feasTpaApproval = json['feas_tpa_approval'] ?? "";
+    remarks = json['remarks'] ?? "";
     crn = json['crn'] ?? "";
     firstName = json['first_name'] ?? "";
     middleName = json['middle_name'] ?? "";
@@ -220,7 +233,6 @@ class InstallationDoneRows {
     guardianName = json['guardian_name'] ?? "";
     houseNumber = json['house_number'] ?? "";
     locality = json['locality'] ?? "";
-    address2 = json['address2'] ?? "";
     town = json['town'] ?? "";
     district = json['district'] ?? "";
     state = json['state'] ?? "";
@@ -236,16 +248,18 @@ class InstallationDoneRows {
     propName = json['prop_name'] ?? "";
     propClass = json['prop_class'] ?? "";
     dmaId = json['dma_id'] ?? "";
-    bpNumber = json['bp_number'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['charge_area_name'] = this.chargeArea;
-    data['area_id'] = this.areaId;
-    data['bp_number'] = this.bpNumber;
-    data['building_number'] = this.buildingNumber;
+    data['charge_area_name'] = this.chargeAreaName;
     data['area_name'] = this.areaName;
+    data['feas_tpa_remarks'] = this.feasTpaRemarks;
+    data['feas_tpa_approval_date'] = this.feasTpaApprovalDate;
+    data['feas_tpa_status'] = this.feasTpaStatus;
+    data['bp_number'] = this.bpNumber;
+    data['area_id'] = this.areaId;
+    data['building_number'] = this.buildingNumber;
     data['mobile_number'] = this.mobileNumber;
     data['id'] = this.id;
     data['dma_reg_id'] = this.dmaRegId;
@@ -285,6 +299,8 @@ class InstallationDoneRows {
     data['actual_lmc_work_started_date'] = this.actualLmcWorkStartedDate;
     data['tpa_inspection_date'] = this.tpaInspectionDate;
     data['ngc_conversion_date'] = this.ngcConversionDate;
+    data['feas_tpa_approval'] = this.feasTpaApproval;
+    data['remarks'] = this.remarks;
     data['crn'] = this.crn;
     data['first_name'] = this.firstName;
     data['middle_name'] = this.middleName;
@@ -292,7 +308,6 @@ class InstallationDoneRows {
     data['guardian_name'] = this.guardianName;
     data['house_number'] = this.houseNumber;
     data['locality'] = this.locality;
-    data['address2'] = this.address2;
     data['town'] = this.town;
     data['district'] = this.district;
     data['state'] = this.state;

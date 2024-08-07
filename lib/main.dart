@@ -12,6 +12,8 @@ import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_inst
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_bloc.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
+import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_bloc.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_bloc.dart';
 
 void main() async {
   runApp(MyApp());
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => LMCInstallationBloc()),
           BlocProvider(create: (BuildContext context) => PreviewInstallationBloc()),
           BlocProvider(create: (BuildContext context) => FormInstallationBloc()),
+          BlocProvider(create: (BuildContext context) => NgcTableBloc()),
+          BlocProvider(create: (BuildContext context) => NGCFormBloc()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

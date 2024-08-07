@@ -1,0 +1,87 @@
+import 'package:flutter/cupertino.dart';
+import 'package:bloc/bloc.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_event.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_state.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
+import 'package:lmc/features/NGC/NGCTable/helper/ngc_table_helper.dart';
+
+class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
+  NgcTableBloc() : super(NgcTableInitialState()) {
+    on<NgcTablePageLoadEvent>(_pageLoad);
+    on<SelectAreaValueEvent>(_selectAreaValue);
+    on<SearchBpNumberEvent>(_searchBpNumber);
+  }
+int pageNo = 1;
+  bool isLoader = false;
+  GetAllAreaModel? areaValue;
+  List<GetAllAreaModel> listOfAllArea = [];
+  List<InstallationByNgcData> listOfInstallationByNgc = [];
+  List<InstallationByNgcData> listOfFilterInstallationByNgc = [];
+  LMCInstallationByNgcModel? lmcInstallationByNgcModel;
+  TextEditingController bpNumberController = TextEditingController();
+
+  _pageLoad(NgcTablePageLoadEvent event, emit) async {
+    emit(NgcTablePageLoadState());
+    isLoader = false;
+    pageNo = 1;
+    areaValue = null;
+    listOfAllArea = [];
+    listOfInstallationByNgc = [];
+    lmcInstallationByNgcModel = LMCInstallationByNgcModel();
+    await fetchAllArea(context: event.context);
+    await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
+    _eventCompleted(emit);
+  }
+
+  _selectAreaValue(SelectAreaValueEvent event, emit) async {
+    areaValue = event.allAreaValue;
+    await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    _eventCompleted(emit);
+  }
+
+  _searchBpNumber(SearchBpNumberEvent event, emit) async {
+    bpNumberController.text = event.searchBpNumber;
+    if (event.searchBpNumber.length > 1) {
+      listOfInstallationByNgc = listOfInstallationByNgc.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
+      print("listOfFeasibilityRow${listOfInstallationByNgc}");
+      print("bpNumberController${bpNumberController.text}");
+    }else if (bpNumberController.text.isEmpty){
+      await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
+    }
+    _eventCompleted(emit);
+  }
+
+  fetchAllArea({required BuildContext context}) async {
+    var res = await NgcTableHelper.getAllAreaApi(context: context);
+    if (res != null) {
+      listOfAllArea = res;
+      return res;
+    }
+  }
+
+  fetchFeasibility({required BuildContext context, required String bpNumber, required String areaId}) async {
+    var res = await NgcTableHelper.getLmcInstallationByNgcApi(context: context, bpNumber: bpNumber, areaId: areaId);
+    if (res != null) {
+      lmcInstallationByNgcModel = res;
+      if (lmcInstallationByNgcModel?.success != 400) {
+        listOfInstallationByNgc = lmcInstallationByNgcModel!.data!;
+        listOfFilterInstallationByNgc = listOfInstallationByNgc;
+      }
+    }
+  }
+
+
+
+  _eventCompleted(Emitter<NgcTableState> emit) {
+    emit(FetchNgcTableDataState(
+        isLoader: isLoader,
+        pageNo: pageNo,
+        allAreaValue: areaValue,
+        listOfAllArea: listOfAllArea,
+        listOfInstallationByNgc: listOfInstallationByNgc,
+        lmcInstallationByNgcModel: lmcInstallationByNgcModel,
+        bpNumberController: bpNumberController,
+    ));
+  }
+}

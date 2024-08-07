@@ -16,6 +16,7 @@ import 'package:lmc/features/Home/presentation/widget/card_widget.dart';
 import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
+import 'package:lmc/service/Apis.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -32,7 +33,6 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,15 +40,10 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBarWidget(
         title: RoutesName.home,
         boolLeading: false,
-        leadingWidget:  Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              "${AppString.release}: ${AppString.reDate}",
-              style: Styles.rel,
-            )
-          ],
+        leadingWidget:  Align(
+          alignment: Alignment.bottomLeft,
+          child: Text("${AppString.release}: ${AppString.reDate}",textAlign: TextAlign.start, style: Styles.rel,
+          ),
         ),
         actions: [
           IconButton(
@@ -62,7 +57,6 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
       body: SafeArea(
-
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is FetchHomeDataState) {
@@ -92,18 +86,16 @@ class _HomeViewState extends State<HomeView> {
       ),*/
     );
   }
-
-
-
-
-
-
   _buildLayout({required FetchHomeDataState dataState}){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
-        Image.asset(AssetPath.household,width: double.infinity,),
+        Stack(
+          children: [
+            Image.asset(AssetPath.household,width: double.infinity,),
+            Positioned(
+                child: Text(dataState.baseUrl == Apis.baseUrl ? "UAT APP" : "", textAlign: TextAlign.end,style: Styles.title,))
+          ],
+        ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,21 +114,23 @@ class _HomeViewState extends State<HomeView> {
                 icon: Icons.arrow_circle_down_outlined,
                 text: "LMC Installation",
                 onTap: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => InstallationView()));
                   Navigator.push(context, MaterialPageRoute(builder: (context) => LMCInstallationView()));
+
                 },
               ),
             ),
           ],
         ),
      //   SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
-        CardWidget(
+        /*CardWidget(
           icon: Icons.arrow_circle_down_outlined,
           text: "NGC",
           onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => NgcTableView()));
           },
-        ),
+        ),*/
       ],
+
     );
   }
   }

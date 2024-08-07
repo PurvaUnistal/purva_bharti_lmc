@@ -15,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool isLoader =  false;
   String scheme = '';
   String userName = '';
+  String baseUrl = '';
 
   int pageIndex = 0;
   int currentIndex = 0;
@@ -25,6 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     isLoader =  false;
     scheme = await SharedPref.getString(key: PrefsValue.schema);
     userName = await SharedPref.getString(key: PrefsValue.userName);
+    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     pageIndex = 0;
     currentIndex = 0;
     pageWidgets  = [];
@@ -59,6 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(FetchHomeDataState(
         isLoader: isLoader,
         scheme: scheme,
+        baseUrl: baseUrl,
         userName: userName,
         pageIndex: pageIndex,
         currentIndex: currentIndex,

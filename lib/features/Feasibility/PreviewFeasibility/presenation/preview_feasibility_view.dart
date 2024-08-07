@@ -32,11 +32,12 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green.shade50,
       appBar: AppBarWidget(
         title: RoutesName.lmcFeasibility,
         boolLeading: true,
       ),
-      body:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
+      body: BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
         builder: (context, state) {
           if (state is PreviewFeasibilityDataState) {
             return _itemBuilder(dataState: state, context: context);
@@ -66,8 +67,8 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
             _rowItem(textName: AppString.town,textValue: dataState.town),
             _rowItem(textName: AppString.pinCode,textValue: dataState.pinCode),
             _verticalSpace(),
-            _verticalSpace(),
             _button(dataState: dataState),
+            _verticalSpace(),
           ],
         ),
       ),
@@ -75,26 +76,19 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   }
 
   Widget _rowItem({required String textName, required String textValue}) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(child: Text("${textName} :",style: Styles.labels,)),
-              Flexible(
-                  child: Text(
-                    textValue,
-                  )),
-            ],
-          ),
+    return Card(
+      color: AppColor.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(child: Text("${textName} :",style: Styles.labels,)),
+            Flexible(child: Text(textValue,style: Styles.texts,textAlign:TextAlign.right)),
+          ],
         ),
-        Divider(
-          color: AppColor.primer1,
-        )
-      ],
+      ),
     );
   }
 

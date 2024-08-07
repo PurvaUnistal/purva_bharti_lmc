@@ -10,6 +10,7 @@ class PrefsValue {
   static String gaId = "gaId";
   static String cookies = "cookies";
   static String pwdChanged = "pwdChanged";
+  static String baseUrl = "baseUrl";
 
   static String bpNumber = "bpNumber";
   static String workCompletedDate = "Work Completed Date";
@@ -42,4 +43,20 @@ class PrefsValue {
   static String meterLMCFeasId = "meterLMCFeasId";
   static String proposedDate = "proposedDate";
   static String assignLmcDate = "assignLmcDate";
+  static String dmaUserId = "dmaUserId";
+  static String lmcInstallationId = "lmcInstallationId";
+  static String isInstall = "isInstall";
+  static String meterReading = "meterReading";
+  static String meterSerial = "meterSerial";
+  static String alternateMobileNo = "alternateMobileNo";
+  static String email = "email";
+  static String ngOfBurners = "ngOfBurners";
+  static String ngChargeDate = "ngChargeDate";
+  static String delayReason = "delayReason";
+  static String typeOfNr = "typeOfNr";
+  static String latitudeTf = "latitudeTf";
+  static String longitudeTf = "longitudeTf";
+  static String latitudeHg = "latitudeHg";
+  static String longitudeHg = "longitudeHg";
+  static String rfcDate = "rfcDate";
 }

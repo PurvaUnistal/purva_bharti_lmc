@@ -26,6 +26,9 @@ class FeasibilityView extends StatefulWidget {
 }
 
 class _FeasibilityViewState extends State<FeasibilityView> {
+  ScrollController _horizontalScrollController = ScrollController();
+  ScrollController _verticalScrollController = ScrollController();
+
   @override
   void initState() {
     BlocProvider.of<LMCFeasibilityBloc>(context).add(LMCFeasibilityPageLoadEvent(context: context));
@@ -108,65 +111,110 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
     return dataState.feasibilityModel?.success == 400
         ? Center(child: Text("No records found"))
-        : SingleChildScrollView(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.green[800]),
-                child: DataTable(
-                  sortAscending: true,
-                  columnSpacing: 0,
-                  horizontalMargin: 0,
-                  showCheckboxColumn: false,
-                  headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
-                  dividerThickness: 1,
-                  columns: [
-                    _dataColumn(label: "S.No"),
-                    _dataColumn(label: "Mobile Number"),
-                    _dataColumn(label: "BP Number"),
-                    _dataColumn(label: "Area"),
-                    _dataColumn(label: "Name"),
-                  ],
-                  rows: dataState.listOfFeasibilityRow
-                      .mapIndexed((index, user) => DataRow(
-                              onSelectChanged: (newValue) async {
-                                await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
-                                await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate ?? "");
-                                await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
-                                await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");
-                                await SharedPref.setString(key: PrefsValue.dma, value: user.dma ?? "");
-                                await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn ?? "");
-                                await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName ?? "");
-                                await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName ?? "");
-                                await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName ?? "");
-                                await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName ?? "");
-                                await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName ?? "");
-                                await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName ?? "");
-                                await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass ?? "");
-                                await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
-                                await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
-                                await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
-                                await SharedPref.setString(key: PrefsValue.state, value: user.state ?? "");
-                                await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
-                                await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
-                                await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
-                              },
-                              cells: <DataCell>[
-                                _dataCell(label: (dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                                _dataCell(label: user.mobileNumber.toString()),
-                                _dataCell(label: user.bpNumber.toString()),
-                                _dataCell(label: user.areaName.toString()),
-                                _dataCell(label: user.firstName.toString()),
-                              ]))
-                      .toList(),
+        : Theme(
+      data: ThemeData(
+        highlightColor: AppColor.primer1,
+      ),
+          child: Scrollbar(
+                controller: _verticalScrollController,
+                thickness: 3.0,
+                scrollbarOrientation: ScrollbarOrientation.right,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          controller: _verticalScrollController,
+                child: Theme(
+                  data: ThemeData(
+                    highlightColor: AppColor.primer1,
+                  ),
+                  child: Scrollbar(
+                    controller: _horizontalScrollController,
+                    thickness: 3.0,
+                    scrollbarOrientation: ScrollbarOrientation.top,
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      controller: _horizontalScrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(dividerColor:AppColor.primer),
+                        child: DataTable(
+                          sortAscending: true,
+                          columnSpacing: 0,
+                          horizontalMargin: 0,
+                          showCheckboxColumn: false,
+                          dataTextStyle: Styles.texts,
+                          dataRowHeight: MediaQuery.of(context).size.height * 0.04,
+                          headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
+                          dividerThickness: 1,
+                          columns: [
+                            _dataColumn(label: "S.No"),
+                            _dataColumn(label: "Mobile Number"),
+                            _dataColumn(label: "BP Number"),
+                            _dataColumn(label: "Area"),
+                            _dataColumn(label: "Name"),
+                          ],
+                          rows: dataState.listOfFeasibilityRow
+                              .mapIndexed((index, user) => DataRow(
+                                      onSelectChanged: (newValue) async {
+                                        await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
+                                        await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate ?? "");
+                                        await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
+                                        await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");
+                                        await SharedPref.setString(key: PrefsValue.dma, value: user.dma ?? "");
+                                        await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber ?? "");
+                                        await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn ?? "");
+                                        await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber ?? "");
+                                        await SharedPref.setString(key: PrefsValue.guardianName, value: user.guardianName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.proCateName, value: user.propName ?? "");
+                                        await SharedPref.setString(key: PrefsValue.propClass, value: user.propClass ?? "");
+                                        await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
+                                        await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
+                                        await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
+                                        await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
+                                        await SharedPref.setString(key: PrefsValue.state, value: user.state ?? "");
+                                        await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
+                                        await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
+                                        await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
+                                       /* showModalBottomSheet(
+                                            constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context).size.height * (525 / 850),
+                                              minHeight: MediaQuery.of(context).size.height * (525 / 850),
+                                            ),
+                                            enableDrag: true,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                            ),
+                                          ),
+                                          isScrollControlled: true,
+                                          isDismissible: true,
+                                          context: context, builder: (context) {
+                                            return PreviewFeasibilityView();
+                                          },
+                                        );*/
+                                       Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
+                                      },
+                                      cells: <DataCell>[
+                                        _dataCell(label: (dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                        _dataCell(label: user.mobileNumber.toString()),
+                                        _dataCell(label: user.bpNumber.toString()),
+                                        _dataCell(label: user.areaName.toString()),
+                                        _dataCell(label: user.firstName.toString()),
+                                      ]))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          );
+          ),
+        );
   }
 
   DataColumn _dataColumn({required String label}) {

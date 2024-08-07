@@ -8,6 +8,8 @@ class Apis {
   static String getLMCInstallation = baseUrl + "getlmcInstallationApi?";
   static String getRFCInstallation = baseUrl + "getlmcRFCInstallationApi?";
   static String getConstant = baseUrl + "getConstant?";
+  static String lmcReason = baseUrl + "lmcreason";
+  static String regulatorType = baseUrl + "regulatortype";
   static String getMeters = baseUrl + "getMeters?";
   static String getRegulators = baseUrl + "getRegulators?";
   static String getAllFreeMaterial = baseUrl + "getAllFreeMaterial?";
@@ -16,12 +18,8 @@ class Apis {
   static String saveLmcRFCInstallation  = baseUrl + "saveLmcRFCInstallation";
 
 
-
-  static String getLmcInstallationByNgc = baseUrl + 'getlmcInstallationbyNgc';
-  static String forgotPassword = baseUrl + '/login';
-  static String tableList = baseUrl + 'getlmcInstallationbyNgc';
+  static String getLmcInstallationByNgc = baseUrl + 'getlmcInstallationbyNgc?';
   static String setNGCReport = baseUrl + 'setNGCReport';
-  static const String list = 'getlmcInstallationbyNgc';
+  static String list = 'getlmcInstallationbyNgc';
 
-  static String resetPassword = baseUrl + "resetpassword";
 }

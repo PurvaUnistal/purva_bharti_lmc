@@ -28,16 +28,11 @@ class DropdownWidget<T> extends StatelessWidget {
         isExpanded: true,
         isDense: true,
         elevation: 16,
-        borderRadius: BorderRadius.circular(5),
         decoration: InputDecoration(
           filled: true,
           fillColor: AppColor.white,
           isDense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
-          suffixIconConstraints: const BoxConstraints(
-            maxWidth: 25,
-            maxHeight: 25,
-          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
           enabledBorder: _border(),
           disabledBorder:_border(),
           border: _border(),
@@ -69,12 +64,8 @@ class DropdownWidget<T> extends StatelessWidget {
 
   OutlineInputBorder _border(){
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(
-        style: BorderStyle.solid,
-        width: 0.80,
-        color: AppColor.primer,
-      ),
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
     );
   }
 }

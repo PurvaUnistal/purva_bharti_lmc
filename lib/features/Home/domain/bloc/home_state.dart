@@ -18,6 +18,7 @@ class FetchHomeDataState extends HomeState {
   final bool isLoader;
   final String scheme;
   final String userName;
+  final String baseUrl;
   final int pageIndex;
   final int currentIndex;
   final List<Widget> pageWidgets;
@@ -25,6 +26,7 @@ class FetchHomeDataState extends HomeState {
   FetchHomeDataState({
     required this.isLoader,
     required this.scheme,
+    required this.baseUrl,
     required this.userName,
     required this.pageIndex,
     required this.pageWidgets,
@@ -35,6 +37,7 @@ class FetchHomeDataState extends HomeState {
     isLoader,
     scheme,
     userName,
+    baseUrl,
     pageIndex,
     currentIndex,
     bottomNavyBarItemList,
