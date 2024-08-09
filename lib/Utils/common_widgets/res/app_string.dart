@@ -75,7 +75,7 @@ class AppString {
   static String installation  = "Installation";
   static String meterFile  = "Meter File";
   static String material  = "Material";
-  static String meter  = "Meter Installation";
+  static String meter  = "Meter Photo";
   static String reason  = "Reason";
   static String remarks  = "Remarks";
   static String contractor  = "Contractor";

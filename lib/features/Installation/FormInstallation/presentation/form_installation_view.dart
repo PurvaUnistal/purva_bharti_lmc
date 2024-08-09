@@ -187,7 +187,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       star: AppString.star,
       hintText: AppString.meterNumber,
       label: AppString.meterNumber,
-      suggestions: stateData.listOfMeterNumber,
+      suggestions: stateData.listOfMeterNumber.length == 0 ? ["No Data"] :  stateData.listOfMeterNumber,
       keyboardType: TextInputType.text,
       onSelected: (val) {
         print(val);

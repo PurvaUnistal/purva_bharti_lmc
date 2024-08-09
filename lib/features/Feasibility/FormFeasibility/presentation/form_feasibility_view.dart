@@ -73,7 +73,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
             _bpNumberController(stateData: dataState),
             _verticalSpace(),
             _assignedDateController(stateData: dataState),
-            _verticalSpace(),
             _feasibilityDateController(stateData: dataState),
             _verticalSpace(),
             _checkFeasibilityDropdown(stateData: dataState),
@@ -116,22 +115,25 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
 
   Widget _feasibilityDateController({required FormFeasibilityDataState stateData}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.lmcFeaDate,
-      label: AppString.lmcFeaDate,
-      enabled: true,
-      controller: stateData.feasibilityDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
+    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3" ? Container()
+        :_col(
+      child: TextFieldWidget(
+        star: AppString.star,
+        hintText: AppString.lmcFeaDate,
+        label: AppString.lmcFeaDate,
+        enabled: true,
+        controller: stateData.feasibilityDateController,
+        suffixIcon: IconButtonWidget(
+          iconData: Icons.calendar_today,
+          onPressed: () {
+            BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
+          },
+        ),
+        onTap: () {
           BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
         },
       ),
-      onTap: () {
-        BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
-      },
-    );
+    ) ;
   }
 
   Widget _checkFeasibilityDropdown({required FormFeasibilityDataState stateData}) {
@@ -188,7 +190,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
 
   Widget _proposedDateController({required FormFeasibilityDataState stateData}) {
-    return TextFieldWidget(
+    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3" ?Container()
+        : TextFieldWidget(
       star: AppString.star,
       hintText: AppString.lmcProDate,
       label: AppString.lmcProDate,
@@ -203,11 +206,11 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       onTap: () {
         BlocProvider.of<FormFeasibilityBloc>(context).add(SelectProposedDateEvent(context: context));
       },
-    );
+    ) ;
   }
 
   Widget _lmcReasonDropdown({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3" ? _col(
+    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3" ? Center(
       child: DropdownWidget<GetConstantModel>(
         star: AppString.star,
         label: AppString.lmcReason,

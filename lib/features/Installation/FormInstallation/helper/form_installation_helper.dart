@@ -190,13 +190,14 @@ class FormInstallationHelper {
     required LmcReasonModel regulatorTypeId,
     required String meterReading,
     required String meterPhoto,
+    required String rfcDate,
     required String isometricPhoto,
     required String pneumaticPhoto,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
-  //  try {
+    try {
       Map<String, String> para = {
         "schema": schema,
         "meter_reading_date": meterReadingDate,
@@ -216,11 +217,12 @@ class FormInstallationHelper {
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
         "rfc_form": rfcForm ?? "",
-        "delay_reason": delayReason.name ?? "",
-        "type_of_nr": typeOfNR.value ?? "",
-        "ngc": ngc.value ?? "",
+        "delay_reason": delayReason.id.toString(),
+        "type_of_nr": typeOfNR.key.toString(),
+        "ngc": ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate ?? "",
-        "regulator_type_id": regulatorTypeId.name ?? "",
+        "regulator_type_id": regulatorTypeId.id.toString(),
+        "rfc_date": rfcDate,
       };
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
@@ -237,10 +239,10 @@ class FormInstallationHelper {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
-  /*  } catch (e) {
+    } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
       return null;
-    }*/
+    }
     return null;
   }
 

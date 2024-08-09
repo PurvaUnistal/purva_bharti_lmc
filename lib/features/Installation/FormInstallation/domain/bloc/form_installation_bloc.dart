@@ -182,7 +182,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         context: event.context,
         initialDate: DateTime.now(),
         firstDate: assignDate,
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now(),);
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       installationDateController.text = formattedDate.toString();
@@ -200,15 +200,15 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _selectRFCDeclarationDate(SelectRFCDeclarationDateEvent event,emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(feasibilityDateController.text);
     DateTime? dateTime = await showDatePicker(
-        context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: assignDate,
-        lastDate: DateTime(2050));
+      context: event.context,
+      initialDate: DateTime.now(),
+      firstDate: assignDate,
+      lastDate: DateTime.now(),);
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       rfcConDateController.text = formattedDate.toString();
-      _eventCompleted(emit);
     }
+    _eventCompleted(emit);
   }
 
   _selectProposedConDate(SelectProposedConDateEvent event,emit) async {
@@ -475,7 +475,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
 
   _submit(SubmitFormInstallationEvent event, emit) async {
-  //  try {
+    try {
       var validationCheck = await FormInstallationHelper.validationSubmit(
         context: event.context,
         dateInstallation:  installationDateController.text.trim().toString(),
@@ -502,6 +502,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           workCompletedDate:workCompletedDate.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
           meterNo:listOfMeterNumber.toString(),
+          rfcDate: rfcConDateController.text.trim().toString(),
           latitudeTf: latOfSRController.text.trim().toString(),
           longitudeTf: longOfSRController.text.trim().toString(),
           latitudeHg: latOfHouseController.text.trim().toString(),
@@ -536,11 +537,11 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           _eventCompleted(emit);
         }
       }
-   /* } catch (e) {
+    } catch (e) {
       print("_submit-->${e.toString()}");
       isBtnLoader = false;
       _eventCompleted(emit);
-    }*/
+    }
   }
 
 
