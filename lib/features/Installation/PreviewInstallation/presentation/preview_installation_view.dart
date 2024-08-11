@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
+import 'package:lmc/Utils/common_widgets/background_widget.dart';
+import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
-import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/form_installation_view.dart';
@@ -33,14 +33,10 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green.shade50,
-      appBar: AppBarWidget(
-        title: RoutesName.installation,
-        boolLeading: true,
-      ),
       body: BlocBuilder<PreviewInstallationBloc, PreviewInstallationState>(
         builder: (context, state) {
           if (state is PreviewInstallationDataState) {
-            return _itemBuilder(dataState: state, context: context);
+            return BackgroundWidget(child: _itemBuilder(dataState: state, context: context));
           } else {
             return Center(child: SpinLoader());
           }
@@ -50,10 +46,32 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   }
 
   _itemBuilder({required PreviewInstallationDataState dataState, required BuildContext context}) {
-    return SingleChildScrollView(
-      child: Padding(
+    return Scaffold(
+      appBar: AppBarWidget(
+        title: AppString.lmcInstallDetailH,
+        boolLeading: true,
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                dataState.userName,
+                textAlign: TextAlign.start,
+                style: Styles.rel,
+              ),
+              Text(
+                dataState.schema,
+                textAlign: TextAlign.start,
+                style: Styles.rel,
+              )
+            ],
+          ),
+        ],
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: ListView(
           children: [
             _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
             _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
@@ -62,13 +80,15 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
             _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
             _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
             _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
-            _rowItem(textName: AppString.buildingNumber,textValue: dataState.buildingNumber),
-            _rowItem(textName: AppString.houseNumber,textValue: dataState.houseNumber),
-            _rowItem(textName: AppString.street,textValue: dataState.locality),
-            _rowItem(textName: AppString.town,textValue: dataState.town),
-            _rowItem(textName: AppString.pinCode,textValue: dataState.pinCode),
+            _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
+            _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
+            _rowItem(textName: AppString.street, textValue: dataState.locality),
+            _rowItem(textName: AppString.town, textValue: dataState.town),
+            _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
+            _verticalSpace(),
             _verticalSpace(),
             _button(dataState: dataState),
+            _verticalSpace(),
             _verticalSpace(),
           ],
         ),
@@ -85,8 +105,12 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(child: Text("${textName} :",style: Styles.labels,)),
-            Flexible(child: Text(textValue,style:Styles.texts,textAlign: TextAlign.right)),
+            Flexible(
+                child: Text(
+              "${textName} :",
+              style: Styles.labels,
+            )),
+            Flexible(child: Text(textValue, style: Styles.texts, textAlign: TextAlign.right)),
           ],
         ),
       ),

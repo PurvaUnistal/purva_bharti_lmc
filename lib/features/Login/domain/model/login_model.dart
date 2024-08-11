@@ -4,15 +4,14 @@
 
 import 'dart:convert';
 
-LoginModel loginModelFromJson(String str) =>
-    LoginModel.fromJson(jsonDecode(str));
+LoginModel loginModelFromJson(String str) => LoginModel.fromJson(jsonDecode(str));
 
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
   final int? status;
   final bool? error;
-  final String? messages;
+  final dynamic messages;
   final String? token;
   final User? user;
   final String? exptime;
@@ -31,7 +30,7 @@ class LoginModel {
         error: json["error"] ?? "",
         messages: json["messages"] ?? "",
         token: json["token"],
-        user:  json["user"] == null ? null : User.fromJson(json["user"]),
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
         exptime: json["exptime"] ?? "",
       );
 
@@ -88,4 +87,3 @@ class User {
         "role": role,
       };
 }
-

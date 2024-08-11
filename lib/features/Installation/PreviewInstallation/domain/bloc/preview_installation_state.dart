@@ -15,6 +15,8 @@ class PreviewInstallationPageLoadState extends PreviewInstallationState {
 //ignore: must_be_immutable
 class PreviewInstallationDataState extends PreviewInstallationState {
   final bool isLoader;
+  final String schema;
+  final String userName;
   String custRegNo;
   String feasibilityVisitDate;
   String chargeArea;
@@ -34,6 +36,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   String pinCode;
 
   PreviewInstallationDataState({
+    required this.schema,
+    required this.userName,
     required this.isLoader,
     required this.custRegNo,
     required this.feasibilityVisitDate,
@@ -57,6 +61,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   @override
   // TODO: implement props
   List<Object?> get props => [
+        schema,
+        userName,
         isLoader,
         custRegNo,
         feasibilityVisitDate,
@@ -65,7 +71,7 @@ class PreviewInstallationDataState extends PreviewInstallationState {
         street,
         firstName,
         lastName,
-    mobileNumber,
+        mobileNumber,
         guardianName,
         proCateName,
         propClass,

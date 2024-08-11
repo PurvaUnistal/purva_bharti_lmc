@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_event.dart';
@@ -14,6 +16,8 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
 
+  String schema = "";
+  String userName = "";
   bool isLoader = false;
   bool isLoadingMore = false;
   int pageNo = 1;
@@ -35,6 +39,12 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     listOfInstallationRow = [];
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
+    schema = await SharedPref.getString(
+      key: PrefsValue.schema,
+    );
+    userName = await SharedPref.getString(
+      key: PrefsValue.userName,
+    );
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
     _eventCompleted(emit);
@@ -92,6 +102,8 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
 
   _eventCompleted(emit) {
     emit(LMCInstallationDataState(
+      userName: userName,
+      schema: schema,
       isLoader: isLoader,
       isLoadingMore: isLoadingMore,
       allAreaValue: areaValue,

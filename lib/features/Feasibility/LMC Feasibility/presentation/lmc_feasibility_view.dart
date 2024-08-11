@@ -2,13 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/background_widget.dart';
+import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
-import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
@@ -38,10 +38,6 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        title: RoutesName.lmcFeasibility,
-        boolLeading: true,
-      ),
       body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
         builder: (context, state) {
           if (state is LMCFeasibilityDataState) {
@@ -57,22 +53,48 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   }
 
   Widget _itemBuilder({required LMCFeasibilityDataState dataState}) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
+    return Scaffold(
+      appBar: AppBarWidget(
+        title: AppString.lmcFeaH,
+        boolLeading: true,
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _verticalSpace(),
-              _areaDropDown(dataState: dataState),
-              _verticalSpace(),
-              _searchTextField(dataState: dataState),
+              Text(
+                dataState.userName,
+                textAlign: TextAlign.start,
+                style: Styles.rel,
+              ),
+              Text(
+                dataState.schema,
+                textAlign: TextAlign.start,
+                style: Styles.rel,
+              )
             ],
           ),
+        ],
+      ),
+      body: BackgroundWidget(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                children: [
+                  _verticalSpace(),
+                  _areaDropDown(dataState: dataState),
+                  _verticalSpace(),
+                  _searchTextField(dataState: dataState),
+                ],
+              ),
+            ),
+            _verticalSpace(),
+            Flexible(child: _dataTableWidget(dataState: dataState)),
+          ],
         ),
-        _verticalSpace(),
-        Flexible(child: _dataTableWidget(dataState: dataState)),
-      ],
+      ),
     );
   }
 
@@ -98,7 +120,10 @@ class _FeasibilityViewState extends State<FeasibilityView> {
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,
-      suffixIcon: IconButtonWidget(iconData:  Icons.search_rounded,onPressed: (){},),
+      suffixIcon: IconButtonWidget(
+        iconData: Icons.search_rounded,
+        onPressed: () {},
+      ),
       onChanged: (val) {
         BlocProvider.of<LMCFeasibilityBloc>(context).add(SearchBpNumberEvent(
           context: context,
@@ -112,17 +137,17 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return dataState.feasibilityModel?.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
-      data: ThemeData(
-        highlightColor: AppColor.primer1,
-      ),
-          child: Scrollbar(
+            data: ThemeData(
+              highlightColor: AppColor.primer1,
+            ),
+            child: Scrollbar(
+              controller: _verticalScrollController,
+              thickness: 3.0,
+              scrollbarOrientation: ScrollbarOrientation.right,
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 controller: _verticalScrollController,
-                thickness: 3.0,
-                scrollbarOrientation: ScrollbarOrientation.right,
-                thumbVisibility: true,
-                child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          controller: _verticalScrollController,
                 child: Theme(
                   data: ThemeData(
                     highlightColor: AppColor.primer1,
@@ -136,7 +161,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                       controller: _horizontalScrollController,
                       scrollDirection: Axis.horizontal,
                       child: Theme(
-                        data: Theme.of(context).copyWith(dividerColor:AppColor.primer),
+                        data: Theme.of(context).copyWith(dividerColor: AppColor.primer),
                         child: DataTable(
                           sortAscending: true,
                           columnSpacing: 0,
@@ -179,25 +204,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                         await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
                                         await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
                                         await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
-                                       /* showModalBottomSheet(
-                                            constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context).size.height * (525 / 850),
-                                              minHeight: MediaQuery.of(context).size.height * (525 / 850),
-                                            ),
-                                            enableDrag: true,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                          isScrollControlled: true,
-                                          isDismissible: true,
-                                          context: context, builder: (context) {
-                                            return PreviewFeasibilityView();
-                                          },
-                                        );*/
-                                       Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                                       },
                                       cells: <DataCell>[
                                         _dataCell(label: (dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
@@ -213,12 +220,13 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                   ),
                 ),
               ),
-          ),
-        );
+            ),
+          );
   }
 
   DataColumn _dataColumn({required String label}) {
-    return DataColumn(label: Padding(
+    return DataColumn(
+        label: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Text(label, style: Styles.table),
     ));

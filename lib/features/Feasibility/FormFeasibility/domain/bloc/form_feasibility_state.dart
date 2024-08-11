@@ -19,6 +19,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   final bool isLoader;
   final bool isBtnLoader;
   final bool isSelected;
+  String schema;
+  String userName;
   final GetConstantModel? checkFeasibleValue;
   final GetConstantModel? lmcReasonValue;
   final List<GetConstantModel> listOfCheckFeasible;
@@ -35,6 +37,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
 
   FormFeasibilityDataState({
     required this.isLoader,
+    required this.schema,
+    required this.userName,
     required this.isBtnLoader,
     required this.isSelected,
     required this.checkFeasibleValue,
@@ -55,21 +59,23 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isBtnLoader,
-    isSelected,
-    checkFeasibleValue,
-    lmcReasonValue,
-    listOfCheckFeasible,
-    listOfLMCReason,
-    materialList,
-    listOfAllRFC,
-    bpNumberController,
-    proposedDateController,
-    feasibilityDateController,
-    assignedDateController,
-    reasonController,
-    remarksController,
-    followUpDateController,
-  ];
+        isLoader,
+        schema,
+        userName,
+        isBtnLoader,
+        isSelected,
+        checkFeasibleValue,
+        lmcReasonValue,
+        listOfCheckFeasible,
+        listOfLMCReason,
+        materialList,
+        listOfAllRFC,
+        bpNumberController,
+        proposedDateController,
+        feasibilityDateController,
+        assignedDateController,
+        reasonController,
+        remarksController,
+        followUpDateController,
+      ];
 }

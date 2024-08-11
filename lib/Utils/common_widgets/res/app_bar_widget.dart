@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -8,8 +9,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leadingWidget;
   final List<Widget>? actions;
   final Widget? tabBar;
-  const AppBarWidget({Key? key, this.title, this.leadingWidget, this.boolLeading, this.actions, this.tabBar})
-      : super(key: key);
+  const AppBarWidget({Key? key, this.title, this.leadingWidget, this.boolLeading, this.actions, this.tabBar}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
@@ -33,11 +33,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         child: Text(
           title ?? "",
           textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              decoration: TextDecoration.none),
+          style: Styles.appTitle,
         ),
       ),
       actions: actions ?? [],

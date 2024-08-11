@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
-import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:lmc/Utils/common_widgets/icon_button.dart';
-import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
+import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
+import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
@@ -34,15 +34,17 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: RoutesName.login,
+        title: AppString.lmcMobilityH,
         boolLeading: false,
       ),
       body: SafeArea(
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             if (state is LoginFetchDataState) {
-              return Center(
-                child: _buildLayout(dataState: state),
+              return BackgroundWidget(
+                child: Center(
+                  child: _buildLayout(dataState: state),
+                ),
               );
             } else {
               return const Center(child: CircularProgressIndicator());
@@ -65,7 +67,7 @@ class _LoginViewState extends State<LoginView> {
             child: Align(
               alignment: Alignment.center,
               child: Container(
-                height:h * 0.6,
+                height: h * 0.6,
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -82,7 +84,6 @@ class _LoginViewState extends State<LoginView> {
                       ],
                     ),
                   ),
-
                 ),
               ),
             ),
@@ -91,7 +92,8 @@ class _LoginViewState extends State<LoginView> {
             top: -80,
             left: .0,
             right: .0,
-            child: _logoWidget(),)
+            child: _logoWidget(),
+          ),
         ],
       ),
     );
@@ -112,14 +114,13 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _emailWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
-      label:  AppString.emailLabel,
+      label: AppString.emailLabel,
       hintText: AppString.emailLabel,
       autofillHints: [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
-      prefixIcon: IconButtonWidget(iconData: Icons.email,onPressed: (){}),
+      prefixIcon: IconButtonWidget(iconData: Icons.email, onPressed: () {}),
       onChanged: (val) {
-        BlocProvider.of<LoginBloc>(context).add(
-            LoginSetEmailIdEvent(emailId: val.toString().replaceAll(" ", "")));
+        BlocProvider.of<LoginBloc>(context).add(LoginSetEmailIdEvent(emailId: val.toString().replaceAll(" ", "")));
       },
     );
   }
@@ -127,20 +128,18 @@ class _LoginViewState extends State<LoginView> {
   Widget _passwordWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
       label: AppString.passwordLabel,
-      hintText:  AppString.passwordLabel,
+      hintText: AppString.passwordLabel,
       autofillHints: const [AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
-      prefixIcon:  IconButtonWidget(iconData: Icons.password,onPressed: (){}),
+      prefixIcon: IconButtonWidget(iconData: Icons.password, onPressed: () {}),
       suffixIcon: IconButtonWidget(
           iconData: dataState.isPassword ? Icons.visibility_off : Icons.visibility,
-          onPressed: (){
-            BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(
-                isHideShow: dataState.isPassword == true ? false : true));
+          onPressed: () {
+            BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(isHideShow: dataState.isPassword == true ? false : true));
           }),
       obscureText: dataState.isPassword,
       onChanged: (val) {
-        BlocProvider.of<LoginBloc>(context).add(LoginSetPasswordEvent(
-            password: val.toString().replaceAll(" ", "")));
+        BlocProvider.of<LoginBloc>(context).add(LoginSetPasswordEvent(password: val.toString().replaceAll(" ", "")));
       },
     );
   }
@@ -148,13 +147,12 @@ class _LoginViewState extends State<LoginView> {
   Widget _loginBtnWidget({required LoginFetchDataState dataState}) {
     return dataState.isPageLoader == false
         ? ButtonWidget(
-        text: AppString.login,
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          TextInput.finishAutofillContext();
-          BlocProvider.of<LoginBloc>(context).add(
-              LoginSubmitDataEvent(context: context, isLoginLoading: true));
-        })
+            text: AppString.login,
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              TextInput.finishAutofillContext();
+              BlocProvider.of<LoginBloc>(context).add(LoginSubmitDataEvent(context: context, isLoginLoading: true));
+            })
         : DottedLoaderWidget();
   }
 

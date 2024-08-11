@@ -1,7 +1,7 @@
-
-
 class AppString {
-  static String release = "Release";
+  static String version = "Version : LMC-1.0.0.00";
+  static String companyName = "© Unistal Systems Pvt. Ltd.";
+  static String release = "Release Date";
   static String reDate = "7/8/2024";
   static String dateFormat = "dd-MM-yyyy";
   static String emailLabel = "Enter User Email";
@@ -19,6 +19,13 @@ class AppString {
   static String logoutMsg = "Are you sure you want to logout? Once you logout, you will be return to login screen";
   static String star = "* ";
 
+  static String lmcMobilityH = "LMC Mobility App";
+  static String lmcFeaH = "LMC Feasibility App";
+  static String lmcFeaDetailH = "LMC Feasibility Consumer Details";
+  static String lmcFeaFormH = "LMC Feasibility Consumer Form";
+  static String lmcInstallH = "LMC Installation App";
+  static String lmcInstallDetailH = "LMC Installation Consumer Details";
+  static String lmcInstallFormH = "LMC Installation Consumer Form";
 
   static String search = "Search";
   static String selectArea = "Select Area";
@@ -50,7 +57,7 @@ class AppString {
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Is Feasible?";
   static String lmcReason = "LMC Reason";
-  static String typeOfNR = "Type of NR";
+  static String typeOfNR = "Type of Meter Connection";
   static String regulatorType = "Regulator Type";
   static String actualWorkStart = "Actual Work Start";
   static String reasonDelay = "Reason for Delay";
@@ -61,27 +68,27 @@ class AppString {
   static String meterInitNumber = "Meter Initial Reading";
   static String latOfSR = "Latitude of SR";
   static String longOfSR = "Longitude of SR";
-  static String latOfHouse  = "Latitude of House";
-  static String longOfHouse  = "Longitude of House";
+  static String latOfHouse = "Latitude of House";
+  static String longOfHouse = "Longitude of House";
   static String srNumber = "SR Number";
-  static String rfcDeclarationDate   = "RFC Declaration Date";
-  static String proNgcConDate  = "Proposed NGC Conversion Date";
-  static String extraPrice  = "Extra Price";
-  static String extraPipe  = "Extra Pipe";
-  static String photo  = "Photo";
-  static String ngcReportFile  = "Ngc Report File";
-  static String pneumatic  = "Pneumatic Test Report";
-  static String rfc  = "RFC Image";
-  static String installation  = "Installation";
-  static String meterFile  = "Meter File";
-  static String material  = "Material";
-  static String meter  = "Meter Photo";
-  static String reason  = "Reason";
-  static String remarks  = "Remarks";
-  static String contractor  = "Contractor";
-  static String meterReading  = "Meter Reading";
-  static String meterReplace  = "Do you want to replace meter?";
-  static String burnersNo  = "Burners No";
-  static String ngChargeDate  = "NG Charge Date";
-  static String followUpDate  = "Follow Up Date";
+  static String rfcDeclarationDate = "RFC Declaration Date";
+  static String proNgcConDate = "Proposed NGC Conversion Date";
+  static String extraPrice = "Extra Price";
+  static String extraPipe = "Extra Pipe";
+  static String photo = "Photo";
+  static String ngcReportFile = "Ngc Report File";
+  static String pneumatic = "Pneumatic Test Report";
+  static String rfc = "RFC Image";
+  static String installation = "Installation";
+  static String meterFile = "Meter File";
+  static String material = "Material";
+  static String meter = "Meter Photo";
+  static String reason = "Reason";
+  static String remarks = "Remarks";
+  static String contractor = "Contractor";
+  static String meterReading = "Meter Reading";
+  static String meterReplace = "Do you want to replace meter?";
+  static String burnersNo = "Burners No";
+  static String ngChargeDate = "NG Charge Date";
+  static String followUpDate = "Follow Up Date";
 }

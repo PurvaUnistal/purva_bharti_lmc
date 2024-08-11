@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 
-abstract class LMCFeasibilityState extends Equatable{}
+abstract class LMCFeasibilityState extends Equatable {}
 
 class LMCFeasibilityInitialState extends LMCFeasibilityState {
   @override
@@ -17,11 +17,13 @@ class LMCFeasibilityPageLoadState extends LMCFeasibilityState {
 }
 
 //ignore: must_be_immutable
-class LMCFeasibilityDataState extends LMCFeasibilityState{
+class LMCFeasibilityDataState extends LMCFeasibilityState {
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
   final int pageNo;
+  final String schema;
+  final String userName;
   final List<GetAllAreaModel> listOfAllArea;
   List<FeasibilityData> listOfFeasibilityRow;
   FeasibilityModel? feasibilityModel;
@@ -29,6 +31,8 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
   final ScrollController scrollController;
 
   LMCFeasibilityDataState({
+    required this.schema,
+    required this.userName,
     required this.isLoader,
     required this.isLoadingMore,
     required this.pageNo,
@@ -38,20 +42,20 @@ class LMCFeasibilityDataState extends LMCFeasibilityState{
     required this.feasibilityModel,
     required this.bpNumberController,
     required this.scrollController,
-
-});
+  });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isLoadingMore,
-    allAreaValue,
-    pageNo,
-    listOfAllArea,
-    listOfFeasibilityRow,
-    feasibilityModel,
-    bpNumberController,
-    scrollController,
-  ];
+        schema,
+        userName,
+        isLoadingMore,
+        allAreaValue,
+        pageNo,
+        listOfAllArea,
+        listOfFeasibilityRow,
+        feasibilityModel,
+        bpNumberController,
+        scrollController,
+      ];
 }

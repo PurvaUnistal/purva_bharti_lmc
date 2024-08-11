@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class Styles {
-  static TextStyle rel = TextStyle(color: Colors.white, fontWeight: FontWeight.w800,fontSize: 8);
+  static TextStyle rel = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 8);
+  static TextStyle appTitle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12);
 
-  static TextStyle btnText = TextStyle(color: Colors.white, fontWeight: FontWeight.bold,);
+  static TextStyle btnText = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  );
 
   static TextStyle text = TextStyle(fontSize: 12, color: AppColor.primer, fontWeight: FontWeight.bold);
 
@@ -14,11 +18,11 @@ class Styles {
   static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.red);
   static TextStyle table = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
 
-  static TextStyle labels =  TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.primer);
-  static TextStyle labelGrey =  TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.grey);
-  static TextStyle title = TextStyle(fontSize: 12, color:Colors.green.shade800, fontWeight: FontWeight.bold);
-  static TextStyle status({required color }) {
-    return TextStyle(fontSize: 12, color:color, fontWeight: FontWeight.bold);
+  static TextStyle labels = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.primer);
+  static TextStyle labelGrey = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.grey);
+  static TextStyle title = TextStyle(fontSize: 12, color: Colors.green.shade800, fontWeight: FontWeight.bold);
+  static TextStyle status({required color}) {
+    return TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.bold);
   }
 
   static TextStyle texts = const TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.black);

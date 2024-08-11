@@ -65,7 +65,7 @@ class TextFieldWidget extends StatelessWidget {
       focusNode: focusNode,
       autofillHints: autofillHints,
       onTap: onTap,
-      autofocus: autofocus?? false ,
+      autofocus: autofocus ?? false,
       onFieldSubmitted: onFieldSubmitted,
       enabled: enabled ?? true,
       maxLength: maxLength,
@@ -84,22 +84,26 @@ class TextFieldWidget extends StatelessWidget {
         counterText: "",
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        suffixIconConstraints: suffixIcon != null ? const BoxConstraints(
-          maxWidth: 30,
-          maxHeight: 25,
-        ) : null,
-        prefixIconConstraints: prefixIcon != null ? const BoxConstraints(
-          maxWidth: 30,
-          maxHeight: 25,
-        ) : null,
+        suffixIconConstraints: suffixIcon != null
+            ? const BoxConstraints(
+                maxWidth: 30,
+                maxHeight: 25,
+              )
+            : null,
+        prefixIconConstraints: prefixIcon != null
+            ? const BoxConstraints(
+                maxWidth: 30,
+                maxHeight: 25,
+              )
+            : null,
         filled: true,
         fillColor: AppColor.white,
         isDense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical:prefixIcon != null || suffixIcon != null ? 10: 10),
-        border: enabled == false ? border1 : border,
-        focusedBorder: enabled == false ? border1 : border,
-        disabledBorder:enabled == false ? border1 : border,
-        enabledBorder: enabled == false ? border1 : border,
+        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
+        border: enabled == false ? borderGrey : border,
+        focusedBorder: enabled == false ? borderGrey : border,
+        disabledBorder: enabled == false ? borderGrey : border,
+        enabledBorder: enabled == false ? borderGrey : border,
         hintText: hintText,
         hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
         label: Padding(
@@ -109,8 +113,10 @@ class TextFieldWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(flex : 1,child: Text(star ?? "",  style: Styles.stars)),
-              Flexible(flex : 6,child: Text(label  ?? "", style: enabled == false ? Styles.labelGrey : Styles.labels),
+              Flexible(flex: 1, child: Text(star ?? "", style: Styles.stars)),
+              Flexible(
+                flex: 6,
+                child: Text(label ?? "", style: enabled == false ? Styles.labelGrey : Styles.labels),
               ),
             ],
           ),
@@ -118,12 +124,17 @@ class TextFieldWidget extends StatelessWidget {
       ),
     );
   }
+
   OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
   );
-  OutlineInputBorder border1 = OutlineInputBorder(
+  OutlineInputBorder borderGrey = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),
+  );
+  OutlineInputBorder borderRed = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    borderSide: BorderSide(color: AppColor.red, style: BorderStyle.solid, width: 0.80),
   );
 }

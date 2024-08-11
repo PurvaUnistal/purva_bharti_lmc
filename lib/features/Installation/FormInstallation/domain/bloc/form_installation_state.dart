@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
@@ -20,7 +21,11 @@ class FormInstallationPageLoadState extends FormInstallationState {
 }
 
 class FormInstallationDataState extends FormInstallationState {
+  String schema;
+  String userName;
   bool isLoader;
+  bool isCheckMeterMismatch;
+  bool isCheckRegulatorMismatch;
   bool isBtnLoader;
   bool isDelayReason;
   bool isRegulator;
@@ -38,8 +43,8 @@ class FormInstallationDataState extends FormInstallationState {
   List<LmcReasonModel> listOfDelayReason;
   List<LmcReasonModel> listOfRegulatorType;
   List<String> listOfMeterNumber;
-  List<ListOfMeterNo> listOfRegulatorNo;
-  List<String> listOfRegulator;
+  List<String> listOfRegulatorSerial;
+  List<ListOfMeterNo> listOfRegulator;
   List<String> listOfQtyLMC;
   List<FreeMaterialData> listOfAllMaterial;
   List<GetConstantModel> listOfAllRFC;
@@ -62,10 +67,15 @@ class FormInstallationDataState extends FormInstallationState {
   TextEditingController meterIniReading2Controller;
   TextEditingController meterIniReading3Controller;
   TextEditingController meterInitialReadingController;
-
+  TextEditingController materialSerialController;
+  TextEditingController regulatorSerialController;
 
   FormInstallationDataState({
+    required this.userName,
+    required this.schema,
     required this.isLoader,
+    required this.isCheckRegulatorMismatch,
+    required this.isCheckMeterMismatch,
     required this.isBtnLoader,
     required this.isDelayReason,
     required this.isRegulator,
@@ -83,7 +93,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.listOfDelayReason,
     required this.listOfMeterNumber,
     required this.listOfRegulatorType,
-    required this.listOfRegulatorNo,
+    required this.listOfRegulatorSerial,
     required this.listOfRegulator,
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
@@ -107,53 +117,60 @@ class FormInstallationDataState extends FormInstallationState {
     required this.proConDateController,
     required this.extraPipeController,
     required this.extraPriceController,
-
+    required this.materialSerialController,
+    required this.regulatorSerialController,
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isBtnLoader,
-    isDelayReason,
-    isRegulator,
-    meterImg,
-    meterNoValue,
-    typeOfNrValue,
-    delayReasonValue,
-    listOfMeterNo,
-    listOfTypeOfNr,
-    listOfDelayReason,
-    listOfMeterNumber,
-    regulatorTypeValue,
-    listOfRegulatorType,
-    bpNumberController,
-    proposedDateController,
-    installationDateController,
-    meterIniReading1Controller,
-    meterIniReading2Controller,
-    meterIniReading3Controller,
-    meterInitialReadingController,
-    meterIniReading1FocusNode,
-    meterIniReading2FocusNode,
-    meterIniReading3FocusNode,
-    isSelected,
-    listOfQtyLMC,
-    rfcCardImg,
-    pneumaticTestReportImg,
-    installationImg,
-    listOfRegulatorNo,
-    listOfRegulator,
-    listOfAllMaterial,
-    listOfAllRFC,
-    materialList,
-    latOfSRController,
-    longOfSRController,
-    latOfHouseController,
-    longOfHouseController,
-    rfcConDateController,
-    proConDateController,
-    extraPipeController,
-    extraPriceController,
-  ];
+        schema,
+        userName,
+        isLoader,
+        isCheckRegulatorMismatch,
+        isCheckMeterMismatch,
+        isBtnLoader,
+        isDelayReason,
+        isRegulator,
+        meterImg,
+        meterNoValue,
+        typeOfNrValue,
+        delayReasonValue,
+        listOfMeterNo,
+        listOfTypeOfNr,
+        listOfDelayReason,
+        listOfMeterNumber,
+        regulatorTypeValue,
+        listOfRegulatorType,
+        bpNumberController,
+        proposedDateController,
+        installationDateController,
+        meterIniReading1Controller,
+        meterIniReading2Controller,
+        meterIniReading3Controller,
+        meterInitialReadingController,
+        meterIniReading1FocusNode,
+        meterIniReading2FocusNode,
+        meterIniReading3FocusNode,
+        isSelected,
+        listOfQtyLMC,
+        rfcCardImg,
+        pneumaticTestReportImg,
+        installationImg,
+        listOfRegulatorSerial,
+        listOfRegulator,
+        listOfAllMaterial,
+        listOfAllRFC,
+        materialList,
+        latOfSRController,
+        longOfSRController,
+        latOfHouseController,
+        longOfHouseController,
+        rfcConDateController,
+        proConDateController,
+        extraPipeController,
+        extraPriceController,
+        materialSerialController,
+        regulatorSerialController,
+      ];
 }

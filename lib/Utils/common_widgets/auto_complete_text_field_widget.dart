@@ -12,6 +12,9 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
   final String? hintText;
   final TextInputType? keyboardType;
   final Function(String)? onSelected;
+  final Function(String)? onChanged;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   AutoCompleteTextFieldWidget({
     super.key,
@@ -24,48 +27,54 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     this.hintText,
     this.keyboardType,
     this.onSelected,
+    this.onChanged,
+    this.validator,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
-      fieldViewBuilder: (BuildContext context,
-          TextEditingController fieldTextEditingController,
-          FocusNode fieldFocusNode,
-          VoidCallback onFieldSubmitted) {
+      fieldViewBuilder: (BuildContext context, TextEditingController controller, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
         return TextFormField(
           cursorColor: AppColor.primer,
           style: Styles.texts,
+          onChanged: onChanged,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             hintText: hintText,
             counterText: "",
             label: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2.0,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(flex : 1,child: Text(star ?? "",  style:Styles.stars)),
-                  Flexible(flex : 6,child: Text(label  ?? "", style:Styles.labels),
+                  Flexible(flex: 1, child: Text(star ?? "", style: Styles.stars)),
+                  Flexible(
+                    flex: 6,
+                    child: Text(label ?? "", style: Styles.labels),
                   ),
                 ],
               ),
             ),
             hintStyle: Styles.labels,
             filled: true,
-            fillColor: enabled == false ? AppColor.white05 : AppColor.white,
+            fillColor: enabled == false ? AppColor.white70 : AppColor.white,
             contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
             isDense: true,
             border: enabled == false ? border1 : border,
             focusedBorder: enabled == false ? border1 : border,
-            disabledBorder:enabled == false ? border1 : border,
+            disabledBorder: enabled == false ? border1 : border,
             enabledBorder: enabled == false ? border1 : border,
           ),
-          controller: fieldTextEditingController,
+          controller: controller,
           focusNode: fieldFocusNode,
+          validator: validator == null ? null : validator,
         );
       },
       optionsBuilder: (TextEditingValue fruitTextEditingValue) {
@@ -73,15 +82,13 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
           return const Iterable<String>.empty();
         }
         return suggestions.where((String option) {
-          return option
-              .contains(fruitTextEditingValue.text.toLowerCase());
-        }
-
-        );
+          return option.contains(fruitTextEditingValue.text.toLowerCase());
+        });
       },
       onSelected: onSelected,
     );
   }
+
   OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_state.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
@@ -14,6 +16,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
 
+  String schema = "";
+  String userName = "";
   bool isLoader = false;
   bool isLoadingMore = false;
   int pageNo = 1;
@@ -35,6 +39,12 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     listOfFeasibilityRow = [];
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
+    schema = await SharedPref.getString(
+      key: PrefsValue.schema,
+    );
+    userName = await SharedPref.getString(
+      key: PrefsValue.userName,
+    );
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
     _eventCompleted(emit);
@@ -91,6 +101,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   _eventCompleted(Emitter<LMCFeasibilityState> emit) {
     emit(LMCFeasibilityDataState(
         isLoader: isLoader,
+        schema: schema,
+        userName: userName,
         isLoadingMore: isLoadingMore,
         allAreaValue: areaValue,
         pageNo: pageNo,

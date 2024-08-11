@@ -10,6 +10,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
   }
 
   bool isLoader = false;
+  String schema = '';
+  String userName = '';
   String custRegNo = '';
   String feasibilityVisitDate = '';
   String chargeArea = '';
@@ -37,6 +39,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
     feasibilityVisitDate = await SharedPref.getString(
       key: PrefsValue.feasibilityVisitDate,
     );
+    userName = await SharedPref.getString(key: PrefsValue.userName);
+    schema = await SharedPref.getString(key: PrefsValue.schema);
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
     firstName = await SharedPref.getString(key: PrefsValue.firstName);
@@ -57,6 +61,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
 
   _eventCompleted(Emitter<PreviewInstallationState> emit) {
     emit(PreviewInstallationDataState(
+      schema: schema,
+      userName: userName,
       isLoader: isLoader,
       custRegNo: custRegNo,
       feasibilityVisitDate: feasibilityVisitDate,

@@ -1,21 +1,17 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/res/app_string.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
-import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
-import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
+import 'package:lmc/features/Home/presentation/home_view.dart';
 
 class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
   FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
@@ -32,6 +28,9 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   bool isLoader = false;
   bool isBtnLoader = false;
   bool isSelected = false;
+
+  String schema = "";
+  String userName = "";
 
   GetConstantModel checkFeasibleValue = GetConstantModel();
   GetConstantModel lmcReasonValue = GetConstantModel();
@@ -72,22 +71,32 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     reasonController.text = '';
     remarksController.text = '';
     followUpDateController.text = '';
+    schema = await SharedPref.getString(
+      key: PrefsValue.schema,
+    );
+    userName = await SharedPref.getString(
+      key: PrefsValue.userName,
+    );
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     assignedDateController.text = await SharedPref.getString(key: PrefsValue.assignLmcDate);
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     proposedDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     await fetchCheckFeasibilityApi(context: event.context);
     await fetchLMCReasonApi(context: event.context);
-    await fetchFreeMaterialApi(context: event.context,);
+    await fetchFreeMaterialApi(
+      context: event.context,
+    );
     _eventCompleted(emit);
   }
 
   _selectFeasibilityDate(SelectFeasibilityDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(assignedDateController.text);
-    DateTime? dateTime = await showDatePicker(context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: assignDate,
-        lastDate:DateTime.now(),);
+    DateTime? dateTime = await showDatePicker(
+      context: event.context,
+      initialDate: DateTime.now(),
+      firstDate: assignDate,
+      lastDate: DateTime.now(),
+    );
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       feasibilityDateController.text = formattedDate.toString();
@@ -97,11 +106,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectProposedDate(SelectProposedDateEvent event, emit) async {
     var feasibilityDate = DateFormat(AppString.dateFormat).parse(feasibilityDateController.text);
-    DateTime? dateTime = await showDatePicker(
-        context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: feasibilityDate,
-        lastDate: DateTime(2050));
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: feasibilityDate, lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       proposedDateController.text = formattedDate.toString();
@@ -110,11 +115,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectFollowUpDate(SelectFollowUpDateEvent event, emit) async {
-    DateTime? dateTime = await showDatePicker(
-        context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1950),
-        lastDate: DateTime(2050));
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       followUpDateController.text = formattedDate.toString();
@@ -136,14 +137,16 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   fetchFreeMaterialApi({required BuildContext context}) async {
     List<String> tempList = [];
     List<MaterialItem> _materialList = [];
-    var res = await FormFeasibilityHelper.getAllFreeMaterialApi(context: context,);
+    var res = await FormFeasibilityHelper.getAllFreeMaterialApi(
+      context: context,
+    );
     if (res != null) {
       listOfAllMaterial = res;
       tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
       listOfAllMaterialId.addAll(tempList);
       _materialList = List.generate(
         listOfAllMaterial.length,
-            (i) => MaterialItem(
+        (i) => MaterialItem(
             value: '0',
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
@@ -156,11 +159,10 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     }
   }
 
-  _selectQTYLMC(SelectQTYLMCEvent event,  emit) {
+  _selectQTYLMC(SelectQTYLMCEvent event, emit) {
     listOfQtyLMC[event.index] = event.qtyValue;
     _eventCompleted(emit);
   }
-
 
   _submit(SubmitFormFeasibilityEvent event, emit) async {
     try {
@@ -194,11 +196,9 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(
               event.context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      HomeView()),
+              MaterialPageRoute(builder: (BuildContext context) => HomeView()),
               //  InstallationView()),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         } else {
           isBtnLoader = false;
           _eventCompleted(emit);
@@ -210,7 +210,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       _eventCompleted(emit);
     }
   }
-
 
   fetchCheckFeasibilityApi({required BuildContext context}) async {
     var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);
@@ -230,6 +229,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _eventCompleted(emit) {
     emit(FormFeasibilityDataState(
+      userName: userName,
+      schema: schema,
       isLoader: isLoader,
       isBtnLoader: isBtnLoader,
       isSelected: isSelected,
@@ -248,5 +249,4 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       remarksController: remarksController,
     ));
   }
-
 }

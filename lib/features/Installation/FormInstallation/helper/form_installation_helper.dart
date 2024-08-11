@@ -1,7 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
@@ -12,11 +14,9 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReaso
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
-
   static Future<List<GetConstantModel>?> getTypeOfNrApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
@@ -74,8 +74,8 @@ class FormInstallationHelper {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema":schema,
-        "meterSerial":meterSerial,
+        "schema": schema,
+        "meterSerial": meterSerial,
         "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;
@@ -88,16 +88,13 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi({
-    required BuildContext context,
-    required String regulatorSerial,
-    required String regulatorType}) async {
+  static Future<List<ListOfMeterNo>?> getRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema":schema,
-        "regulatorSerial":regulatorSerial,
+        "schema": schema,
+        "regulatorSerial": regulatorSerial,
         "user_id": userId,
         "regulatorType": regulatorType,
       };
@@ -117,6 +114,8 @@ class FormInstallationHelper {
     required String dateInstallation,
     required LmcReasonModel delayReason,
     required String meterNumber,
+    required bool isCheckMeterMismatch,
+    required bool isCheckRegulatorMismatch,
     required String meterInit1,
     required String meterInit2,
     required String meterInit3,
@@ -131,14 +130,20 @@ class FormInstallationHelper {
       if (dateInstallation.isEmpty) {
         Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
         return false;
-      } else  if (delayReason.id == null) {
+      } else if (delayReason.id == null) {
         Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
         return false;
-      }  else  if (meterNumber.isEmpty) {
+      } else if (meterNumber.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
+        return false;
+      } else if (isCheckMeterMismatch == true) {
+        Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
         return false;
       } else if (meterInit1.isEmpty && meterInit2.isEmpty && meterInit3.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
+        return false;
+      } else if (isCheckRegulatorMismatch == true) {
+        Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
         return false;
       } else if (rfcDeclarationDate.isEmpty) {
         Utils.errorSnackBar(msg: "The RFC Declaration Date field is required.", context: context);
@@ -165,7 +170,6 @@ class FormInstallationHelper {
       return true;
     }
   }
-
 
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,
@@ -227,15 +231,19 @@ class FormInstallationHelper {
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
         urlEndPoint: Apis.saveLmcInstallation,
-        body: para, context: context,
-        keyWord1: "meter_photo",filePath1: meterPhoto.toString(),
-        keyWord2: "isometric_image",filePath2: isometricPhoto.toString(),
-        keyWord3: "pneumatic_image",filePath3: pneumaticPhoto.toString(),
+        body: para,
+        context: context,
+        keyWord1: "meter_photo",
+        filePath1: meterPhoto.toString(),
+        keyWord2: "isometric_image",
+        filePath2: isometricPhoto.toString(),
+        keyWord3: "pneumatic_image",
+        filePath3: pneumaticPhoto.toString(),
       );
-      if(res != null && res["error"] == false){
+      if (res != null && res["error"] == false) {
         // Utils.successSnackBar(msg: res["data"], context: context);
         return SaveFeasibleModel.fromJson(res);
-      } else if(res != null && res["error"] == true){
+      } else if (res != null && res["error"] == true) {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
@@ -270,15 +278,11 @@ class FormInstallationHelper {
     return files;
   }
 
-  static Future<Position > getCurrentLocation() async {
+  static Future<Position> getCurrentLocation() async {
     await Geolocator.requestPermission();
     await Permission.locationAlways.request();
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     log('latitude : ${position.latitude} longitude : ${position.longitude}');
     return position;
   }
-
 }
-
-
-

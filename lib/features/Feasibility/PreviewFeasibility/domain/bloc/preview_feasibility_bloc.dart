@@ -5,8 +5,8 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/Feasibil
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
 
-class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasibilityState>{
-  PreviewFeasibilityBloc() : super(PreviewFeasibilityInitialState()){
+class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasibilityState> {
+  PreviewFeasibilityBloc() : super(PreviewFeasibilityInitialState()) {
     on<PreviewFeasibilityPageLoadEvent>(_pageLoad);
   }
 
@@ -15,6 +15,8 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   FeasibilityModel? feasibilityModel;
   FeasibilityData feasibilityRowsModel = FeasibilityData();
   String custRegNo = '';
+  String schema = '';
+  String userName = '';
   String chargeArea = '';
   String areaName = '';
   String firstName = '';
@@ -36,12 +38,20 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     emit(PreviewFeasibilityInitialState());
     isLoader = false;
     feasibilityRowsModel = FeasibilityData();
-    custRegNo = await SharedPref.getString(key: PrefsValue.custRegNo,);
+    userName = await SharedPref.getString(
+      key: PrefsValue.userName,
+    );
+    schema = await SharedPref.getString(
+      key: PrefsValue.schema,
+    );
+    custRegNo = await SharedPref.getString(
+      key: PrefsValue.custRegNo,
+    );
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
-    firstName =  await SharedPref.getString(key: PrefsValue.firstName);
-    lastName =  await SharedPref.getString(key: PrefsValue.lastName);
-    mobileNumber =  await SharedPref.getString(key: PrefsValue.mobileNumber);
+    firstName = await SharedPref.getString(key: PrefsValue.firstName);
+    lastName = await SharedPref.getString(key: PrefsValue.lastName);
+    mobileNumber = await SharedPref.getString(key: PrefsValue.mobileNumber);
     guardianName = await SharedPref.getString(key: PrefsValue.guardianName);
     proCateName = await SharedPref.getString(key: PrefsValue.proCateName);
     propClass = await SharedPref.getString(key: PrefsValue.propClass);
@@ -56,31 +66,31 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     _eventCompleted(emit);
   }
 
-
   _eventCompleted(Emitter<PreviewFeasibilityState> emit) {
     emit(PreviewFeasibilityDataState(
-        isLoader: isLoader,
-        custRegNo: custRegNo,
-        chargeArea: chargeArea,
-        areaName: areaName,
-        firstName: firstName,
-        lastName: lastName,
-        mobileNumber: mobileNumber,
-        guardianName: guardianName,
-        proCateName: proCateName,
-        propClass: propClass,
-        buildingNumber: buildingNumber,
-        houseNumber: houseNumber,
-        locality: locality,
-        town: town,
-        street: street,
-        district: district,
-        pinCode: pinCode,
-        feasibilityRowsModel: feasibilityRowsModel,
-        listOfFeasibilityRow: listOfFeasibilityRow,
-        feasibilityModel: feasibilityModel,
+      schema: schema,
+      userName: userName,
+      isLoader: isLoader,
+      custRegNo: custRegNo,
+      chargeArea: chargeArea,
+      areaName: areaName,
+      firstName: firstName,
+      lastName: lastName,
+      mobileNumber: mobileNumber,
+      guardianName: guardianName,
+      proCateName: proCateName,
+      propClass: propClass,
+      buildingNumber: buildingNumber,
+      houseNumber: houseNumber,
+      locality: locality,
+      town: town,
+      street: street,
+      district: district,
+      pinCode: pinCode,
+      feasibilityRowsModel: feasibilityRowsModel,
+      listOfFeasibilityRow: listOfFeasibilityRow,
+      feasibilityModel: feasibilityModel,
       colony: colony,
-    )
-    );
+    ));
   }
 }

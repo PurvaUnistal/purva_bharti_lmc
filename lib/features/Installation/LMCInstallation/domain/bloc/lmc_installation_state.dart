@@ -17,6 +17,8 @@ class LMCInstallationPageLoadState extends LMCInstallationState {
 
 //ignore: must_be_immutable
 class LMCInstallationDataState extends LMCInstallationState {
+  String schema;
+  String userName;
   final bool isLoader;
   final bool isLoadingMore;
   final dynamic allAreaValue;
@@ -28,6 +30,8 @@ class LMCInstallationDataState extends LMCInstallationState {
   final TextEditingController bpNumberController;
 
   LMCInstallationDataState({
+    required this.schema,
+    required this.userName,
     required this.isLoader,
     required this.isLoadingMore,
     required this.allAreaValue,
@@ -42,14 +46,16 @@ class LMCInstallationDataState extends LMCInstallationState {
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    isLoadingMore,
-    allAreaValue,
-    pageNo,
-    listOfAllArea,
-    listOfInstallationRow,
-    installationDoneModel,
-    scrollController,
-    bpNumberController,
-  ];
+        schema,
+        userName,
+        isLoader,
+        isLoadingMore,
+        allAreaValue,
+        pageNo,
+        listOfAllArea,
+        listOfInstallationRow,
+        installationDoneModel,
+        scrollController,
+        bpNumberController,
+      ];
 }

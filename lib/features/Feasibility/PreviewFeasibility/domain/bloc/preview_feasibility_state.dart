@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 
-abstract class PreviewFeasibilityState extends Equatable{}
+abstract class PreviewFeasibilityState extends Equatable {}
 
 class PreviewFeasibilityInitialState extends PreviewFeasibilityState {
   @override
@@ -14,8 +14,10 @@ class PreviewFeasibilityPageLoadState extends PreviewFeasibilityState {
 }
 
 //ignore: must_be_immutable
-class PreviewFeasibilityDataState extends PreviewFeasibilityState{
+class PreviewFeasibilityDataState extends PreviewFeasibilityState {
   final bool isLoader;
+  String schema;
+  String userName;
   String custRegNo;
   String chargeArea;
   String areaName;
@@ -39,52 +41,55 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState{
 
   PreviewFeasibilityDataState({
     required this.isLoader,
-     required this.custRegNo,
-     required this.chargeArea,
-     required this.areaName,
-     required this.firstName,
-     required this.lastName,
-     required this.mobileNumber,
-     required this.colony,
-     required this.guardianName,
-     required this.proCateName,
-     required this.propClass,
-     required this.buildingNumber,
-     required this.houseNumber,
-     required this.locality,
-     required this.street,
-     required this.town,
-     required this.district,
-     required this.pinCode,
+    required this.schema,
+    required this.userName,
+    required this.custRegNo,
+    required this.chargeArea,
+    required this.areaName,
+    required this.firstName,
+    required this.lastName,
+    required this.mobileNumber,
+    required this.colony,
+    required this.guardianName,
+    required this.proCateName,
+    required this.propClass,
+    required this.buildingNumber,
+    required this.houseNumber,
+    required this.locality,
+    required this.street,
+    required this.town,
+    required this.district,
+    required this.pinCode,
     required this.feasibilityRowsModel,
     required this.listOfFeasibilityRow,
     required this.feasibilityModel,
-
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-    isLoader,
-    custRegNo,
-    chargeArea,
-    areaName,
-    street,
-    firstName,
-    lastName,
-    mobileNumber,
-    colony,
-    guardianName,
-    proCateName,
-    propClass,
-    buildingNumber,
-    houseNumber,
-    locality,
-    town,
-    district,
-    pinCode,
-    feasibilityRowsModel,
-    listOfFeasibilityRow,
-    feasibilityModel,
-  ];
+        schema,
+        userName,
+        isLoader,
+        custRegNo,
+        chargeArea,
+        areaName,
+        street,
+        firstName,
+        lastName,
+        mobileNumber,
+        colony,
+        guardianName,
+        proCateName,
+        propClass,
+        buildingNumber,
+        houseNumber,
+        locality,
+        town,
+        district,
+        pinCode,
+        feasibilityRowsModel,
+        listOfFeasibilityRow,
+        feasibilityModel,
+      ];
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
@@ -12,11 +13,10 @@ import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
 
 class LoginHelper {
-  static Future<dynamic> textFieldValidation(
-      {required String email, required String password, required BuildContext context}) async {
+  static Future<dynamic> textFieldValidation({required String email, required String password, required BuildContext context}) async {
     try {
       if (email.isEmpty) {
-        Utils.errorSnackBar(msg: AppString.emailValidation,context: context);
+        Utils.errorSnackBar(msg: AppString.emailValidation, context: context);
         return false;
       } else if (password.isEmpty) {
         Utils.errorSnackBar(msg: AppString.passwordValidation, context: context);
@@ -42,30 +42,32 @@ class LoginHelper {
     return null;
   }
 
-  static Future<LoginModel?> loginData(
-      {required String emailId, required String password, required BuildContext context}) async {
+  static Future<LoginModel?> loginData({required String emailId, required String password, required BuildContext context}) async {
     var deviceId = await getUniqueDeviceId();
-    Map<String,String> para = {
+    Map<String, String> para = {
       "email": emailId,
       "password": password,
       "device": deviceId,
     };
     try {
-      var res = await ApiHelper.postData(
-          urlEndPoint: Apis.loginUrl, body: jsonEncode(para), context: context);
+      var res = await ApiHelper.postData(urlEndPoint: Apis.loginUrl, body: jsonEncode(para), context: context);
 
-      if(res != null && res["error"] == false){
+      if (res != null && res["error"] == false) {
+        await Utils.successSnackBar(msg: res["messages"], context: context);
         String str = Apis.loginUrl;
-        await SharedPref.setString(key: PrefsValue.baseUrl,value:  str.replaceAll("auth", ""));
+        await SharedPref.setString(key: PrefsValue.baseUrl, value: str.replaceAll("auth", ""));
         print(str.replaceAll("auth", ""));
         return LoginModel.fromJson(res);
-      } else if(res != null && res["  error"] == true){
-       await Utils.errorSnackBar(msg: res["messages"], context: context);
+      } else if (res != null && res["error"] == true) {
+        await Utils.errorSnackBar(msg: res["messages"], context: context);
+        return null;
+      } else if (res != null && res["error"] == true && res["messages"] != null) {
+        await Utils.errorSnackBar(msg: res["messages"], context: context);
         return null;
       }
     } catch (e) {
       log("catchLoginHelper-->${e.toString()}");
-      Utils.errorSnackBar(msg: e.toString(),context: context);
+      Utils.errorSnackBar(msg: e.toString(), context: context);
       return null;
     }
   }
