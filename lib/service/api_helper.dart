@@ -47,12 +47,12 @@ class ApiHelper {
     }
   }
 
-  static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context}) async {
+  static Future<dynamic> postData({required String urlEndPoint, var body, required BuildContext context, Map<String, String>? headers}) async {
     try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      var res = await post(Uri.parse(urlEndPoint), body: body);
+      var res = await post(Uri.parse(urlEndPoint), body: body,headers: headers);
       print(res.body);
     //  if(urlEndPoint)
       if (res.statusCode == 200) {
@@ -81,6 +81,8 @@ class ApiHelper {
     required String keyWord2,
     required String filePath3,
     required String keyWord3,
+    required String filePath4,
+    required String keyWord4,
   }) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(PrefsValue.token) ?? "";
@@ -105,7 +107,11 @@ class ApiHelper {
         var uploadFile1 = await MultipartFile.fromPath(keyWord3, filePath3, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
         request.files.add(uploadFile1);
       }
-
+      if (filePath4.isNotEmpty) {
+        final mimeTypeData = lookupMimeType(filePath4, headerBytes: [0xFF, 0xD8])!.split('/');
+        var uploadFile1 = await MultipartFile.fromPath(keyWord4, filePath4, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+        request.files.add(uploadFile1);
+      }
       request.fields.addAll(body);
       request.headers.addAll(headers);
       var response = await request.send();

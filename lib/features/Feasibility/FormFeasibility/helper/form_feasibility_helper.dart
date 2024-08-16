@@ -43,6 +43,22 @@ class FormFeasibilityHelper {
     return null;
   }
 
+  static Future<List<FreeMaterialData>?> getAllFreePipeMaterial({required BuildContext context,}) async {
+    String schema = await SharedPref.getString(key: PrefsValue.schema);
+    try {
+      Map<String, String> para = {
+        "schema":schema,
+      };
+      String json = Uri(queryParameters: para).query;
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
+      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(jsonDecode(res));
+      return materialModel.data;
+    } catch (e) {
+      log("getAllFreePipeMaterial-->${e.toString()}");
+    }
+    return null;
+  }
+
   static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({required BuildContext context,}) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {

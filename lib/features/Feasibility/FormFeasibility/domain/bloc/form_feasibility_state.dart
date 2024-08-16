@@ -28,6 +28,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   List<GetConstantModel> listOfAllRFC;
   List<MaterialItem> materialList;
   final TextEditingController bpNumberController;
+  final TextEditingController trNumberController;
   final TextEditingController proposedDateController;
   final TextEditingController feasibilityDateController;
   final TextEditingController assignedDateController;
@@ -48,6 +49,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
     required this.materialList,
     required this.listOfAllRFC,
     required this.bpNumberController,
+    required this.trNumberController,
     required this.proposedDateController,
     required this.feasibilityDateController,
     required this.assignedDateController,
@@ -71,6 +73,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
         materialList,
         listOfAllRFC,
         bpNumberController,
+    trNumberController,
         proposedDateController,
         feasibilityDateController,
         assignedDateController,

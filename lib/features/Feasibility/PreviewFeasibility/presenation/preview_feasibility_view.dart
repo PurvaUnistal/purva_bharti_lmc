@@ -8,6 +8,7 @@ import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
@@ -32,7 +33,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade50,
+      backgroundColor: AppColor.green50,
       body: BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
         builder: (context, state) {
           if (state is PreviewFeasibilityDataState) {
@@ -50,7 +51,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppString.lmcFeaDetailH,
+        title: AppString.lmcFeaH,
         boolLeading: true,
         actions: [
           Column(
@@ -73,47 +74,55 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
-            _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
-            _rowItem(textName: AppString.area, textValue: dataState.areaName),
-            _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
-            _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
-            _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
-            _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
-            _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
-            _rowItem(textName: AppString.street, textValue: dataState.locality),
-            _rowItem(textName: AppString.town, textValue: dataState.town),
-            _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
-            _verticalSpace(),
-            _verticalSpace(),
-            _button(dataState: dataState),
-            _verticalSpace(),
-            _verticalSpace(),
-          ],
+        child: Card(
+          elevation: 1.5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(AppString.lmcFeaDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
+                ),
+                decoration: BoxDecoration(
+                    color: AppColor.primer,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
+                ),
+              ),
+              _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
+              _rowItem(textName: AppString.trNumber, textValue: dataState.trNumber),
+              _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
+              _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
+              _rowItem(textName: AppString.area, textValue: dataState.areaName),
+              _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
+              _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
+              _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
+              _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
+              _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
+              _rowItem(textName: AppString.street, textValue: dataState.locality),
+              _rowItem(textName: AppString.town, textValue: dataState.town),
+              _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
+              _verticalSpace(),
+              _verticalSpace(),
+              _button(dataState: dataState),
+              _verticalSpace(),
+              _verticalSpace(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _rowItem({required String textName, required String textValue}) {
-    return Card(
-      color: AppColor.white,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-                child: Text(
-              "${textName} :",
-              style: Styles.labels,
-            )),
-            Flexible(child: Text(textValue, style: Styles.texts, textAlign: TextAlign.right)),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
+      child: RowWidget(
+        widget1: Text("${textName} :", style: Styles.labels,),
+        widget2: Text(textValue, style: Styles.texts, textAlign: TextAlign.right),
+
       ),
     );
   }
@@ -121,10 +130,10 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
   Widget _button({required PreviewFeasibilityDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-            text: AppString.checkFea,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FormFeasibilityView()));
-            })
+        text: AppString.checkFea,
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => FormFeasibilityView()));
+        })
         : DottedLoaderWidget();
   }
 

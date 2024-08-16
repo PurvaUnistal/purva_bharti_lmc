@@ -29,6 +29,7 @@ class TextFieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final String? fieldText;
 
   TextFieldWidget({
     Key? key,
@@ -56,6 +57,7 @@ class TextFieldWidget extends StatelessWidget {
     this.inputFormatters,
     this.prefixIcon,
     this.suffixIcon,
+    this.fieldText,
   }) : super(key: key);
 
   @override

@@ -16,6 +16,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   String scheme = '';
   String userName = '';
   String baseUrl = '';
+  String installationName = '';
+  String feasibilityName = '';
 
   int pageIndex = 0;
   int currentIndex = 0;
@@ -27,6 +29,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     scheme = await SharedPref.getString(key: PrefsValue.schema);
     userName = await SharedPref.getString(key: PrefsValue.userName);
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+    feasibilityName = await SharedPref.getString(key: PrefsValue.feasibilityName);
+    installationName = await SharedPref.getString(key: PrefsValue.installationName);
     pageIndex = 0;
     currentIndex = 0;
     pageWidgets  = [];
@@ -63,6 +67,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         scheme: scheme,
         baseUrl: baseUrl,
         userName: userName,
+        installationName: installationName,
+        feasibilityName: feasibilityName,
         pageIndex: pageIndex,
         currentIndex: currentIndex,
         bottomNavyBarItemList: bottomNavyBarItemList,

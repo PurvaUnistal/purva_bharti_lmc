@@ -11,8 +11,14 @@ class PrefsValue {
   static String cookies = "cookies";
   static String pwdChanged = "pwdChanged";
   static String baseUrl = "baseUrl";
+  static String feasibilityName = "FeasibilityName";
+  static String installationName = "InstallationName";
 
   static String bpNumber = "bpNumber";
+
+
+
+
   static String workCompletedDate = "Work Completed Date";
   static String custRegNo = "customerRegistrationNo";
   static String feasibilityVisitDate = "feasibilityVisitDate";
@@ -43,6 +49,7 @@ class PrefsValue {
   static String meterLMCFeasId = "meterLMCFeasId";
   static String proposedDate = "proposedDate";
   static String assignLmcDate = "assignLmcDate";
+  static String trNumber = "trNumber";
   static String dmaUserId = "dmaUserId";
   static String lmcInstallationId = "lmcInstallationId";
   static String isInstall = "isInstall";
@@ -51,6 +58,7 @@ class PrefsValue {
   static String alternateMobileNo = "alternateMobileNo";
   static String email = "email";
   static String ngOfBurners = "ngOfBurners";
+  static String noOfFamilyMembers = "noOfFamilyMembers";
   static String ngChargeDate = "ngChargeDate";
   static String delayReason = "delayReason";
   static String typeOfNr = "typeOfNr";
@@ -59,4 +67,6 @@ class PrefsValue {
   static String latitudeHg = "latitudeHg";
   static String longitudeHg = "longitudeHg";
   static String rfcDate = "rfcDate";
+  static String lmcInstallationDate = "lmcInstallationDate";
+  static String proposedNgcDate = "proposedNgcDate";
 }

@@ -38,6 +38,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.green50,
       body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
         builder: (context, state) {
           if (state is LMCFeasibilityDataState) {
@@ -91,6 +92,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
               ),
             ),
             _verticalSpace(),
+            Text("Click on row to open Feasibility Form", style: Styles.labels,),
             Flexible(child: _dataTableWidget(dataState: dataState)),
           ],
         ),
@@ -182,6 +184,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                               .mapIndexed((index, user) => DataRow(
                                       onSelectChanged: (newValue) async {
                                         await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
+                                        await SharedPref.setString(key: PrefsValue.trNumber, value: user.trNumber ?? "");
                                         await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate ?? "");
                                         await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
                                         await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class LMCInstallationByNgcModel {
   int? success;
   bool? error;
@@ -28,10 +30,11 @@ class LMCInstallationByNgcModel {
 }
 
 class InstallationByNgcData {
+  String? trNumber;
   String? rfcDate;
   String? instDirPath;
-  dynamic proposedNgcDate;
-  String? lmcInstallationDate;
+  dynamic lmcInstallationDate;
+  dynamic lmcProposedNgcDate;
   String? id;
   String? createdOn;
   dynamic lmcId;
@@ -65,7 +68,7 @@ class InstallationByNgcData {
   String? paymentCreditStatusNgc;
   String? saleId;
   String? collectionId;
-  String? refundableStatus;
+  dynamic refundableStatus;
   String? ageingId;
   String? areaId;
   String? mobileNumber;
@@ -87,7 +90,7 @@ class InstallationByNgcData {
   String? noOfKitchen;
   String? noOfBathroom;
   String? existingCookingFuel;
-  String? noOfFamilyMembers;
+  dynamic noOfFamilyMembers;
   String? ownerConsent;
   String? kycDocument1;
   String? kycDocument1Number;
@@ -172,8 +175,7 @@ class InstallationByNgcData {
   String? districtId;
   String? disconnectionStatus;
   dynamic refundableStatu;
-  String? trNumber;
-  dynamic alternateMobile;
+  String? alternateMobile;
   String? dmaDirPath;
   dynamic source;
   dynamic futureRegNgcEligibleStatus;
@@ -254,13 +256,24 @@ class InstallationByNgcData {
   String? tpaUserId;
   String? insExtraPipe;
   String? insExtraPrice;
-  dynamic pipePaymentType;
+  String? pipePaymentType;
   dynamic oldMeterNumber;
   dynamic meterReplacementDate;
   dynamic previousInstalledStatus;
   String? installationProcessStatus;
   String? rfcProcessStatus;
-  dynamic regulatorTypeId;
+  String? regulatorTypeId;
+  String? proposedNgcDate;
+  dynamic srPhoto;
+  dynamic latitudeSr;
+  dynamic longitudeSr;
+  dynamic srRegulators;
+  dynamic mrPhoto;
+  dynamic latitudeMr;
+  dynamic longitudeMr;
+  dynamic mrRegulatorId;
+  String? regulatorCheck;
+  String? houseImage;
   String? name;
   String? gid;
   dynamic objectid;
@@ -300,6 +313,8 @@ class InstallationByNgcData {
   dynamic ngcRegulators;
   dynamic meterChangeReason;
   dynamic changeMeterType;
+  dynamic replaceMeter;
+  dynamic meterImageChange;
   String? serialNumber;
   String? materialCost;
   dynamic installationCost;
@@ -323,8 +338,8 @@ class InstallationByNgcData {
   String? workingStatus;
   String? installmentNos;
   String? materialTypeId;
-  dynamic ngcContractorId;
-  dynamic ngcAssignedDate;
+  String? ngcContractorId;
+  String? ngcAssignedDate;
   String? inspectionDate;
   String? meterSerial;
   String? meterreading;
@@ -339,10 +354,11 @@ class InstallationByNgcData {
   String? propClass;
 
   InstallationByNgcData(
-      {this.rfcDate,
+      {this.trNumber,
+        this.rfcDate,
         this.instDirPath,
-        this.proposedNgcDate,
         this.lmcInstallationDate,
+        this.lmcProposedNgcDate,
         this.id,
         this.createdOn,
         this.lmcId,
@@ -483,7 +499,6 @@ class InstallationByNgcData {
         this.districtId,
         this.disconnectionStatus,
         this.refundableStatu,
-        this.trNumber,
         this.alternateMobile,
         this.dmaDirPath,
         this.source,
@@ -572,6 +587,17 @@ class InstallationByNgcData {
         this.installationProcessStatus,
         this.rfcProcessStatus,
         this.regulatorTypeId,
+        this.proposedNgcDate,
+        this.srPhoto,
+        this.latitudeSr,
+        this.longitudeSr,
+        this.srRegulators,
+        this.mrPhoto,
+        this.latitudeMr,
+        this.longitudeMr,
+        this.mrRegulatorId,
+        this.regulatorCheck,
+        this.houseImage,
         this.name,
         this.gid,
         this.objectid,
@@ -611,6 +637,8 @@ class InstallationByNgcData {
         this.ngcRegulators,
         this.meterChangeReason,
         this.changeMeterType,
+        this.replaceMeter,
+        this.meterImageChange,
         this.serialNumber,
         this.materialCost,
         this.installationCost,
@@ -650,10 +678,13 @@ class InstallationByNgcData {
         this.propClass});
 
   InstallationByNgcData.fromJson(Map<String, dynamic> json) {
+    trNumber = json['tr_number'] ?? "";
     rfcDate = json['rfc_date'] ?? "";
     instDirPath = json['inst_dir_path'] ?? "";
-    proposedNgcDate = json['proposed_ngc_date'] ?? "";
     lmcInstallationDate = json['lmc_installation_date'] ?? "";
+    lmcProposedNgcDate = json['lmc_proposed_ngc_date'] == null ? DateFormat('dd-MM-yyyy').format(DateTime.now()).toString() : json['lmc_proposed_ngc_date'];
+    proposedNgcDate = json
+    ['proposed_ngc_date'] == null ? DateFormat('dd-MM-yyyy').format(DateTime.now()).toString() : json['proposed_ngc_date'];
     id = json['id'] ?? "";
     createdOn = json['created_on'] ?? "";
     lmcId = json['lmc_id'] ?? "";
@@ -794,7 +825,6 @@ class InstallationByNgcData {
     districtId = json['district_id'] ?? "";
     disconnectionStatus = json['disconnection_status'] ?? "";
     refundableStatu = json['refundable_statu'] ?? "";
-    trNumber = json['tr_number'] ?? "";
     alternateMobile = json['alternateMobile'] ?? "";
     dmaDirPath = json['dma_dir_path'] ?? "";
     source = json['source'] ?? "";
@@ -883,6 +913,16 @@ class InstallationByNgcData {
     installationProcessStatus = json['installation_process_status'] ?? "";
     rfcProcessStatus = json['rfc_process_status'] ?? "";
     regulatorTypeId = json['regulator_type_id'] ?? "";
+    srPhoto = json['sr_photo'] ?? "";
+    latitudeSr = json['latitude_sr'] ?? "";
+    longitudeSr = json['longitude_sr'] ?? "";
+    srRegulators = json['sr_regulators'] ?? "";
+    mrPhoto = json['mr_photo'] ?? "";
+    latitudeMr = json['latitude_mr'] ?? "";
+    longitudeMr = json['longitude_mr'] ?? "";
+    mrRegulatorId = json['mr_regulator_id'] ?? "";
+    regulatorCheck = json['regulator_check'] ?? "";
+    houseImage = json['house_image'] ?? "";
     name = json['name'] ?? "";
     gid = json['gid'] ?? "";
     objectid = json['objectid'] ?? "";
@@ -922,6 +962,8 @@ class InstallationByNgcData {
     ngcRegulators = json['ngc_regulators'] ?? "";
     meterChangeReason = json['meter_change_reason'] ?? "";
     changeMeterType = json['change_meter_type'] ?? "";
+    replaceMeter = json['replace_meter'] ?? "";
+    meterImageChange = json['meter_image_change'] ?? "";
     serialNumber = json['serial_number'] ?? "";
     materialCost = json['material_cost'] ?? "";
     installationCost = json['installation_cost'] ?? "";
@@ -963,10 +1005,11 @@ class InstallationByNgcData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['tr_number'] = this.trNumber;
     data['rfc_date'] = this.rfcDate;
     data['inst_dir_path'] = this.instDirPath;
-    data['proposed_ngc_date'] = this.proposedNgcDate;
     data['lmc_installation_date'] = this.lmcInstallationDate;
+    data['lmc_proposed_ngc_date'] = this.lmcProposedNgcDate;
     data['id'] = this.id;
     data['created_on'] = this.createdOn;
     data['lmc_id'] = this.lmcId;
@@ -1107,7 +1150,6 @@ class InstallationByNgcData {
     data['district_id'] = this.districtId;
     data['disconnection_status'] = this.disconnectionStatus;
     data['refundable_statu'] = this.refundableStatu;
-    data['tr_number'] = this.trNumber;
     data['alternateMobile'] = this.alternateMobile;
     data['dma_dir_path'] = this.dmaDirPath;
     data['source'] = this.source;
@@ -1197,6 +1239,17 @@ class InstallationByNgcData {
     data['installation_process_status'] = this.installationProcessStatus;
     data['rfc_process_status'] = this.rfcProcessStatus;
     data['regulator_type_id'] = this.regulatorTypeId;
+    data['proposed_ngc_date'] = this.proposedNgcDate;
+    data['sr_photo'] = this.srPhoto;
+    data['latitude_sr'] = this.latitudeSr;
+    data['longitude_sr'] = this.longitudeSr;
+    data['sr_regulators'] = this.srRegulators;
+    data['mr_photo'] = this.mrPhoto;
+    data['latitude_mr'] = this.latitudeMr;
+    data['longitude_mr'] = this.longitudeMr;
+    data['mr_regulator_id'] = this.mrRegulatorId;
+    data['regulator_check'] = this.regulatorCheck;
+    data['house_image'] = this.houseImage;
     data['name'] = this.name;
     data['gid'] = this.gid;
     data['objectid'] = this.objectid;
@@ -1236,6 +1289,8 @@ class InstallationByNgcData {
     data['ngc_regulators'] = this.ngcRegulators;
     data['meter_change_reason'] = this.meterChangeReason;
     data['change_meter_type'] = this.changeMeterType;
+    data['replace_meter'] = this.replaceMeter;
+    data['meter_image_change'] = this.meterImageChange;
     data['serial_number'] = this.serialNumber;
     data['material_cost'] = this.materialCost;
     data['installation_cost'] = this.installationCost;

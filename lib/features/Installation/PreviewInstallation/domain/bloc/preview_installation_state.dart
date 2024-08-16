@@ -18,6 +18,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   final String schema;
   final String userName;
   String custRegNo;
+  String trNumber;
+  String bpNumber;
   String feasibilityVisitDate;
   String chargeArea;
   String areaName;
@@ -39,6 +41,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
     required this.schema,
     required this.userName,
     required this.isLoader,
+    required this.trNumber,
+    required this.bpNumber,
     required this.custRegNo,
     required this.feasibilityVisitDate,
     required this.chargeArea,
@@ -65,6 +69,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
         userName,
         isLoader,
         custRegNo,
+    trNumber,
+    bpNumber,
         feasibilityVisitDate,
         chargeArea,
         areaName,

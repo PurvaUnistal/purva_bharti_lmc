@@ -14,6 +14,7 @@ import 'package:lmc/features/Home/domain/bloc/home_state.dart';
 import 'package:lmc/features/Home/presentation/widget/card_widget.dart';
 import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
 import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
+import 'package:lmc/features/NGC/NGCTable/presentation/ngc_table_view.dart';
 import 'package:lmc/service/Apis.dart';
 
 class HomeView extends StatefulWidget {
@@ -69,6 +70,7 @@ class _HomeViewState extends State<HomeView> {
 
   _buildLayout({required FetchHomeDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.green50,
       appBar: AppBarWidget(
         title: AppString.lmcMobilityH,
         boolLeading: false,
@@ -142,7 +144,7 @@ class _HomeViewState extends State<HomeView> {
             icon: Icons.arrow_circle_down_outlined,
             text: "NG Conversion",
             onTap: () {
-              //    Navigator.push(context, MaterialPageRoute(builder: (context) => NgcTableView()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NgcTableView()));
             },
           ),
         ],

@@ -15,6 +15,8 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   FeasibilityModel? feasibilityModel;
   FeasibilityData feasibilityRowsModel = FeasibilityData();
   String custRegNo = '';
+  String trNumber = '';
+  String bpNumber = '';
   String schema = '';
   String userName = '';
   String chargeArea = '';
@@ -47,6 +49,8 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     custRegNo = await SharedPref.getString(
       key: PrefsValue.custRegNo,
     );
+    trNumber = await SharedPref.getString(key: PrefsValue.trNumber);
+    bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);
     firstName = await SharedPref.getString(key: PrefsValue.firstName);
@@ -72,6 +76,8 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
       userName: userName,
       isLoader: isLoader,
       custRegNo: custRegNo,
+      trNumber: trNumber,
+      bpNumber: bpNumber,
       chargeArea: chargeArea,
       areaName: areaName,
       firstName: firstName,

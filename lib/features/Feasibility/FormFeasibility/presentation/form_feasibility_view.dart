@@ -9,8 +9,10 @@ import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
@@ -38,6 +40,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        backgroundColor: AppColor.green50,
         body: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
           builder: (context, state) {
             if (state is FormFeasibilityDataState) {
@@ -64,7 +67,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   _itemBuilder({required FormFeasibilityDataState dataState}) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppString.lmcFeaFormH,
+        title: AppString.lmcFeaH,
         boolLeading: true,
         actions: [
           Column(
@@ -85,33 +88,36 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            _bpNumberController(stateData: dataState),
-            _verticalSpace(),
-            _assignedDateController(stateData: dataState),
-            _feasibilityDateController(stateData: dataState),
-            _verticalSpace(),
-            _checkFeasibilityDropdown(stateData: dataState),
-            _verticalSpace(),
-            _materialList(dataState: dataState),
-            _proposedDateController(stateData: dataState),
-            _lmcReasonDropdown(stateData: dataState),
-            _reasonController(stateData: dataState),
-            _followUpDateController(stateData: dataState),
-            _remarksController(stateData: dataState),
-            _verticalSpace(),
-            _verticalSpace(),
-            _button(dataState: dataState),
-            _verticalSpace(),
-            _verticalSpace(),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.all(8),
+        children: [
+          Text("Feasibility Form",style: Styles.text,textAlign: TextAlign.center,),
+          _verticalSpace(),
+          RowWidget(
+            widget1:  _bpNumberController(stateData: dataState),
+            widget2: _trNumberController(stateData: dataState),
+            widget3: _assignedDateController(stateData: dataState),
+          ),
+          _feasibilityDateController(stateData: dataState),
+          _verticalSpace(),
+          _checkFeasibilityDropdown(stateData: dataState),
+          _verticalSpace(),
+          _materialList(dataState: dataState),
+          _proposedDateController(stateData: dataState),
+          _lmcReasonDropdown(stateData: dataState),
+          _reasonController(stateData: dataState),
+          _followUpDateController(stateData: dataState),
+          _remarksController(stateData: dataState),
+          _verticalSpace(),
+          _verticalSpace(),
+          _button(dataState: dataState),
+          _verticalSpace(),
+          _verticalSpace(),
+        ],
       ),
     );
   }
+
 
   Widget _bpNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
@@ -121,6 +127,14 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       controller: stateData.bpNumberController,
     );
   }
+  Widget _trNumberController({required FormFeasibilityDataState stateData}) {
+    return TextFieldWidget(
+      hintText: AppString.trNumber,
+      label: AppString.trNumber,
+      enabled: false,
+      controller: stateData.trNumberController,
+    );
+  }
 
   Widget _assignedDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
@@ -128,10 +142,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       label: AppString.lmcAssignedDate,
       enabled: false,
       controller: stateData.assignedDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {},
-      ),
     );
   }
 

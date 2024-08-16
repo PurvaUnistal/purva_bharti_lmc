@@ -10,6 +10,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
+import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPipeDetailsModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/service/Apis.dart';
@@ -109,63 +110,123 @@ class FormInstallationHelper {
     return null;
   }
 
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context,required String pipeQty}) async {
+    String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String token = await SharedPref.getString(key: PrefsValue.token);
+    try {
+      Map<String, String> headers = {
+        "Authorization": token,
+      };
+      Map<String, String> para = {
+        "schema":schema,
+        "pipeQty":pipeQty,
+      };
+      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails, context: context,body: para, headers: headers);
+      return ExtraPipePriceData.fromJson(res['data']);
+    } catch (e) {
+      log("getExtraPipeDetails-->${e.toString()}");
+    }
+    return null;
+  }
+
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String dateInstallation,
+    required bool isDelayReason,
     required LmcReasonModel delayReason,
     required String meterNumber,
     required bool isCheckMeterMismatch,
-    required bool isCheckRegulatorMismatch,
     required String meterInit1,
     required String meterInit2,
     required String meterInit3,
-    required String rfcDeclarationDate,
+    required bool isInstallRegulator,
+    required LmcReasonModel regulatorType,
+    required String regulatorNumber,
+    required bool isCheckRegulatorMismatch,
+    required String srNumber,
     required String proposedNGCConversionDate,
     required String fittingDetails,
     required String meterPhoto,
     required String rfcPhoto,
     required String pneumaticTestReportPhoto,
+    required String housePhoto,
+ //   required String latSR,
+ //   required String longSR,
+  //  required String latMR,
+  //  required String longMR,
+ //   required String mrPhoto,
+  //  required String srPhoto,
   }) async {
-    try {
-      if (dateInstallation.isEmpty) {
-        Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
+     try {
+    if (dateInstallation.isEmpty) {
+      Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
+      return false;
+    } else if(isDelayReason == true && delayReason.id == null){
+      Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
+      return false;
+    } else if (meterNumber.isEmpty) {
+      Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
+      return false;
+    } else if (isCheckMeterMismatch == true) {
+      Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
+      return false;
+    } else if (meterInit1.isEmpty && meterInit2.isEmpty && meterInit3.isEmpty) {
+      Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
+      return false;
+    } else if(isInstallRegulator == true){
+      if(regulatorType.name == null){
+        Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
-      } else if (delayReason.id == null) {
-        Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
-        return false;
-      } else if (meterNumber.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
-        return false;
-      } else if (isCheckMeterMismatch == true) {
-        Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
-        return false;
-      } else if (meterInit1.isEmpty && meterInit2.isEmpty && meterInit3.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
-        return false;
-      } else if (isCheckRegulatorMismatch == true) {
-        Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
-        return false;
-      } else if (rfcDeclarationDate.isEmpty) {
-        Utils.errorSnackBar(msg: "The RFC Declaration Date field is required.", context: context);
-        return false;
-      } else if (proposedNGCConversionDate.isEmpty) {
-        Utils.errorSnackBar(msg: "The Proposed NGC Conversion Date field is required.", context: context);
-        return false;
-      } else if (fittingDetails.isEmpty) {
-        Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
-        return false;
-      } else if (meterPhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
-        return false;
-      } else if (rfcPhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The RFC Photo field is required.", context: context);
-        return false;
-      } else if (pneumaticTestReportPhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The Pneumatic Test Report Photo field is required.", context: context);
-        return false;
+      } else if(regulatorType.name == "SR"){
+        if(regulatorNumber.isEmpty){
+          Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
+          return false;
+        } else if (isCheckRegulatorMismatch == true) {
+          Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+          return false;
+        }
+       /* else if (srNumber.isEmpty) {
+          Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+          return false;
+        } else if (mrPhoto.isEmpty) {
+          Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
+          return false;
+        } else if(latMR.isEmpty && longMR.isEmpty) {
+          Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
+          return false;
+        } else if(latSR.isEmpty && longSR.isEmpty) {
+          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
+          return false;
+        } else if(srPhoto.isEmpty){
+          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
+          return false;
+        }*/
+
+      } else if(regulatorType.name == "PRV"){
+        if(regulatorNumber.isEmpty){
+          Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
+          return false;
+        }
       }
-      return true;
-    } catch (e) {
+    }
+    if (proposedNGCConversionDate.isEmpty) {
+      Utils.errorSnackBar(msg: "The Proposed NGC Conversion Date field is required.", context: context);
+      return false;
+    } else if (fittingDetails.isEmpty) {
+      Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
+      return false;
+    } else if (meterPhoto.isEmpty) {
+      Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
+      return false;
+    } else if (rfcPhoto.isEmpty) {
+      Utils.errorSnackBar(msg: "The RFC Photo field is required.", context: context);
+      return false;
+    } else if (pneumaticTestReportPhoto.isEmpty) {
+      Utils.errorSnackBar(msg: "The Pneumatic Test Report Photo field is required.", context: context);
+      return false;
+    }
+    return true;
+     } catch (e) {
       log("catchValidationSubmit--->${e.toString()}");
       return true;
     }
@@ -174,9 +235,8 @@ class FormInstallationHelper {
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,
     required String meterNo,
-    required String regulators,
-    required String latitudeTf,
-    required String longitudeTf,
+    required String regulatorsNumber,
+    required String srNumber,
     required String latitudeHg,
     required String longitudeHg,
     required String workCompletedDate,
@@ -191,12 +251,15 @@ class FormInstallationHelper {
     required GetConstantModel typeOfNR,
     required GetConstantModel ngc,
     required String proposedNgcDate,
+    required String regulatorCheck,
     required LmcReasonModel regulatorTypeId,
     required String meterReading,
     required String meterPhoto,
     required String rfcDate,
     required String isometricPhoto,
     required String pneumaticPhoto,
+    required String housePhoto,
+
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
@@ -205,28 +268,28 @@ class FormInstallationHelper {
       Map<String, String> para = {
         "schema": schema,
         "meter_reading_date": meterReadingDate,
-        "meter_reading": meterReading,
+        "meter_reading": meterReading.isEmpty ? "" :meterReading,
         "dma_id": meterDma,
         "meter_number": meterNo,
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
-        "regulators": regulators,
-        "latitude_tf": latitudeTf,
-        "longitude_tf": longitudeTf,
+        "regulators": regulatorsNumber,
         "latitude_hg": latitudeHg,
         "longitude_hg": longitudeHg,
+        "tf_number": srNumber,
         "work_completed_date": workCompletedDate,
         "material_id_lmc": materialIdLmc,
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
         "rfc_form": rfcForm ?? "",
-        "delay_reason": delayReason.id.toString(),
-        "type_of_nr": typeOfNR.key.toString(),
-        "ngc": ngc.key.toString(),
+        "delay_reason": delayReason.id == null ? "" : delayReason.id.toString(),
+        "type_of_nr": typeOfNR.key == null ? "" :typeOfNR.key.toString(),
+        "ngc": ngc.key == null ? "": ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate ?? "",
-        "regulator_type_id": regulatorTypeId.id.toString(),
-        "rfc_date": rfcDate,
+        "regulator_check": regulatorCheck.isEmpty ?"0" : regulatorCheck,
+        "regulator_type_id": regulatorTypeId.id == "" ? "" :regulatorTypeId.id.toString(),
+        "rfc_date": rfcDate.isEmpty ? "" :rfcDate,
       };
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
@@ -239,6 +302,8 @@ class FormInstallationHelper {
         filePath2: isometricPhoto.toString(),
         keyWord3: "pneumatic_image",
         filePath3: pneumaticPhoto.toString(),
+        keyWord4: "house_image",
+        filePath4: housePhoto.toString(),
       );
       if (res != null && res["error"] == false) {
         // Utils.successSnackBar(msg: res["data"], context: context);

@@ -13,6 +13,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
   String schema = '';
   String userName = '';
   String custRegNo = '';
+  String trNumber = '';
+  String bpNumber = '';
   String feasibilityVisitDate = '';
   String chargeArea = '';
   String areaName = '';
@@ -39,6 +41,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
     feasibilityVisitDate = await SharedPref.getString(
       key: PrefsValue.feasibilityVisitDate,
     );
+    bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
+    trNumber = await SharedPref.getString(key: PrefsValue.trNumber);
     userName = await SharedPref.getString(key: PrefsValue.userName);
     schema = await SharedPref.getString(key: PrefsValue.schema);
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
@@ -65,6 +69,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
       userName: userName,
       isLoader: isLoader,
       custRegNo: custRegNo,
+      trNumber: trNumber,
+      bpNumber: bpNumber,
       feasibilityVisitDate: feasibilityVisitDate,
       chargeArea: chargeArea,
       areaName: areaName,

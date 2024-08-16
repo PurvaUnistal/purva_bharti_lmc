@@ -19,6 +19,8 @@ class NgcTablePageLoadState extends NgcTableState {
 class FetchNgcTableDataState extends NgcTableState {
   final bool isLoader;
   final int pageNo;
+  final String schema;
+  final String userName;
   final dynamic allAreaValue;
   final List<GetAllAreaModel> listOfAllArea;
   final List<InstallationByNgcData> listOfInstallationByNgc;
@@ -27,6 +29,8 @@ class FetchNgcTableDataState extends NgcTableState {
 
   FetchNgcTableDataState({
     required this.isLoader,
+    required this.schema,
+    required this.userName,
     required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
@@ -40,6 +44,8 @@ class FetchNgcTableDataState extends NgcTableState {
   // TODO: implement props
   List<Object?> get props => [
     isLoader,
+    schema,
+    userName,
     pageNo,
     allAreaValue,
     listOfAllArea,

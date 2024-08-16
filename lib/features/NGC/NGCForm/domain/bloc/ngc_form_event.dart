@@ -12,6 +12,13 @@ class NGCFormLoadEvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
+class SelectTypeNRValueEvent extends NGCFormEvent {
+  final dynamic typeOfNRValue;
+  SelectTypeNRValueEvent({required this.typeOfNRValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [typeOfNRValue];
+}
 
 class SelectMeterReplaceEvent extends NGCFormEvent {
   final BuildContext context;
@@ -52,17 +59,11 @@ class SelectRegulatorsValueEvent extends NGCFormEvent {
   List<Object> get props => [regulatorsValue,context];
 }
 
-class SelectNgcChargeDateEvent extends NGCFormEvent{
-  final BuildContext context;
-  SelectNgcChargeDateEvent({ required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
 
-class SelectProposedNgcConversionDateEvent extends NGCFormEvent{
+
+class SelectNGConversionDateEvent extends NGCFormEvent{
   final BuildContext context;
-  SelectProposedNgcConversionDateEvent({ required this.context});
+  SelectNGConversionDateEvent({ required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];
@@ -76,6 +77,21 @@ class SelectDelayReasonValueEvent extends NGCFormEvent {
   List<Object> get props => [delayReasonValue];
 }
 
+class SelectDelayStatueValueEvent extends NGCFormEvent {
+  final LmcReasonModel delayStatueValue;
+  SelectDelayStatueValueEvent({required this.delayStatueValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [delayStatueValue];
+}
+class SelectMeterTypeValueEvent extends NGCFormEvent {
+  final LmcReasonModel meterTypeValue;
+  SelectMeterTypeValueEvent({required this.meterTypeValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [meterTypeValue];
+}
+
 class SelectLocationOfSREvent extends NGCFormEvent {
   final BuildContext context;
   SelectLocationOfSREvent({required this.context});
@@ -84,13 +100,6 @@ class SelectLocationOfSREvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
-class SelectLocationOfHouseEvent extends NGCFormEvent {
-  final BuildContext context;
-  SelectLocationOfHouseEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
 
 class CaptureGalleryMeterEvent extends NGCFormEvent{
   @override
@@ -116,6 +125,28 @@ class CaptureCameraNGCReportEvent extends NGCFormEvent{
   List<Object> get props => [];
 }
 
+class CaptureGalleryMREvent extends NGCFormEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureCameraMREvent extends NGCFormEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureGallerySREvent extends NGCFormEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+class CaptureCameraSREvent extends NGCFormEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
 
 class NGCSubmitEvent extends NGCFormEvent {
   final BuildContext context;

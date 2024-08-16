@@ -7,6 +7,7 @@ import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
@@ -29,10 +30,10 @@ class _LoginViewState extends State<LoginView> {
     BlocProvider.of<LoginBloc>(context).add(LoginPageLoadingEvent());
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.green50,
       appBar: AppBarWidget(
         title: AppString.lmcMobilityH,
         boolLeading: false,

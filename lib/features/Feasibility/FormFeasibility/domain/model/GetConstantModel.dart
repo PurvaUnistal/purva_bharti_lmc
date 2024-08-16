@@ -1,6 +1,6 @@
 class GetConstantModel {
-  final dynamic key;
-  final String? value;
+   dynamic key;
+   String? value;
   bool isSelected;
 
   GetConstantModel({

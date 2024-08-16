@@ -102,6 +102,7 @@ class InstallationDoneRows {
   String? propName;
   String? propClass;
   String? dmaId;
+  String? trNumber;
 
   InstallationDoneRows(
       {this.chargeAreaName,
@@ -174,7 +175,9 @@ class InstallationDoneRows {
         this.dis,
         this.propName,
         this.propClass,
-        this.dmaId});
+        this.dmaId,
+        this.trNumber,
+      });
 
   InstallationDoneRows.fromJson(Map<String, dynamic> json) {
     chargeAreaName = json['charge_area_name'] ?? "";
@@ -248,6 +251,7 @@ class InstallationDoneRows {
     propName = json['prop_name'] ?? "";
     propClass = json['prop_class'] ?? "";
     dmaId = json['dma_id'] ?? "";
+    trNumber = json['tr_number'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -323,6 +327,7 @@ class InstallationDoneRows {
     data['prop_name'] = this.propName;
     data['prop_class'] = this.propClass;
     data['dma_id'] = this.dmaId;
+    data['tr_number'] = this.trNumber;
     return data;
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_event.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_state.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/features/NGC/NGCTable/helper/ngc_table_helper.dart';
+
+import '../../../../../Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import '../../../../../Utils/common_widgets/SharedPerfs/preference_utils.dart';
 
 class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   NgcTableBloc() : super(NgcTableInitialState()) {
@@ -12,8 +15,10 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     on<SelectAreaValueEvent>(_selectAreaValue);
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
-int pageNo = 1;
+  int pageNo = 1;
   bool isLoader = false;
+  String schema = "";
+  String userName = "";
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
   List<InstallationByNgcData> listOfInstallationByNgc = [];
@@ -29,6 +34,8 @@ int pageNo = 1;
     listOfAllArea = [];
     listOfInstallationByNgc = [];
     lmcInstallationByNgcModel = LMCInstallationByNgcModel();
+    schema = await SharedPref.getString(key: PrefsValue.schema);
+    userName = await SharedPref.getString(key: PrefsValue.userName);
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
     _eventCompleted(emit);
@@ -75,13 +82,15 @@ int pageNo = 1;
 
   _eventCompleted(Emitter<NgcTableState> emit) {
     emit(FetchNgcTableDataState(
-        isLoader: isLoader,
-        pageNo: pageNo,
-        allAreaValue: areaValue,
-        listOfAllArea: listOfAllArea,
-        listOfInstallationByNgc: listOfInstallationByNgc,
-        lmcInstallationByNgcModel: lmcInstallationByNgcModel,
-        bpNumberController: bpNumberController,
+      schema: schema,
+      userName: userName,
+      isLoader: isLoader,
+      pageNo: pageNo,
+      allAreaValue: areaValue,
+      listOfAllArea: listOfAllArea,
+      listOfInstallationByNgc: listOfInstallationByNgc,
+      lmcInstallationByNgcModel: lmcInstallationByNgcModel,
+      bpNumberController: bpNumberController,
     ));
   }
 }

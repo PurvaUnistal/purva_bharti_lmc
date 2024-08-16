@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+
 class AppString {
-  static String version = "Version : LMC-1.0.0.00";
+  static String version = "Version : LMC-1.16.8.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
-  static String reDate = "7/8/2024";
   static String dateFormat = "dd-MM-yyyy";
   static String emailLabel = "Enter User Email";
   static String passwordLabel = "Enter User Password";
@@ -26,10 +28,12 @@ class AppString {
   static String lmcInstallH = "LMC Installation App";
   static String lmcInstallDetailH = "LMC Installation Consumer Details";
   static String lmcInstallFormH = "LMC Installation Consumer Form";
+  static String ngConH = "NG Conversion APP";
 
   static String search = "Search";
   static String selectArea = "Select Area";
   static String custReg = "Customer Registration";
+  static String trNumber = "TR Number";
   static String lmcAssignedDate = "LMC assigned Date";
   static String lmcFeaDate = "Date of Feasibility";
   static String chargeArea = "Charge Area";
@@ -37,7 +41,7 @@ class AppString {
   static String firstName = "First Name";
   static String lastName = "Last Name";
   static String mobileNumber = "Mobile Number";
-  static String altMobileNo = "Alter Mobile Number";
+  static String altMobileNo = "Alternate Mobile Number";
   static String email = "Email";
   static String guardianName = "Guardian Name";
   static String propertyCategory = "Property Category";
@@ -63,24 +67,31 @@ class AppString {
   static String reasonDelay = "Reason for Delay";
   static String meterReadingDate = "Meter Reading Date";
   static String meterNumber = "Meter Number";
+  static String meterNoErrorMsg = "Meter not Issued or Meter Number Incorrect or Meter already Installed";
+  static String regulatorNoErrorMsg = "regulator Incorrect or Not allocated ";
   static String regulator = "Regulators";
   static String meterRegulator = "Meter Regulator";
-  static String meterInitNumber = "Meter Initial Reading";
+  static String meterInitNumber = "* Meter Initial Reading";
   static String latOfSR = "Latitude of SR";
   static String longOfSR = "Longitude of SR";
+  static String latOfMR = "Latitude of MR";
+  static String longOfMR = "Longitude of MR";
   static String latOfHouse = "Latitude of House";
   static String longOfHouse = "Longitude of House";
   static String srNumber = "SR Number";
   static String rfcDeclarationDate = "RFC Declaration Date";
-  static String proNgcConDate = "Proposed NGC Conversion Date";
+  static String proNgcConDate = "NGC Conversion Date";
   static String extraPrice = "Extra Price";
   static String extraPipe = "Extra Pipe";
   static String photo = "Photo";
   static String ngcReportFile = "Ngc Report File";
   static String pneumatic = "Pneumatic Test Report";
-  static String rfc = "RFC Image";
+  static String rfc = "RFC Photo";
+  static String housePhoto = "House Photo";
+  static String mrPhoto = "MR Photo";
+  static String srPhoto = "SR Photo";
   static String installation = "Installation";
-  static String meterFile = "Meter File";
+  static String meterPhoto = "Meter Photo";
   static String material = "Material";
   static String meter = "Meter Photo";
   static String reason = "Reason";
@@ -88,7 +99,31 @@ class AppString {
   static String contractor = "Contractor";
   static String meterReading = "Meter Reading";
   static String meterReplace = "Do you want to replace meter?";
+  static String installRegulator = "Do you want to Install Regulator";
   static String burnersNo = "Burners No";
   static String ngChargeDate = "NG Charge Date";
   static String followUpDate = "Follow Up Date";
+  static String dateInstallation = "Date of Installation";
+  static String ngConversionDate = "NG Conversion Date";
+  static String reasonForDelay = "Reason for Delay";
+  static String meterType = "Meter Type";
+  static String reasonMeterChange = "Reason for Meter Change";
+  static String meterInitialReading = "Meter Initial Reading";
+  static String delayStatus = "Delay Status";
+  static String delayReason = "Delay Reason";
+  static String noOfFamilyMembers = "No. Of Family Members";
+
+
+ static OutlineInputBorder border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
+  );
+  OutlineInputBorder borderGrey = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),
+  );
+  static  OutlineInputBorder borderRed = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    borderSide: BorderSide(color: AppColor.red, style: BorderStyle.solid, width: 0.80),
+  );
 }

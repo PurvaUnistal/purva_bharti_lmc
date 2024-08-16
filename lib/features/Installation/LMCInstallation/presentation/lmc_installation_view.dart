@@ -38,6 +38,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.green50,
       body: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
         builder: (context, state) {
           if (state is LMCInstallationDataState) {
@@ -90,6 +91,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
             ),
           ),
           _verticalSpace(),
+          Text("Click on row to open LMC Installation Form", style: Styles.labels,),
           Flexible(child: _dataTableWidget(dataState: dataState)),
         ],
       ),
@@ -176,6 +178,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                           rows: dataState.listOfInstallationRow
                               .mapIndexed((index, user) => DataRow(
                                       onSelectChanged: (newValue) async {
+                                        await SharedPref.setString(key: PrefsValue.trNumber, value: user.trNumber!);
                                         await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
                                         await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate!);
                                         await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);

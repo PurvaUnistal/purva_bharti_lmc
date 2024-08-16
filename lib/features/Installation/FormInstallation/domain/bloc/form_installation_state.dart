@@ -24,25 +24,27 @@ class FormInstallationDataState extends FormInstallationState {
   String schema;
   String userName;
   bool isLoader;
+  bool isInstallRegulator;
   bool isCheckMeterMismatch;
   bool isCheckRegulatorMismatch;
   bool isBtnLoader;
   bool isDelayReason;
   bool isRegulator;
   bool isSelected;
-  File rfcCardImg;
-  File pneumaticTestReportImg;
-  File installationImg;
-  File meterImg;
+  File rfcCardPhoto;
+  File pneumaticTestReportPhoto;
+  File installationPhoto;
+  File meterPhoto;
+  File housePhoto;
   ListOfMeterNo? meterNoValue;
   LmcReasonModel? delayReasonValue;
   GetConstantModel? typeOfNrValue;
   LmcReasonModel? regulatorTypeValue;
-  List<ListOfMeterNo> listOfMeterNo;
+  List<ListOfMeterNo> listOfMeterNumber;
   List<GetConstantModel> listOfTypeOfNr;
   List<LmcReasonModel> listOfDelayReason;
   List<LmcReasonModel> listOfRegulatorType;
-  List<String> listOfMeterNumber;
+  List<String> listOfMeterNumberSerial;
   List<String> listOfRegulatorSerial;
   List<ListOfMeterNo> listOfRegulator;
   List<String> listOfQtyLMC;
@@ -52,43 +54,47 @@ class FormInstallationDataState extends FormInstallationState {
   FocusNode meterIniReading1FocusNode;
   FocusNode meterIniReading2FocusNode;
   FocusNode meterIniReading3FocusNode;
-  TextEditingController latOfSRController;
-  TextEditingController longOfSRController;
+
   TextEditingController latOfHouseController;
   TextEditingController longOfHouseController;
+  TextEditingController srNumberController;
   TextEditingController rfcConDateController;
   TextEditingController proConDateController;
   TextEditingController extraPipeController;
   TextEditingController extraPriceController;
   TextEditingController bpNumberController;
+  TextEditingController trNumberController;
   TextEditingController proposedDateController;
+  TextEditingController feasibilityDateController;
   TextEditingController installationDateController;
   TextEditingController meterIniReading1Controller;
   TextEditingController meterIniReading2Controller;
   TextEditingController meterIniReading3Controller;
   TextEditingController meterInitialReadingController;
-  TextEditingController materialSerialController;
+  TextEditingController meterNumberSerialController;
   TextEditingController regulatorSerialController;
 
   FormInstallationDataState({
     required this.userName,
     required this.schema,
+    required this.isInstallRegulator,
     required this.isLoader,
     required this.isCheckRegulatorMismatch,
     required this.isCheckMeterMismatch,
     required this.isBtnLoader,
     required this.isDelayReason,
     required this.isRegulator,
-    required this.meterImg,
+    required this.meterPhoto,
+    required this.housePhoto,
     required this.isSelected,
-    required this.rfcCardImg,
-    required this.pneumaticTestReportImg,
-    required this.installationImg,
+    required this.rfcCardPhoto,
+    required this.pneumaticTestReportPhoto,
+    required this.installationPhoto,
     required this.meterNoValue,
     required this.typeOfNrValue,
     required this.delayReasonValue,
     required this.regulatorTypeValue,
-    required this.listOfMeterNo,
+    required this.listOfMeterNumberSerial,
     required this.listOfTypeOfNr,
     required this.listOfDelayReason,
     required this.listOfMeterNumber,
@@ -103,21 +109,22 @@ class FormInstallationDataState extends FormInstallationState {
     required this.meterIniReading2FocusNode,
     required this.meterIniReading3FocusNode,
     required this.bpNumberController,
+    required this.trNumberController,
     required this.proposedDateController,
+    required this.feasibilityDateController,
     required this.installationDateController,
     required this.meterIniReading1Controller,
     required this.meterIniReading2Controller,
     required this.meterIniReading3Controller,
     required this.meterInitialReadingController,
-    required this.latOfSRController,
-    required this.longOfSRController,
     required this.latOfHouseController,
     required this.longOfHouseController,
+    required this.srNumberController,
     required this.rfcConDateController,
     required this.proConDateController,
     required this.extraPipeController,
     required this.extraPriceController,
-    required this.materialSerialController,
+    required this.meterNumberSerialController,
     required this.regulatorSerialController,
   });
 
@@ -127,23 +134,27 @@ class FormInstallationDataState extends FormInstallationState {
         schema,
         userName,
         isLoader,
+    isInstallRegulator,
         isCheckRegulatorMismatch,
         isCheckMeterMismatch,
         isBtnLoader,
         isDelayReason,
         isRegulator,
-        meterImg,
+        meterPhoto,
+    housePhoto,
         meterNoValue,
         typeOfNrValue,
         delayReasonValue,
-        listOfMeterNo,
+        listOfMeterNumberSerial,
         listOfTypeOfNr,
         listOfDelayReason,
         listOfMeterNumber,
         regulatorTypeValue,
         listOfRegulatorType,
         bpNumberController,
+    trNumberController,
         proposedDateController,
+    feasibilityDateController,
         installationDateController,
         meterIniReading1Controller,
         meterIniReading2Controller,
@@ -154,23 +165,22 @@ class FormInstallationDataState extends FormInstallationState {
         meterIniReading3FocusNode,
         isSelected,
         listOfQtyLMC,
-        rfcCardImg,
-        pneumaticTestReportImg,
-        installationImg,
+        rfcCardPhoto,
+        pneumaticTestReportPhoto,
+        installationPhoto,
         listOfRegulatorSerial,
         listOfRegulator,
         listOfAllMaterial,
         listOfAllRFC,
         materialList,
-        latOfSRController,
-        longOfSRController,
         latOfHouseController,
         longOfHouseController,
         rfcConDateController,
+    srNumberController,
         proConDateController,
         extraPipeController,
         extraPriceController,
-        materialSerialController,
+        meterNumberSerialController,
         regulatorSerialController,
       ];
 }

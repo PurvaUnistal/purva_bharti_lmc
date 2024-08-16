@@ -2,21 +2,30 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/model/SubmitNgcReportModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_helper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 
 class NGCFormHelper{
 
+  static Future<Position > getCurrentLocation() async {
+    await Geolocator.requestPermission();
+    await Permission.locationAlways.request();
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    log('latitude : ${position.latitude} longitude : ${position.longitude}');
+    return position;
+  }
 
   static Future<File> cameraCapture() async {
-      await Permission.camera.request();
+    await Permission.camera.request();
     final XFile? file = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 50,
@@ -28,7 +37,7 @@ class NGCFormHelper{
   }
 
   static Future<File> galleryCapture() async {
-      await Permission.storage.request();
+    await Permission.storage.request();
     final XFile? file = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
@@ -58,6 +67,50 @@ class NGCFormHelper{
     }
   }
 
+  static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
+    try {
+      var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
+      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      return response;
+    } catch (e) {
+      log("lmcReasonApi-->${e.toString()}");
+    }
+    return null;
+  }
+
+  static Future<List<LmcReasonModel>?> ngcReasonApi({required BuildContext context}) async {
+    try {
+      var res = await ApiHelper.getData(urlEndPoint: Apis.ngcReason, context: context);
+      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      return response;
+    } catch (e) {
+      log("ngcReasonApi-->${e.toString()}");
+    }
+    return null;
+  }
+
+  static Future<List<LmcReasonModel>?> meterReplaceTypeApi({required BuildContext context}) async {
+    try {
+      var res = await ApiHelper.getData(urlEndPoint: Apis.meterReplaceType, context: context);
+      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      return response;
+    } catch (e) {
+      log("lmcReasonApi-->${e.toString()}");
+    }
+    return null;
+  }
+
+  static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
+    try {
+      var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
+      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      return response;
+    } catch (e) {
+      log("regulatorTypeApi-->${e.toString()}");
+    }
+    return null;
+  }
+
   static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context, required String meterSerial}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
@@ -77,7 +130,10 @@ class NGCFormHelper{
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi({required BuildContext context,required String regulatorSerial}) async {
+  static Future<List<ListOfMeterNo>?> getRegulatorsApi({
+    required BuildContext context,
+    required String regulatorSerial,
+    required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
@@ -85,9 +141,11 @@ class NGCFormHelper{
         "schema":schema,
         "regulatorSerial":regulatorSerial,
         "user_id": userId,
+        "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getRegulators + json, context: context);
+      print(res);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(jsonDecode(res));
       return meterNoModel.data;
     } catch (e) {
@@ -98,54 +156,91 @@ class NGCFormHelper{
 
   static Future<dynamic> validationSubmit({
     required BuildContext context,
-    String? nameContractor,
-    String? bpNumber,
-    String? noOfBurners,
-    String? meterReading,
-    String? meterNo,
-    String? phoneNo,
-    String? meterImg,
-    String? ngcReportImg,
-    String? delayStatusValue,
-    String? date,
-    String? delayReason,
+    required bool isDelayReason,
+    required LmcReasonModel delayReason,
+    required String meterNumber,
+    required bool isCheckMeterMismatch,
+    required LmcReasonModel regulatorType,
+    required String regulatorNumber,
+    required bool isCheckRegulatorMismatch,
+    required String srNumber,
+    required String regulatorId,
+    required String latSR,
+    required String longSR,
+    required String latMR,
+    required String longMR,
+    required String mrPhoto,
+    required String srPhoto,
+    required String nameContractor,
+    required String bpNumber,
+    required String noOfBurners,
+    required String meterInitialReading,
+    required String phoneNo,
+    required File meterImg,
+    //  required File ngcReportImg,
+    required String ngChargeDate,
+    required LmcReasonModel ngcDelayStatusValue,
+    required String changeMeterType,
   }) async {
     try {
-      if (nameContractor!.isEmpty) {
-        Utils.errorSnackBar(msg : "The Name Contractor field is required.", context:context);
+      if(isDelayReason == true && delayReason.id == null){
+        Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
         return false;
-      } else if (bpNumber!.isEmpty) {
+      }else if (meterNumber.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
+        return false;
+      } else if (isCheckMeterMismatch == true) {
+        Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
+        return false;
+      }else if (changeMeterType == "null") {
+        Utils.errorSnackBar(msg : "The Meter Type is required.",context: context);
+        return false;
+      } else if (meterInitialReading.isEmpty) {
+        Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
+        return false;
+      }   if(regulatorType.name == null){
+        Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
+        return false;
+      } else if(regulatorType.name == "SR"){
+        if(regulatorNumber.isEmpty){
+          Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
+          return false;
+        } else if (isCheckRegulatorMismatch == true) {
+          Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+          return false;
+        } else if (srNumber.isEmpty) {
+          Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+          return false;
+        } else if (mrPhoto.isEmpty) {
+          Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
+          return false;
+        } else if(latMR.isEmpty && longMR.isEmpty) {
+          Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
+          return false;
+        } else if(latSR.isEmpty && longSR.isEmpty) {
+          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
+          return false;
+        } else if(srPhoto.isEmpty){
+          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
+          return false;
+        }
+      } else if(regulatorType.name == "PRV"){
+        if(regulatorNumber.isEmpty){
+          Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
+          return false;
+        }
+      }else if (bpNumber.isEmpty) {
         Utils.errorSnackBar(msg : "The bp Number field is required.", context:context);
         return false;
-      } else if (noOfBurners!.isEmpty) {
+      } else if (noOfBurners.isEmpty) {
         Utils.errorSnackBar(msg : "The No. Of Burners field is required.",context: context);
         return false;
-      } else if (meterReading!.isEmpty) {
-        Utils.errorSnackBar(msg : "The Meter Reading field is required.", context:context);
-        return false;
-      } else if (meterNo!.isEmpty) {
-        Utils.errorSnackBar(msg : "The Meter No. field is required.",context: context);
-        return false;
-      } else if (phoneNo!.isEmpty) {
+      } else if (phoneNo.isEmpty) {
         Utils.errorSnackBar(msg : "The Phone No. field is required.", context:context);
         return false;
-      } else if (date!.isEmpty) {
-        Utils.errorSnackBar(msg : "The NG Charge Date field is required.", context:context);
+      } else if (meterImg.path.isEmpty) {
+        Utils.errorSnackBar(msg : "The Meter Photo field is required.",context: context);
         return false;
-      } else if (delayStatusValue == "null") {
-        Utils.errorSnackBar(msg : "The Delay Status field is required.",context: context);
-        return false;
-      } else if (meterImg!.isEmpty || meterImg == "" ) {
-        Utils.errorSnackBar(msg : "The Meter File field is required.",context: context);
-        return false;
-      } else if (ngcReportImg!.isEmpty || ngcReportImg == "") {
-        Utils.errorSnackBar(msg : "The NGC Report File field is required.", context:context);
-        return false;
-      } else if(delayStatusValue == "Yes"){
-       if (delayReason!.isEmpty ) {
-        Utils.errorSnackBar(msg : "The Delay Reason field is required.",context: context);
-        return false;
-      }
       }
       return true;
     } catch (e) {
@@ -156,26 +251,39 @@ class NGCFormHelper{
 
   static Future<SubmitNgcReportModel?> setNGCReportData({
     required BuildContext context,
-    String? schema,
-    String? nameOfContractor,
-    String? meterReading,
-    String? jmrNo,
-    String? nOfBurners,
-    String? mismatchMeterNo,
-    String? contactPerson,
-    String? reasonOfDelay,
-    String? alternateMobile,
-    String? email,
-    String? delayStatus,
-    String? conversionDate,
-    String? workCompletedDate,
-    String? dmaUserId,
-    String? lmcInstallationId,
-    String? isInstall,
-    String? comment,
+    required String schema,
+    required String nameOfContractor,
+    required String meterReading,
+    required String jmrNo,
+    required String nOfBurners,
+    required String mismatchMeterNo,
+    required String contactPerson,
+    required String reasonOfDelay,
+    required String alternateMobile,
+    required String email,
+    required LmcReasonModel delayStatus,
+    required String conversionDate,
+    required String workCompletedDate,
+    required String dmaUserId,
+    required String lmcInstallationId,
+    required String isInstall,
+    required String comment,
+    required String meterNumber,
+    required String regulatorsNumber,
+    required String srNumber,
+    required LmcReasonModel regulatorTypeId,
+    required String meterChangeReason,
+    required String replaceMeter,
+    required LmcReasonModel changeMeterType,
+      required String mrRegulatorId,
+      required String latitudeMR,
+      required String longitudeMR,
+      required String latitudeTf,
+      required String longitudeTf,
+      required String mrPhoto,
+     required String sr_photo,
     File? meterFile,
     File? ngcReportFile,
-
   }) async {
     Map<String, String> body = {
       "schema": schema ?? "",
@@ -188,13 +296,25 @@ class NGCFormHelper{
       "reason_of_delay": reasonOfDelay ?? "",
       "alternate_mobile": alternateMobile ?? "",
       "email": email ?? "",
-      "delay_status": delayStatus == null ? "" : delayStatus,
-      "conversion_date": conversionDate ?? "",
+      "delay_status": delayStatus.id == null ? "" :delayStatus.id.toString(),
+      "conversion_date": conversionDate.isEmpty ? "" : conversionDate,
       "work_completed_date": workCompletedDate ?? "",
       "dma_user_id": dmaUserId ?? "",
       "lmc_installation_id": lmcInstallationId ?? "",
       "is_install": isInstall ?? "",
       "comment": comment ?? "",
+      "meter_number": meterNumber ?? "",
+      "regulators_number": regulatorsNumber ?? "",
+      "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
+      "meter_change_reason": meterChangeReason,
+      "replace_meter": replaceMeter,
+      "change_meter_type": changeMeterType.id == null ? "" : changeMeterType.id.toString(),
+      "tf_number": srNumber,
+      "mr_regulator_id": mrRegulatorId,
+        "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
+      "longitude_mr": longitudeMR.isEmpty ? "0" :longitudeMR,
+      "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,
+       "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
     };
     log("jsonBody-->${body}");
     try {
@@ -202,9 +322,11 @@ class NGCFormHelper{
         urlEndPoint: "${Apis.setNGCReport}",
         body: body, keyWord1: "meter_image", filePath1: meterFile!.path.toString(),
         keyWord2: "ngc_report_file", filePath2: ngcReportFile!.path.toString(),
+        keyWord3: "mr_photo",
+         filePath3: mrPhoto.toString(),
+         keyWord4: "sr_photo",
+         filePath4: mrPhoto.toString(),
         context: context,
-        filePath3: "",
-        keyWord3: "",
       );
       if (res != null && res["error"] == false) {
         return SubmitNgcReportModel.fromJson(res);
@@ -215,10 +337,8 @@ class NGCFormHelper{
         Utils.errorSnackBar(msg: res["data"].toString(),context: context);
         return null;
       }
-    } catch (e) {
-      log("catchSubmitModel-->${e.toString()}");
-      Utils.errorSnackBar(msg: e.toString(), context:context);
-      return null;
+    }catch(e){
+      print(e.toString());
     }
   }
 

@@ -19,6 +19,8 @@ class FetchHomeDataState extends HomeState {
   final String scheme;
   final String userName;
   final String baseUrl;
+  final String installationName;
+  final String feasibilityName;
   final int pageIndex;
   final int currentIndex;
   final List<Widget> pageWidgets;
@@ -30,6 +32,8 @@ class FetchHomeDataState extends HomeState {
     required this.userName,
     required this.pageIndex,
     required this.pageWidgets,
+    required this.installationName,
+    required this.feasibilityName,
     required this.currentIndex,
     required this.bottomNavyBarItemList});
   @override
@@ -39,6 +43,8 @@ class FetchHomeDataState extends HomeState {
     userName,
     baseUrl,
     pageIndex,
+   installationName,
+  feasibilityName,
     currentIndex,
     bottomNavyBarItemList,
     pageWidgets];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 
 class AutoCompleteTextFieldWidget extends StatelessWidget {
   final List<String> suggestions;
@@ -14,7 +15,8 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
   final Function(String)? onSelected;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
-  final TextEditingController? controller;
+  TextEditingController? controller;
+  InputBorder? errorBorder;
 
   AutoCompleteTextFieldWidget({
     super.key,
@@ -30,25 +32,91 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.controller,
+    this.errorBorder
   });
 
   @override
   Widget build(BuildContext context) {
-    return Autocomplete<String>(
-      fieldViewBuilder: (BuildContext context, TextEditingController controller, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
+    return  Autocomplete(
+      initialValue: TextEditingValue(text: controller?.text ?? ""),
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return const Iterable<String>.empty();
+        } else {
+          return suggestions.where((word) {
+            String startsFilter = word.toLowerCase().toString();
+            return startsFilter.startsWith(textEditingValue.text.toLowerCase());
+          });
+        }
+      },
+      optionsViewBuilder:
+          (context, Function(String) onSelectedOption, options) {
+        return Material(
+          elevation: 4,
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              final option = options.elementAt(index);
+              return ListTile(
+                // title: Text(option.toString()),
+                title: SubstringHighlight(
+                  text: option.toString(),
+                  term: controller!.text,
+                  textStyleHighlight: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize:18 ),
+                ),
+                onTap: () {
+                 onSelectedOption(option.toString());
+                 this.onSelected!(option.toString());
+                },
+              );
+            },
+            separatorBuilder: (context, index) => Divider(),
+            itemCount: options.length,
+          ),
+        );
+      },
+      onSelected: (selectedString) {
+        print(selectedString);
+      },
+      fieldViewBuilder:
+          (context, controller, focusNode, onEditingComplete) {
         return TextFormField(
           cursorColor: AppColor.primer,
+          controller: controller,
+          focusNode: focusNode,
+          onEditingComplete: onEditingComplete,
+          validator: validator,
           style: Styles.texts,
           onChanged: onChanged,
           decoration: InputDecoration(
+            counterText: "",
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
+            errorStyle: Styles.subStar,
+            suffixIconConstraints: suffixIcon != null
+                ? const BoxConstraints(
+              maxWidth: 30,
+              maxHeight: 25,
+            )
+                : null,
+            prefixIconConstraints: prefixIcon != null
+                ? const BoxConstraints(
+              maxWidth: 30,
+              maxHeight: 25,
+            )
+                : null,
+            fillColor: AppColor.white,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
+            border: enabled == false ? borderGrey : border,
+            focusedBorder: enabled == false ? borderGrey : border,
+            disabledBorder: enabled == false ? borderGrey : border,
+            enabledBorder: enabled == false ? borderGrey : border,
+            errorBorder: errorBorder,
             hintText: hintText,
-            counterText: "",
+            hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
             label: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2.0,
-              ),
+              padding: const EdgeInsets.only(left: 2.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,35 +125,14 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
                   Flexible(flex: 1, child: Text(star ?? "", style: Styles.stars)),
                   Flexible(
                     flex: 6,
-                    child: Text(label ?? "", style: Styles.labels),
+                    child: Text(label ?? "", style: enabled == false ? Styles.labelGrey : Styles.labels),
                   ),
                 ],
               ),
             ),
-            hintStyle: Styles.labels,
-            filled: true,
-            fillColor: enabled == false ? AppColor.white70 : AppColor.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
-            isDense: true,
-            border: enabled == false ? border1 : border,
-            focusedBorder: enabled == false ? border1 : border,
-            disabledBorder: enabled == false ? border1 : border,
-            enabledBorder: enabled == false ? border1 : border,
           ),
-          controller: controller,
-          focusNode: fieldFocusNode,
-          validator: validator == null ? null : validator,
         );
       },
-      optionsBuilder: (TextEditingValue fruitTextEditingValue) {
-        if (fruitTextEditingValue.text == '') {
-          return const Iterable<String>.empty();
-        }
-        return suggestions.where((String option) {
-          return option.contains(fruitTextEditingValue.text.toLowerCase());
-        });
-      },
-      onSelected: onSelected,
     );
   }
 
@@ -93,8 +140,12 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
   );
-  OutlineInputBorder border1 = OutlineInputBorder(
+  OutlineInputBorder borderGrey = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),
+  );
+  OutlineInputBorder borderRed = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    borderSide: BorderSide(color: AppColor.red, style: BorderStyle.solid, width: 0.80),
   );
 }

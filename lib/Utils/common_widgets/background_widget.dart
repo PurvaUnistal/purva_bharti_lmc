@@ -9,46 +9,38 @@ class BackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        child,
-        Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-                decoration: BoxDecoration(color: AppColor.primer),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                          child: Text(
-                        AppString.companyName,
-                        textAlign: TextAlign.start,
-                        style: Styles.rel,
-                      )),
-                      Flexible(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${AppString.release} : ${AppString.reDate}",
-                            textAlign: TextAlign.start,
-                            style: Styles.rel,
-                          ),
-                          Text(
-                            AppString.version,
-                            textAlign: TextAlign.start,
-                            style: Styles.rel,
-                          ),
-                        ],
-                      )),
-                    ],
-                  ),
-                )))
-      ],
+    return Scaffold(
+      body: Stack(
+        children: [
+          child,
+          Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                  decoration: BoxDecoration(color: AppColor.primer),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                            child: Text(
+                          AppString.companyName,
+                          textAlign: TextAlign.start,
+                          style: Styles.rel,
+                        )),
+                        Flexible(
+                            child: Text(
+                              AppString.version,
+                              textAlign: TextAlign.start,
+                              style: Styles.rel,
+                            )),
+                      ],
+                    ),
+                  )))
+        ],
+      ),
     );
   }
 }

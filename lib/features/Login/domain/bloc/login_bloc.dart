@@ -78,6 +78,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await SharedPref.setString(key: PrefsValue.userName,value: res.user!.name!);
               await SharedPref.setString(key: PrefsValue.userRole,value: res.user!.role!);
               await SharedPref.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
+              if(res.user!.accessright != null){
+                  await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].name!);
+                  await SharedPref.setString(key: PrefsValue.feasibilityName,value: res.user!.accessright![1].name!);
+              }
               Navigator.pushReplacementNamed(event.context, RoutesName.home,);
             }
           }

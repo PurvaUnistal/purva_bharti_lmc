@@ -36,6 +36,15 @@ class SelectDelayReasonValueEvent extends FormInstallationEvent {
   List<Object> get props => [delayReasonValue];
 }
 
+class SelectInstallRegulatorEvent extends FormInstallationEvent {
+  final BuildContext context;
+  final bool installRegulator;
+  SelectInstallRegulatorEvent({required this.context, required this.installRegulator});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context,installRegulator];
+}
+
 class SelectRegulatorTypeValueEvent extends FormInstallationEvent {
   final BuildContext context;
   final LmcReasonModel regulatorTypeValue;
@@ -85,6 +94,19 @@ class CaptureCameraMeterEvent extends FormInstallationEvent{
   // TODO: implement props
   List<Object> get props => [];
 }
+class CaptureGalleryHouseEvent extends FormInstallationEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureCameraHouseEvent extends FormInstallationEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+
 
 class MeterInitReadingEvent extends FormInstallationEvent{
   @override
@@ -102,24 +124,15 @@ class SelectProposedConDateEvent extends FormInstallationEvent {
 class SelectQTYLMCEvent extends FormInstallationEvent {
   final String qtyValue;
   final BuildContext context;
-  final int index;
-  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
+  SelectQTYLMCEvent({required this.qtyValue,required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [qtyValue,context, index];
+  List<Object> get props => [qtyValue,context,];
 }
 
 class SelectRFCDeclarationDateEvent extends FormInstallationEvent {
   final BuildContext context;
   SelectRFCDeclarationDateEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
-
-class SelectLocationOfSREvent extends FormInstallationEvent {
-  final BuildContext context;
-  SelectLocationOfSREvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];

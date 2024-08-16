@@ -65,6 +65,7 @@ class LoginHelper {
         await Utils.errorSnackBar(msg: res["messages"], context: context);
         return null;
       }
+      return null;
     } catch (e) {
       log("catchLoginHelper-->${e.toString()}");
       Utils.errorSnackBar(msg: e.toString(), context: context);

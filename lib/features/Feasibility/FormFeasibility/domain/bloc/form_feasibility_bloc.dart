@@ -46,6 +46,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   List<GetConstantModel> listOfAllRFC = [];
 
   TextEditingController bpNumberController = TextEditingController();
+  TextEditingController trNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
   TextEditingController feasibilityDateController = TextEditingController();
   TextEditingController assignedDateController = TextEditingController();
@@ -78,6 +79,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       key: PrefsValue.userName,
     );
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
+    trNumberController.text = await SharedPref.getString(key: PrefsValue.trNumber);
     assignedDateController.text = await SharedPref.getString(key: PrefsValue.assignLmcDate);
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     proposedDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
@@ -137,7 +139,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   fetchFreeMaterialApi({required BuildContext context}) async {
     List<String> tempList = [];
     List<MaterialItem> _materialList = [];
-    var res = await FormFeasibilityHelper.getAllFreeMaterialApi(
+    var res = await FormFeasibilityHelper.getAllFreePipeMaterial(
       context: context,
     );
     if (res != null) {
@@ -241,6 +243,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       listOfAllRFC: listOfAllRFC,
       materialList: materialList,
       bpNumberController: bpNumberController,
+      trNumberController: trNumberController,
       proposedDateController: proposedDateController,
       feasibilityDateController: feasibilityDateController,
       assignedDateController: assignedDateController,
