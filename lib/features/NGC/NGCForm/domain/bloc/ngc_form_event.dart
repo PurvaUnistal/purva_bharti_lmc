@@ -99,6 +99,13 @@ class SelectLocationOfSREvent extends NGCFormEvent {
   // TODO: implement props
   List<Object> get props => [context];
 }
+class SelectLocationOfMREvent extends NGCFormEvent {
+  final BuildContext context;
+  SelectLocationOfMREvent({required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context];
+}
 
 
 class CaptureGalleryMeterEvent extends NGCFormEvent{

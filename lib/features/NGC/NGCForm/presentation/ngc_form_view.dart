@@ -427,7 +427,7 @@ class _NGCFormViewState extends State<NGCFormView> {
           IconButtonWidget(
             iconData: Icons.location_on,
             onPressed: () {
-              BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfSREvent(context: context));
+              BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfMREvent(context: context));
             },
           )
         ],

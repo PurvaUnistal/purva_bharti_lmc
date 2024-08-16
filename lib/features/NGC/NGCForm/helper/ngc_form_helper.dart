@@ -174,6 +174,7 @@ class NGCFormHelper{
     required String nameContractor,
     required String bpNumber,
     required String noOfBurners,
+    required String noOfFamily,
     required String meterInitialReading,
     required String phoneNo,
     required File meterImg,
@@ -235,6 +236,9 @@ class NGCFormHelper{
       } else if (noOfBurners.isEmpty) {
         Utils.errorSnackBar(msg : "The No. Of Burners field is required.",context: context);
         return false;
+      } else if (noOfFamily.isEmpty) {
+        Utils.errorSnackBar(msg : "The No. Of Family field is required.",context: context);
+        return false;
       } else if (phoneNo.isEmpty) {
         Utils.errorSnackBar(msg : "The Phone No. field is required.", context:context);
         return false;
@@ -282,6 +286,7 @@ class NGCFormHelper{
       required String longitudeTf,
       required String mrPhoto,
      required String sr_photo,
+     required String noOfFamily,
     File? meterFile,
     File? ngcReportFile,
   }) async {
@@ -315,6 +320,7 @@ class NGCFormHelper{
       "longitude_mr": longitudeMR.isEmpty ? "0" :longitudeMR,
       "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,
        "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
+       "no_of_family": noOfFamily.isEmpty ? "0" : noOfFamily,
     };
     log("jsonBody-->${body}");
     try {
@@ -332,6 +338,12 @@ class NGCFormHelper{
         return SubmitNgcReportModel.fromJson(res);
       } else if (res != null && res["data"]) {
         Utils.errorSnackBar(msg: res["data"]["delay_status"].toString(),context: context);
+        return null;
+      } else if (res != null &&
+          res['success'] != null &&
+          res['success'] == 415 &&
+          res['data'] != null) {
+        Utils.errorSnackBar(msg: res["data"].toString(),context: context);
         return null;
       } else if ( res != null && res["error"] == true){
         Utils.errorSnackBar(msg: res["data"].toString(),context: context);

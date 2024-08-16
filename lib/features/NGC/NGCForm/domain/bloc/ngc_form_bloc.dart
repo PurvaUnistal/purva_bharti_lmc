@@ -28,6 +28,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectDelayReasonValueEvent>(_selectDelayReasonValue);
     on<SelectDelayStatueValueEvent>(_selectDelayStatueValue);
+    on<SelectLocationOfSREvent>(_locationOfSR);
+    on<SelectLocationOfMREvent>(_locationOfMR);
     on<SelectMeterTypeValueEvent>(_selectMeterTypeValue);
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
@@ -164,8 +166,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     regulatorSerialController.text = '';
     schema = await SharedPref.getString(key: PrefsValue.schema);
     userName = await SharedPref.getString(key: PrefsValue.userName);
-    latOfSRController.text = await SharedPref.getString(key: PrefsValue.latitudeTf);
-    longOfSRController.text = await SharedPref.getString(key: PrefsValue.longitudeTf);
+    latOfSRController.text = "0";
+    longOfSRController.text = "0";
     latOfMRController.text = "0";
     longOfMRController.text = "0";
     typeOfNrValue.value = await SharedPref.getString(key: PrefsValue.delayReason);
@@ -378,43 +380,51 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     longOfMRController.text = getLocation.longitude.toString();
     return getLocation;
   }
+  _locationOfSR(SelectLocationOfSREvent event, emit) async {
+    await _setSRLocation();
+    _eventCompleted(emit);
+  }
+  _locationOfMR(SelectLocationOfMREvent event, emit) async {
+    await _setMRLocation();
+    _eventCompleted(emit);
+  }
   _captureCameraMR(CaptureCameraMREvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setMRLocation();
       mrPhoto = photoPath;
+      _setMRLocation();
+      _eventCompleted(emit);;
     }
-    _eventCompleted(emit);
   }
   _captureGalleryMR(CaptureGalleryMREvent event, emit) async {
     var photoPath = await FormInstallationHelper.galleryCapture();
-    log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setMRLocation();
       mrPhoto = photoPath;
+      _setMRLocation();
+      log("photo-->$photoPath");
+      _eventCompleted(emit);
     }
-    _eventCompleted(emit);
   }
 
   _captureCameraSR(CaptureCameraSREvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setSRLocation();
       srPhoto = photoPath;
+      _setSRLocation();
+      _eventCompleted(emit);
     }
-    _eventCompleted(emit);
   }
 
   _captureGallerySR(CaptureGallerySREvent event, emit) async {
     var photoPath = await FormInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setSRLocation();
       srPhoto = photoPath;
+      _setSRLocation();
+      _eventCompleted(emit);
     }
-    _eventCompleted(emit);
   }
 
 
@@ -445,6 +455,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         nameContractor: nameContractorController.text.trim().toString(),
         ngcDelayStatusValue: ngcDelayStatusValue,
         noOfBurners: noOfBurnersController.text.trim().toString(),
+        noOfFamily: noOfFamilyMembersController.text.trim().toString(),
         phoneNo: mobileNumberController.text.trim().toString(),
       );
       if (await validationCheck == true) {
@@ -485,6 +496,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           mrPhoto: mrPhoto.path,
           sr_photo: srPhoto.path,
           mrRegulatorId: "",
+          noOfFamily: noOfFamilyMembersController.text.trim().toString(),
           //  mrRegulatorId: mr,
         );
         if (res != null ) {
