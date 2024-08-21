@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class LMCInstallationByNgcModel {
   int? success;
   bool? error;
@@ -8,10 +6,10 @@ class LMCInstallationByNgcModel {
   LMCInstallationByNgcModel({this.success, this.error, this.data});
 
   LMCInstallationByNgcModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    error = json['error'];
+    success = json['success'] ?? "";
+    error = json['error'] ?? "";
     if (json['data'] != null) {
-      data = <InstallationByNgcData>[];
+      data = <InstallationByNgcData>[] ;
       json['data'].forEach((v) {
         data!.add(new InstallationByNgcData.fromJson(v));
       });
@@ -30,11 +28,18 @@ class LMCInstallationByNgcModel {
 }
 
 class InstallationByNgcData {
+  String? lmcpath;
+  String? regulatorTypeId;
+  String? regulatorType;
+  String? regulatorSerial;
+  String? regulators;
+  dynamic mrRegulatorId;
+  String? dmafamily;
   String? trNumber;
-  String? rfcDate;
-  String? instDirPath;
-  dynamic lmcInstallationDate;
-  dynamic lmcProposedNgcDate;
+  dynamic rfcDate;
+  dynamic instDirPath;
+  String? lmcInstallationDate;
+  String? lmcProposedNgcDate;
   String? id;
   String? createdOn;
   dynamic lmcId;
@@ -73,50 +78,50 @@ class InstallationByNgcData {
   String? areaId;
   String? mobileNumber;
   String? firstName;
-  String? middleName;
+  dynamic middleName;
   String? lastName;
-  String? guardianName;
-  String? emailId;
+  dynamic guardianName;
+  dynamic emailId;
   String? propertyCategoryId;
   String? propertyClassId;
-  String? houseNumber;
-  String? locality;
-  String? town;
+  dynamic houseNumber;
+  dynamic locality;
+  dynamic town;
   String? district;
   String? state;
-  String? pinCode;
+  dynamic pinCode;
   String? societyAllowedMdpe;
   String? residentStatus;
   String? noOfKitchen;
   String? noOfBathroom;
   String? existingCookingFuel;
   dynamic noOfFamilyMembers;
-  String? ownerConsent;
-  String? kycDocument1;
-  String? kycDocument1Number;
-  String? kycDocument2;
-  String? kycDocument2Number;
-  String? kycDocument3;
-  String? kycDocument3Number;
+  dynamic ownerConsent;
+  dynamic kycDocument1;
+  dynamic kycDocument1Number;
+  dynamic kycDocument2;
+  dynamic kycDocument2Number;
+  dynamic kycDocument3;
+  dynamic kycDocument3Number;
   dynamic formStatus;
   String? dmaUserId;
   String? remarks;
-  String? longitude;
-  String? latitude;
+  dynamic longitude;
+  dynamic latitude;
   dynamic cgs;
   String? chargeAreaId;
   String? dateOfRegistration;
-  String? nameOfBank;
-  String? bankAccountNumber;
-  String? bankIfscCode;
-  String? bankAddress;
+  dynamic nameOfBank;
+  dynamic bankAccountNumber;
+  dynamic bankIfscCode;
+  dynamic bankAddress;
   dynamic dmaFormStatus;
   dynamic customerConsentStatus;
-  String? reasonForHold;
+  dynamic reasonForHold;
   dynamic initialDepositeDate;
   String? modeOfDeposite;
   dynamic installmentNumber;
-  String? payementBankName;
+  dynamic payementBankName;
   String? paymentCreditStatus;
   String? dmaUserName;
   String? initialDepositeStatus;
@@ -124,31 +129,31 @@ class InstallationByNgcData {
   String? acceptConversionPolicy;
   String? acceptExtraFittingCost;
   dynamic customerRegistrationNo;
-  String? chequeNumber;
+  dynamic chequeNumber;
   String? marketingApprovStatus;
   String? accountApprovStatus;
   String? initialAmount;
-  String? customerConsent;
-  String? canceledCheque;
+  dynamic customerConsent;
+  dynamic canceledCheque;
   String? crn;
-  String? customerPhoto;
-  String? housePhoto;
-  String? kycDocument1Image;
-  String? kycDocument2Image;
-  String? kycDocument3Image;
-  String? buildingNumber;
+  dynamic customerPhoto;
+  dynamic housePhoto;
+  dynamic kycDocument1Image;
+  dynamic kycDocument2Image;
+  dynamic kycDocument3Image;
+  dynamic buildingNumber;
   dynamic address1;
   String? address2;
-  String? backside1;
-  String? backside2;
-  String? backside3;
-  String? chequeBankAccount;
-  String? chequePhoto;
+  dynamic backside1;
+  dynamic backside2;
+  dynamic backside3;
+  dynamic chequeBankAccount;
+  dynamic chequePhoto;
   String? isGasDepositApplicable;
   String? marketingApproval;
   String? markStatusTime;
   dynamic marketingRejectReason;
-  String? accountingApproval;
+  dynamic accountingApproval;
   String? accountingTime;
   dynamic accontingRejectReason;
   String? depositeType;
@@ -165,7 +170,7 @@ class InstallationByNgcData {
   String? selfRegistration;
   String? customerStatus;
   dynamic chequeBounceReason;
-  String? micr;
+  dynamic micr;
   dynamic mobileResponseTime;
   String? isEdited;
   String? inAccount;
@@ -175,8 +180,8 @@ class InstallationByNgcData {
   String? districtId;
   String? disconnectionStatus;
   dynamic refundableStatu;
-  String? alternateMobile;
-  String? dmaDirPath;
+  dynamic alternateMobile;
+  dynamic dmaDirPath;
   dynamic source;
   dynamic futureRegNgcEligibleStatus;
   dynamic futureRegisDate;
@@ -229,40 +234,38 @@ class InstallationByNgcData {
   String? meterReadingDate;
   String? meterPhoto;
   String? tfNumber;
-  String? latitudeTf;
-  String? longitudeTf;
+  dynamic latitudeTf;
+  dynamic longitudeTf;
   String? latitudeHg;
   String? longitudeHg;
   dynamic workCompletedImage;
   dynamic custAckImage;
   dynamic custAckDate;
   String? feasibilityId;
-  String? cementingOfHoles;
+  dynamic cementingOfHoles;
   dynamic clampingPvc;
-  String? claminngCopper;
-  String? meterTesting;
-  String? paintaingofGIpipe;
+  dynamic claminngCopper;
+  dynamic meterTesting;
+  dynamic paintaingofGIpipe;
   String? typeOfNr;
   String? ngc;
-  String? regulators;
   String? extraPipeId;
   String? isometricImage;
-  String? isometricDate;
-  String? pneumaticDate;
+  dynamic isometricDate;
+  dynamic pneumaticDate;
   String? pneumaticImage;
-  String? rfcForm;
+  dynamic rfcForm;
   String? tpaStatus;
-  String? tpaRejectReason;
-  String? tpaUserId;
+  dynamic tpaRejectReason;
+  dynamic tpaUserId;
   String? insExtraPipe;
   String? insExtraPrice;
-  String? pipePaymentType;
+  dynamic pipePaymentType;
   dynamic oldMeterNumber;
   dynamic meterReplacementDate;
   dynamic previousInstalledStatus;
   String? installationProcessStatus;
   String? rfcProcessStatus;
-  String? regulatorTypeId;
   String? proposedNgcDate;
   dynamic srPhoto;
   dynamic latitudeSr;
@@ -271,7 +274,6 @@ class InstallationByNgcData {
   dynamic mrPhoto;
   dynamic latitudeMr;
   dynamic longitudeMr;
-  dynamic mrRegulatorId;
   String? regulatorCheck;
   String? houseImage;
   String? name;
@@ -338,8 +340,8 @@ class InstallationByNgcData {
   String? workingStatus;
   String? installmentNos;
   String? materialTypeId;
-  String? ngcContractorId;
-  String? ngcAssignedDate;
+  dynamic ngcContractorId;
+  dynamic ngcAssignedDate;
   String? inspectionDate;
   String? meterSerial;
   String? meterreading;
@@ -354,7 +356,14 @@ class InstallationByNgcData {
   String? propClass;
 
   InstallationByNgcData(
-      {this.trNumber,
+      {this.lmcpath,
+        this.regulatorTypeId,
+        this.regulators,
+        this.regulatorType,
+        this.regulatorSerial,
+        this.mrRegulatorId,
+        this.dmafamily,
+        this.trNumber,
         this.rfcDate,
         this.instDirPath,
         this.lmcInstallationDate,
@@ -568,7 +577,6 @@ class InstallationByNgcData {
         this.paintaingofGIpipe,
         this.typeOfNr,
         this.ngc,
-        this.regulators,
         this.extraPipeId,
         this.isometricImage,
         this.isometricDate,
@@ -586,7 +594,6 @@ class InstallationByNgcData {
         this.previousInstalledStatus,
         this.installationProcessStatus,
         this.rfcProcessStatus,
-        this.regulatorTypeId,
         this.proposedNgcDate,
         this.srPhoto,
         this.latitudeSr,
@@ -595,7 +602,6 @@ class InstallationByNgcData {
         this.mrPhoto,
         this.latitudeMr,
         this.longitudeMr,
-        this.mrRegulatorId,
         this.regulatorCheck,
         this.houseImage,
         this.name,
@@ -678,13 +684,18 @@ class InstallationByNgcData {
         this.propClass});
 
   InstallationByNgcData.fromJson(Map<String, dynamic> json) {
+    lmcpath = json['lmcpath'] ?? "";
+    regulatorTypeId = json['regulator_type_id'] ?? "";
+    regulators = json['regulators'] ?? "";
+   regulatorType = json['regulator_type'] ?? "";
+    regulatorSerial = json['regulator_serial'] ?? "";
+    mrRegulatorId = json['mr_regulator_id'] ?? "";
+    dmafamily = json['dmafamily'] ?? "";
     trNumber = json['tr_number'] ?? "";
     rfcDate = json['rfc_date'] ?? "";
     instDirPath = json['inst_dir_path'] ?? "";
     lmcInstallationDate = json['lmc_installation_date'] ?? "";
-    lmcProposedNgcDate = json['lmc_proposed_ngc_date'] == null ? DateFormat('dd-MM-yyyy').format(DateTime.now()).toString() : json['lmc_proposed_ngc_date'];
-    proposedNgcDate = json
-    ['proposed_ngc_date'] == null ? DateFormat('dd-MM-yyyy').format(DateTime.now()).toString() : json['proposed_ngc_date'];
+    lmcProposedNgcDate = json['lmc_proposed_ngc_date'] ?? "";
     id = json['id'] ?? "";
     createdOn = json['created_on'] ?? "";
     lmcId = json['lmc_id'] ?? "";
@@ -894,7 +905,6 @@ class InstallationByNgcData {
     paintaingofGIpipe = json['paintaingofGIpipe'] ?? "";
     typeOfNr = json['type_of_nr'] ?? "";
     ngc = json['ngc'] ?? "";
-    regulators = json['regulators'] ?? "";
     extraPipeId = json['extra_pipe_id'] ?? "";
     isometricImage = json['isometric_image'] ?? "";
     isometricDate = json['isometric_date'] ?? "";
@@ -912,7 +922,7 @@ class InstallationByNgcData {
     previousInstalledStatus = json['previous_installed_status'] ?? "";
     installationProcessStatus = json['installation_process_status'] ?? "";
     rfcProcessStatus = json['rfc_process_status'] ?? "";
-    regulatorTypeId = json['regulator_type_id'] ?? "";
+    proposedNgcDate = json['proposed_ngc_date'] ?? "";
     srPhoto = json['sr_photo'] ?? "";
     latitudeSr = json['latitude_sr'] ?? "";
     longitudeSr = json['longitude_sr'] ?? "";
@@ -920,7 +930,6 @@ class InstallationByNgcData {
     mrPhoto = json['mr_photo'] ?? "";
     latitudeMr = json['latitude_mr'] ?? "";
     longitudeMr = json['longitude_mr'] ?? "";
-    mrRegulatorId = json['mr_regulator_id'] ?? "";
     regulatorCheck = json['regulator_check'] ?? "";
     houseImage = json['house_image'] ?? "";
     name = json['name'] ?? "";
@@ -1005,6 +1014,13 @@ class InstallationByNgcData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['lmcpath'] = this.lmcpath;
+    data['regulator_type_id'] = this.regulatorTypeId;
+    data['regulators'] = this.regulators;
+    data['regulator_type'] = this.regulatorType;
+    data['regulator_serial'] = this.regulatorSerial;
+    data['mr_regulator_id'] = this.mrRegulatorId;
+    data['dmafamily'] = this.dmafamily;
     data['tr_number'] = this.trNumber;
     data['rfc_date'] = this.rfcDate;
     data['inst_dir_path'] = this.instDirPath;
@@ -1220,7 +1236,6 @@ class InstallationByNgcData {
     data['paintaingofGIpipe'] = this.paintaingofGIpipe;
     data['type_of_nr'] = this.typeOfNr;
     data['ngc'] = this.ngc;
-    data['regulators'] = this.regulators;
     data['extra_pipe_id'] = this.extraPipeId;
     data['isometric_image'] = this.isometricImage;
     data['isometric_date'] = this.isometricDate;
@@ -1238,7 +1253,6 @@ class InstallationByNgcData {
     data['previous_installed_status'] = this.previousInstalledStatus;
     data['installation_process_status'] = this.installationProcessStatus;
     data['rfc_process_status'] = this.rfcProcessStatus;
-    data['regulator_type_id'] = this.regulatorTypeId;
     data['proposed_ngc_date'] = this.proposedNgcDate;
     data['sr_photo'] = this.srPhoto;
     data['latitude_sr'] = this.latitudeSr;
@@ -1247,7 +1261,6 @@ class InstallationByNgcData {
     data['mr_photo'] = this.mrPhoto;
     data['latitude_mr'] = this.latitudeMr;
     data['longitude_mr'] = this.longitudeMr;
-    data['mr_regulator_id'] = this.mrRegulatorId;
     data['regulator_check'] = this.regulatorCheck;
     data['house_image'] = this.houseImage;
     data['name'] = this.name;

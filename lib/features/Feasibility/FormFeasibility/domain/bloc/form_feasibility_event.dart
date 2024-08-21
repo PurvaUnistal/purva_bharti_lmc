@@ -55,11 +55,10 @@ class SelectLMCReasonValueEvent extends FormFeasibilityEvent {
 class SelectQTYLMCEvent extends FormFeasibilityEvent {
   final String qtyValue;
   final BuildContext context;
-  final int index;
-  SelectQTYLMCEvent({required this.qtyValue,required this.context, required this.index});
+  SelectQTYLMCEvent({required this.qtyValue,required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [qtyValue,context, index];
+  List<Object> get props => [qtyValue,context,];
 }
 
 class SelectRFCCheckValueEvent extends FormFeasibilityEvent {

@@ -25,7 +25,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
   final String schema;
   final String userName;
   final List<GetAllAreaModel> listOfAllArea;
-  List<FeasibilityData> listOfFeasibilityRow;
+  List<FeasibilityData> listOfFilterFeasibilityRow;
   FeasibilityModel? feasibilityModel;
   TextEditingController bpNumberController;
   final ScrollController scrollController;
@@ -38,7 +38,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
     required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
-    required this.listOfFeasibilityRow,
+    required this.listOfFilterFeasibilityRow,
     required this.feasibilityModel,
     required this.bpNumberController,
     required this.scrollController,
@@ -53,7 +53,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
         allAreaValue,
         pageNo,
         listOfAllArea,
-        listOfFeasibilityRow,
+        listOfFilterFeasibilityRow,
         feasibilityModel,
         bpNumberController,
         scrollController,

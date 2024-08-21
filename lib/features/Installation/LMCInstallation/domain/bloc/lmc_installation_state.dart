@@ -24,7 +24,7 @@ class LMCInstallationDataState extends LMCInstallationState {
   final dynamic allAreaValue;
   final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
-  List<InstallationDoneRows> listOfInstallationRow;
+  List<InstallationDoneRows> listOfFilterInstallationRow;
   InstallationDoneModel? installationDoneModel;
   final ScrollController scrollController;
   final TextEditingController bpNumberController;
@@ -37,7 +37,7 @@ class LMCInstallationDataState extends LMCInstallationState {
     required this.allAreaValue,
     required this.pageNo,
     required this.listOfAllArea,
-    required this.listOfInstallationRow,
+    required this.listOfFilterInstallationRow,
     required this.installationDoneModel,
     required this.scrollController,
     required this.bpNumberController,
@@ -53,7 +53,7 @@ class LMCInstallationDataState extends LMCInstallationState {
         allAreaValue,
         pageNo,
         listOfAllArea,
-        listOfInstallationRow,
+        listOfFilterInstallationRow,
         installationDoneModel,
         scrollController,
         bpNumberController,

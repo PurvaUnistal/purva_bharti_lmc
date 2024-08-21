@@ -69,7 +69,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           _eventCompleted(emit);
           if (res.user != null) {
             _loginModel = res;
-            if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc')){
+            if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc')){
               await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
               await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
               await SharedPref.setString(key: PrefsValue.userId,value: res.user!.id!);

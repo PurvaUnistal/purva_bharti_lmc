@@ -27,6 +27,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   final List<GetConstantModel> listOfLMCReason;
   List<GetConstantModel> listOfAllRFC;
   List<MaterialItem> materialList;
+  TextEditingController extraPipeController;
+  TextEditingController extraPriceController;
   final TextEditingController bpNumberController;
   final TextEditingController trNumberController;
   final TextEditingController proposedDateController;
@@ -56,6 +58,8 @@ class FormFeasibilityDataState extends FormFeasibilityState {
     required this.reasonController,
     required this.remarksController,
     required this.followUpDateController,
+    required this.extraPipeController,
+    required this.extraPriceController,
   });
 
   @override
@@ -80,5 +84,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
         reasonController,
         remarksController,
         followUpDateController,
+extraPipeController,
+ extraPriceController,
       ];
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-1.16.8.24";
+  static String version = "Version : LMC-1.21.8.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -23,12 +23,12 @@ class AppString {
 
   static String lmcMobilityH = "LMC Mobility App";
   static String lmcFeaH = "LMC Feasibility App";
-  static String lmcFeaDetailH = "LMC Feasibility Consumer Details";
+  static String consumerDetailH = "Consumer Details";
   static String lmcFeaFormH = "LMC Feasibility Consumer Form";
   static String lmcInstallH = "LMC Installation App";
-  static String lmcInstallDetailH = "LMC Installation Consumer Details";
-  static String lmcInstallFormH = "LMC Installation Consumer Form";
   static String ngConH = "NG Conversion APP";
+  static String feasibilityForm = "Feasibility Form";
+  static String installationForm = "Installation Form";
 
   static String search = "Search";
   static String selectArea = "Select Area";
@@ -61,7 +61,7 @@ class AppString {
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Is Feasible?";
   static String lmcReason = "LMC Reason";
-  static String typeOfNR = "Type of Meter Connection";
+  static String meterConnection = "Meter Connection";
   static String regulatorType = "Regulator Type";
   static String actualWorkStart = "Actual Work Start";
   static String reasonDelay = "Reason for Delay";
@@ -93,6 +93,7 @@ class AppString {
   static String installation = "Installation";
   static String meterPhoto = "Meter Photo";
   static String material = "Material";
+  static String pipe = "Pipe";
   static String meter = "Meter Photo";
   static String reason = "Reason";
   static String remarks = "Remarks";

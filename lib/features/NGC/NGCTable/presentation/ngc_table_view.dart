@@ -182,7 +182,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                       _dataColumn(label: "First Name"),
                       _dataColumn(label: "Surname"),
                     ],
-                    rows: dataState.listOfInstallationByNgc.mapIndexed((index, user) =>
+                    rows: dataState.listOfFilterInstallationByNgc.mapIndexed((index, user) =>
                         DataRow(
                             onSelectChanged: (newValue) async {
                               await SharedPref.setString(
@@ -207,26 +207,20 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(key: PrefsValue.alternateMobileNo, value: user.alternateMobileNo ?? "");
                               await SharedPref.setString(key: PrefsValue.email, value: user.email ?? "");
                               await SharedPref.setString(key: PrefsValue.ngOfBurners, value: user.ngOfBurners ?? "");
-                              await SharedPref.setString(key: PrefsValue.ngOfBurners, value: user.noOfFamilyMembers ?? "");
+                              await SharedPref.setString(key: PrefsValue.noOfFamilyMembers, value: user.dmafamily ?? "");
                               await SharedPref.setString(key: PrefsValue.workCompletedDate, value: user.workCompletedDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.ngChargeDate, value: user.ngChargeDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
-                              await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
-                              await SharedPref.setString(key: PrefsValue.state, value: user.state ?? "");
-                              await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
-                              await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
-                              await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
-                              await SharedPref.setString(key: PrefsValue.delayReason, value: user.delayReason ?? "");
                               await SharedPref.setString(key: PrefsValue.typeOfNr, value: user.typeOfNr ?? "");
-                              await SharedPref.setString(key: PrefsValue.latitudeTf, value: user.latitudeTf ?? "");
-                              await SharedPref.setString(key: PrefsValue.longitudeTf, value: user.longitudeTf ?? "");
-                              await SharedPref.setString(key: PrefsValue.latitudeHg, value: user.latitudeHg ?? "");
-                              await SharedPref.setString(key: PrefsValue.longitudeHg, value: user.longitudeHg ?? "");
                               await SharedPref.setString(key: PrefsValue.rfcDate, value: user.rfcDate ?? "");
                               await SharedPref.setString(key: PrefsValue.lmcInstallationDate, value: user.lmcInstallationDate ?? "");
                               await SharedPref.setString(key: PrefsValue.proposedNgcDate, value: user.lmcProposedNgcDate ?? AppString.dateFormat);
+                              await SharedPref.setString(key: PrefsValue.lmcPath, value: user.lmcpath!);
+                              await SharedPref.setString(key: PrefsValue.meterPhoto, value: user.meterPhoto!);
+                              await SharedPref.setString(key: PrefsValue.regulatorType, value: user.regulatorType!);
+                              await SharedPref.setString(key: PrefsValue.regulatorTypeId, value: user.regulatorTypeId!);
+                              await SharedPref.setString(key: PrefsValue.regulatorSerial, value: user.regulatorSerial!);
+                              await SharedPref.setString(key: PrefsValue.regulators, value: user.regulators!);
+                              await SharedPref.setString(key: PrefsValue.srRegulators, value: user.srRegulators!);
+                              await SharedPref.setString(key: PrefsValue.srNumber, value: user.tfNumber!);
                               //////////////////////
                               if (user.interested == "0") {
                                 if (user.futureRegNgcEligibleStatus == "1") {
@@ -335,7 +329,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                               //////////////////////////////
                             },
                             cells: <DataCell>[
-                              _dataCell(label: (dataState.listOfInstallationByNgc
+                              _dataCell(label: (dataState.listOfFilterInstallationByNgc
                                   .indexOf(user) + 1 + (dataState.pageNo - 1) * 10)
                                   .toString()),
                               ///////////////////
@@ -385,10 +379,6 @@ class _NgcTableViewState extends State<NgcTableView> {
                               _dataCell(label: user.mobileNumber.toString()),
                               _dataCell(label: user.firstName.toString()),
                               _dataCell(label: user.lastName.toString()),
-                              /*_dataCell(label: user.propName.toString()),
-                              _dataCell(label: user.propClass.toString()),
-                              _dataCell(label: user.houseNumber.toString()),
-                              _dataCell(label: user.locality.toString()),*/
                             ]))
                         .toList(),
                   ),

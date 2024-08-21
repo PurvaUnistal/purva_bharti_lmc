@@ -180,7 +180,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                             _dataColumn(label: "Area"),
                             _dataColumn(label: "Name"),
                           ],
-                          rows: dataState.listOfFeasibilityRow
+                          rows: dataState.listOfFilterFeasibilityRow
                               .mapIndexed((index, user) => DataRow(
                                       onSelectChanged: (newValue) async {
                                         await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
@@ -210,7 +210,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                                       },
                                       cells: <DataCell>[
-                                        _dataCell(label: (dataState.listOfFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                        _dataCell(label: (dataState.listOfFilterFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
                                         _dataCell(label: user.mobileNumber.toString()),
                                         _dataCell(label: user.bpNumber.toString()),
                                         _dataCell(label: user.areaName.toString()),

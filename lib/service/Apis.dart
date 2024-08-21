@@ -1,6 +1,7 @@
 class Apis {
 
  //  static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+  static String basePath = 'http://142.79.231.30:8097/';
   static String baseUrl = 'http://142.79.231.30:8097/api/';
   static String loginUrl = baseUrl + "auth";
    static String areaList = baseUrl + "getAllArea?schema=";
@@ -14,6 +15,8 @@ class Apis {
   static String regulatorType = baseUrl + "regulatortype";
   static String getMeters = baseUrl + "getMeters?";
   static String getRegulators = baseUrl + "getRegulators?";
+  static String getNgcMeters = baseUrl + "getNgcMeters?";
+  static String getNgcRegulators = baseUrl + "getNgcRegulators?";
   static String getAllFreeMaterial = baseUrl + "getAllFreeMaterial?";
   static String getAllFreePipeMaterial = baseUrl + "getAllFreePipeMaterial?";
   static String getExtraPipeDetails = baseUrl + "getExtraPipeDetails?";

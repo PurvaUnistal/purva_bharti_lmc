@@ -82,7 +82,7 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(AppString.lmcInstallDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
+                  child: Text(AppString.consumerDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
                 ),
                 decoration: BoxDecoration(
                     color: AppColor.primer,

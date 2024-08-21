@@ -50,11 +50,9 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfInstallationByNgc = listOfInstallationByNgc.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
-      print("listOfFeasibilityRow${listOfInstallationByNgc}");
-      print("bpNumberController${bpNumberController.text}");
-    }else if (bpNumberController.text.isEmpty){
-      await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
+      listOfFilterInstallationByNgc = listOfFilterInstallationByNgc.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
+    }else if (event.searchBpNumber.length  == 0){
+      listOfFilterInstallationByNgc = await listOfInstallationByNgc;
     }
     _eventCompleted(emit);
   }
@@ -88,7 +86,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
       pageNo: pageNo,
       allAreaValue: areaValue,
       listOfAllArea: listOfAllArea,
-      listOfInstallationByNgc: listOfInstallationByNgc,
+      listOfFilterInstallationByNgc: listOfFilterInstallationByNgc,
       lmcInstallationByNgcModel: lmcInstallationByNgcModel,
       bpNumberController: bpNumberController,
     ));

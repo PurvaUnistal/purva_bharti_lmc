@@ -111,7 +111,7 @@ class NGCFormHelper{
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context, required String meterSerial}) async {
+  static Future<List<ListOfMeterNo>?> getMetersNGCApi({required BuildContext context, required String meterSerial}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
@@ -121,7 +121,7 @@ class NGCFormHelper{
         "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getMeters + json, context: context);
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcMeters + json, context: context);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(jsonDecode(res));
       return meterNoModel.data;
     } catch (e) {
@@ -130,7 +130,7 @@ class NGCFormHelper{
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi({
+  static Future<List<ListOfMeterNo>?> getRegulatorsNGCApi({
     required BuildContext context,
     required String regulatorSerial,
     required String regulatorType}) async {
@@ -144,7 +144,7 @@ class NGCFormHelper{
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getRegulators + json, context: context);
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcRegulators + json, context: context);
       print(res);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(jsonDecode(res));
       return meterNoModel.data;
@@ -279,16 +279,16 @@ class NGCFormHelper{
     required String meterChangeReason,
     required String replaceMeter,
     required LmcReasonModel changeMeterType,
-      required String mrRegulatorId,
-      required String latitudeMR,
-      required String longitudeMR,
-      required String latitudeTf,
-      required String longitudeTf,
-      required String mrPhoto,
-     required String sr_photo,
-     required String noOfFamily,
-    File? meterFile,
-    File? ngcReportFile,
+    required String mrRegulatorId,
+    required String latitudeMR,
+    required String longitudeMR,
+    required String latitudeTf,
+    required String longitudeTf,
+    required String mrPhoto,
+    required String srPhoto,
+    required String noOfFamily,
+    required String meterPhoto,
+    required String ngcReportPhoto,
   }) async {
     Map<String, String> body = {
       "schema": schema ?? "",
@@ -297,6 +297,7 @@ class NGCFormHelper{
       "jmr_no": jmrNo ?? "",
       "no_of_burners": nOfBurners ?? "",
       "mismatch_meter_no": mismatchMeterNo ?? "",
+      "ngc_meter_number": meterNumber ?? "",
       "contact_person": contactPerson ?? "",
       "reason_of_delay": reasonOfDelay ?? "",
       "alternate_mobile": alternateMobile ?? "",
@@ -308,41 +309,35 @@ class NGCFormHelper{
       "lmc_installation_id": lmcInstallationId ?? "",
       "is_install": isInstall ?? "",
       "comment": comment ?? "",
-      "meter_number": meterNumber ?? "",
       "regulators_number": regulatorsNumber ?? "",
+      "tf_number": srNumber,
       "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
       "meter_change_reason": meterChangeReason,
-      "replace_meter": replaceMeter,
-      "change_meter_type": changeMeterType.id == null ? "" : changeMeterType.id.toString(),
-      "tf_number": srNumber,
+      "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
+      "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
       "mr_regulator_id": mrRegulatorId,
-        "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
+      "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
       "longitude_mr": longitudeMR.isEmpty ? "0" :longitudeMR,
       "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,
-       "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
-       "no_of_family": noOfFamily.isEmpty ? "0" : noOfFamily,
+      "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
+      "no_of_family": noOfFamily.isEmpty ? "0" : noOfFamily,
     };
     log("jsonBody-->${body}");
     try {
       var res = await ApiHelper.postDataWithFile(
         urlEndPoint: "${Apis.setNGCReport}",
-        body: body, keyWord1: "meter_image", filePath1: meterFile!.path.toString(),
-        keyWord2: "ngc_report_file", filePath2: ngcReportFile!.path.toString(),
-        keyWord3: "mr_photo",
-         filePath3: mrPhoto.toString(),
-         keyWord4: "sr_photo",
-         filePath4: mrPhoto.toString(),
+        body: body,
+        imageRequestObject: [
+          ImageRequestObject("meter_image", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+          ImageRequestObject("ngc_report_file", ngcReportPhoto.isEmpty ? "" :ngcReportPhoto.toString()),
+          ImageRequestObject("mr_photo", mrPhoto.isEmpty ? "" : mrPhoto.toString()),
+          ImageRequestObject("sr_photo", srPhoto.isEmpty  ? "" : srPhoto.toString()),
+        ],
         context: context,
       );
       if (res != null && res["error"] == false) {
         return SubmitNgcReportModel.fromJson(res);
-      } else if (res != null && res["data"]) {
-        Utils.errorSnackBar(msg: res["data"]["delay_status"].toString(),context: context);
-        return null;
-      } else if (res != null &&
-          res['success'] != null &&
-          res['success'] == 415 &&
-          res['data'] != null) {
+      } else if (res != null && res['success'] != null && res['success'] == 415 && res['data'] != null) {
         Utils.errorSnackBar(msg: res["data"].toString(),context: context);
         return null;
       } else if ( res != null && res["error"] == true){
@@ -350,7 +345,7 @@ class NGCFormHelper{
         return null;
       }
     }catch(e){
-      print(e.toString());
+      print("setNGCReportData-->${e.toString()}");
     }
   }
 

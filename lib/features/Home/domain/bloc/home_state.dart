@@ -18,6 +18,7 @@ class FetchHomeDataState extends HomeState {
   final bool isLoader;
   final String scheme;
   final String userName;
+  final String role;
   final String baseUrl;
   final String installationName;
   final String feasibilityName;
@@ -30,6 +31,7 @@ class FetchHomeDataState extends HomeState {
     required this.scheme,
     required this.baseUrl,
     required this.userName,
+    required this.role,
     required this.pageIndex,
     required this.pageWidgets,
     required this.installationName,
@@ -41,6 +43,7 @@ class FetchHomeDataState extends HomeState {
     isLoader,
     scheme,
     userName,
+    role,
     baseUrl,
     pageIndex,
    installationName,

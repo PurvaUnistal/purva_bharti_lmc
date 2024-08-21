@@ -58,8 +58,7 @@ class FormInstallationDataState extends FormInstallationState {
   TextEditingController latOfHouseController;
   TextEditingController longOfHouseController;
   TextEditingController srNumberController;
-  TextEditingController rfcConDateController;
-  TextEditingController proConDateController;
+  TextEditingController ngConversionDateController;
   TextEditingController extraPipeController;
   TextEditingController extraPriceController;
   TextEditingController bpNumberController;
@@ -120,8 +119,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.latOfHouseController,
     required this.longOfHouseController,
     required this.srNumberController,
-    required this.rfcConDateController,
-    required this.proConDateController,
+    required this.ngConversionDateController,
     required this.extraPipeController,
     required this.extraPriceController,
     required this.meterNumberSerialController,
@@ -175,9 +173,8 @@ class FormInstallationDataState extends FormInstallationState {
         materialList,
         latOfHouseController,
         longOfHouseController,
-        rfcConDateController,
+        ngConversionDateController,
     srNumberController,
-        proConDateController,
         extraPipeController,
         extraPriceController,
         meterNumberSerialController,

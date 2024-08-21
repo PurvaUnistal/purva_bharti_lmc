@@ -12,6 +12,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstan
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
 import 'package:lmc/features/Home/presentation/home_view.dart';
+import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
 
 class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
   FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
@@ -31,6 +32,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   String schema = "";
   String userName = "";
+  String extraPipe = "0";
+  String extraPrice = "0";
 
   GetConstantModel checkFeasibleValue = GetConstantModel();
   GetConstantModel lmcReasonValue = GetConstantModel();
@@ -41,6 +44,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   List<FreeMaterialData> listOfAllMaterial = [];
   List<String> listOfAllMaterialId = [];
   List<MaterialItem> materialList = [];
+  List<MaterialItem> listOfMaterial = [];
   List<String> listOfQtyLMC = [];
 
   List<GetConstantModel> listOfAllRFC = [];
@@ -53,6 +57,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   TextEditingController followUpDateController = TextEditingController();
   TextEditingController reasonController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
+  TextEditingController extraPipeController = TextEditingController(text: "0");
+  TextEditingController extraPriceController = TextEditingController(text: "0");
 
   _pageLoad(FormFeasibilityPageLoadEvent event, emit) async {
     emit(FormFeasibilityInitialState());
@@ -66,8 +72,13 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     listOfAllMaterial = [];
     listOfAllMaterialId = [];
     materialList = [];
+    listOfMaterial = [];
     listOfQtyLMC = [];
     listOfAllRFC = [];
+     extraPipe = "0";
+     extraPrice = "0";
+    extraPipeController.text = "0";
+    extraPriceController.text = "0";
     proposedDateController.text = '';
     reasonController.text = '';
     remarksController.text = '';
@@ -138,7 +149,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   fetchFreeMaterialApi({required BuildContext context}) async {
     List<String> tempList = [];
-    List<MaterialItem> _materialList = [];
     var res = await FormFeasibilityHelper.getAllFreePipeMaterial(
       context: context,
     );
@@ -146,7 +156,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       listOfAllMaterial = res;
       tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
       listOfAllMaterialId.addAll(tempList);
-      _materialList = List.generate(
+      listOfMaterial = List.generate(
         listOfAllMaterial.length,
         (i) => MaterialItem(
             value: '0',
@@ -155,14 +165,41 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
             unit: '${listOfAllMaterial[i].materialUnit}',
             controller: TextEditingController(text: "0")),
       );
-      materialList.addAll(_materialList);
-      listOfQtyLMC = _materialList.asMap().values.map((e) => e.controller.text).toList();
+      materialList.addAll(listOfMaterial);
+      listOfQtyLMC = listOfMaterial.asMap().values.map((e) => e.controller.text).toList();
       return res;
     }
   }
 
-  _selectQTYLMC(SelectQTYLMCEvent event, emit) {
-    listOfQtyLMC[event.index] = event.qtyValue;
+  _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
+    double sumOfPipes = 0.0;
+    for(int i = 0; i< listOfMaterial.length; i++){
+      MaterialItem dataOfAllMaterial = listOfMaterial[i];
+      if(dataOfAllMaterial.name.toLowerCase().contains("pipe")){
+        if(dataOfAllMaterial.controller.text != ""){
+          sumOfPipes +=  double.parse(dataOfAllMaterial.controller.text);
+        }else{
+          dataOfAllMaterial.controller.text = '0';
+        }
+      }
+    }
+    print("sumOfPipes---> $sumOfPipes");
+    if(sumOfPipes > 15.0){
+      extraPriceController.text = "";
+      extraPipeController.text = "";
+      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
+      if(res != null){
+        extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
+        extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
+        extraPipe = res.price.toString();
+        extraPrice = res.qty.toString();
+        _eventCompleted(emit);
+      }else{
+        extraPriceController.text = '0';
+        extraPipeController.text = '0';
+        _eventCompleted(emit);
+      }
+    }
     _eventCompleted(emit);
   }
 
@@ -250,6 +287,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       reasonController: reasonController,
       followUpDateController: followUpDateController,
       remarksController: remarksController,
+      extraPipeController: extraPipeController,
+      extraPriceController: extraPriceController,
     ));
   }
 }

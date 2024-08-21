@@ -111,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               Positioned(
                   child: Text(
-                dataState.baseUrl == Apis.baseUrl ? "UAT APP" : "",
+                dataState.baseUrl == Apis.basePath ? "UAT APP" : "",
                 textAlign: TextAlign.end,
                 style: Styles.title,
               ))
@@ -120,33 +120,37 @@ class _HomeViewState extends State<HomeView> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
-          CardWidget(
+          dataState.role == "lmc" ? CardWidget(
             icon: Icons.balance_outlined,
             text: "LMC Feasibility",
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => FeasibilityView()));
             },
-          ),
+          )
+          : Container(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.001,
           ),
-          CardWidget(
+          dataState.role == "lmc" ?  CardWidget(
             icon: Icons.arrow_circle_down_outlined,
             text: "LMC Installation",
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => LMCInstallationView()));
             },
-          ),
+          )
+          :Container(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.001,
           ),
+          dataState.role == "ngc" ?
           CardWidget(
             icon: Icons.arrow_circle_down_outlined,
             text: "NG Conversion",
             onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => NgcTableView()));
             },
-          ),
+          )
+          : Container(),
         ],
       ),
     );

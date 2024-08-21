@@ -23,6 +23,7 @@ import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_inst
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/image_widget.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/meter_no_widget.dart';
+import 'package:lmc/features/Installation/LMCInstallation/presentation/Widgets/cameraPopWidget.dart';
 
 class FormInstallationView extends StatefulWidget {
   const FormInstallationView({
@@ -73,7 +74,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   _itemBuilder({required FormInstallationDataState dataState}) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppString.lmcInstallFormH,
+        title: AppString.lmcInstallH,
         boolLeading: true,
         actions: [
           Column(
@@ -97,6 +98,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       body: ListView(
         padding: EdgeInsets.all(8),
         children: [
+          Text(AppString.installationForm,style: Styles.text,textAlign: TextAlign.center,),
+          _verticalSpace(),
           RowWidget(
               widget1: _bpNumberController(stateData: dataState),
               widget2: _trNumberController(stateData: dataState)
@@ -108,10 +111,9 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           ),
           _verticalSpace(),
           _installationDateController(stateData: dataState),
-          _verticalSpace(),
           _delayReasonDropdown(stateData: dataState),
           _verticalSpace(),
-          _typeOfNRDropdown(stateData: dataState),
+          _meterConnectionDropdown(stateData: dataState),
           _verticalSpace(),
           _meterNumberController(stateData: dataState),
           _verticalSpace(),
@@ -122,7 +124,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _regulatorController(stateData: dataState),
           _srNumberController(stateData: dataState),
           _verticalSpace(),
-          _proConDateController(stateData: dataState),
+          _ngConversionDateController(stateData: dataState),
           _verticalSpace(),
           _verticalSpace(),
           _materialList(stateData: dataState),
@@ -203,22 +205,24 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _delayReasonDropdown({required FormInstallationDataState stateData}) {
-    return DropdownWidget<LmcReasonModel>(
-      star: stateData.isDelayReason == true ?AppString.star : "",
-      label: AppString.reasonDelay,
-      hint: AppString.reasonDelay,
-      dropdownValue: stateData.delayReasonValue?.name == null ? null : stateData.delayReasonValue,
-      items: stateData.listOfDelayReason,
-      onChanged: (val) {
-        BlocProvider.of<FormInstallationBloc>(context).add(SelectDelayReasonValueEvent(delayReasonValue: val));
-      },
-    );
+    return stateData.isDelayReason == true ? _col(
+      child: DropdownWidget<LmcReasonModel>(
+        star: AppString.star ,
+        label: AppString.reasonDelay,
+        hint: AppString.reasonDelay,
+        dropdownValue: stateData.delayReasonValue?.name == null ? null : stateData.delayReasonValue,
+        items: stateData.listOfDelayReason,
+        onChanged: (val) {
+          BlocProvider.of<FormInstallationBloc>(context).add(SelectDelayReasonValueEvent(delayReasonValue: val));
+        },
+      ),
+    ): Container();
   }
 
-  Widget _typeOfNRDropdown({required FormInstallationDataState stateData}) {
+  Widget _meterConnectionDropdown({required FormInstallationDataState stateData}) {
     return DropdownWidget<GetConstantModel>(
-      label: AppString.typeOfNR,
-      hint: AppString.typeOfNR,
+      label: AppString.meterConnection,
+      hint: AppString.meterConnection,
       dropdownValue: stateData.typeOfNrValue?.value == null ? null : stateData.typeOfNrValue,
       items: stateData.listOfTypeOfNr,
       onChanged: (val) {
@@ -236,8 +240,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       keyboardType: TextInputType.text,
       controller: stateData.meterNumberSerialController,
       validator: (value) {
-       if(value != null && value.isNotEmpty && !stateData.listOfMeterNumberSerial.contains(value)) {
-         return AppString.meterNoErrorMsg;
+        if(value != null && value.isNotEmpty && !stateData.listOfMeterNumberSerial.contains(value)) {
+          return AppString.meterNoErrorMsg;
         }
         return null;
       },
@@ -263,19 +267,19 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ),
         Row(
           children: [
-            _meterReading4Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading5Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading6Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading7Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading8Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading9Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
-            _meterReading10Controller(stateData: stateData),
+            MeterNoWidget(enabled: false),
             _widthSpace(),
             _meterReading1Controller(stateData: stateData),
             _widthSpace(),
@@ -354,47 +358,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _meterReading4Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading5Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading6Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading7Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading8Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading9Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
-
-  Widget _meterReading10Controller({required FormInstallationDataState stateData}) {
-    return MeterNoWidget(
-      enabled: false,
-    );
-  }
 
   Widget _installRegulatorCheck({required FormInstallationDataState stateData}) {
     return  Card(
@@ -433,6 +396,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     return stateData.isInstallRegulator == true ? stateData.isRegulator == false ? _col(
       child: AutoCompleteTextFieldWidget(
         star: AppString.star,
+        enabled: stateData.regulatorTypeValue?.name == null ? false : true,
         label: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
         hintText: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
         suggestions: stateData.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : stateData.listOfRegulatorSerial,
@@ -471,21 +435,21 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
 
-  Widget _proConDateController({required FormInstallationDataState stateData}) {
+  Widget _ngConversionDateController({required FormInstallationDataState stateData}) {
     return TextFieldWidget(
       star: AppString.star,
-      hintText: AppString.proNgcConDate,
-      label: AppString.proNgcConDate,
+      hintText: AppString.ngConversionDate,
+      label: AppString.ngConversionDate,
       enabled: true,
-      controller: stateData.proConDateController,
+      controller: stateData.ngConversionDateController,
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
         onPressed: () {
-          BlocProvider.of<FormInstallationBloc>(context).add(SelectProposedConDateEvent(context: context));
+          BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
         },
       ),
       onTap: () {
-        BlocProvider.of<FormInstallationBloc>(context).add(SelectProposedConDateEvent(context: context));
+        BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
       },
     );
   }
@@ -517,7 +481,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             controller: stateData.longOfHouseController,
           ),
         ),
-       /* SizedBox(
+        /* SizedBox(
           width: MediaQuery.of(context).size.width * 0.02,
         ),
         IconButtonWidget(
@@ -537,7 +501,17 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           children: [
             Row(
               children: [
+                e.name.toLowerCase().contains("pipe") ?
                 Flexible(
+                  flex: 7,
+                  child: TextFieldWidget(
+                    hintText: AppString.pipe,
+                    label: AppString.pipe,
+                    initialValue: e.name,
+                    enabled: false,
+                  ),
+                )
+                    : Flexible(
                   flex: 7,
                   child: TextFieldWidget(
                     hintText: AppString.material,
@@ -554,7 +528,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                   child: TextFieldWidget(
                     hintText: e.unit,
                     label: e.unit,
-                    // initialValue: e.controller.text,
                     controller: e.controller,
                     enabled: true,
                     keyboardType: TextInputType.number,
@@ -608,7 +581,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     return GridView.builder(
       padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 180.0,
+        maxCrossAxisExtent: 200.0,
         mainAxisSpacing: 0.0,
         crossAxisSpacing: 0.0,
         childAspectRatio: 4.0,
@@ -719,14 +692,10 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                 isScrollControlled: true,
                 context: context,
                 builder: (BuildContext context) {
-                  return ImagePopWidget(
+                  return CameraPopWidget(
                     onTapCamera: () async {
                       Navigator.of(context).pop();
                       BlocProvider.of<FormInstallationBloc>(context).add(CaptureCameraHouseEvent());
-                    },
-                    onTapGallery: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<FormInstallationBloc>(context).add(CaptureGalleryHouseEvent());
                     },
                   );
                 });

@@ -9,8 +9,8 @@ List<LmcReasonModel> lmcReasonModelFromJson(String str) => List<LmcReasonModel>.
 String lmcReasonModelToJson(List<LmcReasonModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class LmcReasonModel {
-  final int? id;
-  final String? name;
+  dynamic id;
+  String? name;
 
   LmcReasonModel({
      this.id,
@@ -18,17 +18,28 @@ class LmcReasonModel {
   });
 
   factory LmcReasonModel.fromJson(Map<String, dynamic> json) => LmcReasonModel(
-    id: json["id"],
-    name: json["name"],
+    id: json["id"] ?? "",
+    name: json["name"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
   };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LmcReasonModel &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
+
   @override
   String toString() {
     // TODO: implement toString
-    return name.toString();
+    return name ?? "";
   }
 }

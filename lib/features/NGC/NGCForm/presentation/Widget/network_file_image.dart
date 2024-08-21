@@ -4,12 +4,20 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
-class ImageWidget extends StatelessWidget {
-  final File imgFile;
+class NetworkImageWidget extends StatelessWidget {
   final String title;
   final String? star;
+  final String baseUrl;
+  final File networkPath;
   final void Function() onPressed;
-  const ImageWidget({super.key, required this.imgFile, this.star, required this.title, required this.onPressed});
+  const NetworkImageWidget({
+    super.key,
+    this.star,
+    required this.baseUrl,
+    required this.title,
+    required this.onPressed,
+    required this.networkPath,
+  });
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -29,12 +37,16 @@ class ImageWidget extends StatelessWidget {
             height:MediaQuery.of(context).size.height* 0.12,
             child: InkWell(
               onTap: onPressed,
-              child: imgFile.path.isNotEmpty
+              child: networkPath.path.isNotEmpty
                   ? Card(
                 child: Stack(
                   children: <Widget>[
-                    Image.file(
-                      imgFile,
+                    baseUrl.isNotEmpty && networkPath.path.startsWith("http")
+                        ? Image.network(networkPath.path,
+                        fit: BoxFit.fill,
+                        width: MediaQuery.of(context).size.width *0.23,
+                        height:MediaQuery.of(context).size.height* 0.12)
+                        :  Image.file(networkPath,
                       fit: BoxFit.fill,
                       width: MediaQuery.of(context).size.width *0.23,
                       height:MediaQuery.of(context).size.height* 0.12,
@@ -42,7 +54,6 @@ class ImageWidget extends StatelessWidget {
                     Container(
                         width: MediaQuery.of(context).size.width/3,
                         height:MediaQuery.of(context).size.width/3,
-                      //  color : Colors.white.withOpacity(0.6),
                         child: Center(child: Icon(Icons.refresh, color: AppColor.primer,))),
                   ],
 

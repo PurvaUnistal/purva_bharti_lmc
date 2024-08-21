@@ -59,11 +59,11 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfFeasibilityRow = listOfFeasibilityRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
-      print("listOfFeasibilityRow${listOfFeasibilityRow}");
-      print("bpNumberController${bpNumberController.text}");
-      _eventCompleted(emit);
+      listOfFilterFeasibilityRow = listOfFilterFeasibilityRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
+    }else  if (event.searchBpNumber.length == 0) {
+      listOfFilterFeasibilityRow = await listOfFeasibilityRow;
     }
+    _eventCompleted(emit);
   }
 
   fetchAllArea({required BuildContext context}) async {
@@ -107,7 +107,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         allAreaValue: areaValue,
         pageNo: pageNo,
         listOfAllArea: listOfAllArea,
-        listOfFeasibilityRow: listOfFeasibilityRow,
+        listOfFilterFeasibilityRow: listOfFilterFeasibilityRow,
         feasibilityModel: feasibilityModel,
         bpNumberController: bpNumberController,
         scrollController: scrollController));

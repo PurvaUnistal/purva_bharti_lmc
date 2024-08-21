@@ -14,6 +14,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   bool isLoader =  false;
   String scheme = '';
+  String role = '';
   String userName = '';
   String baseUrl = '';
   String installationName = '';
@@ -27,6 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _pageLoad(HomeLoadEvent event, emit) async {
     isLoader =  false;
     scheme = await SharedPref.getString(key: PrefsValue.schema);
+    role = await SharedPref.getString(key: PrefsValue.userRole);
     userName = await SharedPref.getString(key: PrefsValue.userName);
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     feasibilityName = await SharedPref.getString(key: PrefsValue.feasibilityName);
@@ -67,6 +69,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         scheme: scheme,
         baseUrl: baseUrl,
         userName: userName,
+        role: role,
         installationName: installationName,
         feasibilityName: feasibilityName,
         pageIndex: pageIndex,

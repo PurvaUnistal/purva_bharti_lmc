@@ -20,12 +20,12 @@ import 'package:lmc/features/NGC/NGCForm/helper/ngc_form_helper.dart';
 class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   NGCFormBloc() : super(NGCFormInitialState()) {
     on<NGCFormLoadEvent>(_pageLoad);
+    on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectTypeNRValueEvent>(_selectTypeNRValue);
     on<SelectMeterReplaceEvent>(_selectMeterReplace);
     on<SelectMeterNumberValueEvent>(_selectMeterNumberValue);
     on<SelectRegulatorTypeValueEvent>(_selectRegulatorTypeValue);
     on<SelectRegulatorsValueEvent>(_selectRegulatorsValue);
-    on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectDelayReasonValueEvent>(_selectDelayReasonValue);
     on<SelectDelayStatueValueEvent>(_selectDelayStatueValue);
     on<SelectLocationOfSREvent>(_locationOfSR);
@@ -70,6 +70,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   String regulatorId = '';
   String materialId = '';
   String meterReplace = "0";
+  String lmcPath = "";
+  String baseUrl = '';
+  String networkMeterPhoto = "";
+ // String networkMeterPhotoPath = '';
 
   TextEditingController meterNumberSerialController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
@@ -90,7 +94,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController altMobileNumberController = TextEditingController();
   TextEditingController noOfFamilyMembersController = TextEditingController();
   TextEditingController emailIdController = TextEditingController();
-  TextEditingController ngChargeDateController = TextEditingController();
   TextEditingController delayReasonController = TextEditingController();
   TextEditingController typeOfNrController = TextEditingController();
   TextEditingController dateInstallationController = TextEditingController();
@@ -170,7 +173,16 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     longOfSRController.text = "0";
     latOfMRController.text = "0";
     longOfMRController.text = "0";
-    typeOfNrValue.value = await SharedPref.getString(key: PrefsValue.delayReason);
+    typeOfNrValue.value = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "":PrefsValue.typeOfNr);
+    regulatorTypeValue.name = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" :PrefsValue.regulatorType);
+    regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "": PrefsValue.regulatorTypeId);
+    regulatorSerialController.text = await SharedPref.getString(key: PrefsValue.regulatorSerial);
+    regulatorId = await SharedPref.getString(key: PrefsValue.regulators);
+    srNumberController.text = await SharedPref.getString(key: PrefsValue.srNumber);
+    lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
+    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+    networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
+    _meterPhoto = File(baseUrl+"uploads/"+lmcPath+"/" +networkMeterPhoto.toString());
     dmaUserId = await SharedPref.getString(key: PrefsValue.dmaUserId) ?? "";
     isInstall = await SharedPref.getString(key: PrefsValue.isInstall);
     lmcInstallationId = await SharedPref.getString(key: PrefsValue.lmcInstallationId);
@@ -183,10 +195,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     altMobileNumberController.text = await SharedPref.getString(key: PrefsValue.alternateMobileNo) ?? "";
     noOfFamilyMembersController.text = await SharedPref.getString(key: PrefsValue.noOfFamilyMembers) ?? "";
     noOfBurnersController.text = await SharedPref.getString(key: PrefsValue.ngOfBurners)  == "" ? "2" : await SharedPref.getString(key: PrefsValue.ngOfBurners);
-    ngChargeDateController.text = await SharedPref.getString(key: PrefsValue.ngChargeDate) ?? DateFormat(AppString.dateFormat).format(DateTime.now());;
     typeOfNrController.text = await SharedPref.getString(key: PrefsValue.typeOfNr) ?? "";
     dateInstallationController.text = await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
-    ngConversionDateController.text =  await SharedPref.getString(key: PrefsValue.proposedNgcDate);
+    ngConversionDateController.text =  DateFormat(AppString.dateFormat).format(DateTime.now());
     await fetchDelayReasonApi(context: event.context);
     await fetchTypeOfNrApi(context: event.context);
     await fetchNgcReasonApi(context: event.context);
@@ -194,7 +205,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     await fetchRegulatorTypeApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await checkDelayReason();
-    _eventCompleted(emit);
+    if(regulatorTypeValue.id != null){
+      await fetchRegulatorsApi(context: event.context,regulatorSerial: "", regulatorType : regulatorTypeValue.id.toString());
+    }
+   _eventCompleted(emit);
   }
 
   checkDelayReason(){
@@ -210,7 +224,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var res = await FormInstallationHelper.getTypeOfNrApi(context: context);
     if (res != null) {
       listOfTypeOfNr = res;
-      typeOfNrValue = listOfTypeOfNr.first;
+     // typeOfNrValue = listOfTypeOfNr.first;
       return res;
     }
   }
@@ -222,6 +236,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var res = await NGCFormHelper.regulatorTypeApi(context: context);
     if (res != null) {
       listOfRegulatorType = res;
+
       return res;
     }
   }
@@ -249,7 +264,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    var res = await NGCFormHelper.getRegulatorsApi(context: context,regulatorSerial: regulatorSerial,regulatorType: regulatorType);
+    var res = await NGCFormHelper.getRegulatorsNGCApi(context: context,regulatorSerial: regulatorSerial,regulatorType: regulatorType);
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
@@ -258,7 +273,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   fetchMetersApi({required BuildContext context, required String meterSerial}) async {
-    var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
+    var res = await NGCFormHelper.getMetersNGCApi(context: context, meterSerial: meterSerial);
     if (res != null) {
       listOfMeterNumber = res;
       listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
@@ -269,13 +284,20 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     meterNumberSerialController.text = event.meterReadingValue;
     materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
-  }
+    if(event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
+      isCheckMeterMismatch = true;
+    }else{
+      isCheckMeterMismatch = false;
+    }
+    _eventCompleted(emit); }
+
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    if (regulatorTypeValue.id != null) {
-      regulatorSerialController.text = event.regulatorsValue;
-      regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
-    } else {
-      Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: event.context);
+    regulatorSerialController.text = event.regulatorsValue;
+    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
+    if(event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
+      isCheckRegulatorMismatch = true;
+    }else{
+      isCheckRegulatorMismatch = false;
     }
     _eventCompleted(emit);
   }
@@ -289,7 +311,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
-      ngChargeDateController.text = formattedDate.toString();
+      ngConversionDateController.text = formattedDate.toString();
       _eventCompleted(emit);
     }
   }
@@ -450,7 +472,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         regulatorNumber: regulatorSerialController.text.trim().toString(),
         srNumber: srNumberController.text.trim().toString(),
         bpNumber: bpNumberController.text.trim().toString(),
-        ngChargeDate: ngChargeDateController.text.trim().toString(),
+        ngChargeDate: ngConversionDateController.text.trim().toString(),
         meterImg: meterPhoto,
         nameContractor: nameContractorController.text.trim().toString(),
         ngcDelayStatusValue: ngcDelayStatusValue,
@@ -468,23 +490,22 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           alternateMobile: altMobileNumberController.text.trim().toString(),
           comment: delayReasonController.text.trim().toString(),
           contactPerson: mobileNumberController.text.trim().toString(),
-          conversionDate: ngChargeDateController.text.trim().toString(),
+          conversionDate: ngConversionDateController.text.trim().toString(),
           delayStatus: ngcDelayStatusValue,
           email: emailIdController.text.trim().toString(),
           isInstall: isInstall,
           jmrNo:bpNumberController.text.trim().toString(),
-          lmcInstallationId: lmcInstallationId,
-          meterFile: meterPhoto,
+          lmcInstallationId: lmcInstallationId.toString(),
           meterReading: meterInitialReading.text.trim().toString(),
           mismatchMeterNo:isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
+          meterNumber: isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
           nameOfContractor: nameContractorController.text.trim().toString(),
-          ngcReportFile: ngcReportPhoto,
           nOfBurners: noOfBurnersController.text.trim().toString(),
           reasonOfDelay: delayReasonController.text.trim().toString(),
           workCompletedDate: dateInstallationController.text.trim().toString(),
           meterChangeReason: reasonMeterChangeController.text.trim().toString(),
-          meterNumber: materialId,
-          regulatorsNumber: regulatorId,
+          regulatorsNumber: regulatorId.toString(),
+          mrRegulatorId: regulatorId.toString(),
           regulatorTypeId: regulatorTypeValue,
           replaceMeter: meterReplace.toString(),
           changeMeterType: meterReplaceTypeValue,
@@ -493,11 +514,11 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           longitudeMR: longOfMRController.text.trim().toString(),
           latitudeTf: latOfSRController.text.trim().toString(),
           longitudeTf: longOfSRController.text.trim().toString(),
-          mrPhoto: mrPhoto.path,
-          sr_photo: srPhoto.path,
-          mrRegulatorId: "",
+          meterPhoto:   meterPhoto.path.toString(),
+          mrPhoto: mrPhoto.path.toString(),
+          srPhoto: srPhoto.path.toString(),
+          ngcReportPhoto: ngcReportPhoto.path.toString(),
           noOfFamily: noOfFamilyMembersController.text.trim().toString(),
-          //  mrRegulatorId: mr,
         );
         if (res != null ) {
           _isBtnLoader = false;
@@ -558,7 +579,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       mobileNumberController : mobileNumberController,
       altMobileNumberController : altMobileNumberController,
       emailIdController : emailIdController,
-      ngChargeDateController : ngChargeDateController,
+      ngChargeDateController : ngConversionDateController,
       typeOfNrController : typeOfNrController,
       dateInstallationController : dateInstallationController,
       delayReasonValue :delayReasonValue,
@@ -572,6 +593,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       isDelayReason: isDelayReason,
       listOfTypeOfNr: listOfTypeOfNr,
       typeOfNrValue: typeOfNrValue,
+      baseUrl: baseUrl,
+      lmcPath: lmcPath,
     ));
   }
 

@@ -33,8 +33,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
     on<MeterInitReadingEvent>(_meterInitReading);
-    on<SelectRFCDeclarationDateEvent>(_selectRFCDeclarationDate);
-    on<SelectProposedConDateEvent>(_selectProposedConDate);
+    on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectLocationOfHouseEvent>(_selectLocationOfHouse);
     on<CaptureGalleryRFCCardEvent>(_captureGalleryRFCCard);
     on<CaptureCameraRFCCardEvent>(_captureCameraRFCCard);
@@ -100,10 +99,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController latOfHouseController = TextEditingController();
   TextEditingController longOfHouseController = TextEditingController();
-  TextEditingController rfcConDateController = TextEditingController();
+  TextEditingController ngConversionDateController = TextEditingController();
   TextEditingController srNumberController = TextEditingController();
-  TextEditingController proConDateController = TextEditingController();
-  TextEditingController workCompletedDate = TextEditingController();
   TextEditingController meterReadingDate = TextEditingController();
   TextEditingController extraPipeController = TextEditingController(text: "0");
   TextEditingController extraPriceController = TextEditingController(text: "0");
@@ -184,9 +181,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     userName = await SharedPref.getString(
       key: PrefsValue.userName,
     );
-    rfcConDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    proConDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    workCompletedDate.text = DateFormat(AppString.dateFormat).format(DateTime.now());
+    ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     meterReadingDate.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     installationDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     extraPipeController.text = "0";
@@ -238,27 +233,14 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
   }
 
-  _selectRFCDeclarationDate(SelectRFCDeclarationDateEvent event, emit) async {
-    var assignDate = DateFormat(AppString.dateFormat).parse(feasibilityDateController.text);
-    DateTime? dateTime = await showDatePicker(
-      context: event.context,
-      initialDate: DateTime.now(),
-      firstDate: assignDate,
-      lastDate: DateTime.now(),
-    );
-    if (dateTime != null) {
-      String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
-      rfcConDateController.text = formattedDate.toString();
-    }
-    _eventCompleted(emit);
-  }
 
-  _selectProposedConDate(SelectProposedConDateEvent event, emit) async {
+
+  _selectNGConversionDate(SelectNGConversionDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
     DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
-      rfcConDateController.text = formattedDate.toString();
+      ngConversionDateController.text = formattedDate.toString();
       _eventCompleted(emit);
     }
   }
@@ -420,15 +402,23 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     meterNumberSerialController.text = event.meterReadingValue;
     materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
+    if(event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
+      isCheckMeterMismatch = true;
+    }else{
+      isCheckMeterMismatch = false;
+    }
+    _eventCompleted(emit);
   }
+
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-      if (regulatorTypeValue.id != null) {
-        regulatorSerialController.text = event.regulatorsValue;
-        regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
-      } else {
-        Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: event.context);
-      }
-      _eventCompleted(emit);
+    regulatorSerialController.text = event.regulatorsValue;
+    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
+    if(event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
+      isCheckRegulatorMismatch = true;
+    }else{
+      isCheckRegulatorMismatch = false;
+    }
+    _eventCompleted(emit);
   }
 
   _setHouseLocation() async {
@@ -560,7 +550,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         dateInstallation: installationDateController.text.trim().toString(),
         isDelayReason: isDelayReason,
         delayReason: delayReasonValue,
-        meterNumber: materialId,
+        meterNumber: meterNumberSerialController.text.trim().toString(),
         isCheckMeterMismatch: isCheckMeterMismatch,
         meterInit1: meterIniReading1Controller.text.trim().toString(),
         meterInit2: meterIniReading2Controller.text.trim().toString(),
@@ -570,7 +560,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         srNumber: srNumberController.text.trim().toString(),
         regulatorNumber: regulatorSerialController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
-        proposedNGCConversionDate: proConDateController.text.trim().toString(),
+        ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
         meterPhoto: meterPhoto.path.toString(),
         rfcPhoto: rfcCardPhoto.path.toString(),
@@ -585,22 +575,16 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           extraPipe: extraPipe.toString(),
           extraPrice: extraPrice.toString(),
           rfcForm: "",
-          workCompletedDate: workCompletedDate.text.trim().toString(),
+          workCompletedDate: installationDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
           meterNo: materialId,
-          rfcDate: rfcConDateController.text.trim().toString(),
+          rfcDate:installationDateController.text.trim().toString(),
           latitudeHg: latOfHouseController.text.trim().toString(),
           longitudeHg: longOfHouseController.text.trim().toString(),
-         /* latitudeMR: latOfMRController.text.trim().toString(),
-          longitudeMR: longOfMRController.text.trim().toString(),
-          latitudeTf: latOfSRController.text.trim().toString(),
-          longitudeTf: longOfSRController.text.trim().toString(),*/
           srNumber: srNumberController.text.trim().toString(),
-      /*    mrPhoto: mrPhoto.path,
-          mrRegulatorId: "",*/
           regulatorCheck: installRegulator,
           materialIdLmc: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-          proposedNgcDate: proConDateController.text.trim().toString(),
+          proposedNgcDate: ngConversionDateController.text.trim().toString(),
           qtyLmc: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
           regulatorsNumber: regulatorId.toString(),
           regulatorTypeId: regulatorTypeValue,
@@ -611,7 +595,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           ngc: readyNGCValue,
           meterPhoto: meterPhoto.path,
           housePhoto: housePhoto.path,
-      //    sr_photo: srPhoto.path,
           pneumaticPhoto: pneumaticTestReportPhoto.path.toString(),
           isometricPhoto: rfcCardPhoto.path.toString(),
         );
@@ -681,9 +664,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       materialList: materialList,
       latOfHouseController: latOfHouseController,
       longOfHouseController: longOfHouseController,
-      rfcConDateController: rfcConDateController,
+      ngConversionDateController: ngConversionDateController,
       srNumberController: srNumberController,
-      proConDateController: proConDateController,
       extraPipeController: extraPipeController,
       extraPriceController: extraPriceController,
       regulatorSerialController: regulatorSerialController,

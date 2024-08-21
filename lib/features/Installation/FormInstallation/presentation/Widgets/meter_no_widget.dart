@@ -53,8 +53,8 @@ class MeterNoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: enabled == false ? MediaQuery.of(context).size.width * 0.06 : MediaQuery.of(context).size.width * 0.07,
-      height: enabled == false ? MediaQuery.of(context).size.height * 0.05 : MediaQuery.of(context).size.height * 0.07,
+      width: enabled == false ? MediaQuery.of(context).size.width * 0.063 : MediaQuery.of(context).size.width * 0.076,
+     // height: enabled == false ? MediaQuery.of(context).size.height * 0.05 : MediaQuery.of(context).size.height * 0.07,
       child: TextFormField(
         cursorColor: AppColor.primer,
         focusNode: focusNode,
@@ -92,7 +92,7 @@ class MeterNoWidget extends StatelessWidget {
                 )
               : null,
           filled: true,
-          fillColor: AppColor.white,
+          fillColor: enabled == false ? AppColor.grey50: AppColor.white,
           isDense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
           border: enabled == false ? borderGrey : borderRed,

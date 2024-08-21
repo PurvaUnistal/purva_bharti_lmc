@@ -23,7 +23,7 @@ class FetchNgcTableDataState extends NgcTableState {
   final String userName;
   final dynamic allAreaValue;
   final List<GetAllAreaModel> listOfAllArea;
-  final List<InstallationByNgcData> listOfInstallationByNgc;
+  final List<InstallationByNgcData> listOfFilterInstallationByNgc;
   final LMCInstallationByNgcModel? lmcInstallationByNgcModel;
   final  TextEditingController bpNumberController;
 
@@ -34,7 +34,7 @@ class FetchNgcTableDataState extends NgcTableState {
     required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
-    required this.listOfInstallationByNgc,
+    required this.listOfFilterInstallationByNgc,
     required this.lmcInstallationByNgcModel,
     required this.bpNumberController,
 
@@ -49,7 +49,7 @@ class FetchNgcTableDataState extends NgcTableState {
     pageNo,
     allAreaValue,
     listOfAllArea,
-    listOfInstallationByNgc,
+    listOfFilterInstallationByNgc,
     lmcInstallationByNgcModel,
     bpNumberController,
   ];

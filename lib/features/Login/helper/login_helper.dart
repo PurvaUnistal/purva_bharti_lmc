@@ -55,8 +55,8 @@ class LoginHelper {
       if (res != null && res["error"] == false) {
         await Utils.successSnackBar(msg: res["messages"], context: context);
         String str = Apis.loginUrl;
-        await SharedPref.setString(key: PrefsValue.baseUrl, value: str.replaceAll("auth", ""));
-        print(str.replaceAll("auth", ""));
+        await SharedPref.setString(key: PrefsValue.baseUrl, value: str.replaceAll("api/auth", ""));
+        print(str.replaceAll("api/auth", ""));
         return LoginModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
         await Utils.errorSnackBar(msg: res["messages"], context: context);

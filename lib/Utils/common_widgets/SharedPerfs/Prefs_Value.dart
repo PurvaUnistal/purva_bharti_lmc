@@ -59,7 +59,6 @@ class PrefsValue {
   static String email = "email";
   static String ngOfBurners = "ngOfBurners";
   static String noOfFamilyMembers = "noOfFamilyMembers";
-  static String ngChargeDate = "ngChargeDate";
   static String delayReason = "delayReason";
   static String typeOfNr = "typeOfNr";
   static String latitudeTf = "latitudeTf";
@@ -69,4 +68,12 @@ class PrefsValue {
   static String rfcDate = "rfcDate";
   static String lmcInstallationDate = "lmcInstallationDate";
   static String proposedNgcDate = "proposedNgcDate";
+  static String lmcPath = "lmcPath";
+  static String meterPhoto = "meterPhoto";
+  static String regulatorType = "regulatorType";
+  static String regulatorTypeId = "regulatorTypeId";
+  static String regulatorSerial = "regulatorSerial";
+  static String regulators = "regulators";
+  static String srRegulators = "srRegulators";
+  static String srNumber = "srNumber";
 }

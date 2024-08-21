@@ -113,9 +113,9 @@ class MeterInitReadingEvent extends FormInstallationEvent{
   List<Object?> get props => [];
 }
 
-class SelectProposedConDateEvent extends FormInstallationEvent {
+class SelectNGConversionDateEvent extends FormInstallationEvent {
   final BuildContext context;
-  SelectProposedConDateEvent({required this.context});
+  SelectNGConversionDateEvent({required this.context});
   @override
   // TODO: implement props
   List<Object> get props => [context];
@@ -130,13 +130,6 @@ class SelectQTYLMCEvent extends FormInstallationEvent {
   List<Object> get props => [qtyValue,context,];
 }
 
-class SelectRFCDeclarationDateEvent extends FormInstallationEvent {
-  final BuildContext context;
-  SelectRFCDeclarationDateEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
 
 class SelectLocationOfHouseEvent extends FormInstallationEvent {
   final BuildContext context;

@@ -54,7 +54,7 @@ class ApiHelper {
       }
       var res = await post(Uri.parse(urlEndPoint), body: body,headers: headers);
       print(res.body);
-    //  if(urlEndPoint)
+      //  if(urlEndPoint)
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       } else if (res.statusCode == 403) {
@@ -74,43 +74,27 @@ class ApiHelper {
   static Future<dynamic> postDataWithFile({
     var urlEndPoint,
     var body,
-    required BuildContext context,
-    required String filePath1,
-    required String keyWord1,
-    required String filePath2,
-    required String keyWord2,
-    required String filePath3,
-    required String keyWord3,
-    required String filePath4,
-    required String keyWord4,
+    required  List<ImageRequestObject> imageRequestObject,
+    required BuildContext context
   }) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString(PrefsValue.token) ?? "";
     try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context!) == false){
+      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
       Map<String, String> headers = {"Authorization": token};
       var request = MultipartRequest("POST", Uri.parse(urlEndPoint));
-      if (filePath1.isNotEmpty) {
-        final mimeTypeData = lookupMimeType(filePath1, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile1 = await MultipartFile.fromPath(keyWord1, filePath1, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile1);
-      }
-      if (filePath2.isNotEmpty) {
-        final mimeTypeData = lookupMimeType(filePath2, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile1 = await MultipartFile.fromPath(keyWord2, filePath2, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile1);
-      }
-      if (filePath3.isNotEmpty) {
-        final mimeTypeData = lookupMimeType(filePath3, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile1 = await MultipartFile.fromPath(keyWord3, filePath3, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile1);
-      }
-      if (filePath4.isNotEmpty) {
-        final mimeTypeData = lookupMimeType(filePath4, headerBytes: [0xFF, 0xD8])!.split('/');
-        var uploadFile1 = await MultipartFile.fromPath(keyWord4, filePath4, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-        request.files.add(uploadFile1);
+
+      for(int i=0; i< imageRequestObject.length ; i++) {
+        var element = imageRequestObject[i];
+        if (element.path!.isNotEmpty && !element.path!.startsWith("http")) {
+          final mimeTypeData = lookupMimeType(element.path!, headerBytes: [0xFF, 0xD8])!.split('/');
+          var file = await MultipartFile.fromPath(element.key!, element.path!, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+          request.files.add(file);
+        } else {
+          body[element.key] = element.path;
+        }
       }
       request.fields.addAll(body);
       request.headers.addAll(headers);
@@ -121,8 +105,11 @@ class ApiHelper {
         log("result-->${result.toString()}");
         return result;
       } else if (response.statusCode == 401) {
-
-    } else if (response.statusCode == 415) {
+        var responseData = await response.stream.toBytes();
+        var result = json.decode(String.fromCharCodes(responseData));
+        log("result-->${result.toString()}");
+        return result;
+      } else if (response.statusCode == 415) {
         var responseData = await response.stream.toBytes();
         var result = json.decode(String.fromCharCodes(responseData));
         log(result.toString());
@@ -136,7 +123,7 @@ class ApiHelper {
         return null;
       }
     } catch (e) {
-      log(e.toString());
+      log("postDataWithFile-->${e.toString()}");
       return null;
     }
   }
@@ -155,3 +142,10 @@ class ApiHelper {
 }
 
 enum Api { error }
+
+class ImageRequestObject {
+  String? key;
+  String? path;
+
+  ImageRequestObject(this.key, this.path);
+}

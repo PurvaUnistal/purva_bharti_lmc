@@ -1,4 +1,4 @@
-
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
@@ -23,6 +23,7 @@ import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_bloc.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
+import 'package:lmc/features/NGC/NGCForm/presentation/Widget/network_file_image.dart';
 
 
 class NGCFormView extends StatefulWidget {
@@ -52,7 +53,6 @@ class _NGCFormViewState extends State<NGCFormView> {
         backgroundColor: AppColor.green50,
         body: BlocBuilder<NGCFormBloc, NGCFormState>(
           builder: (context, state) {
-            print(state);
             if (state is NGCFormPageLoadState) {
               return Center(
                 child: SpinLoader(),
@@ -109,60 +109,56 @@ class _NGCFormViewState extends State<NGCFormView> {
           ),
         ],
       ),
-      body: Form(
-        key: formGlobalKey,
-        child: ListView(
-          padding: EdgeInsets.all(8),
-          children: [
-            RowWidget(
-                widget1:_bpNumberWidget(dataState : dataState),
-                widget2: _dateInstallationController(dataState : dataState)
-            ),
-            _sizedBox(),
-            _delayReasonDropdown(dataState : dataState),
-            _sizedBox(),
-            _typeOfNRDropdown(dataState: dataState),
-            _sizedBox(),
-            _ngConversionDateController(dataState: dataState),
-            _sizedBox(),
-            _meterReplaceCheck(dataState : dataState),
-            _sizedBox(),
-            _meterReplaceController(dataState : dataState),
-            _sizedBox(),
-            _meterTypeDropdown(dataState : dataState),
-            _reasonMeterChangeController(dataState : dataState),
-            _meterInitialReadingController(dataState : dataState),
-            _sizedBox(),
-            _regulatorTypeDropdown(dataState : dataState),
-            _sizedBox(),
-            _srNumberController(dataState : dataState),
-            _regulatorController(dataState : dataState),
-            _mrPhoto(dataState : dataState),
-            _locationOfSR(dataState : dataState),
-            _locationOfMR(dataState : dataState),
-            _contractorWidget(dataState : dataState),
-            _sizedBox(),
-            RowWidget(
-                widget1: _burnerNoWidget(dataState : dataState),
-                widget2: _noOfFamilyMembersController(dataState : dataState)
-            ),
-            _sizedBox(),
-            _contactNoWidget(dataState : dataState),
-            _sizedBox(),
-            _altContactNoWidget(dataState : dataState),
-            _sizedBox(),
-            _emailWidget(dataState : dataState),
-            _sizedBox(),
-            RowWidget(
-                widget1: _meterPhoto(dataState : dataState),
-                widget2: _ngcReportPhoto(dataState: dataState)),
-            _sizedBox(),
-            _sizedBox(),
-            _submitBtnWidget(dataState: dataState),
-            _sizedBox(),
-            _sizedBox(),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.all(8),
+        children: [
+          RowWidget(
+              widget1:_bpNumberWidget(dataState : dataState),
+              widget2: _dateInstallationController(dataState : dataState)
+          ),
+          _sizedBox(),
+          _delayReasonDropdown(dataState : dataState),
+          _meterConnectionDropdown(dataState: dataState),
+          _sizedBox(),
+          _ngConversionDateController(dataState: dataState),
+          _sizedBox(),
+          _meterReplaceCheck(dataState : dataState),
+          _sizedBox(),
+          _meterReplaceController(dataState : dataState),
+          _sizedBox(),
+          _meterTypeDropdown(dataState : dataState),
+          _reasonMeterChangeController(dataState : dataState),
+          _meterInitialReadingController(dataState : dataState),
+          _sizedBox(),
+          _regulatorTypeDropdown(dataState : dataState),
+          _sizedBox(),
+          _srNumberController(dataState : dataState),
+          _regulatorController(dataState : dataState),
+          _mrPhoto(dataState : dataState),
+          _locationOfSR(dataState : dataState),
+          _locationOfMR(dataState : dataState),
+          _contractorWidget(dataState : dataState),
+          _sizedBox(),
+          RowWidget(
+              widget1: _burnerNoWidget(dataState : dataState),
+              widget2: _noOfFamilyMembersController(dataState : dataState)
+          ),
+          _sizedBox(),
+          _contactNoWidget(dataState : dataState),
+          _sizedBox(),
+          _altContactNoWidget(dataState : dataState),
+          _sizedBox(),
+          _emailWidget(dataState : dataState),
+          _sizedBox(),
+          RowWidget(
+              widget1: _meterPhoto(dataState : dataState),
+              widget2: _ngcReportPhoto(dataState: dataState)),
+          _sizedBox(),
+          _sizedBox(),
+          _submitBtnWidget(dataState: dataState),
+          _sizedBox(),
+          _sizedBox(),
+        ],
       ),
     );
   }
@@ -191,26 +187,28 @@ class _NGCFormViewState extends State<NGCFormView> {
     );
   }
   Widget _delayReasonDropdown({required NGCFormDataState dataState}) {
-    return DropdownWidget<LmcReasonModel>(
-      star: dataState.isDelayReason == true ?AppString.star : "",
-      label: AppString.reasonDelay,
-      hint: AppString.reasonDelay,
-      dropdownValue: dataState.delayReasonValue?.name == null ? null : dataState.delayReasonValue,
-      items: dataState.listOfDelayReason,
-      onChanged: (val) {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectDelayStatueValueEvent(delayStatueValue: val!));
-      },
-    );
+    return dataState.isDelayReason == true ? _col(
+      child: DropdownWidget<LmcReasonModel>(
+        star: AppString.star ,
+        label: AppString.reasonDelay,
+        hint: AppString.reasonDelay,
+        dropdownValue: dataState.delayReasonValue?.name == null ? null : dataState.delayReasonValue,
+        items: dataState.listOfDelayReason,
+        onChanged: (val) {
+          BlocProvider.of<NGCFormBloc>(context).add(SelectDelayStatueValueEvent(delayStatueValue: val!));
+        },
+      ),
+    ): Container();
   }
 
-  Widget _typeOfNRDropdown({required NGCFormDataState dataState}) {
+  Widget _meterConnectionDropdown({required NGCFormDataState dataState}) {
     return DropdownWidget<GetConstantModel>(
-      label: AppString.typeOfNR,
-      hint: AppString.typeOfNR,
-      dropdownValue: dataState.typeOfNrValue?.value == null ? null : dataState.typeOfNrValue,
+      label: AppString.meterConnection,
+      hint: AppString.meterConnection,
+      dropdownValue: dataState.typeOfNrValue!.value!.isEmpty ? null : dataState.typeOfNrValue,
       items: dataState.listOfTypeOfNr,
       onChanged: (val) {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectTypeNRValueEvent(typeOfNRValue: val));
+        BlocProvider.of<NGCFormBloc>(context).add(SelectTypeNRValueEvent(typeOfNRValue: val!));
       },
     );
   }
@@ -219,10 +217,13 @@ class _NGCFormViewState extends State<NGCFormView> {
     return TextFieldWidget(
       label: AppString.ngConversionDate,
       hintText: AppString.ngConversionDate,
-      enabled: false,
+      enabled: true,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.text,
       controller: dataState.ngConversionDateController,
+      onChanged: (val) {
+        BlocProvider.of<NGCFormBloc>(context).add(SelectNGConversionDateEvent(context: context));
+      },
     );
   }
 
@@ -246,10 +247,11 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _meterPhoto({required NGCFormDataState dataState}){
-    return ImageWidget(
+    return NetworkImageWidget(
       star: AppString.star,
       title: AppString.meterPhoto,
-      imgFile: dataState.mrPhoto,
+      baseUrl: dataState.baseUrl,
+      networkPath: dataState.meterPhoto,
       onPressed: () {
         showModalBottomSheet(
             enableDrag: true,
@@ -290,8 +292,8 @@ class _NGCFormViewState extends State<NGCFormView> {
         formKey.currentState?.validate();
         BlocProvider.of<NGCFormBloc>(context).add(SelectMeterNumberValueEvent(context: context, meterReadingValue: val));
       },
-      onChanged: (val) {
-        formKey.currentState?.validate();
+      onChanged: (val) async {
+        await formKey.currentState?.validate();
         BlocProvider.of<NGCFormBloc>(context).add(SelectMeterNumberValueEvent(context: context, meterReadingValue: val));
       },
     )
@@ -349,7 +351,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       star: AppString.star,
       label: AppString.regulatorType,
       hint: AppString.regulatorType,
-      dropdownValue: dataState.regulatorTypeValue?.name == null ? null : dataState.regulatorTypeValue,
+      dropdownValue: dataState.regulatorTypeValue!.name!.isEmpty  ? null : dataState.regulatorTypeValue,
       items: dataState.listOfRegulatorType,
       onChanged: (val) {
         BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeValueEvent(regulatorTypeValue: val!, context:context));
@@ -361,6 +363,7 @@ class _NGCFormViewState extends State<NGCFormView> {
     return dataState.isRegulator == false ? _col(
       child: AutoCompleteTextFieldWidget(
         star: AppString.star,
+        enabled: dataState.regulatorTypeValue?.name == null ? false : true,
         label: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
         hintText: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
         suggestions: dataState.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : dataState.listOfRegulatorSerial,
@@ -625,14 +628,13 @@ class _NGCFormViewState extends State<NGCFormView> {
     return dataState.isBtnLoader == false ? Center(
       child: ButtonWidget(
           text: AppString.submit,
-          onPressed: () {
-            if (formGlobalKey.currentState!.validate()) {
-              formGlobalKey.currentState?.save();
+          onPressed: () async {
+            await  formKey.currentState?.validate();
               FocusScope.of(context).unfocus();
               BlocProvider.of<NGCFormBloc>(context).add(NGCSubmitEvent(context: context,));
             }
 
-          }),
+          ),
     ) : DottedLoaderWidget();
   }
 

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 
 abstract class NGCFormEvent extends Equatable {}
@@ -13,7 +14,7 @@ class NGCFormLoadEvent extends NGCFormEvent {
 }
 
 class SelectTypeNRValueEvent extends NGCFormEvent {
-  final dynamic typeOfNRValue;
+  final GetConstantModel typeOfNRValue;
   SelectTypeNRValueEvent({required this.typeOfNRValue});
   @override
   // TODO: implement props
@@ -38,6 +39,14 @@ class SelectMeterNumberValueEvent extends NGCFormEvent {
   List<Object> get props => [context,meterReadingValue];
 }
 
+class SelectNGConversionDateEvent extends NGCFormEvent {
+  final BuildContext context;
+  SelectNGConversionDateEvent({required this.context, });
+  @override
+  // TODO: implement props
+  List<Object> get props => [context,];
+}
+
 class SelectRegulatorTypeValueEvent extends NGCFormEvent {
   final BuildContext context;
   final LmcReasonModel regulatorTypeValue;
@@ -57,16 +66,6 @@ class SelectRegulatorsValueEvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [regulatorsValue,context];
-}
-
-
-
-class SelectNGConversionDateEvent extends NGCFormEvent{
-  final BuildContext context;
-  SelectNGConversionDateEvent({ required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
 }
 
 class SelectDelayReasonValueEvent extends NGCFormEvent {

@@ -23,8 +23,10 @@ class NGCFormDataState extends NGCFormState {
   bool isCheckMeterMismatch;
   bool isMeterReplace;
   bool isDelayReason;
-  final String userName;
-  final String schema;
+  String userName;
+  String schema;
+  String lmcPath;
+  String baseUrl;
   File meterPhoto;
   File ngcReportPhoto;
   File mrPhoto;
@@ -80,6 +82,8 @@ class NGCFormDataState extends NGCFormState {
     required this.isRegulator,
     required this.userName,
     required this.schema,
+    required this.lmcPath,
+    required this.baseUrl,
     required this.listOfTypeOfNr,
     required this.typeOfNrValue,
 
@@ -138,6 +142,8 @@ class NGCFormDataState extends NGCFormState {
     ngcReportPhoto,
     isRegulator,
     schema,
+    lmcPath,
+    baseUrl,
     userName,
    listOfTypeOfNr,
    typeOfNrValue,

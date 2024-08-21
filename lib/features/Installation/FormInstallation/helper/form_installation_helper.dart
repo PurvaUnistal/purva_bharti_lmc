@@ -144,18 +144,12 @@ class FormInstallationHelper {
     required String regulatorNumber,
     required bool isCheckRegulatorMismatch,
     required String srNumber,
-    required String proposedNGCConversionDate,
+    required String ngConversionDate,
     required String fittingDetails,
     required String meterPhoto,
     required String rfcPhoto,
     required String pneumaticTestReportPhoto,
     required String housePhoto,
- //   required String latSR,
- //   required String longSR,
-  //  required String latMR,
-  //  required String longMR,
- //   required String mrPhoto,
-  //  required String srPhoto,
   }) async {
      try {
     if (dateInstallation.isEmpty) {
@@ -184,24 +178,10 @@ class FormInstallationHelper {
         } else if (isCheckRegulatorMismatch == true) {
           Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
           return false;
-        }
-       /* else if (srNumber.isEmpty) {
+        }else if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
           return false;
-        } else if (mrPhoto.isEmpty) {
-          Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
-          return false;
-        } else if(latMR.isEmpty && longMR.isEmpty) {
-          Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
-          return false;
-        } else if(latSR.isEmpty && longSR.isEmpty) {
-          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
-          return false;
-        } else if(srPhoto.isEmpty){
-          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
-          return false;
-        }*/
-
+        }
       } else if(regulatorType.name == "PRV"){
         if(regulatorNumber.isEmpty){
           Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
@@ -209,8 +189,8 @@ class FormInstallationHelper {
         }
       }
     }
-    if (proposedNGCConversionDate.isEmpty) {
-      Utils.errorSnackBar(msg: "The Proposed NGC Conversion Date field is required.", context: context);
+    if (ngConversionDate.isEmpty) {
+      Utils.errorSnackBar(msg: "The NG Conversion Date field is required.", context: context);
       return false;
     } else if (fittingDetails.isEmpty) {
       Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
@@ -223,6 +203,9 @@ class FormInstallationHelper {
       return false;
     } else if (pneumaticTestReportPhoto.isEmpty) {
       Utils.errorSnackBar(msg: "The Pneumatic Test Report Photo field is required.", context: context);
+      return false;
+    }else if (housePhoto.isEmpty) {
+      Utils.errorSnackBar(msg: "The House Photo field is required.", context: context);
       return false;
     }
     return true;
@@ -274,6 +257,7 @@ class FormInstallationHelper {
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
         "regulators": regulatorsNumber,
+        "mr_regulator_id": regulatorsNumber,
         "latitude_hg": latitudeHg,
         "longitude_hg": longitudeHg,
         "tf_number": srNumber,
@@ -296,14 +280,12 @@ class FormInstallationHelper {
         urlEndPoint: Apis.saveLmcInstallation,
         body: para,
         context: context,
-        keyWord1: "meter_photo",
-        filePath1: meterPhoto.toString(),
-        keyWord2: "isometric_image",
-        filePath2: isometricPhoto.toString(),
-        keyWord3: "pneumatic_image",
-        filePath3: pneumaticPhoto.toString(),
-        keyWord4: "house_image",
-        filePath4: housePhoto.toString(),
+        imageRequestObject: [
+          ImageRequestObject("meter_photo", meterPhoto.toString()),
+          ImageRequestObject("isometric_image", isometricPhoto.toString()),
+          ImageRequestObject("pneumatic_image", pneumaticPhoto.toString()),
+          ImageRequestObject("house_image", housePhoto.toString()),
+        ]
       );
       if (res != null && res["error"] == false) {
         // Utils.successSnackBar(msg: res["data"], context: context);

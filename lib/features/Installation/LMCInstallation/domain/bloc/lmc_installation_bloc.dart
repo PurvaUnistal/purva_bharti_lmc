@@ -59,10 +59,10 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfInstallationRow = listOfInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
-      print("listOfFeasibilityRow${listOfInstallationRow}");
-      print("bpNumberController${bpNumberController.text}");
+      listOfFilterInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       _eventCompleted(emit);
+    }else if(event.searchBpNumber.length == 0){
+      listOfFilterInstallationRow = await listOfInstallationRow;
     }
   }
 
@@ -81,6 +81,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
       installationDoneModel = res;
       if (installationDoneModel?.success != 400) {
         listOfInstallationRow = installationDoneModel!.data!;
+        listOfFilterInstallationRow = listOfInstallationRow;
       }
     }
   }
@@ -110,7 +111,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
       listOfAllArea: listOfAllArea,
       pageNo: pageNo,
       installationDoneModel: installationDoneModel,
-      listOfInstallationRow: listOfInstallationRow,
+      listOfFilterInstallationRow: listOfFilterInstallationRow,
       scrollController: scrollController,
       bpNumberController: bpNumberController,
     ));
