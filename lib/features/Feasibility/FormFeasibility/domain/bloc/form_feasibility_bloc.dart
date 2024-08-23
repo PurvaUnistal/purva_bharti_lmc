@@ -29,6 +29,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   bool isLoader = false;
   bool isBtnLoader = false;
   bool isSelected = false;
+  bool isExtraPipe = false;
 
   String schema = "";
   String userName = "";
@@ -65,6 +66,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     isLoader = false;
     isBtnLoader = false;
     isSelected = false;
+    isExtraPipe = false;
     checkFeasibleValue = GetConstantModel();
     lmcReasonValue = GetConstantModel();
     listOfCheckFeasible = [];
@@ -185,20 +187,27 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     }
     print("sumOfPipes---> $sumOfPipes");
     if(sumOfPipes > 15.0){
+      isExtraPipe = true;
+      _eventCompleted(emit);
+      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
       extraPriceController.text = "";
       extraPipeController.text = "";
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
+      extraPipe = "";
+      extraPrice = "";
       if(res != null){
+        isExtraPipe = false;
+        _eventCompleted(emit);
         extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
         extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
         extraPipe = res.price.toString();
         extraPrice = res.qty.toString();
         _eventCompleted(emit);
-      }else{
-        extraPriceController.text = '0';
-        extraPipeController.text = '0';
-        _eventCompleted(emit);
       }
+    }else{
+      isExtraPipe = false;
+      _eventCompleted(emit);
+      extraPriceController.text = '0';
+      extraPipeController.text = '0';
     }
     _eventCompleted(emit);
   }
@@ -219,14 +228,14 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         var res = await FormFeasibilityHelper.saveLmcFeasibility(
           context: event.context,
           feasibilityDate: feasibilityDateController.text..trim().toString(),
+          proposedDate: proposedDateController.text.trim().toString(),
           isFeasible: checkFeasibleValue,
           comment: reasonController.text..trim().toString(),
           followUpDate: followUpDateController.text..trim().toString(),
-          proposedDate: proposedDateController.text.trim().toString(),
-          extraPipe: "",
-          extraPrice: "",
+          extraPipe: extraPipe,
+          extraPrice: extraPrice,
           materialId: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-          qtyLMC: "",
+          qtyLMC:listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
@@ -273,6 +282,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       isLoader: isLoader,
       isBtnLoader: isBtnLoader,
       isSelected: isSelected,
+      isExtraPipe: isExtraPipe,
       checkFeasibleValue: checkFeasibleValue,
       lmcReasonValue: lmcReasonValue,
       listOfCheckFeasible: listOfCheckFeasible,

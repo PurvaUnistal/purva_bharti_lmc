@@ -24,6 +24,7 @@ class FormInstallationDataState extends FormInstallationState {
   String schema;
   String userName;
   bool isLoader;
+  bool isExtraPipe;
   bool isInstallRegulator;
   bool isCheckMeterMismatch;
   bool isCheckRegulatorMismatch;
@@ -46,6 +47,7 @@ class FormInstallationDataState extends FormInstallationState {
   List<LmcReasonModel> listOfRegulatorType;
   List<String> listOfMeterNumberSerial;
   List<String> listOfRegulatorSerial;
+  List<String> listOfSRSerial;
   List<ListOfMeterNo> listOfRegulator;
   List<String> listOfQtyLMC;
   List<FreeMaterialData> listOfAllMaterial;
@@ -78,6 +80,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.schema,
     required this.isInstallRegulator,
     required this.isLoader,
+    required this.isExtraPipe,
     required this.isCheckRegulatorMismatch,
     required this.isCheckMeterMismatch,
     required this.isBtnLoader,
@@ -99,6 +102,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.listOfMeterNumber,
     required this.listOfRegulatorType,
     required this.listOfRegulatorSerial,
+    required this.listOfSRSerial,
     required this.listOfRegulator,
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
@@ -132,6 +136,7 @@ class FormInstallationDataState extends FormInstallationState {
         schema,
         userName,
         isLoader,
+    isExtraPipe,
     isInstallRegulator,
         isCheckRegulatorMismatch,
         isCheckMeterMismatch,
@@ -167,6 +172,7 @@ class FormInstallationDataState extends FormInstallationState {
         pneumaticTestReportPhoto,
         installationPhoto,
         listOfRegulatorSerial,
+    listOfSRSerial,
         listOfRegulator,
         listOfAllMaterial,
         listOfAllRFC,

@@ -92,7 +92,10 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
           ),
           _verticalSpace(),
           Text("Click on row to open LMC Installation Form", style: Styles.labels,),
-          Flexible(child: _dataTableWidget(dataState: dataState)),
+          Flexible(child: Padding(
+            padding: const EdgeInsets.only(bottom: 18.0),
+            child: _dataTableWidget(dataState: dataState),
+          )),
         ],
       ),
     );
@@ -133,9 +136,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
     return dataState.installationDoneModel?.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
-      data: ThemeData(
-        highlightColor: AppColor.primer1,
-      ),
+      data: ThemeData(highlightColor: AppColor.primer1),
       child: Scrollbar(
         controller: _verticalScrollController,
         thickness: 3.0,
@@ -173,7 +174,6 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                       _dataColumn(label: "BP Number"),
                       _dataColumn(label: "Area"),
                       _dataColumn(label: "Name"),
-                      //  _dataColumn(label: "Proposed Date"),
                     ],
                     rows: dataState.listOfFilterInstallationRow
                         .mapIndexed((index, user) => DataRow(
@@ -193,7 +193,6 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                           await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
                           await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
                           await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
-                          //   await SharedPref.setString(key: PrefsValue.address2, value: user.address2 ?? "");
                           await SharedPref.setString(key: PrefsValue.town, value: user.town!);
                           await SharedPref.setString(key: PrefsValue.district, value: user.district!);
                           await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);

@@ -255,7 +255,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
             );
           }).toList(),
         ),
-        _extraPipeWidget(dataState: dataState),
+        dataState.isExtraPipe == false ?
+        _extraPipeWidget(dataState: dataState) : DottedLoaderWidget(),
         _verticalSpace(),
       ],
     )

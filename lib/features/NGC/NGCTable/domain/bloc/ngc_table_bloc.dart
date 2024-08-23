@@ -33,6 +33,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     areaValue = null;
     listOfAllArea = [];
     listOfInstallationByNgc = [];
+    bpNumberController.text = "";
     lmcInstallationByNgcModel = LMCInstallationByNgcModel();
     schema = await SharedPref.getString(key: PrefsValue.schema);
     userName = await SharedPref.getString(key: PrefsValue.userName);

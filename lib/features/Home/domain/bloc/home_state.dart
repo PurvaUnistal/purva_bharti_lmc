@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 
 abstract class HomeState extends Equatable {}
 
@@ -21,10 +22,12 @@ class FetchHomeDataState extends HomeState {
   final String role;
   final String baseUrl;
   final String installationName;
+  final String pendingNgc;
   final String feasibilityName;
   final int pageIndex;
   final int currentIndex;
   final List<Widget> pageWidgets;
+  List<Accessright> listOFAccessRight;
   final List<BottomNavigationBarItem> bottomNavyBarItemList;
   FetchHomeDataState({
     required this.isLoader,
@@ -34,8 +37,10 @@ class FetchHomeDataState extends HomeState {
     required this.role,
     required this.pageIndex,
     required this.pageWidgets,
+    required this.listOFAccessRight,
     required this.installationName,
     required this.feasibilityName,
+    required this.pendingNgc,
     required this.currentIndex,
     required this.bottomNavyBarItemList});
   @override
@@ -48,7 +53,9 @@ class FetchHomeDataState extends HomeState {
     pageIndex,
    installationName,
   feasibilityName,
+    pendingNgc,
     currentIndex,
     bottomNavyBarItemList,
+    listOFAccessRight,
     pageWidgets];
 }

@@ -162,17 +162,19 @@ class FormFeasibilityHelper {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
     String dma = await SharedPref.getString(key: PrefsValue.dma);
+    String userId = await SharedPref.getString(key: PrefsValue.userId);
     try {
       Map<String, String> para = {
         "lmcId": lmcId,
         "dmaId": dma,
+        "user_id": userId,
         "proposed_date": proposedDate,
         "feasibility_visit_date": feasibilityDate,
         "schema": schema,
         "is_feasible": isFeasible.key,
         "comment":comment,
         "follow_up_date": followUpDate,
-        "material_id": materialId,
+        "material_id_lmc": materialId,
         "qty_lmc": qtyLMC,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,

@@ -70,45 +70,47 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          elevation: 1.5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(AppString.consumerDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
+            elevation: 1.5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Text(AppString.consumerDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
+                  ),
+                  decoration: BoxDecoration(
+                      color: AppColor.primer,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
+                  ),
                 ),
-                decoration: BoxDecoration(
-                    color: AppColor.primer,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
-                ),
-              ),
-              _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
-              _rowItem(textName: AppString.trNumber, textValue: dataState.trNumber),
-              _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
-              _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
-              _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
-              _rowItem(textName: AppString.area, textValue: dataState.areaName),
-              _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
-              _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
-              _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
-              _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
-              _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
-              _rowItem(textName: AppString.street, textValue: dataState.locality),
-              _rowItem(textName: AppString.town, textValue: dataState.town),
-              _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
-              _verticalSpace(),
-              _verticalSpace(),
-              _button(dataState: dataState),
-              _verticalSpace(),
-              _verticalSpace(),
-            ],
+                _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
+                _rowItem(textName: AppString.trNumber, textValue: dataState.trNumber),
+                _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
+                _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
+                _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
+                _rowItem(textName: AppString.area, textValue: dataState.areaName),
+                _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
+                _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
+                _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
+                _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
+                _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
+                _rowItem(textName: AppString.street, textValue: dataState.locality),
+                _rowItem(textName: AppString.town, textValue: dataState.town),
+                _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
+                _verticalSpace(),
+                _verticalSpace(),
+                _button(dataState: dataState),
+                _verticalSpace(),
+                _verticalSpace(),
+              ],
+            ),
           ),
         ),
       ),

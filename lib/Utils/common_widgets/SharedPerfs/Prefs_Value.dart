@@ -13,6 +13,9 @@ class PrefsValue {
   static String baseUrl = "baseUrl";
   static String feasibilityName = "FeasibilityName";
   static String installationName = "InstallationName";
+  static String pendingNgc = "pendingNgc";
+  static String accessRight = "accessRight";
+  static String appVersion = "appVersion";
 
   static String bpNumber = "bpNumber";
 
@@ -74,6 +77,6 @@ class PrefsValue {
   static String regulatorTypeId = "regulatorTypeId";
   static String regulatorSerial = "regulatorSerial";
   static String regulators = "regulators";
-  static String srRegulators = "srRegulators";
+  static String mrRegulatorSerial = "mrRegulatorSerial";
   static String srNumber = "srNumber";
 }

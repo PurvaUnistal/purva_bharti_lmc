@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
@@ -6,6 +8,7 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feas
 import 'package:lmc/features/Home/domain/bloc/home_event.dart';
 import 'package:lmc/features/Home/domain/bloc/home_state.dart';
 import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitialState()) {
@@ -19,6 +22,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   String baseUrl = '';
   String installationName = '';
   String feasibilityName = '';
+  String pendingNgc = '';
+  String accessRightData = '';
+  List<Accessright> listOFAccessRight = [];
 
   int pageIndex = 0;
   int currentIndex = 0;
@@ -33,6 +39,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     feasibilityName = await SharedPref.getString(key: PrefsValue.feasibilityName);
     installationName = await SharedPref.getString(key: PrefsValue.installationName);
+    pendingNgc = await SharedPref.getString(key: PrefsValue.pendingNgc);
+    var json = await SharedPref.getString(key: PrefsValue.accessRight);
+    listOFAccessRight = Accessright.accessrightListFromJson(json);
     pageIndex = 0;
     currentIndex = 0;
     pageWidgets  = [];
@@ -72,10 +81,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         role: role,
         installationName: installationName,
         feasibilityName: feasibilityName,
+        pendingNgc: pendingNgc,
         pageIndex: pageIndex,
         currentIndex: currentIndex,
         bottomNavyBarItemList: bottomNavyBarItemList,
-        pageWidgets: pageWidgets
+        pageWidgets: pageWidgets,
+        listOFAccessRight: listOFAccessRight,
+
     ));
   }
 }

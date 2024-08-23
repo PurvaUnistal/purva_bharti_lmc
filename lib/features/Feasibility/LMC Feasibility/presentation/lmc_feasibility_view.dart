@@ -93,7 +93,10 @@ class _FeasibilityViewState extends State<FeasibilityView> {
             ),
             _verticalSpace(),
             Text("Click on row to open Feasibility Form", style: Styles.labels,),
-            Flexible(child: _dataTableWidget(dataState: dataState)),
+            Flexible(child: Padding(
+              padding: const EdgeInsets.only(bottom: 18.0),
+              child: _dataTableWidget(dataState: dataState),
+            )),
           ],
         ),
       ),
@@ -139,9 +142,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return dataState.feasibilityModel?.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
-            data: ThemeData(
-              highlightColor: AppColor.primer1,
-            ),
+            data: ThemeData(highlightColor: AppColor.primer1),
             child: Scrollbar(
               controller: _verticalScrollController,
               thickness: 3.0,

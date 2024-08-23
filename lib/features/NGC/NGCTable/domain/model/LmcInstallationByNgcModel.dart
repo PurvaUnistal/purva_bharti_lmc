@@ -271,6 +271,7 @@ class InstallationByNgcData {
   dynamic latitudeSr;
   dynamic longitudeSr;
   dynamic srRegulators;
+  dynamic mrRegulatorSerial;
   dynamic mrPhoto;
   dynamic latitudeMr;
   dynamic longitudeMr;
@@ -599,6 +600,7 @@ class InstallationByNgcData {
         this.latitudeSr,
         this.longitudeSr,
         this.srRegulators,
+        this.mrRegulatorSerial,
         this.mrPhoto,
         this.latitudeMr,
         this.longitudeMr,
@@ -927,6 +929,7 @@ class InstallationByNgcData {
     latitudeSr = json['latitude_sr'] ?? "";
     longitudeSr = json['longitude_sr'] ?? "";
     srRegulators = json['sr_regulators'] ?? "";
+    mrRegulatorSerial = json['mr_regulator_serial'] ?? "";
     mrPhoto = json['mr_photo'] ?? "";
     latitudeMr = json['latitude_mr'] ?? "";
     longitudeMr = json['longitude_mr'] ?? "";
@@ -1258,6 +1261,7 @@ class InstallationByNgcData {
     data['latitude_sr'] = this.latitudeSr;
     data['longitude_sr'] = this.longitudeSr;
     data['sr_regulators'] = this.srRegulators;
+    data['mr_regulator_serial'] = this.mrRegulatorSerial;
     data['mr_photo'] = this.mrPhoto;
     data['latitude_mr'] = this.latitudeMr;
     data['longitude_mr'] = this.longitudeMr;

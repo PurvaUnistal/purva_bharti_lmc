@@ -128,8 +128,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _verticalSpace(),
           _verticalSpace(),
           _materialList(stateData: dataState),
-          _extraPipeWidget(stateData: dataState),
-          _verticalSpace(),
           _checkListRFC(stateData: dataState),
           _verticalSpace(),
           _locationOfHouse(stateData: dataState),
@@ -393,7 +391,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _regulatorController({required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true ? stateData.isRegulator == false ? _col(
+    return stateData.isInstallRegulator == true ? stateData.isRegulator == false
+        ? _col(
       child: AutoCompleteTextFieldWidget(
         star: AppString.star,
         enabled: stateData.regulatorTypeValue?.name == null ? false : true,
@@ -422,15 +421,30 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _srNumberController({required FormInstallationDataState stateData}) {
-    return stateData.regulatorTypeValue?.name == "SR" ? _col(
-      child: TextFieldWidget(
+    return stateData.isInstallRegulator == true ? stateData.regulatorTypeValue?.name == "SR" ? _col(
+      child: AutoCompleteTextFieldWidget(
         star: AppString.star,
+        label:  AppString.srNumber,
         hintText: AppString.srNumber,
-        label: AppString.srNumber,
-        enabled: true,
+        suggestions: stateData.listOfSRSerial.length == 0 ? ["No Data Found"] : stateData.listOfSRSerial,
+        keyboardType: TextInputType.text,
         controller: stateData.srNumberController,
+        onSelected: (val) {
+          formKey.currentState?.validate();
+          BlocProvider.of<FormInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
+        },
+        validator: (value) {
+          if(value != null && value.isNotEmpty && !stateData.listOfSRSerial.contains(value)) {
+            return AppString.srNoErrorMsg;
+          }
+          return null;
+        },
+        onChanged: (val) async {
+          await formKey.currentState?.validate();
+          BlocProvider.of<FormInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
+        },
       ),
-    ): Container();
+    ): Container(): Container();
   }
 
 
@@ -440,7 +454,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       star: AppString.star,
       hintText: AppString.ngConversionDate,
       label: AppString.ngConversionDate,
-      enabled: true,
       controller: stateData.ngConversionDateController,
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
@@ -496,64 +509,71 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _materialList({required FormInstallationDataState stateData}) {
     return Column(
-      children: stateData.materialList.mapIndexed((index, e) {
-        return Column(
-          children: [
-            Row(
+      children: [
+        Column(
+          children: stateData.materialList.mapIndexed((index, e) {
+            return Column(
               children: [
-                e.name.toLowerCase().contains("pipe") ?
-                Flexible(
-                  flex: 7,
-                  child: TextFieldWidget(
-                    hintText: AppString.pipe,
-                    label: AppString.pipe,
-                    initialValue: e.name,
-                    enabled: false,
-                  ),
-                )
-                    : Flexible(
-                  flex: 7,
-                  child: TextFieldWidget(
-                    hintText: AppString.material,
-                    label: AppString.material,
-                    initialValue: e.name,
-                    enabled: false,
-                  ),
+                Row(
+                  children: [
+                    e.name.toLowerCase().contains("pipe") ?
+                    Flexible(
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.pipe,
+                        label: AppString.pipe,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    )
+                        : Flexible(
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.material,
+                        label: AppString.material,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    e.name.toLowerCase().contains("pipe") ?  Flexible(
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          BlocProvider.of<FormInstallationBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
+                        },
+                      ),
+                    ):
+                    Flexible(
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                      ),
+                    )
+                  ],
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                e.name.toLowerCase().contains("pipe") ?  Flexible(
-                  flex: 3,
-                  child: TextFieldWidget(
-                    hintText: e.unit,
-                    label: e.unit,
-                    controller: e.controller,
-                    enabled: true,
-                    keyboardType: TextInputType.number,
-                    onChanged: (val) {
-                      BlocProvider.of<FormInstallationBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
-                    },
-                  ),
-                ):
-                Flexible(
-                  flex: 3,
-                  child: TextFieldWidget(
-                    hintText: e.unit,
-                    label: e.unit,
-                    controller: e.controller,
-                    enabled: true,
-                    keyboardType: TextInputType.number,
-                  ),
-                )
               ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-          ],
-        );
-      }).toList(),
+            );
+          }).toList(),
+        ),
+        stateData.isExtraPipe == false ?
+        _extraPipeWidget(stateData: stateData) : DottedLoaderWidget(),
+        _verticalSpace(),
+      ],
     );
   }
 
@@ -710,7 +730,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ? ButtonWidget(
         text: AppString.submit,
         onPressed: () {
-          formKey.currentState?.validate();
+        //  formKey.currentState?.validate();
           BlocProvider.of<FormInstallationBloc>(context).add(SubmitFormInstallationEvent(context: context));
         })
         : DottedLoaderWidget();

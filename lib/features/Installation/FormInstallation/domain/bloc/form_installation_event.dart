@@ -66,6 +66,15 @@ class SelectRegulatorsValueEvent extends FormInstallationEvent {
   List<Object> get props => [regulatorsValue,context];
 }
 
+class SelectSREvent extends FormInstallationEvent {
+  final String sRegulators;
+  final BuildContext context;
+  SelectSREvent({required this.sRegulators, required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [sRegulators,context];
+}
+
 class SelectNGCValueEvent extends FormInstallationEvent {
   final dynamic readyNGCValue;
   SelectNGCValueEvent({required this.readyNGCValue});

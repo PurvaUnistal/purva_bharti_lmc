@@ -164,6 +164,7 @@ class NGCFormHelper{
     required String regulatorNumber,
     required bool isCheckRegulatorMismatch,
     required String srNumber,
+    required bool isCheckSR,
     required String regulatorId,
     required String latSR,
     required String longSR,
@@ -178,9 +179,7 @@ class NGCFormHelper{
     required String meterInitialReading,
     required String phoneNo,
     required File meterImg,
-    //  required File ngcReportImg,
     required String ngChargeDate,
-    required LmcReasonModel ngcDelayStatusValue,
     required String changeMeterType,
   }) async {
     try {
@@ -211,6 +210,9 @@ class NGCFormHelper{
           return false;
         } else if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+          return false;
+        } else if (isCheckSR == true) {
+          Utils.errorSnackBar(msg: "The SR is mismatch. Please check your SR.", context: context);
           return false;
         } else if (mrPhoto.isEmpty) {
           Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
@@ -263,9 +265,9 @@ class NGCFormHelper{
     required String mismatchMeterNo,
     required String contactPerson,
     required String reasonOfDelay,
+    required String delayReasonValue,
     required String alternateMobile,
     required String email,
-    required LmcReasonModel delayStatus,
     required String conversionDate,
     required String workCompletedDate,
     required String dmaUserId,
@@ -299,10 +301,10 @@ class NGCFormHelper{
       "mismatch_meter_no": mismatchMeterNo ?? "",
       "ngc_meter_number": meterNumber ?? "",
       "contact_person": contactPerson ?? "",
-      "reason_of_delay": reasonOfDelay ?? "",
+      "reason_of_delay":  reasonOfDelay.isEmpty  ? "" :reasonOfDelay.toString(),
+      "delay_status": delayReasonValue.isEmpty  ? "" :delayReasonValue.toString(),
       "alternate_mobile": alternateMobile ?? "",
       "email": email ?? "",
-      "delay_status": delayStatus.id == null ? "" :delayStatus.id.toString(),
       "conversion_date": conversionDate.isEmpty ? "" : conversionDate,
       "work_completed_date": workCompletedDate ?? "",
       "dma_user_id": dmaUserId ?? "",

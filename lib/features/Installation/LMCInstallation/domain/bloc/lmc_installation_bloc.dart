@@ -37,6 +37,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     pageNo = 1;
     listOfAllArea = [];
     listOfInstallationRow = [];
+    bpNumberController.text = "";
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
     schema = await SharedPref.getString(
@@ -61,9 +62,10 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     if (event.searchBpNumber.length > 1) {
       listOfFilterInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
       _eventCompleted(emit);
-    }else if(event.searchBpNumber.length == 0){
+    } else if(event.searchBpNumber.length == 0){
       listOfFilterInstallationRow = await listOfInstallationRow;
     }
+    _eventCompleted(emit);
   }
 
   fetchAllArea({required BuildContext context}) async {

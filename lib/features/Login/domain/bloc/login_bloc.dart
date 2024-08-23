@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:lmc/features/Login/domain/bloc/login_event.dart';
 import 'package:lmc/features/Login/domain/bloc/login_state.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/Login/helper/login_helper.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitState()) {
@@ -69,7 +71,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           _eventCompleted(emit);
           if (res.user != null) {
             _loginModel = res;
-            if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc')){
+            if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc') ){
               await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
               await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
               await SharedPref.setString(key: PrefsValue.userId,value: res.user!.id!);
@@ -78,11 +80,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await SharedPref.setString(key: PrefsValue.userName,value: res.user!.name!);
               await SharedPref.setString(key: PrefsValue.userRole,value: res.user!.role!);
               await SharedPref.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
-              if(res.user!.accessright != null){
-                  await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].name!);
-                  await SharedPref.setString(key: PrefsValue.feasibilityName,value: res.user!.accessright![1].name!);
+              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+              String appVersion = packageInfo.version;
+              await SharedPref.setString(key: PrefsValue.appVersion,value: appVersion);
+              if(res.user!.role == "lmc"){
+                  await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].menuCode!);
+                  await SharedPref.setString(key: PrefsValue.feasibilityName,value: res.user!.accessright![1].menuCode!);
+                  await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![2].menuCode!);
+                  List<Accessright> accessrightList = await res.user!.accessright!;
+                  await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
+
+                  Navigator.pushReplacementNamed(event.context, RoutesName.home,);
+              } else if(res.user!.role == "ngc"){
+                await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![0].menuCode!);
+                List<Accessright> accessrightList = await res.user!.accessright!;
+                await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
+
+                Navigator.pushReplacementNamed(event.context, RoutesName.home,);
               }
-              Navigator.pushReplacementNamed(event.context, RoutesName.home,);
             }
           }
         } else {

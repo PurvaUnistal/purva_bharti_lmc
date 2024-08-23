@@ -117,6 +117,14 @@ class Accessright {
      this.submoduleAlias,
   });
 
+  static accessrightListFromJson(String json) {
+    return List<Accessright>.from(jsonDecode(json).map((x) => Accessright.fromJson(x)));
+  }
+
+  static jsonFromAccessrightList(List<Accessright> list) {
+    return jsonEncode(list);
+  }
+
   factory Accessright.fromJson(Map<String, dynamic> json) => Accessright(
     menuCode: json["menu_code"] ?? "",
     id: json["id"] ?? "",

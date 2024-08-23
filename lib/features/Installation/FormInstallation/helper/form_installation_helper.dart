@@ -136,6 +136,7 @@ class FormInstallationHelper {
     required LmcReasonModel delayReason,
     required String meterNumber,
     required bool isCheckMeterMismatch,
+    required bool isCheckSR,
     required String meterInit1,
     required String meterInit2,
     required String meterInit3,
@@ -181,6 +182,9 @@ class FormInstallationHelper {
         }else if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
           return false;
+        } else if (isCheckSR == true) {
+          Utils.errorSnackBar(msg: "The SR is mismatch. Please check your SR.", context: context);
+          return false;
         }
       } else if(regulatorType.name == "PRV"){
         if(regulatorNumber.isEmpty){
@@ -218,7 +222,8 @@ class FormInstallationHelper {
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,
     required String meterNo,
-    required String regulatorsNumber,
+    required String sRegulatorsId,
+    required String mRegulatorsId,
     required String srNumber,
     required String latitudeHg,
     required String longitudeHg,
@@ -227,7 +232,6 @@ class FormInstallationHelper {
     required String qtyLmc,
     required String extraPipe,
     required String extraPrice,
-    required String rfcForm,
     required LmcReasonModel delayReason,
     required String meterReadingDate,
     required String materialId,
@@ -235,10 +239,12 @@ class FormInstallationHelper {
     required GetConstantModel ngc,
     required String proposedNgcDate,
     required String regulatorCheck,
-    required LmcReasonModel regulatorTypeId,
+    required String regulatorTypeId,
     required String meterReading,
     required String meterPhoto,
     required String rfcDate,
+    required String meterTesting,
+    required String paintingOfGIPipe,
     required String isometricPhoto,
     required String pneumaticPhoto,
     required String housePhoto,
@@ -256,8 +262,8 @@ class FormInstallationHelper {
         "meter_number": meterNo,
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
-        "regulators": regulatorsNumber,
-        "mr_regulator_id": regulatorsNumber,
+        "regulators": sRegulatorsId,
+        "mr_regulator_id": mRegulatorsId,
         "latitude_hg": latitudeHg,
         "longitude_hg": longitudeHg,
         "tf_number": srNumber,
@@ -266,14 +272,15 @@ class FormInstallationHelper {
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
-        "rfc_form": rfcForm ?? "",
-        "delay_reason": delayReason.id == null ? "" : delayReason.id.toString(),
+        "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
         "type_of_nr": typeOfNR.key == null ? "" :typeOfNR.key.toString(),
         "ngc": ngc.key == null ? "": ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate ?? "",
         "regulator_check": regulatorCheck.isEmpty ?"0" : regulatorCheck,
-        "regulator_type_id": regulatorTypeId.id == "" ? "" :regulatorTypeId.id.toString(),
+        "regulator_type_id": regulatorTypeId == "" ? "" :regulatorTypeId.toString(),
         "rfc_date": rfcDate.isEmpty ? "" :rfcDate,
+        "meter_testing": meterTesting.isEmpty ? "0" :meterTesting,
+        "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" :paintingOfGIPipe,
       };
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(
@@ -282,7 +289,8 @@ class FormInstallationHelper {
         context: context,
         imageRequestObject: [
           ImageRequestObject("meter_photo", meterPhoto.toString()),
-          ImageRequestObject("isometric_image", isometricPhoto.toString()),
+      //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
+          ImageRequestObject("rfc_form", isometricPhoto.toString()),
           ImageRequestObject("pneumatic_image", pneumaticPhoto.toString()),
           ImageRequestObject("house_image", housePhoto.toString()),
         ]

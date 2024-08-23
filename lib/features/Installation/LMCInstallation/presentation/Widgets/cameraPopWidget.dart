@@ -27,10 +27,6 @@ class CameraPopWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Align(
-                alignment: Alignment.center,
-                child: Text('Choose One',textAlign: TextAlign.center, style:Styles.text),),
-              Divider(color: AppColor.primer1,),
               ListTile(
                 leading: Icon(Icons.photo_camera,color: AppColor.primer),
                 title: const Text('Camera'),

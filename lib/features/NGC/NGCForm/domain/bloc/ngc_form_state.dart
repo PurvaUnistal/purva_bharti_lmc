@@ -36,19 +36,17 @@ class NGCFormDataState extends NGCFormState {
   GetConstantModel? typeOfNrValue;
   LmcReasonModel? regulatorTypeValue;
   LmcReasonModel? meterTypeValue;
-  LmcReasonModel? delayStatusValue;
-  LmcReasonModel? ngcDelayStatusValue;
   List<ListOfMeterNo> listOfMeterNumber;
   List<String> listOfMeterNumberSerial;
   List<String> listOfMeterNumberId;
   List<ListOfMeterNo> listOfRegulator;
   List<String> listOfRegulatorSerial;
+  List<String> listOfSRSerial;
   List<String> listOfRegulatorId;
   List<LmcReasonModel> listOfRegulatorType;
   List<LmcReasonModel> listOfMeterType;
-  List<LmcReasonModel> listOfDelayStatus;
-  List<LmcReasonModel> listOfNgcDelayStatus;
   TextEditingController regulatorSerialController;
+  TextEditingController proposedNgcDateController;
   TextEditingController noOfFamilyMembersController;
   TextEditingController ngConversionDateController;
   TextEditingController latOfSRController;
@@ -57,6 +55,7 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController srNumberController;
   TextEditingController meterNumberSerialController;
   TextEditingController bpNumberController;
+  TextEditingController delayReasonController;
   TextEditingController meterInitialReading;
   TextEditingController reasonMeterChangeController;
   TextEditingController noOfBurnersController;
@@ -94,18 +93,16 @@ class NGCFormDataState extends NGCFormState {
 
     required this.listOfRegulator,
     required this.listOfRegulatorSerial,
+    required this.listOfSRSerial,
     required this.listOfRegulatorId,
     required this.listOfRegulatorType,
     required this.listOfMeterType,
-    required this.listOfDelayStatus,
-    required this.listOfNgcDelayStatus,
     required this.regulatorTypeValue,
     required this.meterTypeValue,
-    required this.delayStatusValue,
-    required this.ngcDelayStatusValue,
 
 
     required this.regulatorSerialController,
+    required this.proposedNgcDateController,
     required this.noOfFamilyMembersController,
     required this.ngConversionDateController,
     required this.latOfSRController,
@@ -114,6 +111,7 @@ class NGCFormDataState extends NGCFormState {
     required this.srNumberController,
     required this.meterNumberSerialController,
     required this.bpNumberController,
+    required this.delayReasonController,
     required this.meterInitialReading,
     required this.reasonMeterChangeController,
     required this.noOfBurnersController,
@@ -145,8 +143,8 @@ class NGCFormDataState extends NGCFormState {
     lmcPath,
     baseUrl,
     userName,
-   listOfTypeOfNr,
-   typeOfNrValue,
+    listOfTypeOfNr,
+    typeOfNrValue,
 
     listOfMeterNumber,
     listOfMeterNumberSerial,
@@ -154,16 +152,14 @@ class NGCFormDataState extends NGCFormState {
 
     listOfRegulator,
     listOfRegulatorSerial,
+    listOfSRSerial,
     listOfRegulatorId,
     listOfRegulatorType,
     listOfMeterType,
-    listOfDelayStatus,
-    listOfNgcDelayStatus,
     regulatorTypeValue,
     meterTypeValue,
-    delayStatusValue,
-    ngcDelayStatusValue,
     regulatorSerialController,
+    proposedNgcDateController,
     ngConversionDateController,
     latOfSRController,
     longOfSRController,
@@ -173,6 +169,7 @@ class NGCFormDataState extends NGCFormState {
     meterNumberSerialController,
     srNumberController,
     bpNumberController,
+    delayReasonController,
     meterInitialReading,
     noOfBurnersController,
     meterSerialController,
@@ -184,7 +181,7 @@ class NGCFormDataState extends NGCFormState {
     dateInstallationController,
     delayReasonValue,
     listOfDelayReason,
-   longOfMRController,
+    longOfMRController,
     latOfMRController,
     srPhoto,
     mrPhoto,

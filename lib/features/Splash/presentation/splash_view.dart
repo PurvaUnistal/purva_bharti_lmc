@@ -4,6 +4,7 @@ import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -19,6 +20,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     toLogin();
     super.initState();
   }
+
 
   @override
   void dispose() {
@@ -39,14 +41,21 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   Future<void> toLogin() async {
     String email = await SharedPref.getString(key: PrefsValue.emailVal);
     String password = await SharedPref.getString(key: PrefsValue.passwordVal);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String newVersion = packageInfo.version;
+    String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
+    print("newVersion--${newVersion}");
+    print("oldVersion--${oldVersion}");
     Timer(
       const Duration(seconds: 2),
           () async {
-        if (email.isNotEmpty || password.isNotEmpty) {
-          Navigator.pushReplacementNamed(
-            context,
-            RoutesName.home,
-          );
+        if(oldVersion == newVersion){
+          if (email.isNotEmpty || password.isNotEmpty) {
+            Navigator.pushReplacementNamed(
+              context,
+              RoutesName.home,
+            );
+          }
         } else {
           Navigator.pushReplacementNamed(
             context,

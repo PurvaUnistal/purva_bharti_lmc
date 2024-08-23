@@ -19,6 +19,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
   final bool isLoader;
   final bool isBtnLoader;
   final bool isSelected;
+  final bool isExtraPipe;
   String schema;
   String userName;
   final GetConstantModel? checkFeasibleValue;
@@ -44,6 +45,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
     required this.userName,
     required this.isBtnLoader,
     required this.isSelected,
+    required this.isExtraPipe,
     required this.checkFeasibleValue,
     required this.lmcReasonValue,
     required this.listOfCheckFeasible,
@@ -70,6 +72,7 @@ class FormFeasibilityDataState extends FormFeasibilityState {
         userName,
         isBtnLoader,
         isSelected,
+    isExtraPipe,
         checkFeasibleValue,
         lmcReasonValue,
         listOfCheckFeasible,

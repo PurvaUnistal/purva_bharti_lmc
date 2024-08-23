@@ -120,37 +120,95 @@ class _HomeViewState extends State<HomeView> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
-          dataState.role == "lmc" ? CardWidget(
-            icon: Icons.balance_outlined,
-            text: "LMC Feasibility",
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FeasibilityView()));
-            },
-          )
-          : Container(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.001,
-          ),
-          dataState.role == "lmc" ?  CardWidget(
-            icon: Icons.arrow_circle_down_outlined,
-            text: "LMC Installation",
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LMCInstallationView()));
-            },
-          )
-          :Container(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.001,
-          ),
-          dataState.role == "ngc" ?
-          CardWidget(
-            icon: Icons.arrow_circle_down_outlined,
-            text: "NG Conversion",
-            onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => NgcTableView()));
-            },
-          )
-          : Container(),
+          if(dataState.role == "lmc")...[
+            for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
+              dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
+                icon: Icons.balance_outlined,
+                text: "LMC Feasibility",
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => FeasibilityView()));
+                },
+              )
+                  : Container(),
+              SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.001,
+              ),
+              dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
+                icon: Icons.arrow_circle_down_outlined,
+                text: "LMC Installation",
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => LMCInstallationView()));
+                },
+              )
+                  : Container(),
+              SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.001,
+              ),
+              dataState.listOFAccessRight[i].menuCode == "NGC01" ?
+              CardWidget(
+                icon: Icons.arrow_circle_down_outlined,
+                text: "NG Conversion",
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NgcTableView()));
+                },
+              )
+                  : Container()
+
+    ],
+          ]else if(dataState.role == "ngc")...[
+            for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
+              dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
+                icon: Icons.balance_outlined,
+                text: "LMC Feasibility",
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => FeasibilityView()));
+                },
+              )
+                  : Container(),
+              SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.001,
+              ),
+              dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
+                icon: Icons.arrow_circle_down_outlined,
+                text: "LMC Installation",
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => LMCInstallationView()));
+                },
+              )
+                  : Container(),
+              SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.001,
+              ),
+              dataState.listOFAccessRight[i].menuCode == "NGC01" ?
+              CardWidget(
+                icon: Icons.arrow_circle_down_outlined,
+                text: "NG Conversion",
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NgcTableView()));
+                },
+              )
+                  : Container()
+
+            ],
+          ],
         ],
       ),
     );

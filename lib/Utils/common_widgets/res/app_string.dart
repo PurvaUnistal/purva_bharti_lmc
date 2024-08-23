@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-1.21.8.24";
+  static String version = "Version : LMC-1.23.8.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -68,7 +68,8 @@ class AppString {
   static String meterReadingDate = "Meter Reading Date";
   static String meterNumber = "Meter Number";
   static String meterNoErrorMsg = "Meter not Issued or Meter Number Incorrect or Meter already Installed";
-  static String regulatorNoErrorMsg = "regulator Incorrect or Not allocated ";
+  static String regulatorNoErrorMsg = "regulator Incorrect or Not allocated";
+  static String srNoErrorMsg = "SR Incorrect or Not allocated ";
   static String regulator = "Regulators";
   static String meterRegulator = "Meter Regulator";
   static String meterInitNumber = "* Meter Initial Reading";
@@ -78,7 +79,7 @@ class AppString {
   static String longOfMR = "Longitude of MR";
   static String latOfHouse = "Latitude of House";
   static String longOfHouse = "Longitude of House";
-  static String srNumber = "SR Number";
+  static String srNumber = "SR";
   static String rfcDeclarationDate = "RFC Declaration Date";
   static String proNgcConDate = "NGC Conversion Date";
   static String extraPrice = "Extra Price";
@@ -105,10 +106,11 @@ class AppString {
   static String ngChargeDate = "NG Charge Date";
   static String followUpDate = "Follow Up Date";
   static String dateInstallation = "Date of Installation";
+  static String proposedNgcDate = "Proposed Ngc Date";
   static String ngConversionDate = "NG Conversion Date";
   static String reasonForDelay = "Reason for Delay";
-  static String meterType = "Meter Type";
-  static String reasonMeterChange = "Reason for Meter Change";
+  static String meterType = "Change Meter Reason";
+  static String reasonMeterChange = "Remarks";
   static String meterInitialReading = "Meter Initial Reading";
   static String delayStatus = "Delay Status";
   static String delayReason = "Delay Reason";

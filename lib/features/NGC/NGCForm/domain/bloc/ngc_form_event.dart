@@ -68,6 +68,15 @@ class SelectRegulatorsValueEvent extends NGCFormEvent {
   List<Object> get props => [regulatorsValue,context];
 }
 
+class SelectSRegulatorsEvent extends NGCFormEvent {
+  final String sRegulators;
+  final BuildContext context;
+  SelectSRegulatorsEvent({required this.sRegulators, required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [sRegulators,context];
+}
+
 class SelectDelayReasonValueEvent extends NGCFormEvent {
   final LmcReasonModel delayReasonValue;
   SelectDelayReasonValueEvent({required this.delayReasonValue});
@@ -76,13 +85,6 @@ class SelectDelayReasonValueEvent extends NGCFormEvent {
   List<Object> get props => [delayReasonValue];
 }
 
-class SelectDelayStatueValueEvent extends NGCFormEvent {
-  final LmcReasonModel delayStatueValue;
-  SelectDelayStatueValueEvent({required this.delayStatueValue});
-  @override
-  // TODO: implement props
-  List<Object> get props => [delayStatueValue];
-}
 class SelectMeterTypeValueEvent extends NGCFormEvent {
   final LmcReasonModel meterTypeValue;
   SelectMeterTypeValueEvent({required this.meterTypeValue});

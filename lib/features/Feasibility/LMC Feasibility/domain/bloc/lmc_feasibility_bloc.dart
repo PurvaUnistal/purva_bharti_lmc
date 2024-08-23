@@ -37,6 +37,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     pageNo = 1;
     listOfAllArea = [];
     listOfFeasibilityRow = [];
+    bpNumberController.text = "";
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
     schema = await SharedPref.getString(
@@ -60,7 +61,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
       listOfFilterFeasibilityRow = listOfFilterFeasibilityRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
-    }else  if (event.searchBpNumber.length == 0) {
+    } else  if (event.searchBpNumber.length == 0) {
       listOfFilterFeasibilityRow = await listOfFeasibilityRow;
     }
     _eventCompleted(emit);
