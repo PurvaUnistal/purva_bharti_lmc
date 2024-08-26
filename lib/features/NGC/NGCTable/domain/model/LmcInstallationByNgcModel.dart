@@ -697,7 +697,7 @@ class InstallationByNgcData {
     rfcDate = json['rfc_date'] ?? "";
     instDirPath = json['inst_dir_path'] ?? "";
     lmcInstallationDate = json['lmc_installation_date'] ?? "";
-    lmcProposedNgcDate = json['lmc_proposed_ngc_date'] ?? "";
+    lmcProposedNgcDate = json['lmc_proposed_ngc_date'] == null ? "00-00-0000" : json['lmc_proposed_ngc_date'];
     id = json['id'] ?? "";
     createdOn = json['created_on'] ?? "";
     lmcId = json['lmc_id'] ?? "";

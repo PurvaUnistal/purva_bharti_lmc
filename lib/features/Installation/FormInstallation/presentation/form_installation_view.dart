@@ -121,8 +121,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _verticalSpace(),
           _installRegulatorCheck(stateData: dataState),
           _regulatorTypeDropdown(stateData: dataState),
-          _regulatorController(stateData: dataState),
           _srNumberController(stateData: dataState),
+          _regulatorController(stateData: dataState),
           _verticalSpace(),
           _ngConversionDateController(stateData: dataState),
           _verticalSpace(),
@@ -393,7 +393,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   Widget _regulatorController({required FormInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true ? stateData.isRegulator == false
         ? _col(
-      child: AutoCompleteTextFieldWidget(
+        child: stateData.regulatorTypeValue?.name != null ? AutoCompleteTextFieldWidget(
         star: AppString.star,
         enabled: stateData.regulatorTypeValue?.name == null ? false : true,
         label: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
@@ -415,7 +415,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           await formKey.currentState?.validate();
           BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
         },
-      ),
+      ) : Container(),
     ) : DottedLoaderWidget()
         : Container();
   }

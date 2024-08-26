@@ -230,7 +230,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         context: event.context,
         initialDate: DateTime.now(),
         firstDate: assignDate,
-        lastDate: DateTime(2050));
+        lastDate: DateTime.now());
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       ngConversionDateController.text = formattedDate.toString();

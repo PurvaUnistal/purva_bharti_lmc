@@ -154,7 +154,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               dataState.listOFAccessRight[i].menuCode == "NGC01" ?
               CardWidget(
-                icon: Icons.arrow_circle_down_outlined,
+                icon: Icons.sync,
                 text: "NG Conversion",
                 onTap: () {
                   Navigator.push(context,

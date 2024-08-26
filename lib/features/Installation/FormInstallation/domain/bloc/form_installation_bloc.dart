@@ -188,9 +188,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     schema = await SharedPref.getString(
       key: PrefsValue.schema,
     );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
+    userName = await SharedPref.getString(key: PrefsValue.userName,);
     ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     meterReadingDate.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     installationDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
@@ -222,13 +220,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       installationDateController.text = await formattedDate.toString();
-      DateTime  proposedDate = DateFormat(AppString.dateFormat).parse(proposedDateController.text);
-      DateTime  installationDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
-      if (installationDate.compareTo(proposedDate) <= 0 ) {
-        isDelayReason = false;
-      } else {
-        isDelayReason = true;
-      }
+       checkDelayReason();
       _eventCompleted(emit);
     }
   }
@@ -242,8 +234,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       isDelayReason = true;
     }
   }
-
-
 
   _selectNGConversionDate(SelectNGConversionDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
@@ -288,6 +278,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
     regulatorTypeValue = event.regulatorTypeValue;
     regulatorSerialController.clear();
+    srNumberController.clear();
     if (event.regulatorTypeValue.name != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
     }
@@ -577,16 +568,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     listOfAllRFC[event.index].isSelected = isSelected;
     if(listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == true){
       meterTesting = "1";
-      log("meterTesting-- >${meterTesting},");
     } else if(listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == true){
       paintingOfGIPipe = "1";
-      log("paintingOfGIPipe-- >${paintingOfGIPipe},");
     } else if(listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == false){
       meterTesting = "0";
-      log("meterTesting-- >${meterTesting},");
     } else if(listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == false){
       paintingOfGIPipe = "0";
-      log("paintingOfGIPipe-- >${paintingOfGIPipe},");
     }
     log("${listOfAllRFC[event.index]}-->${listOfAllRFC[event.index].isSelected}");
     _eventCompleted(emit);

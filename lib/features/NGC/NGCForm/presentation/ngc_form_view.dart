@@ -399,8 +399,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _regulatorController({required NGCFormDataState dataState}) {
-    return dataState.isRegulator == false ? _col(
-      child: AutoCompleteTextFieldWidget(
+    return  dataState.isRegulator == false ?  _col(
+      child: dataState.regulatorTypeValue?.id != "0" ? AutoCompleteTextFieldWidget(
         star: AppString.star,
         enabled: dataState.regulatorTypeValue?.name == null ? false : true,
         label: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
@@ -422,11 +422,11 @@ class _NGCFormViewState extends State<NGCFormView> {
           await formKey.currentState?.validate();
           BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
         },
-      ),
+      )  : Container(),
     ): DottedLoaderWidget();
   }
   Widget _srNumberController({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR" ? _col(
+    return  dataState.isRegulator == false ? dataState.regulatorTypeValue?.name == "SR" ? _col(
       child:AutoCompleteTextFieldWidget(
         star: AppString.star,
         label:  AppString.srNumber,
@@ -449,15 +449,8 @@ class _NGCFormViewState extends State<NGCFormView> {
           BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
         },
       ),
-
-      /* TextFieldWidget(
-        star: AppString.star,
-        hintText: AppString.srNumber,
-        label: AppString.srNumber,
-        enabled: true,
-        controller: dataState.srNumberController,
-      ),*/
-    ): Container();
+    ): Container()
+        : DottedLoaderWidget();
   }
   Widget _locationOfMR({required NGCFormDataState dataState}) {
     return dataState.regulatorTypeValue?.name == "SR" ? _col(

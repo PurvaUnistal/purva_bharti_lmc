@@ -177,18 +177,21 @@ class FormInstallationHelper {
           Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
           return false;
         } else if (isCheckRegulatorMismatch == true) {
-          Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+          Utils.errorSnackBar(msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.", context: context);
           return false;
         }else if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
           return false;
         } else if (isCheckSR == true) {
-          Utils.errorSnackBar(msg: "The SR is mismatch. Please check your SR.", context: context);
+          Utils.errorSnackBar(msg: "The SR Number is mismatch. Please check your SR Number.", context: context);
           return false;
         }
       } else if(regulatorType.name == "PRV"){
         if(regulatorNumber.isEmpty){
           Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
+          return false;
+        } else if (isCheckRegulatorMismatch == true) {
+          Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
           return false;
         }
       }

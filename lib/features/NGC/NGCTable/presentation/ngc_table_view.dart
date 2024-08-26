@@ -171,7 +171,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                     horizontalMargin: 0,
                     showCheckboxColumn: false,
                     dataTextStyle: Styles.texts,
-                  //  dataRowHeight: MediaQuery.of(context).size.height * 0.04,
+                    dataRowHeight: MediaQuery.of(context).size.height * 0.04,
                     headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
                     dividerThickness: 1,
                     columns: [
@@ -214,7 +214,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(key: PrefsValue.typeOfNr, value: user.typeOfNr ?? "");
                               await SharedPref.setString(key: PrefsValue.rfcDate, value: user.rfcDate ?? "");
                               await SharedPref.setString(key: PrefsValue.lmcInstallationDate, value: user.lmcInstallationDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.proposedNgcDate, value: user.proposedNgcDate ?? AppString.dateFormat);
+                              await SharedPref.setString(key: PrefsValue.proposedNgcDate, value: user.lmcProposedNgcDate ?? AppString.dateFormat);
                               await SharedPref.setString(key: PrefsValue.lmcPath, value: user.lmcpath!);
                               await SharedPref.setString(key: PrefsValue.meterPhoto, value: user.meterPhoto!);
                               await SharedPref.setString(key: PrefsValue.regulatorType, value: user.regulatorType!);
