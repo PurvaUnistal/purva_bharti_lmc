@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -16,7 +17,6 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   TextEditingController? controller;
-  InputBorder? errorBorder;
 
   AutoCompleteTextFieldWidget({
     super.key,
@@ -32,7 +32,6 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.controller,
-    this.errorBorder
   });
 
   @override
@@ -58,7 +57,6 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final option = options.elementAt(index);
               return ListTile(
-                // title: Text(option.toString()),
                 title: SubstringHighlight(
                   text: option.toString(),
                   term: controller!.text,
@@ -105,14 +103,15 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
               maxHeight: 25,
             )
                 : null,
+            filled: true,
             fillColor: AppColor.white,
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
-            border: enabled == false ? borderGrey : border,
-            focusedBorder: enabled == false ? borderGrey : border,
-            disabledBorder: enabled == false ? borderGrey : border,
-            enabledBorder: enabled == false ? borderGrey : border,
-            errorBorder: errorBorder,
+            border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+            focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+            disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+            enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+            errorBorder: CommonStyle.borderRed,
             hintText: hintText,
             hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
             label: Padding(
@@ -136,16 +135,5 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
-  );
-  OutlineInputBorder borderGrey = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),
-  );
-  OutlineInputBorder borderRed = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.red, style: BorderStyle.solid, width: 0.80),
-  );
+
 }

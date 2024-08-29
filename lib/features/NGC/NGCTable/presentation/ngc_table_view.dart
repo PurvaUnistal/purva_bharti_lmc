@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
+import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/pop_two_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
@@ -83,14 +85,14 @@ class _NgcTableViewState extends State<NgcTableView> {
             padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
             child: Column(
               children: [
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
                 _areaDropDown(dataState: dataState),
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
                 _searchTextField(dataState: dataState),
               ],
             ),
           ),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
           Text("Click on row to open NG Conversion Form", style: Styles.labels,),
           Flexible(child: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
@@ -118,14 +120,14 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   Widget _searchTextField({required FetchNgcTableDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.search,
-      hintText: AppString.search,
+      label: AppString.searchBPNumber,
+      hintText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,
-      suffixIcon: Icon(
-        Icons.search_rounded,
-        color: Colors.green.shade800,
+      suffixIcon: IconButtonWidget(
+        iconData: Icons.search_rounded,
+        onPressed: (){},
       ),
       onChanged: (val) {
         BlocProvider.of<NgcTableBloc>(context).add(SearchBpNumberEvent(
@@ -135,9 +137,10 @@ class _NgcTableViewState extends State<NgcTableView> {
       },
     );
   }
+
   Widget _dataTableWidget({required FetchNgcTableDataState dataState}) {
-    var h = MediaQuery.of(context).size.height * 0.20;
-    return dataState.lmcInstallationByNgcModel?.success == 400
+    return dataState.isAreaFilter == false
+        ? dataState.lmcInstallationByNgcModel?.success == 400
         ? Center(child: Text("No records found"))
         :Theme(
       data: ThemeData(
@@ -175,14 +178,14 @@ class _NgcTableViewState extends State<NgcTableView> {
                     headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
                     dividerThickness: 1,
                     columns: [
-                      _dataColumn(label: "S.No"),
-                      _dataColumn(label: "Ready for NGC"),
-                      _dataColumn(label: "BP Number"),
-                      _dataColumn(label: "Installation Date"),
-                      _dataColumn(label: "Area"),
-                      _dataColumn(label: "Mobile Number"),
-                      _dataColumn(label: "First Name"),
-                      _dataColumn(label: "Surname"),
+                      CommonStyle.dataColumn(label: "S.No"),
+                      CommonStyle.dataColumn(label: "Ready for NGC"),
+                      CommonStyle.dataColumn(label: "BP Number"),
+                      CommonStyle.dataColumn(label: "Installation Date"),
+                      CommonStyle.dataColumn(label: "Area"),
+                      CommonStyle.dataColumn(label: "Mobile Number"),
+                      CommonStyle.dataColumn(label: "First Name"),
+                      CommonStyle.dataColumn(label: "Surname"),
                     ],
                     rows: dataState.listOfFilterInstallationByNgc.mapIndexed((index, user) =>
                         DataRow(
@@ -201,9 +204,8 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(
                                   key: PrefsValue.meterReading, value: user
                                   .meterreading ?? "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.meterSerial, value: user
-                                  .meterSerial ?? "");
+                              await SharedPref.setString(key: PrefsValue.meterNumberId, value: user.meterNumber ?? "");
+                              await SharedPref.setString(key: PrefsValue.meterNumberSerial, value: user.meterSerial ?? "");
                               await SharedPref.setString(
                                   key: PrefsValue.mobileNumber, value: user.mobileNumber ?? "");
                               await SharedPref.setString(key: PrefsValue.alternateMobileNo, value: user.alternateMobileNo ?? "");
@@ -219,10 +221,14 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(key: PrefsValue.meterPhoto, value: user.meterPhoto!);
                               await SharedPref.setString(key: PrefsValue.regulatorType, value: user.regulatorType!);
                               await SharedPref.setString(key: PrefsValue.regulatorTypeId, value: user.regulatorTypeId!);
-                              await SharedPref.setString(key: PrefsValue.regulatorSerial, value: user.regulatorSerial!);
-                              await SharedPref.setString(key: PrefsValue.regulators, value: user.regulators!);
-                              await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.mrRegulatorSerial!);
-                              await SharedPref.setString(key: PrefsValue.srNumber, value: user.tfNumber!);
+                          /*    await SharedPref.setString(key: PrefsValue.srRegulatorId, value: user.regulators!);
+                              await SharedPref.setString(key: PrefsValue.srRegulatorSerial, value: user.regulatorSerial!);
+                              await SharedPref.setString(key: PrefsValue.mrRegulatorId, value: user.mrRegulatorId!);
+                              await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.mrRegulatorSerial!);*/
+                              await SharedPref.setString(key: PrefsValue.srRegulatorId, value: user.mrRegulatorId!);
+                              await SharedPref.setString(key: PrefsValue.srRegulatorSerial, value: user.mrRegulatorSerial!);
+                              await SharedPref.setString(key: PrefsValue.mrRegulatorId, value: user.regulators!);
+                              await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.regulatorSerial!);
                               //////////////////////
                               if (user.interested == "0") {
                                 if (user.futureRegNgcEligibleStatus == "1") {
@@ -331,7 +337,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                               //////////////////////////////
                             },
                             cells: <DataCell>[
-                              _dataCell(label: (dataState.listOfFilterInstallationByNgc
+                              CommonStyle.dataCell(label: (dataState.listOfFilterInstallationByNgc
                                   .indexOf(user) + 1 + (dataState.pageNo - 1) * 10)
                                   .toString()),
                               ///////////////////
@@ -372,15 +378,13 @@ class _NgcTableViewState extends State<NgcTableView> {
                                   ],
                                 ]
                               ],
-                              ///////////////////
-                              ///////////////////
-                              _dataCell(label: user.bpNumber.toString()),
-                              _dataCell(
-                                  label: user.dateOfRegistration.toString()),
-                              _dataCell(label: user.areaName.toString()),
-                              _dataCell(label: user.mobileNumber.toString()),
-                              _dataCell(label: user.firstName.toString()),
-                              _dataCell(label: user.lastName.toString()),
+
+                              CommonStyle.dataCell(label: user.bpNumber.toString()),
+                              CommonStyle.dataCell(label: user.dateOfRegistration.toString()),
+                              CommonStyle.dataCell(label: user.areaName.toString()),
+                              CommonStyle.dataCell(label: user.mobileNumber.toString()),
+                              CommonStyle.dataCell(label: user.firstName.toString()),
+                              CommonStyle.dataCell(label: user.lastName.toString()),
                             ]))
                         .toList(),
                   ),
@@ -390,22 +394,10 @@ class _NgcTableViewState extends State<NgcTableView> {
           ),
         ),
       ),
-    );
+    ): Center(child: SpinLoader());
   }
 
-  DataColumn _dataColumn({required String label}) {
-    return DataColumn(label: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label, style: Styles.table),
-    ));
-  }
 
-  DataCell _dataCell({required String label}) {
-    return DataCell(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label, style: Styles.texts,),
-    ));
-  }
   DataCell _dataCellStatus({required String label, required Color color }) {
     return DataCell(Text(label, style: Styles.status(color:color ),));
   }
@@ -414,9 +406,6 @@ class _NgcTableViewState extends State<NgcTableView> {
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Text(label, style: Styles.title,),
     ));
-  }
-  _verticalSpace() {
-    return SizedBox(height: MediaQuery.of(context).size.height * 0.01);
   }
 }
 

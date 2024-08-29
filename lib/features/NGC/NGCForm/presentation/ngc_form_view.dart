@@ -1,15 +1,14 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/auto_complete_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
-import 'package:lmc/Utils/common_widgets/local_mg_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
@@ -112,63 +111,63 @@ class _NGCFormViewState extends State<NGCFormView> {
       body: ListView(
         padding: EdgeInsets.all(8),
         children: [
+          Text(AppString.ngConversionForm,style: Styles.text,textAlign: TextAlign.center,),
+          CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(flex: 1,child: _bpNumberWidget(dataState : dataState)),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.01,
-              ),
+              CommonStyle.widthSpace(context: context),
               Flexible(flex: 1,child: _dateInstallationController(dataState : dataState)),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.01,
-              ),
+              CommonStyle.widthSpace(context: context),
               Flexible(flex: 1,child: _proposedNgcDateController(dataState : dataState)),
             ],
           ),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _meterConnectionDropdown(dataState: dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _ngConversionDateController(dataState: dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _delayReasonDropdown(dataState : dataState),
           _delayReasonControllerWidget(dataState : dataState),
           _meterReplaceCheck(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _meterReplaceController(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _meterTypeDropdown(dataState : dataState),
           _reasonMeterChangeController(dataState : dataState),
           _meterInitialReadingController(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _regulatorTypeDropdown(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           _srNumberController(dataState : dataState),
           _regulatorController(dataState : dataState),
           _mrPhoto(dataState : dataState),
           _locationOfSR(dataState : dataState),
           _locationOfMR(dataState : dataState),
           _contractorWidget(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           RowWidget(
               widget1: _burnerNoWidget(dataState : dataState),
               widget2: _noOfFamilyMembersController(dataState : dataState)
           ),
-          _sizedBox(),
-          _contactNoWidget(dataState : dataState),
-          _sizedBox(),
-          _altContactNoWidget(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
+          RowWidget(
+              widget1: _contactNoWidget(dataState : dataState),
+              widget2: _altContactNoWidget(dataState : dataState)
+          ),
+           CommonStyle.vertical(context: context),
           _emailWidget(dataState : dataState),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
           RowWidget(
               widget1: _meterPhoto(dataState : dataState),
               widget2: _ngcReportPhoto(dataState: dataState)),
-          _sizedBox(),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
+           CommonStyle.vertical(context: context),
           _submitBtnWidget(dataState: dataState),
-          _sizedBox(),
-          _sizedBox(),
+           CommonStyle.vertical(context: context),
+           CommonStyle.vertical(context: context),
         ],
       ),
     );
@@ -466,9 +465,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               controller: dataState.latOfMRController,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.02,
-          ),
+          CommonStyle.widthSpace(context: context),
           Flexible(
             flex: 3,
             child: TextFieldWidget(
@@ -479,9 +476,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               controller: dataState.longOfMRController,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.02,
-          ),
+          CommonStyle.widthSpace(context: context),
           IconButtonWidget(
             iconData: Icons.location_on,
             onPressed: () {
@@ -506,9 +501,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               controller: dataState.latOfSRController,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.02,
-          ),
+          CommonStyle.widthSpace(context: context),
           Flexible(
             flex: 3,
             child: TextFieldWidget(
@@ -519,9 +512,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               controller: dataState.longOfSRController,
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.02,
-          ),
+          CommonStyle.widthSpace(context: context),
           IconButtonWidget(
             iconData: Icons.location_on,
             onPressed: () {
@@ -655,7 +646,6 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _ngcReportPhoto({required NGCFormDataState dataState}) {
     return  ImageWidget(
-      star: AppString.star,
       title: AppString.ngcReportFile,
       imgFile: dataState.ngcReportPhoto,
       onPressed: () {
@@ -692,18 +682,18 @@ class _NGCFormViewState extends State<NGCFormView> {
     ) : DottedLoaderWidget();
   }
 
-  Widget _sizedBox() {
+ /* Widget _sizedBox() {
     var h = MediaQuery.of(context).size.height;
     return SizedBox(
       height: h * 0.02,
     );
-  }
+  }*/
 
   Widget _col({required Widget child}){
     return Column(
       children: [
         child,
-        _sizedBox()
+        CommonStyle.vertical(context: context),
       ],
     );
   }

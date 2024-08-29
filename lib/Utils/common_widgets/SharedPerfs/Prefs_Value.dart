@@ -57,7 +57,8 @@ class PrefsValue {
   static String lmcInstallationId = "lmcInstallationId";
   static String isInstall = "isInstall";
   static String meterReading = "meterReading";
-  static String meterSerial = "meterSerial";
+  static String meterNumberId = "meterNumberId";
+  static String meterNumberSerial = "meterNumberSerial";
   static String alternateMobileNo = "alternateMobileNo";
   static String email = "email";
   static String ngOfBurners = "ngOfBurners";
@@ -75,8 +76,9 @@ class PrefsValue {
   static String meterPhoto = "meterPhoto";
   static String regulatorType = "regulatorType";
   static String regulatorTypeId = "regulatorTypeId";
-  static String regulatorSerial = "regulatorSerial";
-  static String regulators = "regulators";
+  static String srRegulatorId = "srRegulatorId";
+  static String srRegulatorSerial = "srRegulatorSerial";
+  static String regulatorId = "regulatorId";
+  static String mrRegulatorId = "mrRegulatorId";
   static String mrRegulatorSerial = "mrRegulatorSerial";
-  static String srNumber = "srNumber";
 }

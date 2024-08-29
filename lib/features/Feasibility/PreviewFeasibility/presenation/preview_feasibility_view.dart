@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
@@ -105,11 +106,11 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
                 _rowItem(textName: AppString.street, textValue: dataState.locality),
                 _rowItem(textName: AppString.town, textValue: dataState.town),
                 _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
-                _verticalSpace(),
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
+                CommonStyle.vertical(context: context),
                 _button(dataState: dataState),
-                _verticalSpace(),
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
+                CommonStyle.vertical(context: context),
               ],
             ),
           ),
@@ -137,11 +138,5 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => FormFeasibilityView()));
         })
         : DottedLoaderWidget();
-  }
-
-  Widget _verticalSpace() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    );
   }
 }

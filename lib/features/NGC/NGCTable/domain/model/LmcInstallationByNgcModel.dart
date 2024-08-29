@@ -9,11 +9,16 @@ class LMCInstallationByNgcModel {
     success = json['success'] ?? "";
     error = json['error'] ?? "";
     if (json['data'] != null) {
-      data = <InstallationByNgcData>[] ;
-      json['data'].forEach((v) {
-        data!.add(new InstallationByNgcData.fromJson(v));
-      });
-    }
+        if(json['data'] is String){
+          data = json['data'] ?? "";
+        } else{
+          data = <InstallationByNgcData>[] ;
+          json['data'].forEach((v) {
+            data!.add(new InstallationByNgcData.fromJson(v));
+          });
+        }
+      }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -696,7 +701,7 @@ class InstallationByNgcData {
     trNumber = json['tr_number'] ?? "";
     rfcDate = json['rfc_date'] ?? "";
     instDirPath = json['inst_dir_path'] ?? "";
-    lmcInstallationDate = json['lmc_installation_date'] ?? "";
+    lmcInstallationDate =  json['lmc_installation_date'] == null ? "00-00-0000" :json['lmc_installation_date'] ?? "";
     lmcProposedNgcDate = json['lmc_proposed_ngc_date'] == null ? "00-00-0000" : json['lmc_proposed_ngc_date'];
     id = json['id'] ?? "";
     createdOn = json['created_on'] ?? "";

@@ -20,7 +20,7 @@ class LMCInstallationDataState extends LMCInstallationState {
   String schema;
   String userName;
   final bool isLoader;
-  final bool isLoadingMore;
+  final bool isAreaFilter;
   final dynamic allAreaValue;
   final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
@@ -33,7 +33,7 @@ class LMCInstallationDataState extends LMCInstallationState {
     required this.schema,
     required this.userName,
     required this.isLoader,
-    required this.isLoadingMore,
+    required this.isAreaFilter,
     required this.allAreaValue,
     required this.pageNo,
     required this.listOfAllArea,
@@ -49,7 +49,7 @@ class LMCInstallationDataState extends LMCInstallationState {
         schema,
         userName,
         isLoader,
-        isLoadingMore,
+        isAreaFilter,
         allAreaValue,
         pageNo,
         listOfAllArea,

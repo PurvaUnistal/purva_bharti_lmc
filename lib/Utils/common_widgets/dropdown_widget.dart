@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
@@ -33,10 +34,11 @@ class DropdownWidget<T> extends StatelessWidget {
           fillColor: AppColor.white,
           isDense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
-          enabledBorder: _border(),
-          disabledBorder:_border(),
-          border: _border(),
-          focusedBorder: _border(),
+          enabledBorder:CommonStyle.border,
+          disabledBorder:CommonStyle.border,
+          border: CommonStyle.border,
+          focusedBorder: CommonStyle.border,
+          errorBorder: CommonStyle.border,
           label: Padding(
             padding: const EdgeInsets.only(left: 2.0),
             child: Row(
@@ -59,13 +61,6 @@ class DropdownWidget<T> extends StatelessWidget {
           );
         }).toList(),
         onChanged: onChanged
-    );
-  }
-
-  OutlineInputBorder _border(){
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5.0),
-      borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
@@ -106,20 +107,18 @@ class _HomeViewState extends State<HomeView> {
           Stack(
             children: [
               Image.asset(
-                AssetPath.household,
-                width: double.infinity,
-              ),
+                AssetPath.lmcBanner, width: double.infinity,),
               Positioned(
                   child: Text(
-                dataState.baseUrl == Apis.basePath ? "UAT APP" : "",
-                textAlign: TextAlign.end,
-                style: Styles.title,
-              ))
+                    dataState.baseUrl == Apis.basePath ? "UAT APP" : "",
+                    textAlign: TextAlign.end,
+                    style: Styles.title,
+                  )
+              )
             ],
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
+          CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
           if(dataState.role == "lmc")...[
             for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
               dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
@@ -131,12 +130,6 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.001,
-              ),
               dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
                 text: "LMC Installation",
@@ -146,12 +139,6 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.001,
-              ),
               dataState.listOFAccessRight[i].menuCode == "NGC01" ?
               CardWidget(
                 icon: Icons.sync,
@@ -162,9 +149,8 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container()
-
-    ],
-          ]else if(dataState.role == "ngc")...[
+            ],
+          ] else if(dataState.role == "ngc")...[
             for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
               dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
                 icon: Icons.balance_outlined,
@@ -175,12 +161,6 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.001,
-              ),
               dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
                 text: "LMC Installation",
@@ -190,12 +170,6 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.001,
-              ),
               dataState.listOFAccessRight[i].menuCode == "NGC01" ?
               CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
@@ -206,9 +180,8 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container()
-
             ],
-          ],
+          ]
         ],
       ),
     );

@@ -17,6 +17,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   }
   int pageNo = 1;
   bool isLoader = false;
+  bool isAreaFilter = false;
   String schema = "";
   String userName = "";
   GetAllAreaModel? areaValue;
@@ -29,6 +30,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   _pageLoad(NgcTablePageLoadEvent event, emit) async {
     emit(NgcTablePageLoadState());
     isLoader = false;
+    isAreaFilter = false;
     pageNo = 1;
     areaValue = null;
     listOfAllArea = [];
@@ -38,13 +40,16 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     schema = await SharedPref.getString(key: PrefsValue.schema);
     userName = await SharedPref.getString(key: PrefsValue.userName);
     await fetchAllArea(context: event.context);
-    await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
+    await fetchInstallationByNgc(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
     _eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
-    await fetchFeasibility(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    isAreaFilter = true;
+    _eventCompleted(emit);
+    await fetchInstallationByNgc(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    isAreaFilter = false;
     _eventCompleted(emit);
   }
 
@@ -66,7 +71,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     }
   }
 
-  fetchFeasibility({required BuildContext context, required String bpNumber, required String areaId}) async {
+  fetchInstallationByNgc({required BuildContext context, required String bpNumber, required String areaId}) async {
     var res = await NgcTableHelper.getLmcInstallationByNgcApi(context: context, bpNumber: bpNumber, areaId: areaId);
     if (res != null) {
       lmcInstallationByNgcModel = res;
@@ -77,13 +82,12 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     }
   }
 
-
-
   _eventCompleted(Emitter<NgcTableState> emit) {
     emit(FetchNgcTableDataState(
       schema: schema,
       userName: userName,
       isLoader: isLoader,
+      isAreaFilter: isAreaFilter,
       pageNo: pageNo,
       allAreaValue: areaValue,
       listOfAllArea: listOfAllArea,

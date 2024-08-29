@@ -130,6 +130,13 @@ class SelectNGConversionDateEvent extends FormInstallationEvent {
   List<Object> get props => [context];
 }
 
+class SelectRFCDateEvent extends FormInstallationEvent {
+  final BuildContext context;
+  SelectRFCDateEvent({required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context];
+}
 class SelectQTYLMCEvent extends FormInstallationEvent {
   final String qtyValue;
   final BuildContext context;

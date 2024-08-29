@@ -35,6 +35,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
     on<MeterInitReadingEvent>(_meterInitReading);
     on<SelectNGConversionDateEvent>(_selectNGConversionDate);
+    on<SelectRFCDateEvent>(_selectRFCDate);
     on<SelectLocationOfHouseEvent>(_selectLocationOfHouse);
     on<CaptureGalleryRFCCardEvent>(_captureGalleryRFCCard);
     on<CaptureCameraRFCCardEvent>(_captureCameraRFCCard);
@@ -62,6 +63,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   String schema = "";
   String userName = "";
+  String currentDate = "";
   String installRegulator = "0";
   String extraPipe = "0";
   String extraPrice = "0";
@@ -106,6 +108,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   TextEditingController latOfHouseController = TextEditingController();
   TextEditingController longOfHouseController = TextEditingController();
   TextEditingController ngConversionDateController = TextEditingController();
+  TextEditingController rfcDateController = TextEditingController();
   TextEditingController srNumberController = TextEditingController();
   TextEditingController meterReadingDate = TextEditingController();
   TextEditingController extraPipeController = TextEditingController(text: "0");
@@ -169,6 +172,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     extraPrice = "0";
     meterTesting = "0";
     paintingOfGIPipe = "0";
+    extraPipeController.text = "0";
+    extraPriceController.text = "0";
     srNumberController.text = "";
     meterNumberSerialController.text = "";
     regulatorSerialController.text = "";
@@ -176,24 +181,22 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     feasibilityDateController.text = "";
     latOfHouseController.text = "";
     longOfHouseController.text = "";
-    proposedDateController.text = "";
     installationDateController.text = "";
     meterIniReading1Controller.text = "";
     meterIniReading2Controller.text = "";
     meterIniReading3Controller.text = "";
     meterInitialReadingController.text = "";
+
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
+    schema = await SharedPref.getString(key: PrefsValue.schema,);
     userName = await SharedPref.getString(key: PrefsValue.userName,);
-    ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    meterReadingDate.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    installationDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    extraPipeController.text = "0";
-    extraPriceController.text = "0";
+    currentDate =  await DateFormat(AppString.dateFormat).format(DateTime.now());
+    ngConversionDateController.text = currentDate;
+    meterReadingDate.text = currentDate;
+    installationDateController.text = currentDate;
+    rfcDateController.text = currentDate;
     trNumberController.text = await SharedPref.getString(key: PrefsValue.trNumber);
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
@@ -246,6 +249,20 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       ngConversionDateController.text = formattedDate.toString();
+      _eventCompleted(emit);
+    }
+  }
+
+  _selectRFCDate(SelectRFCDateEvent event, emit) async {
+    DateTime? dateTime = await showDatePicker(
+        context: event.context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050)
+    );
+    if (dateTime != null) {
+      String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
+      rfcDateController.text = formattedDate.toString();
       _eventCompleted(emit);
     }
   }
@@ -584,6 +601,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       var validationCheck = await FormInstallationHelper.validationSubmit(
         context: event.context,
         dateInstallation: installationDateController.text.trim().toString(),
+        rfcDateController: rfcDateController.text.trim().toString(),
         isDelayReason: isDelayReason,
         delayReason: delayReasonValue,
         meterNumber: meterNumberSerialController.text.trim().toString(),
@@ -612,9 +630,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           extraPipe: extraPipe.toString(),
           extraPrice: extraPrice.toString(),
           workCompletedDate: installationDateController.text.trim().toString(),
+          rfcDate:rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
           meterNo: materialId,
-          rfcDate:installationDateController.text.trim().toString(),
           latitudeHg: latOfHouseController.text.trim().toString(),
           longitudeHg: longOfHouseController.text.trim().toString(),
           srNumber: srNumberController.text.trim().toString(),
@@ -683,6 +701,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       bpNumberController: bpNumberController,
       trNumberController: trNumberController,
       proposedDateController: proposedDateController,
+      rfcDateController: rfcDateController,
       feasibilityDateController: feasibilityDateController,
       installationDateController: installationDateController,
       meterIniReading1Controller: meterIniReading1Controller,

@@ -30,6 +30,7 @@ class InstallationDoneModel {
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
+
 class InstallationDoneRows {
   String? chargeAreaName;
   String? areaName;

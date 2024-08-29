@@ -132,6 +132,7 @@ class FormInstallationHelper {
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String dateInstallation,
+    required String rfcDateController,
     required bool isDelayReason,
     required LmcReasonModel delayReason,
     required String meterNumber,
@@ -158,6 +159,9 @@ class FormInstallationHelper {
       return false;
     } else if(isDelayReason == true && delayReason.id == null){
       Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
+      return false;
+    } else if(rfcDateController.isEmpty){
+      Utils.errorSnackBar(msg: "The RFC Date field is required.", context: context);
       return false;
     } else if (meterNumber.isEmpty) {
       Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
@@ -265,8 +269,10 @@ class FormInstallationHelper {
         "meter_number": meterNo,
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
-        "regulators": sRegulatorsId,
-        "mr_regulator_id": mRegulatorsId,
+      /*  "regulators": sRegulatorsId,
+        "mr_regulator_id": mRegulatorsId,*/
+        "regulators": mRegulatorsId,
+        "mr_regulator_id": sRegulatorsId,
         "latitude_hg": latitudeHg,
         "longitude_hg": longitudeHg,
         "tf_number": srNumber,
@@ -278,7 +284,7 @@ class FormInstallationHelper {
         "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
         "type_of_nr": typeOfNR.key == null ? "" :typeOfNR.key.toString(),
         "ngc": ngc.key == null ? "": ngc.key.toString(),
-        "proposed_ngc_date": proposedNgcDate ?? "",
+        "proposed_ngc_date": proposedNgcDate,
         "regulator_check": regulatorCheck.isEmpty ?"0" : regulatorCheck,
         "regulator_type_id": regulatorTypeId == "" ? "" :regulatorTypeId.toString(),
         "rfc_date": rfcDate.isEmpty ? "" :rfcDate,

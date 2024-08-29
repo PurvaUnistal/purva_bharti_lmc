@@ -19,7 +19,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   String schema = "";
   String userName = "";
   bool isLoader = false;
-  bool isLoadingMore = false;
+  bool isAreaFilter = false;
   int pageNo = 1;
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
@@ -32,7 +32,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   _pageLoad(LMCFeasibilityPageLoadEvent event, emit) async {
     emit(LMCFeasibilityInitialState());
     isLoader = false;
-    isLoadingMore = false;
+    isAreaFilter = false;
     areaValue = null;
     pageNo = 1;
     listOfAllArea = [];
@@ -40,12 +40,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     bpNumberController.text = "";
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
+    schema = await SharedPref.getString(key: PrefsValue.schema);
+    userName = await SharedPref.getString(key: PrefsValue.userName);
     await fetchAllArea(context: event.context);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
     _eventCompleted(emit);
@@ -53,7 +49,10 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
+    isAreaFilter = true;
+    _eventCompleted(emit);
     await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    isAreaFilter = false;
     _eventCompleted(emit);
   }
 
@@ -90,8 +89,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     emit(LMCFeasibilityInitialState());
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        isLoadingMore = true;
-        _eventCompleted(emit);
+
         pageNo++;
         // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: '');
         _eventCompleted(emit);
@@ -104,7 +102,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
         isLoader: isLoader,
         schema: schema,
         userName: userName,
-        isLoadingMore: isLoadingMore,
+        isAreaFilter: isAreaFilter,
         allAreaValue: areaValue,
         pageNo: pageNo,
         listOfAllArea: listOfAllArea,

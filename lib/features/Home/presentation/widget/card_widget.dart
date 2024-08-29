@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
@@ -13,9 +14,9 @@ class CardWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
+        padding: const EdgeInsets.all(12),
         child: SizedBox(
-          width: MediaQuery.of(context).size.height * 0.22,
+          width: MediaQuery.of(context).size.width * 0.22,
           height: MediaQuery.of(context).size.height * 0.091,
           child: Card(
             color: Colors.white,
@@ -28,9 +29,7 @@ class CardWidget extends StatelessWidget {
                   icon,
                   color: AppColor.primer1,
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
+                CommonStyle.widthSpace(context: context),
                 Flexible(
                     child: Text(
                   text,

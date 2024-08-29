@@ -18,6 +18,7 @@ class NgcTablePageLoadState extends NgcTableState {
 //ignore: must_be_immutable
 class FetchNgcTableDataState extends NgcTableState {
   final bool isLoader;
+  final bool isAreaFilter;
   final int pageNo;
   final String schema;
   final String userName;
@@ -29,6 +30,7 @@ class FetchNgcTableDataState extends NgcTableState {
 
   FetchNgcTableDataState({
     required this.isLoader,
+    required this.isAreaFilter,
     required this.schema,
     required this.userName,
     required this.pageNo,
@@ -44,6 +46,7 @@ class FetchNgcTableDataState extends NgcTableState {
   // TODO: implement props
   List<Object?> get props => [
     isLoader,
+    isAreaFilter,
     schema,
     userName,
     pageNo,

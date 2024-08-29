@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
@@ -102,10 +103,11 @@ class TextFieldWidget extends StatelessWidget {
         fillColor: AppColor.white,
         isDense: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
-        border: enabled == false ? borderGrey : border,
-        focusedBorder: enabled == false ? borderGrey : border,
-        disabledBorder: enabled == false ? borderGrey : border,
-        enabledBorder: enabled == false ? borderGrey : border,
+        border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+        focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+        disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+        enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+        errorBorder: CommonStyle.borderRed,
         hintText: hintText,
         hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
         label: Padding(
@@ -127,16 +129,4 @@ class TextFieldWidget extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
-  );
-  OutlineInputBorder borderGrey = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),
-  );
-  OutlineInputBorder borderRed = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.red, style: BorderStyle.solid, width: 0.80),
-  );
 }

@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
@@ -83,14 +85,14 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               children: [
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
                 _areaDropDown(dataState: dataState),
-                _verticalSpace(),
+                CommonStyle.vertical(context: context),
                 _searchTextField(dataState: dataState),
               ],
             ),
           ),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
           Text("Click on row to open LMC Installation Form", style: Styles.labels,),
           Flexible(child: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
@@ -131,9 +133,8 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
   }
 
   Widget _dataTableWidget({required LMCInstallationDataState dataState}) {
-    var h = MediaQuery.of(context).size.height * 0.026;
-    print("hh${h}");
-    return dataState.installationDoneModel?.success == 400
+    return dataState.isAreaFilter == false
+        ? dataState.installationDoneModel?.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
       data: ThemeData(highlightColor: AppColor.primer1),
@@ -169,21 +170,21 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                     headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
                     dividerThickness: 1,
                     columns: [
-                      _dataColumn(label: "S.No"),
-                      _dataColumn(label: "Mobile Number"),
-                      _dataColumn(label: "BP Number"),
-                      _dataColumn(label: "Area"),
-                      _dataColumn(label: "Name"),
+                      CommonStyle.dataColumn(label: "S.No"),
+                      CommonStyle.dataColumn(label: "Mobile Number"),
+                      CommonStyle.dataColumn(label: "BP Number"),
+                      CommonStyle.dataColumn(label: "Area"),
+                      CommonStyle.dataColumn(label: "Name"),
                     ],
                     rows: dataState.listOfFilterInstallationRow
                         .mapIndexed((index, user) => DataRow(
                         onSelectChanged: (newValue) async {
                           await SharedPref.setString(key: PrefsValue.trNumber, value: user.trNumber!);
                           await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
-                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate!);
+                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate == "" ? AppString.dateFormat : user.proposedDate!);
                           await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
                           await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
-                          await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value: user.feasibilityVisitDate!);
+                          await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value:user.feasibilityVisitDate!);
                           await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
                           await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName!);
                           await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
@@ -199,11 +200,11 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewInstallationView()));
                         },
                         cells: <DataCell>[
-                          _dataCell(label: (dataState.listOfFilterInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                          _dataCell(label: user.mobileNumber.toString()),
-                          _dataCell(label: user.bpNumber.toString()),
-                          _dataCell(label: user.areaName.toString()),
-                          _dataCell(label: user.firstName.toString()),
+                          CommonStyle.dataCell(label: (dataState.listOfFilterInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                          CommonStyle.dataCell(label: user.mobileNumber.toString()),
+                          CommonStyle.dataCell(label: user.bpNumber.toString()),
+                          CommonStyle.dataCell(label: user.areaName.toString()),
+                          CommonStyle.dataCell(label: user.firstName.toString()),
                         ]))
                         .toList(),
                   ),
@@ -213,34 +214,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
           ),
         ),
       ),
-    );
+    ): Center(child: SpinLoader());
   }
-
-  DataColumn _dataColumn({required String label}) {
-    return DataColumn(
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            label,
-            style: Styles.table,
-            textAlign: TextAlign.center,
-          ),
-        ));
-  }
-
-  DataCell _dataCell({required String label}) {
-    return DataCell(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-      ),
-    ));
-  }
-
-  Widget _verticalSpace() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    );
-  }
+  
 }

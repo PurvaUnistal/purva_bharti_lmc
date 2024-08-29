@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 
 class RowWidget extends StatelessWidget {
   final Widget widget1;
@@ -11,9 +12,7 @@ class RowWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(flex:1,child: widget1),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.02,
-        ),
+        CommonStyle.widthSpace(context: context),
         Flexible(flex: 1,child: widget2),
       ],
     );

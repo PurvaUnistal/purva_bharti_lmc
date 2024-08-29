@@ -19,7 +19,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   String schema = "";
   String userName = "";
   bool isLoader = false;
-  bool isLoadingMore = false;
+  bool isAreaFilter = false;
   int pageNo = 1;
   GetAllAreaModel? areaValue;
   List<GetAllAreaModel> listOfAllArea = [];
@@ -32,7 +32,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   _pageLoad(LMCInstallationPageLoadEvent event, emit) async {
     emit(LMCInstallationInitialState());
     isLoader = false;
-    isLoadingMore = true;
+    isAreaFilter = false;
     areaValue = null;
     pageNo = 1;
     listOfAllArea = [];
@@ -40,20 +40,19 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     bpNumberController.text = "";
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
+    schema = await SharedPref.getString(key: PrefsValue.schema,);
+    userName = await SharedPref.getString(key: PrefsValue.userName,);
     await fetchAllArea(context: event.context);
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
+    await fetchInstallation(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
     _eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
     areaValue = event.allAreaValue;
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    isAreaFilter = true;
+    _eventCompleted(emit);
+    await fetchInstallation(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: event.allAreaValue.gid.toString());
+    isAreaFilter = false;
     _eventCompleted(emit);
   }
 
@@ -76,8 +75,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     }
   }
 
-  fetchFeasibility({required BuildContext context, required int pageNumber, required String bpNumber, required String areaId}) async {
-    isLoadingMore = true;
+  fetchInstallation({required BuildContext context, required int pageNumber, required String bpNumber, required String areaId}) async {
     var res = await LMCInstallationHelper.getLMCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
     if (res != null) {
       installationDoneModel = res;
@@ -88,27 +86,12 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     }
   }
 
-  loadDataTable({required BuildContext context, emit}) async {
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        isLoadingMore = true;
-        _eventCompleted(emit);
-        pageNo++;
-        if (pageNo == 1) {
-        } else {
-          //  await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text);
-        }
-        _eventCompleted(emit);
-      }
-    });
-  }
-
   _eventCompleted(emit) {
     emit(LMCInstallationDataState(
       userName: userName,
       schema: schema,
       isLoader: isLoader,
-      isLoadingMore: isLoadingMore,
+      isAreaFilter: isAreaFilter,
       allAreaValue: areaValue,
       listOfAllArea: listOfAllArea,
       pageNo: pageNo,

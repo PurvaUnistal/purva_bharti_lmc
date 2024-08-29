@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
@@ -77,10 +78,10 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _emailWidget(dataState: dataState),
-                        _sizedBox(),
+                        CommonStyle.vertical(context: context),
                         _passwordWidget(dataState: dataState),
-                        _sizedBox(),
-                        _sizedBox(),
+                        CommonStyle.vertical(context: context),
+                        CommonStyle.vertical(context: context),
                         _loginBtnWidget(dataState: dataState),
                       ],
                     ),
@@ -155,12 +156,5 @@ class _LoginViewState extends State<LoginView> {
               BlocProvider.of<LoginBloc>(context).add(LoginSubmitDataEvent(context: context, isLoginLoading: true));
             })
         : DottedLoaderWidget();
-  }
-
-  Widget _sizedBox() {
-    var h = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: h * 0.03,
-    );
   }
 }

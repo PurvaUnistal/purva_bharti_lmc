@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
@@ -93,36 +93,33 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         padding: EdgeInsets.all(8),
         children: [
           Text(AppString.feasibilityForm,style: Styles.text,textAlign: TextAlign.center,),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(flex: 1,child: _bpNumberController(stateData: dataState)),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.01,
-              ),
+              CommonStyle.widthSpace(context: context),
               Flexible(flex: 1,child: _trNumberController(stateData: dataState)),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.01,
-              ),
+              CommonStyle.widthSpace(context: context),
               Flexible(flex: 1,child: _assignedDateController(stateData: dataState)),
             ],
           ),
           _feasibilityDateController(stateData: dataState),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
           _checkFeasibilityDropdown(stateData: dataState),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
           _materialList(dataState: dataState),
           _proposedDateController(stateData: dataState),
           _lmcReasonDropdown(stateData: dataState),
           _reasonController(stateData: dataState),
           _followUpDateController(stateData: dataState),
           _remarksController(stateData: dataState),
-          _verticalSpace(),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
           _button(dataState: dataState),
-          _verticalSpace(),
-          _verticalSpace(),
+          CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
         ],
       ),
     );
@@ -157,8 +154,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _feasibilityDateController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
-        ? Container()
-        : _col(
+        ? Container() : CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         star: AppString.star,
         hintText: AppString.lmcFeaDate,
@@ -220,9 +217,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                         enabled: false,
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.02,
-                    ),
+                    CommonStyle.widthSpace(context: context),
                     e.name.toLowerCase().contains("pipe") ?  Flexible(
                       flex: 3,
                       child: TextFieldWidget(
@@ -248,16 +243,14 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                     )
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
+                CommonStyle.vertical(context: context),
               ],
             );
           }).toList(),
         ),
         dataState.isExtraPipe == false ?
         _extraPipeWidget(dataState: dataState) : DottedLoaderWidget(),
-        _verticalSpace(),
+        CommonStyle.vertical(context: context),
       ],
     )
         : Container();
@@ -321,7 +314,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget _reasonController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
         ? stateData.lmcReasonValue?.key == "Others"
-        ? _col(
+        ? CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         star: AppString.star,
         hintText: AppString.reason,
@@ -338,7 +332,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _remarksController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "3"
-        ? _col(
+        ? CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         hintText: AppString.remarks,
         label: AppString.remarks,
@@ -353,7 +348,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _followUpDateController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "3"
-        ? _col(
+        ? CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         hintText: AppString.followUpDate,
         label: AppString.followUpDate,
@@ -381,20 +377,5 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           BlocProvider.of<FormFeasibilityBloc>(context).add(SubmitFormFeasibilityEvent(context: context));
         })
         : DottedLoaderWidget();
-  }
-
-  Widget _col({required Widget child}) {
-    return Column(
-      children: [
-        _verticalSpace(),
-        child,
-      ],
-    );
-  }
-
-  Widget _verticalSpace() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    );
   }
 }

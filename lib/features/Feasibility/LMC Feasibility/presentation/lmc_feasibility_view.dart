@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
@@ -84,14 +85,14 @@ class _FeasibilityViewState extends State<FeasibilityView> {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 children: [
-                  _verticalSpace(),
+                  CommonStyle.vertical(context: context),
                   _areaDropDown(dataState: dataState),
-                  _verticalSpace(),
+                  CommonStyle.vertical(context: context),
                   _searchTextField(dataState: dataState),
                 ],
               ),
             ),
-            _verticalSpace(),
+            CommonStyle.vertical(context: context),
             Text("Click on row to open Feasibility Form", style: Styles.labels,),
             Flexible(child: Padding(
               padding: const EdgeInsets.only(bottom: 18.0),
@@ -105,8 +106,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _areaDropDown({required LMCFeasibilityDataState dataState}) {
     return DropdownWidget<GetAllAreaModel>(
-      label: "Select Area",
-      hint: "Select Area",
+      label: AppString.area,
+      hint:AppString.area,
       dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
@@ -139,7 +140,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
   }
 
   Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
-    return dataState.feasibilityModel?.success == 400
+    return dataState.isAreaFilter == false
+        ? dataState.feasibilityModel?.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
             data: ThemeData(highlightColor: AppColor.primer1),
@@ -165,7 +167,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                       scrollDirection: Axis.horizontal,
                       child: Theme(
                         data: Theme.of(context).copyWith(dividerColor: AppColor.primer),
-                        child: DataTable(
+                        child:  DataTable(
                           sortAscending: true,
                           columnSpacing: 0,
                           horizontalMargin: 0,
@@ -175,11 +177,11 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                           headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
                           dividerThickness: 1,
                           columns: [
-                            _dataColumn(label: "S.No"),
-                            _dataColumn(label: "Mobile Number"),
-                            _dataColumn(label: "BP Number"),
-                            _dataColumn(label: "Area"),
-                            _dataColumn(label: "Name"),
+                            CommonStyle.dataColumn(label: "S.No"),
+                            CommonStyle.dataColumn(label: "Mobile Number"),
+                            CommonStyle.dataColumn(label: "BP Number"),
+                            CommonStyle.dataColumn(label: "Area"),
+                            CommonStyle.dataColumn(label: "Name"),
                           ],
                           rows: dataState.listOfFilterFeasibilityRow
                               .mapIndexed((index, user) => DataRow(
@@ -211,11 +213,11 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                                       },
                                       cells: <DataCell>[
-                                        _dataCell(label: (dataState.listOfFilterFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                                        _dataCell(label: user.mobileNumber.toString()),
-                                        _dataCell(label: user.bpNumber.toString()),
-                                        _dataCell(label: user.areaName.toString()),
-                                        _dataCell(label: user.firstName.toString()),
+                                        CommonStyle.dataCell(label: (dataState.listOfFilterFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                        CommonStyle.dataCell(label: user.mobileNumber.toString()),
+                                        CommonStyle.dataCell(label: user.bpNumber.toString()),
+                                        CommonStyle.dataCell(label: user.areaName.toString()),
+                                        CommonStyle.dataCell(label: user.firstName.toString()),
                                       ]))
                               .toList(),
                         ),
@@ -225,27 +227,6 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                 ),
               ),
             ),
-          );
-  }
-
-  DataColumn _dataColumn({required String label}) {
-    return DataColumn(
-        label: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label, style: Styles.table),
-    ));
-  }
-
-  DataCell _dataCell({required String label}) {
-    return DataCell(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label),
-    ));
-  }
-
-  Widget _verticalSpace() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.02,
-    );
+          ): Center(child: SpinLoader());
   }
 }

@@ -16,6 +16,7 @@ import 'package:lmc/features/Installation/FormInstallation/helper/form_installat
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
 import 'package:lmc/features/NGC/NGCForm/helper/ngc_form_helper.dart';
+import 'package:lmc/service/Apis.dart';
 
 class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   NGCFormBloc() : super(NGCFormInitialState()) {
@@ -70,12 +71,12 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   String isInstall = "";
   String lmcInstallationId = "";
   String regulatorId = '';
+  String srRegulatorId = '';
   String materialId = '';
   String meterReplace = "0";
   String lmcPath = "";
   String baseUrl = '';
   String networkMeterPhoto = "";
- // String networkMeterPhotoPath = '';
 
   TextEditingController meterNumberSerialController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
@@ -139,6 +140,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     isCheckRegulatorMismatch = false;
     isCheckSR = false;
     regulatorId = '';
+    srRegulatorId = '';
     materialId = '';
     meterReplace = "0";
     mrPhoto = File("");
@@ -178,20 +180,23 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     typeOfNrValue.value = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "":PrefsValue.typeOfNr);
     regulatorTypeValue.name = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" :PrefsValue.regulatorType);
     regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "": PrefsValue.regulatorTypeId);
-    srNumberController.text = await SharedPref.getString(key: PrefsValue.regulatorSerial);
+    srRegulatorId = await SharedPref.getString(key: PrefsValue.srRegulatorId);
+    srNumberController.text = await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
+    regulatorId = await SharedPref.getString(key: PrefsValue.mrRegulatorId);
     regulatorSerialController.text = await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
-    regulatorId = await SharedPref.getString(key: PrefsValue.regulators);
     lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+    String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
     networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
-    _meterPhoto = File(baseUrl+"uploads/"+lmcPath+"/" +networkMeterPhoto.toString());
+    _meterPhoto = File(baseUrl+pathKye+lmcPath+"/" +networkMeterPhoto.toString());
     dmaUserId = await SharedPref.getString(key: PrefsValue.dmaUserId) ?? "";
     isInstall = await SharedPref.getString(key: PrefsValue.isInstall);
     lmcInstallationId = await SharedPref.getString(key: PrefsValue.lmcInstallationId);
     nameContractorController.text = await SharedPref.getString(key: PrefsValue.userName) ?? "";
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber) ?? "0";
     meterInitialReading.text = await SharedPref.getString(key: PrefsValue.meterReading) ?? "0";
-    meterSerialController.text = await SharedPref.getString(key: PrefsValue.meterSerial) ?? "0";
+    materialId = await SharedPref.getString(key: PrefsValue.meterNumberId) ?? "0";
+    meterSerialController.text = await SharedPref.getString(key: PrefsValue.meterNumberSerial) ?? "0";
     mobileNumberController.text =await SharedPref.getString(key: PrefsValue.mobileNumber) ?? "";
     emailIdController.text = await SharedPref.getString(key: PrefsValue.email)??"-";
     altMobileNumberController.text = await SharedPref.getString(key: PrefsValue.alternateMobileNo) ?? "";
@@ -201,7 +206,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     dateInstallationController.text = await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
     proposedNgcDateController.text = await SharedPref.getString(key: PrefsValue.proposedNgcDate) ?? "";
     ngConversionDateController.text =  DateFormat(AppString.dateFormat).format(DateTime.now());
-  //  await fetchDelayReasonApi(context: event.context);
+    //  await fetchDelayReasonApi(context: event.context);
     await fetchTypeOfNrApi(context: event.context);
     await fetchNgcReasonApi(context: event.context);
     await fetchMeterReplaceTypeApi(context: event.context);
@@ -211,7 +216,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     if(regulatorTypeValue.id != null){
       await fetchRegulatorsApi(context: event.context,regulatorSerial: "", regulatorType : regulatorTypeValue.id.toString());
     }
-   _eventCompleted(emit);
+    _eventCompleted(emit);
   }
 
   checkDelayReason(){
@@ -243,7 +248,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var res = await FormInstallationHelper.getTypeOfNrApi(context: context);
     if (res != null) {
       listOfTypeOfNr = res;
-     // typeOfNrValue = listOfTypeOfNr.first;
+      // typeOfNrValue = listOfTypeOfNr.first;
       return res;
     }
   }
@@ -307,12 +312,12 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   fetchMetersApi({required BuildContext context, required String meterSerial}) async {
     if(role == "ngc"){
-    var res = await NGCFormHelper.getMetersNGCApi(context: context, meterSerial: meterSerial);
-    if (res != null) {
-      listOfMeterNumber = res;
-      listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
-      return res;
-    }
+      var res = await NGCFormHelper.getMetersNGCApi(context: context, meterSerial: meterSerial);
+      if (res != null) {
+        listOfMeterNumber = res;
+        listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
+        return res;
+      }
     } else if(role == "lmc"){
       var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
       if (res != null) {
@@ -345,7 +350,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
   _selectSRegulators(SelectSRegulatorsEvent event, emit) async {
     srNumberController.text = event.sRegulators;
-    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
+    srRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
     if(event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
       isCheckSR = true;
     }else{
@@ -367,7 +372,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
- /* fetchDelayReasonApi({required BuildContext context}) async {
+  /* fetchDelayReasonApi({required BuildContext context}) async {
     var res = await NGCFormHelper.lmcReasonApi(context: context);
     if (res != null) {
       listOfDelayReason = res;
@@ -538,20 +543,21 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           jmrNo:bpNumberController.text.trim().toString(),
           lmcInstallationId: lmcInstallationId.toString(),
           meterReading: meterInitialReading.text.trim().toString(),
-          mismatchMeterNo:isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
-          meterNumber: isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
+          mismatchMeterNo: materialId,
+          meterNumberId: materialId,
+          /* mismatchMeterNo:isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
+          meterNumberId: isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),*/
           nameOfContractor: nameContractorController.text.trim().toString(),
           nOfBurners: noOfBurnersController.text.trim().toString(),
           delayReasonValue: delayReasonValue.name == null ? "" :delayReasonValue.name.toString(),
           reasonOfDelay: delayReasonController.text.trim().toString(),
           workCompletedDate: dateInstallationController.text.trim().toString(),
           meterChangeReason: reasonMeterChangeController.text.trim().toString(),
-          regulatorsNumber: regulatorId.toString(),
-          mrRegulatorId: regulatorId.toString(),
-          regulatorTypeId: regulatorTypeValue,
           replaceMeter: meterReplace.toString(),
           changeMeterType: meterReplaceTypeValue,
-          srNumber: srNumberController.text.trim().toString(),
+          regulatorTypeId: regulatorTypeValue,
+          srRegulatorId: srRegulatorId.toString(),
+          mrRegulatorId: regulatorId.toString(),
           latitudeMR: latOfMRController.text.trim().toString(),
           longitudeMR: longOfMRController.text.trim().toString(),
           latitudeTf: latOfSRController.text.trim().toString(),
@@ -584,58 +590,58 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _eventCompleted(emit) {
     emit(NGCFormDataState(
-      userName : userName,
-      schema : schema,
-      isPageLoader : isPageLoader,
-      isBtnLoader : isBtnLoader,
-      isCheckMeterMismatch : isCheckMeterMismatch,
-      isMeterReplace : isMeterReplace,
-      isRegulator : isRegulator,
-      listOfMeterNumber: listOfMeterNumber,
-      listOfMeterNumberSerial: listOfMeterNumberSerial,
-      regulatorSerialController: regulatorSerialController,
+        userName : userName,
+        schema : schema,
+        isPageLoader : isPageLoader,
+        isBtnLoader : isBtnLoader,
+        isCheckMeterMismatch : isCheckMeterMismatch,
+        isMeterReplace : isMeterReplace,
+        isRegulator : isRegulator,
+        listOfMeterNumber: listOfMeterNumber,
+        listOfMeterNumberSerial: listOfMeterNumberSerial,
+        regulatorSerialController: regulatorSerialController,
         proposedNgcDateController: proposedNgcDateController,
-      listOfMeterNumberId: listOfMeterNumberId,
-      listOfRegulator: listOfRegulator,
-      listOfRegulatorSerial: listOfRegulatorSerial,
-      listOfRegulatorId: listOfRegulatorId,
-      regulatorTypeValue: regulatorTypeValue,
-      meterTypeValue: meterReplaceTypeValue,
-      listOfRegulatorType: listOfRegulatorType,
-      listOfMeterType: listOfMeterReplaceType,
-      srNumberController : srNumberController,
-      meterNumberSerialController : meterNumberSerialController,
-      noOfFamilyMembersController : noOfFamilyMembersController,
-      ngConversionDateController : ngConversionDateController,
-      latOfSRController : latOfSRController,
-      longOfSRController : longOfSRController,
-      nameContractorController : nameContractorController,
-      bpNumberController : bpNumberController,
-      meterInitialReading : meterInitialReading,
-      reasonMeterChangeController : reasonMeterChangeController,
-      noOfBurnersController : noOfBurnersController,
-      meterSerialController : meterSerialController,
-      mobileNumberController : mobileNumberController,
-      altMobileNumberController : altMobileNumberController,
-      emailIdController : emailIdController,
-      ngChargeDateController : ngConversionDateController,
-      typeOfNrController : typeOfNrController,
-      dateInstallationController : dateInstallationController,
+        listOfMeterNumberId: listOfMeterNumberId,
+        listOfRegulator: listOfRegulator,
+        listOfRegulatorSerial: listOfRegulatorSerial,
+        listOfRegulatorId: listOfRegulatorId,
+        regulatorTypeValue: regulatorTypeValue,
+        meterTypeValue: meterReplaceTypeValue,
+        listOfRegulatorType: listOfRegulatorType,
+        listOfMeterType: listOfMeterReplaceType,
+        srNumberController : srNumberController,
+        meterNumberSerialController : meterNumberSerialController,
+        noOfFamilyMembersController : noOfFamilyMembersController,
+        ngConversionDateController : ngConversionDateController,
+        latOfSRController : latOfSRController,
+        longOfSRController : longOfSRController,
+        nameContractorController : nameContractorController,
+        bpNumberController : bpNumberController,
+        meterInitialReading : meterInitialReading,
+        reasonMeterChangeController : reasonMeterChangeController,
+        noOfBurnersController : noOfBurnersController,
+        meterSerialController : meterSerialController,
+        mobileNumberController : mobileNumberController,
+        altMobileNumberController : altMobileNumberController,
+        emailIdController : emailIdController,
+        ngChargeDateController : ngConversionDateController,
+        typeOfNrController : typeOfNrController,
+        dateInstallationController : dateInstallationController,
         delayReasonController : delayReasonController,
-      delayReasonValue :delayReasonValue,
-      listOfDelayReason :listOfDelayReason,
-      meterPhoto: meterPhoto,
-      ngcReportPhoto : ngcReportPhoto,
-      latOfMRController: latOfMRController,
-      longOfMRController: longOfMRController,
-      mrPhoto: mrPhoto,
-      srPhoto: srPhoto,
-      isDelayReason: isDelayReason,
-      listOfTypeOfNr: listOfTypeOfNr,
-      typeOfNrValue: typeOfNrValue,
-      baseUrl: baseUrl,
-      lmcPath: lmcPath,
-      listOfSRSerial: listOfSRSerial
+        delayReasonValue :delayReasonValue,
+        listOfDelayReason :listOfDelayReason,
+        meterPhoto: meterPhoto,
+        ngcReportPhoto : ngcReportPhoto,
+        latOfMRController: latOfMRController,
+        longOfMRController: longOfMRController,
+        mrPhoto: mrPhoto,
+        srPhoto: srPhoto,
+        isDelayReason: isDelayReason,
+        listOfTypeOfNr: listOfTypeOfNr,
+        typeOfNrValue: typeOfNrValue,
+        baseUrl: baseUrl,
+        lmcPath: lmcPath,
+        listOfSRSerial: listOfSRSerial
     ));
   }
 

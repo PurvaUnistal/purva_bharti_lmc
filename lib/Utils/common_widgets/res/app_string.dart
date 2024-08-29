@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-1.26.8.24";
+  static String version = "Version : LMC-1.29.8.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -29,6 +29,7 @@ class AppString {
   static String ngConH = "NG Conversion APP";
   static String feasibilityForm = "Feasibility Form";
   static String installationForm = "Installation Form";
+  static String ngConversionForm = "NG Conversion Form";
 
   static String search = "Search";
   static String selectArea = "Select Area";
@@ -56,7 +57,7 @@ class AppString {
   static String searchBPNumber = "Search BP Number...";
   static String bpNumber = "BP Number";
   static String lmcProDate = "Proposed Installation Date";
-  static String rfcDecDate = "RFC Declaration date";
+  static String rfcDate = "RFC Date";
   static String installationDate = "Date of Installation";
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Is Feasible?";

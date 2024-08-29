@@ -66,6 +66,7 @@ class FormInstallationDataState extends FormInstallationState {
   TextEditingController bpNumberController;
   TextEditingController trNumberController;
   TextEditingController proposedDateController;
+  TextEditingController rfcDateController;
   TextEditingController feasibilityDateController;
   TextEditingController installationDateController;
   TextEditingController meterIniReading1Controller;
@@ -114,6 +115,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.bpNumberController,
     required this.trNumberController,
     required this.proposedDateController,
+    required this.rfcDateController,
     required this.feasibilityDateController,
     required this.installationDateController,
     required this.meterIniReading1Controller,
@@ -157,6 +159,7 @@ class FormInstallationDataState extends FormInstallationState {
         bpNumberController,
     trNumberController,
         proposedDateController,
+    rfcDateController,
     feasibilityDateController,
         installationDateController,
         meterIniReading1Controller,

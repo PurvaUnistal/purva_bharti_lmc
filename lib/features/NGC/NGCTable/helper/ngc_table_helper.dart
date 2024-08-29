@@ -40,13 +40,11 @@ class NgcTableHelper {
     String json = Uri(queryParameters: para).query;
     log("json-->$json");
     String url = Apis.getLmcInstallationByNgc +json;
-    log("getLmcInstallationByNgcUrl--> " + url);
     try {
       final res = await ApiHelper.getData(
         urlEndPoint:url,
         context: context,
       );
-      log("Apis.getLmcInstallationByNgc-->${url}");
       if (res != null) {
         return LMCInstallationByNgcModel.fromJson(jsonDecode(res));
       }

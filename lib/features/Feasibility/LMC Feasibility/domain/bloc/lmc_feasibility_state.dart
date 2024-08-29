@@ -19,7 +19,7 @@ class LMCFeasibilityPageLoadState extends LMCFeasibilityState {
 //ignore: must_be_immutable
 class LMCFeasibilityDataState extends LMCFeasibilityState {
   final bool isLoader;
-  final bool isLoadingMore;
+  final bool isAreaFilter;
   final dynamic allAreaValue;
   final int pageNo;
   final String schema;
@@ -34,7 +34,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
     required this.schema,
     required this.userName,
     required this.isLoader,
-    required this.isLoadingMore,
+    required this.isAreaFilter,
     required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
@@ -49,7 +49,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
   List<Object?> get props => [
         schema,
         userName,
-        isLoadingMore,
+        isAreaFilter,
         allAreaValue,
         pageNo,
         listOfAllArea,
