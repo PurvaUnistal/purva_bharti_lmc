@@ -52,31 +52,6 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: RoutesName.splash,
           onGenerateRoute: Routes.generateRoute,
-        //  home: Ima(),
         ));
-  }
-}
-
-class Ima extends StatelessWidget {
-  const Ima({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Network Image in a Container'),
-      ),
-      body:Card(
-        child: Container(
-          width: MediaQuery.of(context).size.width *0.23,
-          height:MediaQuery.of(context).size.height* 0.12,
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColor.primer),
-          ),
-          child:  Image.network("http://142.79.231.30:8097/uploads/chk902/installation/2024/aug/meter_photo_70451724137589.jpg".toString(), fit: BoxFit.cover,),
-        ),
-      ),
-
-    );
   }
 }

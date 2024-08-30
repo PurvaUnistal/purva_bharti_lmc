@@ -73,7 +73,7 @@ class AppString {
   static String srNoErrorMsg = "SR Incorrect or Not allocated ";
   static String regulator = "Regulators";
   static String meterRegulator = "Meter Regulator";
-  static String meterInitNumber = "* Meter Initial Reading";
+  static String meterInitNumber = "Meter Initial Reading";
   static String latOfSR = "Latitude of SR";
   static String longOfSR = "Longitude of SR";
   static String latOfMR = "Latitude of MR";

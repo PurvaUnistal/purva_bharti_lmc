@@ -169,7 +169,7 @@ class FormInstallationHelper {
     } else if (isCheckMeterMismatch == true) {
       Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
       return false;
-    } else if (meterInit1.isEmpty && meterInit2.isEmpty && meterInit3.isEmpty) {
+    } else if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
       Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
       return false;
     } else if(isInstallRegulator == true){

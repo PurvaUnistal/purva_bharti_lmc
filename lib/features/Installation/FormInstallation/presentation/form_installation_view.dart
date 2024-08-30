@@ -118,14 +118,14 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _meterConnectionDropdown(stateData: dataState),
           CommonStyle.vertical(context: context),
           _meterNumberController(stateData: dataState),
-          CommonStyle.vertical(context: context),
+         // CommonStyle.vertical(context: context),
           _initialMeterReading(stateData: dataState),
-          CommonStyle.vertical(context: context),
+         // CommonStyle.vertical(context: context),
           _installRegulatorCheck(stateData: dataState),
           _regulatorTypeDropdown(stateData: dataState),
           _srNumberController(stateData: dataState),
           _regulatorController(stateData: dataState),
-          CommonStyle.vertical(context: context),
+         // CommonStyle.vertical(context: context),
           _ngConversionDateController(stateData: dataState),
           CommonStyle.vertical(context: context),
           _materialList(stateData: dataState),
@@ -278,9 +278,17 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppString.meterInitNumber,
-          style: Styles.labels,
+        Row(
+          children: [
+            Text(
+              AppString.star,
+              style: Styles.stars,
+            ),
+            Text(
+              AppString.meterInitNumber,
+              style: Styles.labels,
+            ),
+          ],
         ),
         Row(
           children: [
@@ -377,20 +385,23 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
   Widget _installRegulatorCheck({required FormInstallationDataState stateData}) {
-    return  Card(
-      child: Row(
-        children: [
-          Checkbox(
-            value:stateData.isInstallRegulator,
-            onChanged: (newVal){
-              BlocProvider.of<FormInstallationBloc>(context).add(SelectInstallRegulatorEvent(
-                  context: context,
-                  installRegulator: newVal!
-              ));
-            },
-          ),
-          Text(AppString.installRegulator, style: Styles.labels,),
-        ],
+    return  CommonStyle.col(
+      context: context,
+      child: Card(
+        child: Row(
+          children: [
+            Checkbox(
+              value:stateData.isInstallRegulator,
+              onChanged: (newVal){
+                BlocProvider.of<FormInstallationBloc>(context).add(SelectInstallRegulatorEvent(
+                    context: context,
+                    installRegulator: newVal!
+                ));
+              },
+            ),
+            Text(AppString.installRegulator, style: Styles.labels,),
+          ],
+        ),
       ),
     );
   }
@@ -412,37 +423,38 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _regulatorController({required FormInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true ? stateData.isRegulator == false
-        ? CommonStyle.col(
-      context: context,
-        child: stateData.regulatorTypeValue?.name != null ? AutoCompleteTextFieldWidget(
-        star: AppString.star,
-        enabled: stateData.regulatorTypeValue?.name == null ? false : true,
-        label: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        hintText: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        suggestions: stateData.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : stateData.listOfRegulatorSerial,
-        keyboardType: TextInputType.text,
-        controller: stateData.regulatorSerialController,
-        onSelected: (val) {
-          formKey.currentState?.validate();
-          BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-        },
-        validator: (value) {
-          if(value != null && value.isNotEmpty && !stateData.listOfRegulatorSerial.contains(value)) {
-            return AppString.regulatorNoErrorMsg;
-          }
-          return null;
-        },
-        onChanged: (val) async {
-          await formKey.currentState?.validate();
-          BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-        },
-      ) : Container(),
-    ) : DottedLoaderWidget()
+        ? stateData.regulatorTypeValue?.name != null ? CommonStyle.col(
+          context: context,
+          child: AutoCompleteTextFieldWidget(
+          star: AppString.star,
+          enabled: stateData.regulatorTypeValue?.name == null ? false : true,
+          label: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
+          hintText: stateData.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
+          suggestions: stateData.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : stateData.listOfRegulatorSerial,
+          keyboardType: TextInputType.text,
+          controller: stateData.regulatorSerialController,
+          onSelected: (val) {
+            formKey.currentState?.validate();
+            BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
+          },
+          validator: (value) {
+            if(value != null && value.isNotEmpty && !stateData.listOfRegulatorSerial.contains(value)) {
+              return AppString.regulatorNoErrorMsg;
+            }
+            return null;
+          },
+          onChanged: (val) async {
+            await formKey.currentState?.validate();
+            BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
+          },
+                ),
+        ) : Container() : DottedLoaderWidget()
         : Container();
   }
 
   Widget _srNumberController({required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true ? stateData.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
+    return stateData.isInstallRegulator == true ? stateData.isRegulator == false ? stateData.regulatorTypeValue?.name == "SR"
+        ? CommonStyle.col(
       context: context,
       child: AutoCompleteTextFieldWidget(
         star: AppString.star,
@@ -466,26 +478,29 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           BlocProvider.of<FormInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
         },
       ),
-    ): Container(): Container();
+    ): Container() : DottedLoaderWidget() : Container();
   }
 
 
 
   Widget _ngConversionDateController({required FormInstallationDataState stateData}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.ngConversionDate,
-      label: AppString.ngConversionDate,
-      controller: stateData.ngConversionDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
+    return CommonStyle.col(
+      context: context,
+      child: TextFieldWidget(
+        star: AppString.star,
+        hintText: AppString.ngConversionDate,
+        label: AppString.ngConversionDate,
+        controller: stateData.ngConversionDateController,
+        suffixIcon: IconButtonWidget(
+          iconData: Icons.calendar_today,
+          onPressed: () {
+            BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
+          },
+        ),
+        onTap: () {
           BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
         },
       ),
-      onTap: () {
-        BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
-      },
     );
   }
 
@@ -614,10 +629,11 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
   Widget _checkListRFC({required FormInstallationDataState stateData}) {
+    var w = MediaQuery.of(context).size.width * 0.5;
+    print("_checkListRFC-->${w}");
     return GridView.builder(
-      padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200.0,
+        maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
         mainAxisSpacing: 0.0,
         crossAxisSpacing: 0.0,
         childAspectRatio: 4.0,

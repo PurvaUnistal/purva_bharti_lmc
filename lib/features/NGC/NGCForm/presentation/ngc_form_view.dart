@@ -134,18 +134,17 @@ class _NGCFormViewState extends State<NGCFormView> {
           _meterReplaceCheck(dataState : dataState),
            CommonStyle.vertical(context: context),
           _meterReplaceController(dataState : dataState),
-           CommonStyle.vertical(context: context),
           _meterTypeDropdown(dataState : dataState),
           _reasonMeterChangeController(dataState : dataState),
+          CommonStyle.vertical(context: context),
           _meterInitialReadingController(dataState : dataState),
-           CommonStyle.vertical(context: context),
           _regulatorTypeDropdown(dataState : dataState),
-           CommonStyle.vertical(context: context),
           _srNumberController(dataState : dataState),
           _regulatorController(dataState : dataState),
           _mrPhoto(dataState : dataState),
           _locationOfSR(dataState : dataState),
           _locationOfMR(dataState : dataState),
+          CommonStyle.vertical(context: context),
           _contractorWidget(dataState : dataState),
            CommonStyle.vertical(context: context),
           RowWidget(
@@ -240,7 +239,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _delayReasonDropdown({required NGCFormDataState dataState}) {
-    return dataState.isDelayReason == true ? _col(
+    return dataState.isDelayReason == true ? CommonStyle.col(
+      context: context,
       child: DropdownWidget<LmcReasonModel>(
         star: AppString.star ,
         label: AppString.delayStatus,
@@ -254,7 +254,8 @@ class _NGCFormViewState extends State<NGCFormView> {
     ): Container();
   }
   Widget _delayReasonControllerWidget({required NGCFormDataState dataState}) {
-    return dataState.isDelayReason == true ? _col(
+    return dataState.isDelayReason == true ? CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         label: AppString.delayReason,
         hintText: AppString.delayReason,
@@ -347,7 +348,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _meterTypeDropdown({required NGCFormDataState dataState}) {
-    return  dataState.isMeterReplace == true ? _col(
+    return  dataState.isMeterReplace == true ? CommonStyle.col(
+      context: context,
       child: DropdownWidget<LmcReasonModel>(
         star: AppString.star,
         label: AppString.meterType,
@@ -362,7 +364,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _reasonMeterChangeController({required NGCFormDataState dataState}) {
-    return  dataState.isMeterReplace == true ? _col(
+    return  dataState.isMeterReplace == true ? CommonStyle.col(
+      context: context,
       child: TextFieldWidget(
         label: AppString.reasonMeterChange,
         hintText: AppString.reasonMeterChange,
@@ -385,20 +388,24 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _regulatorTypeDropdown({required NGCFormDataState dataState}) {
-    return DropdownWidget<LmcReasonModel>(
-      star: AppString.star,
-      label: AppString.regulatorType,
-      hint: AppString.regulatorType,
-      dropdownValue: dataState.regulatorTypeValue!.name!.isEmpty  ? null : dataState.regulatorTypeValue,
-      items: dataState.listOfRegulatorType,
-      onChanged: (val) {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeValueEvent(regulatorTypeValue: val!, context:context));
-      },
+    return CommonStyle.col(
+      context: context,
+      child: DropdownWidget<LmcReasonModel>(
+        star: AppString.star,
+        label: AppString.regulatorType,
+        hint: AppString.regulatorType,
+        dropdownValue: dataState.regulatorTypeValue!.name!.isEmpty  ? null : dataState.regulatorTypeValue,
+        items: dataState.listOfRegulatorType,
+        onChanged: (val) {
+          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeValueEvent(regulatorTypeValue: val!, context:context));
+        },
+      ),
     );
   }
 
   Widget _regulatorController({required NGCFormDataState dataState}) {
-    return  dataState.isRegulator == false ?  _col(
+    return  dataState.isRegulator == false ?  CommonStyle.col(
+      context: context,
       child: dataState.regulatorTypeValue?.id != "0" ? AutoCompleteTextFieldWidget(
         star: AppString.star,
         enabled: dataState.regulatorTypeValue?.name == null ? false : true,
@@ -425,7 +432,8 @@ class _NGCFormViewState extends State<NGCFormView> {
     ): DottedLoaderWidget();
   }
   Widget _srNumberController({required NGCFormDataState dataState}) {
-    return  dataState.isRegulator == false ? dataState.regulatorTypeValue?.name == "SR" ? _col(
+    return  dataState.isRegulator == false ? dataState.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
+      context: context,
       child:AutoCompleteTextFieldWidget(
         star: AppString.star,
         label:  AppString.srNumber,
@@ -452,7 +460,8 @@ class _NGCFormViewState extends State<NGCFormView> {
         : DottedLoaderWidget();
   }
   Widget _locationOfMR({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR" ? _col(
+    return dataState.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
+      context: context,
       child: Row(
         children: [
           Flexible(
@@ -488,7 +497,8 @@ class _NGCFormViewState extends State<NGCFormView> {
     ) : Container();
   }
   Widget _locationOfSR({required NGCFormDataState dataState}) {
-    return  dataState.regulatorTypeValue?.name == "SR" ? _col(
+    return  dataState.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
+      context: context,
       child: Row(
         children: [
           Flexible(
@@ -525,7 +535,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _mrPhoto({required NGCFormDataState dataState}){
-    return dataState.regulatorTypeValue?.name == "SR" ?  _col(
+    return dataState.regulatorTypeValue?.name == "SR" ?  CommonStyle.col(
+      context: context,
       child: RowWidget(
         widget1: ImageWidget(
           star: AppString.star,
@@ -682,20 +693,7 @@ class _NGCFormViewState extends State<NGCFormView> {
     ) : DottedLoaderWidget();
   }
 
- /* Widget _sizedBox() {
-    var h = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: h * 0.02,
-    );
-  }*/
 
-  Widget _col({required Widget child}){
-    return Column(
-      children: [
-        child,
-        CommonStyle.vertical(context: context),
-      ],
-    );
-  }
+
 
 }
