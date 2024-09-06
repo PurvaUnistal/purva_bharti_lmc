@@ -9,7 +9,8 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReaso
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/model/SubmitNgcReportModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
+// import 'package:lmc/service/api_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
@@ -49,7 +50,7 @@ class NGCFormHelper{
   }
 
   static Future<void> clearCache() async {
-    Directory path = Directory("/data/user/0/com.unistal.pbg.ngc_app/cache/");
+    Directory path = Directory("/data/user/0/com.app.pbg.lmc/cache/");
 
     if(await path.exists()) {
       List<FileSystemEntity> files = path.listSync();
@@ -60,7 +61,7 @@ class NGCFormHelper{
       }
     }
 
-    Directory path2 = Directory("/data/user/0/com.unistal.pbg.ngc_app/cache/file_picker/");
+    Directory path2 = Directory("/data/user/0/com.app.pbg.lmc/cache/file_picker/");
 
     if(await path2.exists()) {
       path2.deleteSync(recursive: true);
@@ -70,7 +71,7 @@ class NGCFormHelper{
   static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
-      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("lmcReasonApi-->${e.toString()}");
@@ -81,7 +82,7 @@ class NGCFormHelper{
   static Future<List<LmcReasonModel>?> ngcReasonApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.ngcReason, context: context);
-      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("ngcReasonApi-->${e.toString()}");
@@ -92,7 +93,7 @@ class NGCFormHelper{
   static Future<List<LmcReasonModel>?> meterReplaceTypeApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.meterReplaceType, context: context);
-      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("lmcReasonApi-->${e.toString()}");
@@ -103,7 +104,7 @@ class NGCFormHelper{
   static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
-      List<LmcReasonModel> response = lmcReasonModelFromJson(res);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("regulatorTypeApi-->${e.toString()}");
@@ -278,6 +279,7 @@ class NGCFormHelper{
     required String isInstall,
     required String comment,
     required String meterNumberId,
+    required String srNumber,
     required String srRegulatorId,
     required LmcReasonModel regulatorTypeId,
     required String meterChangeReason,
@@ -295,32 +297,32 @@ class NGCFormHelper{
     required String ngcReportPhoto,
   }) async {
     Map<String, String> body = {
-      "schema": schema ?? "",
-      "name_of_contractor": nameOfContractor ?? "",
-      "meter_reading": meterReading ?? "",
-      "jmr_no": jmrNo ?? "",
-      "no_of_burners": nOfBurners ?? "",
-      "mismatch_meter_no": mismatchMeterNo ?? "",
-      "ngc_meter_number": meterNumberId ?? "",
-      "contact_person": contactPerson ?? "",
+      "schema": schema,
+      "name_of_contractor": nameOfContractor.isEmpty ? "" : nameOfContractor,
+      "meter_reading": meterReading.isEmpty ? "" :meterReading,
+      "jmr_no": jmrNo.isEmpty ? "" :jmrNo,
+      "no_of_burners": nOfBurners.isEmpty ? "" : nOfBurners,
+      "mismatch_meter_no": mismatchMeterNo.isEmpty ? "" :mismatchMeterNo,
+      "ngc_meter_number": meterNumberId.isEmpty ? "" :meterNumberId,
+      "contact_person": contactPerson.isEmpty ? "" : contactPerson,
       "reason_of_delay":  reasonOfDelay.isEmpty  ? "" :reasonOfDelay.toString(),
       "delay_status": delayReasonValue.isEmpty  ? "" :delayReasonValue.toString(),
-      "alternate_mobile": alternateMobile ?? "",
-      "email": email ?? "",
+      "alternate_mobile": alternateMobile.isEmpty ? "" : alternateMobile,
+      "email": email.isEmpty ? "" :email,
       "conversion_date": conversionDate.isEmpty ? "" : conversionDate,
-      "work_completed_date": workCompletedDate ?? "",
-      "dma_user_id": dmaUserId ?? "",
-      "lmc_installation_id": lmcInstallationId ?? "",
-      "is_install": isInstall ?? "",
-      "comment": comment ?? "",
-      "tf_number": srRegulatorId,
+      "work_completed_date": workCompletedDate.isEmpty ? "" : workCompletedDate,
+      "dma_user_id": dmaUserId.isEmpty ? "" : dmaUserId,
+      "lmc_installation_id": lmcInstallationId.isEmpty ? "" : lmcInstallationId,
+      "is_install": isInstall.isEmpty ? "" : isInstall,
+      "comment": comment.isEmpty ? "" : comment,
       "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
-      "meter_change_reason": meterChangeReason,
+      "meter_change_reason": meterChangeReason.isEmpty ? "": meterChangeReason,
       "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
       "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
-      /*"regulators_number": srRegulatorId ?? "",
+      "tf_number": srNumber.isEmpty ? "" : srNumber,
+     /* "regulators_number": srRegulatorId ?? "",
       "mr_regulator_id": mrRegulatorId,*/
-      "regulators_number": mrRegulatorId ?? "",
+      "regulators_number": mrRegulatorId,
       "mr_regulator_id": srRegulatorId,
       "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
       "longitude_mr": longitudeMR.isEmpty ? "0" :longitudeMR,

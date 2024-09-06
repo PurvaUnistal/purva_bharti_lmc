@@ -8,21 +8,22 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialIt
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 
-abstract class FormInstallationState extends Equatable {}
+abstract class FormRFCInstallationState extends Equatable {}
 
-class FormInstallationInitialState extends FormInstallationState {
+class FormRFCInstallationInitialState extends FormRFCInstallationState {
   @override
   List<Object> get props => [];
 }
 
-class FormInstallationPageLoadState extends FormInstallationState {
+class FormInstallationPageLoadState extends FormRFCInstallationState {
   @override
   List<Object> get props => [];
 }
 
-class FormInstallationDataState extends FormInstallationState {
+class FormRFCInstallationDataState extends FormRFCInstallationState {
   String schema;
   String userName;
+  String baseUrl;
   bool isLoader;
   bool isExtraPipe;
   bool isInstallRegulator;
@@ -77,9 +78,10 @@ class FormInstallationDataState extends FormInstallationState {
   TextEditingController meterNumberSerialController;
   TextEditingController regulatorSerialController;
 
-  FormInstallationDataState({
+  FormRFCInstallationDataState({
     required this.userName,
     required this.schema,
+    required this.baseUrl,
     required this.isInstallRegulator,
     required this.isLoader,
     required this.isExtraPipe,
@@ -137,59 +139,60 @@ class FormInstallationDataState extends FormInstallationState {
   @override
   // TODO: implement props
   List<Object?> get props => [
-        schema,
-        userName,
-        isLoader,
+    schema,
+    baseUrl,
+    userName,
+    isLoader,
     isExtraPipe,
     isInstallRegulator,
-        isCheckRegulatorMismatch,
-        isCheckMeterMismatch,
-        isBtnLoader,
-        isDelayReason,
-        isRegulator,
-        meterPhoto,
+    isCheckRegulatorMismatch,
+    isCheckMeterMismatch,
+    isBtnLoader,
+    isDelayReason,
+    isRegulator,
+    meterPhoto,
     housePhoto,
-        meterNoValue,
-        typeOfNrValue,
-        delayReasonValue,
-        listOfMeterNumberSerial,
-        listOfTypeOfNr,
-        listOfDelayReason,
-        listOfMeterNumber,
-        regulatorTypeValue,
-        listOfRegulatorType,
+    meterNoValue,
+    typeOfNrValue,
+    delayReasonValue,
+    listOfMeterNumberSerial,
+    listOfTypeOfNr,
+    listOfDelayReason,
+    listOfMeterNumber,
+    regulatorTypeValue,
+    listOfRegulatorType,
     meterConnectionMeterController,
-        bpNumberController,
+    bpNumberController,
     trNumberController,
-        proposedDateController,
+    proposedDateController,
     rfcDateController,
     feasibilityDateController,
-        installationDateController,
-        meterIniReading1Controller,
-        meterIniReading2Controller,
-        meterIniReading3Controller,
-        meterInitialReadingController,
-        meterIniReading1FocusNode,
-        meterIniReading2FocusNode,
-        meterIniReading3FocusNode,
-        isSelected,
-        listOfQtyLMC,
-        rfcCardPhoto,
-        pneumaticTestReportPhoto,
-        installationPhoto,
-        listOfRegulatorSerial,
+    installationDateController,
+    meterIniReading1Controller,
+    meterIniReading2Controller,
+    meterIniReading3Controller,
+    meterInitialReadingController,
+    meterIniReading1FocusNode,
+    meterIniReading2FocusNode,
+    meterIniReading3FocusNode,
+    isSelected,
+    listOfQtyLMC,
+    rfcCardPhoto,
+    pneumaticTestReportPhoto,
+    installationPhoto,
+    listOfRegulatorSerial,
     listOfSRSerial,
-        listOfRegulator,
-        listOfAllMaterial,
-        listOfAllRFC,
-        materialList,
-        latOfHouseController,
-        longOfHouseController,
-        ngConversionDateController,
+    listOfRegulator,
+    listOfAllMaterial,
+    listOfAllRFC,
+    materialList,
+    latOfHouseController,
+    longOfHouseController,
+    ngConversionDateController,
     srNumberController,
-        extraPipeController,
-        extraPriceController,
-        meterNumberSerialController,
-        regulatorSerialController,
-      ];
+    extraPipeController,
+    extraPriceController,
+    meterNumberSerialController,
+    regulatorSerialController,
+  ];
 }

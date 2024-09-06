@@ -13,21 +13,21 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstan
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
 import 'package:lmc/features/Home/presentation/home_view.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_event.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_state.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_event.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_state.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/helper/form_rfc_installation_helper.dart';
+import 'package:lmc/service/Apis.dart';
 
-class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationState> {
-  FormInstallationBloc() : super(FormInstallationInitialState()) {
-    on<FormInstallationPageLoadEvent>(_pageLoad);
+class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInstallationState> {
+  FormRFCInstallationBloc() : super(FormRFCInstallationInitialState()) {
+    on<FormRFCInstallationPageLoadEvent>(_pageLoad);
     on<SelectInstallationDateEvent>(_selectInstallationDate);
     on<SelectDelayReasonValueEvent>(_selectDelayReasonValue);
     on<SelectInstallRegulatorEvent>(_selectInstallRegulator);
     on<SelectRegulatorTypeValueEvent>(_selectRegulatorTypeValue);
-    on<SelectNGCValueEvent>(_selectNGCValue);
-    on<SelectTypeNRValueEvent>(_selectTypeNRValue);
     on<SelectMeterNumberValueEvent>(_selectMeterNumberValue);
     on<SelectRegulatorsValueEvent>(_selectRegulatorsValue);
     on<SelectSREvent>(_selectSR);
@@ -47,7 +47,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
     on<SelectRFCCheckValueEvent>(_selectRFCCheckValue);
     on<SelectQTYLMCEvent>(_selectQTYLMC);
-    on<SubmitFormInstallationEvent>(_submit);
+    on<SubmitFormRFCInstallation>(_submit);
   }
 
   bool isLoader = false;
@@ -75,6 +75,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   GetConstantModel readyNGCValue = GetConstantModel();
   LmcReasonModel delayReasonValue = LmcReasonModel();
   LmcReasonModel regulatorTypeValue = LmcReasonModel();
+  RFCInstallationLmc rfcInstallationLmc = RFCInstallationLmc();
 
   List<ListOfMeterNo> listOfMeterNumber = [];
   List<String> listOfMeterNumberSerial = [];
@@ -93,6 +94,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<String> listOfAllMaterialId = [];
   List<String> listOfQtyLMC = [];
   List<GetConstantModel> listOfAllRFC = [];
+  List<RFCInstallationMaterial> listOfRFCInstallationMaterial = [];
 
   TextEditingController meterConnectionMeterController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
@@ -122,6 +124,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   String regulatorId = '';
   String sRegulatorId = '';
   String materialId = '';
+  String baseUrl = '';
 
   File housePhoto = File("");
   File rfcCardPhoto = File("");
@@ -129,8 +132,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   File pneumaticTestReportPhoto = File("");
   File installationPhoto = File("");
 
-  _pageLoad(FormInstallationPageLoadEvent event, emit) async {
-    emit(FormInstallationInitialState());
+  _pageLoad(FormRFCInstallationPageLoadEvent event, emit) async {
+    emit(FormRFCInstallationInitialState());
     isLoader = false;
     isBtnLoader = false;
     isSelected = false;
@@ -150,6 +153,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     typeOfNrValue = GetConstantModel();
     delayReasonValue = LmcReasonModel();
     regulatorTypeValue = LmcReasonModel();
+    rfcInstallationLmc = RFCInstallationLmc();
     listOfMeterNumber = [];
     listOfMeterNumberSerial = [];
     listOfMeterNumberId = [];
@@ -190,6 +194,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     meterInitialReadingController.text = "";
     ngConversionDateController.text = "";
     rfcDateController.text = "";
+    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
@@ -204,7 +209,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
     feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
-    await fetchTypeOfNrApi(context: event.context);
+    await fetchRFCInstallationApi(context: event.context);
     await fetchReadyForNgcApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchDelayReasonApi(context: event.context);
@@ -226,7 +231,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       installationDateController.text = await formattedDate.toString();
-       checkDelayReason();
+      checkDelayReason();
       _eventCompleted(emit);
     }
   }
@@ -276,11 +281,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-  _selectNGCValue(SelectNGCValueEvent event, emit) {
-    readyNGCValue = event.readyNGCValue;
-    _eventCompleted(emit);
-  }
-
   _selectInstallRegulator(SelectInstallRegulatorEvent event, emit) async {
     isInstallRegulator = event.installRegulator;
     if(isInstallRegulator == true){
@@ -307,22 +307,69 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-  _selectTypeNRValue(SelectTypeNRValueEvent event, emit) {
-    typeOfNrValue = event.typeOfNRValue;
-    _eventCompleted(emit);
-  }
-
-  fetchTypeOfNrApi({required BuildContext context}) async {
-    var res = await FormInstallationHelper.getTypeOfNrApi(context: context);
+  fetchRFCInstallationApi({required BuildContext context}) async {
+    var res = await FormRFCInstallationHelper.lmcRFCInstallationApi(context: context);
     if (res != null) {
-      listOfTypeOfNr = res;
-      typeOfNrValue = listOfTypeOfNr.first;
+      if(res.data?.lmc != null){
+        rfcInstallationLmc = res.data!.lmc!;
+        installationDateController.text = rfcInstallationLmc.workCompletedDate!;
+        delayReasonValue.name = rfcInstallationLmc.delayReason!;
+        String isValid = rfcInstallationLmc.regulatorCheck!;
+        if(isValid == "1"){
+          isInstallRegulator = bool.parse("true");
+        }else{
+          isInstallRegulator = bool.parse("false");
+        }
+        String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
+        if(regulatorTypeId == "1"){
+          regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
+          regulatorTypeValue.name = "SR";
+        }else if(regulatorTypeId == "0"){
+          regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
+          regulatorTypeValue.name = "PRV";
+        }
+        meterConnectionMeterController.text = rfcInstallationLmc.typeOfNr!;
+        srNumberController.text = rfcInstallationLmc.mrRegulatorSerial!;
+        meterNumberSerialController.text = rfcInstallationLmc.meterSerial!;
+        regulatorSerialController.text = rfcInstallationLmc.regulatorSerial!;
+        sRegulatorId = rfcInstallationLmc.mrRegulatorId!;
+        regulatorId = rfcInstallationLmc.regulators!;
+        materialId = rfcInstallationLmc.meterNumber!;
+        rfcDateController.text = rfcInstallationLmc.rfcDate!;
+        ngConversionDateController.text = rfcInstallationLmc.proposedNgcDate!;
+        meterTesting = rfcInstallationLmc.meterTesting!;
+        paintingOfGIPipe = rfcInstallationLmc.paintaingofGIpipe!;
+        for(int i = 0; i< listOfAllRFC.length; i++){
+          if(meterTesting == "1"){
+            listOfAllRFC[i].isSelected = true;
+          }else{
+            listOfAllRFC[i].isSelected = false;
+          }
+          if(paintingOfGIPipe == "1"){
+            listOfAllRFC[i].isSelected = true;
+          }else{
+            listOfAllRFC[i].isSelected = false;
+          }
+        }
+        String lmcPath = rfcInstallationLmc.lmcpath!;
+        String networkMeterPhoto = rfcInstallationLmc.meterPhoto!;
+        String networkHouseImage = rfcInstallationLmc.houseImage!;
+        baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+        String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
+        meterPhoto = File(baseUrl+pathKye+lmcPath+"/" +networkMeterPhoto.toString());
+        housePhoto = File(baseUrl+pathKye+lmcPath+"/" +networkHouseImage.toString());
+      }
+      if(res.data?.material != null){
+        listOfRFCInstallationMaterial = res.data!.material!;
+        listOfQtyLMC = listOfRFCInstallationMaterial.map((e) => e.materialQty!).toList();
+        print("listOfQtyLMC------>${listOfQtyLMC}");
+      }
       return res;
     }
   }
 
   fetchReadyForNgcApi({required BuildContext context}) async {
-    var res = await FormInstallationHelper.getReadyForNgcApi(context: context);
+    var res = await FormRFCInstallationHelper.getReadyForNgcApi(context: context);
     if (res != null) {
       listOfReadyNGC = res;
       return res;
@@ -330,7 +377,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   fetchDelayReasonApi({required BuildContext context}) async {
-    var res = await FormInstallationHelper.lmcReasonApi(context: context);
+    var res = await FormRFCInstallationHelper.lmcReasonApi(context: context);
     if (res != null) {
       listOfDelayReason = res;
       return res;
@@ -338,7 +385,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   fetchRegulatorTypeApi({required BuildContext context}) async {
-    var res = await FormInstallationHelper.regulatorTypeApi(context: context);
+    var res = await FormRFCInstallationHelper.regulatorTypeApi(context: context);
     if (res != null) {
       listOfRegulatorType = res;
       return res;
@@ -389,7 +436,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if(sumOfPipes > 15.0){
       isExtraPipe = true;
       _eventCompleted(emit);
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
+      var res = await FormRFCInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
       extraPriceController.text = "";
       extraPipeController.text = "";
       extraPipe = "";
@@ -422,7 +469,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
   fetchMetersApi({required BuildContext context, required String meterSerial}) async {
-    var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
+    var res = await FormRFCInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
     if (res != null) {
       listOfMeterNumber = res;
       listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
@@ -430,7 +477,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
   }
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    var res = await FormInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+    var res = await FormRFCInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
@@ -476,7 +523,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _setHouseLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
+    var getLocation = await FormRFCInstallationHelper.getCurrentLocation();
     latOfHouseController.text = getLocation.latitude.toString();
     longOfHouseController.text = getLocation.longitude.toString();
     return getLocation;
@@ -488,7 +535,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureGalleryMeter(CaptureGalleryMeterEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
+    var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       meterPhoto = photoPath;
@@ -497,7 +544,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureCameraMeter(CaptureCameraMeterEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.cameraCapture();
+    var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       meterPhoto = photoPath;
@@ -506,7 +553,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureGalleryRFCCard(CaptureGalleryRFCCardEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
+    var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       rfcCardPhoto = photoPath;
@@ -515,7 +562,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureCameraRFCCard(CaptureCameraRFCCardEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.cameraCapture();
+    var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       rfcCardPhoto = photoPath;
@@ -524,7 +571,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureGalleryPneumatic(CaptureGalleryPneumaticEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
+    var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       pneumaticTestReportPhoto = photoPath;
@@ -533,7 +580,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureCameraPneumatic(CaptureCameraPneumaticEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.cameraCapture();
+    var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       pneumaticTestReportPhoto = photoPath;
@@ -542,7 +589,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureGalleryInstallation(CaptureGalleryInstallationEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
+    var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       installationPhoto = photoPath;
@@ -551,7 +598,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureCameraInstallation(CaptureCameraInstallationEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.cameraCapture();
+    var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       installationPhoto = photoPath;
@@ -560,7 +607,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _captureGalleryHouse(CaptureGalleryHouseEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
+    var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       await _setHouseLocation();
@@ -570,8 +617,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
 
-  _captureCameraHouse(CaptureCameraHouseEvent event, Emitter<FormInstallationState> emit) async {
-    var photoPath = await FormInstallationHelper.cameraCapture();
+  _captureCameraHouse(CaptureCameraHouseEvent event, Emitter<FormRFCInstallationState> emit) async {
+    var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       await _setHouseLocation();
@@ -590,7 +637,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _selectRFCCheckValue(SelectRFCCheckValueEvent event, emit) {
-    emit(FormInstallationInitialState());
+    emit(FormRFCInstallationInitialState());
     isSelected = event.isSelected;
     listOfAllRFC[event.index].isSelected = isSelected;
     if(listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == true){
@@ -606,9 +653,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-  _submit(SubmitFormInstallationEvent event, emit) async {
+  _submit(SubmitFormRFCInstallation event, emit) async {
     try {
-      var validationCheck = await FormInstallationHelper.validationSubmit(
+      var validationCheck = await FormRFCInstallationHelper.validationSubmit(
         context: event.context,
         dateInstallation: installationDateController.text.trim().toString(),
         isDelayReason: isDelayReason,
@@ -635,7 +682,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       if (validationCheck == true) {
         isBtnLoader = true;
         _eventCompleted(emit);
-        var res = await FormInstallationHelper.saveLMCInstallation(
+        var res = await FormRFCInstallationHelper.saveLMCInstallation(
           context: event.context,
           extraPipe: extraPipe.toString(),
           extraPrice: extraPrice.toString(),
@@ -686,8 +733,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _eventCompleted(emit) {
-    emit(FormInstallationDataState(
+    emit(FormRFCInstallationDataState(
       userName: userName,
+      baseUrl: baseUrl,
       schema: schema,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,

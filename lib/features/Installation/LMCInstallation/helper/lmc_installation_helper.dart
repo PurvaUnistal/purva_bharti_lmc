@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
+//import 'package:lmc/service/api_helper.dart';
 
 class LMCInstallationHelper{
   static Future<InstallationDoneModel?> getLMCInstallationApi({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
@@ -27,7 +27,7 @@ class LMCInstallationHelper{
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
       if (res != null) {
-        return InstallationDoneModel.fromJson(jsonDecode(res));
+        return InstallationDoneModel.fromJson(res);
       }
     } catch (e) {
       log("getLMCInstallationApi-->${e.toString()}");

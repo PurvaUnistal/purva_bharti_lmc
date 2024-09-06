@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/Environment/AppConfig.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
@@ -9,6 +10,7 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasi
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_bloc.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_bloc.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_bloc.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
@@ -19,7 +21,18 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  void initState() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -36,6 +49,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (BuildContext context) => LMCInstallationBloc()),
           BlocProvider(create: (BuildContext context) => PreviewInstallationBloc()),
           BlocProvider(create: (BuildContext context) => FormInstallationBloc()),
+          BlocProvider(create: (BuildContext context) => FormRFCInstallationBloc()),
           BlocProvider(create: (BuildContext context) => NgcTableBloc()),
           BlocProvider(create: (BuildContext context) => NGCFormBloc()),
         ],

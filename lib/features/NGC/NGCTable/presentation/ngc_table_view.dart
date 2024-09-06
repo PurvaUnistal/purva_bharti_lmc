@@ -180,12 +180,11 @@ class _NgcTableViewState extends State<NgcTableView> {
                     columns: [
                       CommonStyle.dataColumn(label: "S.No"),
                       CommonStyle.dataColumn(label: "Ready for NGC"),
-                      CommonStyle.dataColumn(label: "BP Number"),
-                      CommonStyle.dataColumn(label: "Installation Date"),
-                      CommonStyle.dataColumn(label: "Area"),
                       CommonStyle.dataColumn(label: "Mobile Number"),
+                      CommonStyle.dataColumn(label: "BP Number"),
+                      CommonStyle.dataColumn(label: "Area"),
                       CommonStyle.dataColumn(label: "First Name"),
-                      CommonStyle.dataColumn(label: "Surname"),
+                      CommonStyle.dataColumn(label: "Installation Date"),
                     ],
                     rows: dataState.listOfFilterInstallationByNgc.mapIndexed((index, user) =>
                         DataRow(
@@ -345,11 +344,11 @@ class _NgcTableViewState extends State<NgcTableView> {
                                 if(user.futureRegNgcEligibleStatus == "1")...[
                                   if(user.paymentCreditStatus == "1")...[
                                     if(user.depositAmountBeforeNgc == "0")...[
-                                      _dataCellIcon(label: "Yes"),
+                                      CommonStyle.dataCellG(label: "Yes"),
                                     ]else...[
                                       if(user.ngcStatus == "1")...[
                                         if(user.paymentCreditStatusNgc == "1")...[
-                                          _dataCellIcon(label: "Yes"),
+                                          CommonStyle.dataCellG(label: "Yes"),
                                         ]else...[
                                           _dataCellStatus(label: "Gas Deposit Payment Pending.", color: AppColor.blue),
                                         ]
@@ -365,11 +364,11 @@ class _NgcTableViewState extends State<NgcTableView> {
                                 ]
                               ]else...[
                                 if(user.depositAmountBeforeNgc == "0")...[
-                                  _dataCellIcon(label: "Yes"),
+                                  CommonStyle.dataCellG(label: "Yes"),
                                 ]else...[
                                   if(user.ngcStatus == "1")...[
                                     if(user.paymentCreditStatusNgc == "1")...[
-                                      _dataCellIcon(label: "Yes"),
+                                      CommonStyle.dataCellG(label: "Yes"),
                                     ]else...[
                                       _dataCellStatus(label: "Gas Deposit Payment Pending.", color: AppColor.blue)
                                     ],
@@ -378,13 +377,11 @@ class _NgcTableViewState extends State<NgcTableView> {
                                   ],
                                 ]
                               ],
-
-                              CommonStyle.dataCell(label: user.bpNumber.toString()),
-                              CommonStyle.dataCell(label: user.dateOfRegistration.toString()),
-                              CommonStyle.dataCell(label: user.areaName.toString()),
                               CommonStyle.dataCell(label: user.mobileNumber.toString()),
+                              CommonStyle.dataCell(label: user.bpNumber.toString()),
+                              CommonStyle.dataCell(label: user.areaName.toString()),
                               CommonStyle.dataCell(label: user.firstName.toString()),
-                              CommonStyle.dataCell(label: user.lastName.toString()),
+                              CommonStyle.dataCell(label: user.dateOfRegistration.toString()),
                             ]))
                         .toList(),
                   ),
@@ -401,12 +398,7 @@ class _NgcTableViewState extends State<NgcTableView> {
   DataCell _dataCellStatus({required String label, required Color color }) {
     return DataCell(Text(label, style: Styles.status(color:color ),));
   }
-  DataCell _dataCellIcon({required String label}) {
-    return DataCell(Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(label, style: Styles.title,),
-    ));
-  }
+
 }
 
 

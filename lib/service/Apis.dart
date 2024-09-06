@@ -1,6 +1,14 @@
-class Apis {
+import 'package:flutter/material.dart';
+import 'package:lmc/Utils/Environment/AppConfig.dart';
+import 'package:lmc/Utils/Environment/singleton.dart';
 
- //static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+class Apis {
+ /* static BuildContext? context = Singleton.instanceInit()?.context;
+  static final String? baseUrl = AppConfig.of(context!)!.getBaseUrl;*/
+
+  static String baseLiveUrl = 'http://pbgpl.smartgasnet.com/api/';
+  static String baseUatUrl = 'http://142.79.231.30:8097/api/';
+
    static String baseUrl = 'http://142.79.231.30:8097/api/';
   static String basePath = 'http://142.79.231.30:8097/';
 
@@ -10,6 +18,7 @@ class Apis {
   static String getLMCInstallation = baseUrl + "getlmcInstallationApi?";
   static String getRFCInstallation = baseUrl + "getlmcRFCInstallationApi?";
   static String getConstant = baseUrl + "getConstant?";
+  static String getlmcRFCInstallationApi = baseUrl + "getlmcRFCInstallationApi?";
   static String lmcReason = baseUrl + "lmcreason";
   static String meterReplaceType = baseUrl + "meterreplacetype";
   static String ngcReason = baseUrl + "ngcreason";

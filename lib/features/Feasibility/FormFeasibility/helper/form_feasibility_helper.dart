@@ -1,16 +1,17 @@
-import 'dart:convert';
+
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
+//import 'package:lmc/service/api_helper.dart';
 
 class FormFeasibilityHelper {
   static Future<List<GetConstantModel>?> getCheckFeasibilityApi({required BuildContext context}) async {
@@ -20,7 +21,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
+      List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
       log("checkFeasibility-->${e.toString()}");
@@ -35,7 +36,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
+      List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
       log("lmcReason-->${e.toString()}");
@@ -51,7 +52,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
-      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(jsonDecode(res));
+      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {
       log("getAllFreePipeMaterial-->${e.toString()}");
@@ -67,7 +68,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);
-      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(jsonDecode(res));
+      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {
       log("getAllFreeMaterial-->${e.toString()}");
@@ -82,7 +83,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(jsonDecode(res));
+      List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
       log("getRFCApi-->${e.toString()}");
@@ -113,10 +114,12 @@ class FormFeasibilityHelper {
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String feasibilityDate,
+    required String pipeLength,
     required String proposedDate,
     required GetConstantModel isFeasible,
     required GetConstantModel lmcReasonValue,
     required String reason,
+    required String followUpDate,
   }) async {
     try {
       if (feasibilityDate.isEmpty) {
@@ -125,7 +128,10 @@ class FormFeasibilityHelper {
       } else if (isFeasible.key == null) {
         Utils.errorSnackBar(msg: "The Is Feasible field is required.", context: context);
         return false;
-      } else if (proposedDate.isEmpty) {
+      } else if (pipeLength.isEmpty) {
+        Utils.errorSnackBar(msg: "At-least one field is required.", context: context);
+        return false;
+      }else if (proposedDate.isEmpty) {
         Utils.errorSnackBar(msg: "The LMC Proposed Date field is required.", context: context);
         return false;
       } else if(isFeasible.key == "2" || isFeasible.key == "3"){
@@ -138,7 +144,11 @@ class FormFeasibilityHelper {
             return false;
           }
         }
-        return true;
+      } if(isFeasible.key == "3"){
+        if(followUpDate.isEmpty){
+          Utils.errorSnackBar(msg: "The Follow Up Date field is required.", context: context);
+          return false;
+        }
       }
       return true;
     } catch (e) {
@@ -180,8 +190,7 @@ class FormFeasibilityHelper {
         "extra_price": extraPrice,
       };
       log("para-->${para}");
-      log("Url-->${Apis.saveLmcFeasibility}");
-      var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, body: para, context: context);
+      var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);
       if(res != null && res["error"] == false){
         return SaveFeasibleModel.fromJson(res);
       } else if(res != null && res["error"] == true){

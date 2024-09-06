@@ -34,8 +34,8 @@ class AppString {
   static String search = "Search";
   static String selectArea = "Select Area";
   static String custReg = "Customer Registration";
-  static String trNumber = "TR Number";
-  static String lmcAssignedDate = "LMC assigned Date";
+  static String crNumber = "CR Number";
+  static String assignedDate = "Assigned Date";
   static String lmcFeaDate = "Date of Feasibility";
   static String chargeArea = "Charge Area";
   static String area = "Area";
@@ -54,7 +54,7 @@ class AppString {
   static String town = "Town";
   static String district = "District";
   static String pinCode = "Pin Code";
-  static String searchBPNumber = "Search BP Number...";
+  static String searchBPNumber = "Search Mobile/BP Number...";
   static String bpNumber = "BP Number";
   static String lmcProDate = "Proposed Installation Date";
   static String rfcDate = "RFC Date";
@@ -68,7 +68,7 @@ class AppString {
   static String reasonDelay = "Reason for Delay";
   static String meterReadingDate = "Meter Reading Date";
   static String meterNumber = "Meter Number";
-  static String meterNoErrorMsg = "Meter not Issued or Meter Number Incorrect or Meter already Installed";
+  static String meterNoErrorMsg = "Meter not Issued or Meter Number Incorrect\nor Meter already Installed";
   static String regulatorNoErrorMsg = "regulator Incorrect or Not allocated";
   static String srNoErrorMsg = "SR Incorrect or Not allocated ";
   static String regulator = "Regulators";
@@ -107,8 +107,8 @@ class AppString {
   static String ngChargeDate = "NG Charge Date";
   static String followUpDate = "Follow Up Date";
   static String dateInstallation = "Date of Installation";
-  static String proposedNgcDate = "Proposed Ngc Date";
   static String ngConversionDate = "NG Conversion Date";
+  static String ngProposedDate = "Proposed NG Conversion Date";
   static String reasonForDelay = "Reason for Delay";
   static String meterType = "Change Meter Reason";
   static String reasonMeterChange = "Remarks";

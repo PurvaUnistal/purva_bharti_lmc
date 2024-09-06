@@ -11,23 +11,30 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasib
 import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPipeDetailsModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
-// import 'package:lmc/service/api_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class FormInstallationHelper {
-  static Future<List<GetConstantModel>?> getTypeOfNrApi({required BuildContext context}) async {
+class FormRFCInstallationHelper {
+
+  static Future<RFCInstallationModel?> lmcRFCInstallationApi({required BuildContext context}) async {
+    String schema = await SharedPref.getString(key: PrefsValue.schema,);
+    String userId = await SharedPref.getString(key: PrefsValue.userId,);
+    String bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
+    Map<String, String> para = {
+      "schema": schema,
+      "user_id": userId,
+      "page": "",
+      "bp_number": bpNumber,
+      "area_id": "",
+    };
+    String json = Uri(queryParameters: para).query;
     try {
-      Map<String, String> para = {
-        "key": "typeOfNr",
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(res);
-      return response;
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getlmcRFCInstallationApi + json, context: context);
+      return RFCInstallationModel.fromJson(res);
     } catch (e) {
-      log("typeOfNr-->${e.toString()}");
+      log("getlmcRFCInstallationApi-->${e.toString()}");
     }
     return null;
   }
@@ -311,14 +318,14 @@ class FormInstallationHelper {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }else{
-         Utils.errorSnackBar(msg: res["data"], context: context);
-         return null;
+        Utils.errorSnackBar(msg: res["data"], context: context);
+        return null;
       }
     } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
       return null;
     }
-}
+  }
 
   static Future<File> cameraCapture() async {
     await Permission.camera.request();

@@ -36,6 +36,8 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   String town;
   String district;
   String pinCode;
+  String lmcInstallId;
+  String rfcProcessStatus;
 
   PreviewInstallationDataState({
     required this.schema,
@@ -60,32 +62,36 @@ class PreviewInstallationDataState extends PreviewInstallationState {
     required this.town,
     required this.district,
     required this.pinCode,
+    required this.lmcInstallId,
+    required this.rfcProcessStatus,
   });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
-        schema,
-        userName,
-        isLoader,
-        custRegNo,
+    schema,
+    userName,
+    isLoader,
+    custRegNo,
     trNumber,
     bpNumber,
-        feasibilityVisitDate,
-        chargeArea,
-        areaName,
-        street,
-        firstName,
-        lastName,
-        mobileNumber,
-        guardianName,
-        proCateName,
-        propClass,
-        buildingNumber,
-        houseNumber,
-        locality,
-        town,
-        district,
-        pinCode,
-      ];
+    feasibilityVisitDate,
+    chargeArea,
+    areaName,
+    street,
+    firstName,
+    lastName,
+    mobileNumber,
+    guardianName,
+    proCateName,
+    propClass,
+    buildingNumber,
+    houseNumber,
+    locality,
+    town,
+    district,
+    pinCode,
+    lmcInstallId,
+    rfcProcessStatus,
+  ];
 }

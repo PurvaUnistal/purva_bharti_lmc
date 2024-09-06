@@ -59,7 +59,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
     if (event.searchBpNumber.length > 1) {
-      listOfFilterInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber)).toList();
+      listOfFilterInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber) || element.mobileNumber.toString().contains(event.searchBpNumber)).toList();
       _eventCompleted(emit);
     } else if(event.searchBpNumber.length == 0){
       listOfFilterInstallationRow = await listOfInstallationRow;

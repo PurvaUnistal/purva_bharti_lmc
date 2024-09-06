@@ -11,6 +11,7 @@ import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/form_installation_view.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/presentation/form_rfc_installation_view.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_event.dart';
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_state.dart';
@@ -91,8 +92,7 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
                   ),
                 ),
-                _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
-                _rowItem(textName: AppString.trNumber, textValue: dataState.trNumber),
+                _rowItem(textName: AppString.crNumber, textValue: dataState.custRegNo),
                 _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
                 _rowItem(textName: AppString.lmcFeaDate, textValue: dataState.feasibilityVisitDate),
                 _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
@@ -134,7 +134,11 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
         ? ButtonWidget(
             text: AppString.installation,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FormInstallationView()));
+              if(dataState.rfcProcessStatus == '' && dataState.lmcInstallId == ""){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FormInstallationView()));
+              } else if(dataState.rfcProcessStatus == ''){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FormRFCInstallationView()));
+              }
             })
         : DottedLoaderWidget();
   }

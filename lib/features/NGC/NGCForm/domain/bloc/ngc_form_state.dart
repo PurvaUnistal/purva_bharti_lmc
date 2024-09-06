@@ -46,6 +46,7 @@ class NGCFormDataState extends NGCFormState {
   List<LmcReasonModel> listOfRegulatorType;
   List<LmcReasonModel> listOfMeterType;
   TextEditingController regulatorSerialController;
+  TextEditingController meterConnectionMeterController;
   TextEditingController proposedNgcDateController;
   TextEditingController noOfFamilyMembersController;
   TextEditingController ngConversionDateController;
@@ -102,6 +103,7 @@ class NGCFormDataState extends NGCFormState {
 
 
     required this.regulatorSerialController,
+    required this.meterConnectionMeterController,
     required this.proposedNgcDateController,
     required this.noOfFamilyMembersController,
     required this.ngConversionDateController,
@@ -164,6 +166,7 @@ class NGCFormDataState extends NGCFormState {
     latOfSRController,
     longOfSRController,
 
+    meterConnectionMeterController,
     nameContractorController,
     noOfFamilyMembersController,
     meterNumberSerialController,

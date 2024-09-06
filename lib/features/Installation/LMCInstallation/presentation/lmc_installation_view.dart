@@ -171,6 +171,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                     dividerThickness: 1,
                     columns: [
                       CommonStyle.dataColumn(label: "S.No"),
+                      CommonStyle.dataColumn(label: "Status"),
                       CommonStyle.dataColumn(label: "Mobile Number"),
                       CommonStyle.dataColumn(label: "BP Number"),
                       CommonStyle.dataColumn(label: "Area"),
@@ -179,7 +180,9 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                     rows: dataState.listOfFilterInstallationRow
                         .mapIndexed((index, user) => DataRow(
                         onSelectChanged: (newValue) async {
-                          await SharedPref.setString(key: PrefsValue.trNumber, value: user.trNumber!);
+                          await SharedPref.setString(key: PrefsValue.lmcInstallId, value: user.lmcInstallId!);
+                          await SharedPref.setString(key: PrefsValue.rfcProcessStatus, value: user.rfcProcessStatus!);
+                          await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn!);
                           await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
                           await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate == "" ? AppString.dateFormat : user.proposedDate!);
                           await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
@@ -201,6 +204,11 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                         },
                         cells: <DataCell>[
                           CommonStyle.dataCell(label: (dataState.listOfFilterInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                          if(user.rfcProcessStatus == "" && user.lmcInstallId == "")...[
+                            CommonStyle.dataCellG(label: "Installation"),
+                          ]else if(user.rfcProcessStatus == "")...[
+                            CommonStyle.dataCellR(label: "RFC Pending"),
+                          ],
                           CommonStyle.dataCell(label: user.mobileNumber.toString()),
                           CommonStyle.dataCell(label: user.bpNumber.toString()),
                           CommonStyle.dataCell(label: user.areaName.toString()),

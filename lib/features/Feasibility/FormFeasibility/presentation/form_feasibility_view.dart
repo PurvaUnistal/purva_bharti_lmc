@@ -94,7 +94,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         children: [
           Text(AppString.feasibilityForm,style: Styles.text,textAlign: TextAlign.center,),
           CommonStyle.vertical(context: context),
-          CommonStyle.vertical(context: context),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -136,8 +135,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
   Widget _trNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.trNumber,
-      label: AppString.trNumber,
+      hintText: AppString.crNumber,
+      label: AppString.crNumber,
       enabled: false,
       controller: stateData.trNumberController,
     );
@@ -145,8 +144,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _assignedDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.lmcAssignedDate,
-      label: AppString.lmcAssignedDate,
+      hintText: AppString.assignedDate,
+      label: AppString.assignedDate,
       enabled: false,
       controller: stateData.assignedDateController,
     );
@@ -351,6 +350,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         ? CommonStyle.col(
       context: context,
       child: TextFieldWidget(
+        star: AppString.star,
         hintText: AppString.followUpDate,
         label: AppString.followUpDate,
         enabled: true,

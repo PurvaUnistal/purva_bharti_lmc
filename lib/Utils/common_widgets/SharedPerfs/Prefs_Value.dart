@@ -52,7 +52,7 @@ class PrefsValue {
   static String meterLMCFeasId = "meterLMCFeasId";
   static String proposedDate = "proposedDate";
   static String assignLmcDate = "assignLmcDate";
-  static String trNumber = "trNumber";
+  static String crNumber = "CRNumber";
   static String dmaUserId = "dmaUserId";
   static String lmcInstallationId = "lmcInstallationId";
   static String isInstall = "isInstall";
@@ -81,4 +81,6 @@ class PrefsValue {
   static String regulatorId = "regulatorId";
   static String mrRegulatorId = "mrRegulatorId";
   static String mrRegulatorSerial = "mrRegulatorSerial";
+  static String lmcInstallId = "lmcInstallId";
+  static String rfcProcessStatus = "rfcProcessStatus";
 }

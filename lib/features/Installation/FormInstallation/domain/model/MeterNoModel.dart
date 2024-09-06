@@ -33,20 +33,24 @@ class MeterNoModel {
 }
 
 class ListOfMeterNo {
+  final String? meterConnection;
   final String? serialNumber;
   final String? id;
 
   ListOfMeterNo({
+     this.meterConnection,
      this.serialNumber,
      this.id,
   });
 
   factory ListOfMeterNo.fromJson(Map<String, dynamic> json) => ListOfMeterNo(
+        meterConnection: json["meter_connection"] ?? "",
         serialNumber: json["serial_number"] ?? "",
         id: json["id"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
+        "meter_connection": meterConnection,
         "serial_number": serialNumber,
         "id": id,
       };

@@ -6,7 +6,8 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
+// import 'package:lmc/service/api_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NgcTableHelper {
@@ -19,7 +20,7 @@ class NgcTableHelper {
       var res = await ApiHelper.getData(
           urlEndPoint: Apis.areaList + schema!, context: context);
       if(res != null){
-        return getAllAreaModelFromJson(res);
+        return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
       }
     } catch (e) {
       log("getAllAreaModelFromJson-->${e.toString()}");
@@ -46,7 +47,7 @@ class NgcTableHelper {
         context: context,
       );
       if (res != null) {
-        return LMCInstallationByNgcModel.fromJson(jsonDecode(res));
+        return LMCInstallationByNgcModel.fromJson(res);
       }
     } catch (e) {
       log("LmcInstallationByNgcModel-->${e.toString()}");

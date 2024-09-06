@@ -10,7 +10,8 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
+//import 'package:lmc/service/api_helper.dart';
 
 class LoginHelper {
   static Future<dynamic> textFieldValidation({required String email, required String password, required BuildContext context}) async {
@@ -34,10 +35,10 @@ class LoginHelper {
     var deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
       var iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      return iosDeviceInfo.identifierForVendor;
     } else if (Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.id; // unique ID on Android
+      return androidDeviceInfo.id;
     }
     return null;
   }
@@ -50,8 +51,9 @@ class LoginHelper {
       "device": deviceId,
     };
     try {
-      var res = await ApiHelper.postData(urlEndPoint: Apis.loginUrl, body: jsonEncode(para), context: context);
-
+      var res = await ApiHelper.postData(
+          urlEndPoint: Apis.loginUrl,
+          param: para, context: context);
       if (res != null && res["error"] == false) {
         await Utils.successSnackBar(msg: res["messages"], context: context);
         String str = Apis.loginUrl;

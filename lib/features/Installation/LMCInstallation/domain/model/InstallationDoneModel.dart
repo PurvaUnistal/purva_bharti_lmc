@@ -32,6 +32,9 @@ class InstallationDoneModel {
 }
 
 class InstallationDoneRows {
+  String? lmcInstallId;
+  String? installationProcessStatus;
+  String? rfcProcessStatus;
   String? chargeAreaName;
   String? areaName;
   String? feasTpaRemarks;
@@ -106,7 +109,11 @@ class InstallationDoneRows {
   String? trNumber;
 
   InstallationDoneRows(
-      {this.chargeAreaName,
+      {
+        this.lmcInstallId,
+        this.installationProcessStatus,
+        this.rfcProcessStatus,
+        this.chargeAreaName,
         this.areaName,
         this.feasTpaRemarks,
         this.feasTpaApprovalDate,
@@ -181,6 +188,9 @@ class InstallationDoneRows {
       });
 
   InstallationDoneRows.fromJson(Map<String, dynamic> json) {
+    installationProcessStatus = json['installation_process_status'] ?? "";
+    lmcInstallId = json['lmc_install_id'] ?? "";
+    rfcProcessStatus = json['rfc_process_status'] ?? "";
     chargeAreaName = json['charge_area_name'] ?? "";
     areaName = json['area_name'] ?? "";
     feasTpaRemarks = json['feas_tpa_remarks'] ?? "";
@@ -257,6 +267,9 @@ class InstallationDoneRows {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['installation_process_status'] = this.installationProcessStatus;
+    data['lmc_install_id'] = this.lmcInstallId;
+    data['rfc_process_status'] = this.rfcProcessStatus;
     data['charge_area_name'] = this.chargeAreaName;
     data['area_name'] = this.areaName;
     data['feas_tpa_remarks'] = this.feasTpaRemarks;

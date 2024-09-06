@@ -94,7 +94,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
                   ),
                 ),
                 _rowItem(textName: AppString.custReg, textValue: dataState.custRegNo),
-                _rowItem(textName: AppString.trNumber, textValue: dataState.trNumber),
+                _rowItem(textName: AppString.crNumber, textValue: dataState.trNumber),
                 _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
                 _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
                 _rowItem(textName: AppString.area, textValue: dataState.areaName),

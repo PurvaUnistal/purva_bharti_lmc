@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 AllFreeMaterialModel allFreeMaterialModelFromJson(String str) => AllFreeMaterialModel.fromJson(json.decode(str));
 
 String allFreeMaterialModelToJson(AllFreeMaterialModel data) => json.encode(data.toJson());
@@ -35,6 +37,7 @@ class AllFreeMaterialModel {
 class FreeMaterialData {
   String? id;
   String? materialUnit;
+  TextEditingController? materialQty;
   String? status;
   DateTime? createdOn;
   String? make;
@@ -48,6 +51,7 @@ class FreeMaterialData {
   FreeMaterialData({
      this.id,
      this.materialUnit,
+     this.materialQty,
      this.status,
      this.createdOn,
      this.make,

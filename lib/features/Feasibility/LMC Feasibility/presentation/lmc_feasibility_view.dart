@@ -187,7 +187,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                               .mapIndexed((index, user) => DataRow(
                                       onSelectChanged: (newValue) async {
                                         await SharedPref.setString(key: PrefsValue.assignLmcDate, value: user.assignLmcDate ?? "");
-                                        await SharedPref.setString(key: PrefsValue.trNumber, value: user.trNumber ?? "");
+                                        await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn ?? "");
                                         await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate ?? "");
                                         await SharedPref.setString(key: PrefsValue.lmcId, value: user.lmcId ?? "");
                                         await SharedPref.setString(key: PrefsValue.assignId, value: user.assignId ?? "");

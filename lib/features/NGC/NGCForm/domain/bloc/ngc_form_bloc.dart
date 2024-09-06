@@ -79,6 +79,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   String networkMeterPhoto = "";
 
   TextEditingController meterNumberSerialController = TextEditingController();
+  TextEditingController meterConnectionMeterController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController srNumberController = TextEditingController();
   TextEditingController delayForReasonController = TextEditingController();
@@ -177,7 +178,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     latOfMRController.text = "0";
     longOfMRController.text = "0";
     role = await SharedPref.getString(key: PrefsValue.userRole);
-    typeOfNrValue.value = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "":PrefsValue.typeOfNr);
+    meterConnectionMeterController.text = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "":PrefsValue.typeOfNr);
     regulatorTypeValue.name = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" :PrefsValue.regulatorType);
     regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "": PrefsValue.regulatorTypeId);
     srRegulatorId = await SharedPref.getString(key: PrefsValue.srRegulatorId);
@@ -329,8 +330,11 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
+    materialId = "";
+    meterConnectionMeterController.text = "";
     meterNumberSerialController.text = event.meterReadingValue;
     materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
+    meterConnectionMeterController.text = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.meterConnection ?? "";
     if(event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
       isCheckMeterMismatch = true;
     }else{
@@ -359,27 +363,15 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
-
   _selectDelayReasonValue(SelectDelayReasonValueEvent event, emit) {
     delayReasonValue = event.delayReasonValue;
     _eventCompleted(emit);
   }
 
-
-
   _selectMeterTypeValue(SelectMeterTypeValueEvent event, emit) {
     meterReplaceTypeValue = event.meterTypeValue;
     _eventCompleted(emit);
   }
-
-  /* fetchDelayReasonApi({required BuildContext context}) async {
-    var res = await NGCFormHelper.lmcReasonApi(context: context);
-    if (res != null) {
-      listOfDelayReason = res;
-      return res;
-    }
-  }*/
-
 
   fetchNgcReasonApi({required BuildContext context}) async {
     var res = await NGCFormHelper.ngcReasonApi(context: context);
@@ -556,13 +548,14 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           replaceMeter: meterReplace.toString(),
           changeMeterType: meterReplaceTypeValue,
           regulatorTypeId: regulatorTypeValue,
+          srNumber: srNumberController.text.trim().toString(),
           srRegulatorId: srRegulatorId.toString(),
           mrRegulatorId: regulatorId.toString(),
           latitudeMR: latOfMRController.text.trim().toString(),
           longitudeMR: longOfMRController.text.trim().toString(),
           latitudeTf: latOfSRController.text.trim().toString(),
           longitudeTf: longOfSRController.text.trim().toString(),
-          meterPhoto:   meterPhoto.path.toString(),
+          meterPhoto: meterPhoto.path.toString(),
           mrPhoto: mrPhoto.path.toString(),
           srPhoto: srPhoto.path.toString(),
           ngcReportPhoto: ngcReportPhoto.path.toString(),
@@ -599,6 +592,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         isRegulator : isRegulator,
         listOfMeterNumber: listOfMeterNumber,
         listOfMeterNumberSerial: listOfMeterNumberSerial,
+        meterConnectionMeterController: meterConnectionMeterController,
         regulatorSerialController: regulatorSerialController,
         proposedNgcDateController: proposedNgcDateController,
         listOfMeterNumberId: listOfMeterNumberId,

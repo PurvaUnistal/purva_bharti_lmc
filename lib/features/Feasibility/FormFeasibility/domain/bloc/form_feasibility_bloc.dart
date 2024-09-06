@@ -47,7 +47,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   List<MaterialItem> materialList = [];
   List<MaterialItem> listOfMaterial = [];
   List<String> listOfQtyLMC = [];
-
+  String  qtyData = "";
   List<GetConstantModel> listOfAllRFC = [];
 
   TextEditingController bpNumberController = TextEditingController();
@@ -92,7 +92,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       key: PrefsValue.userName,
     );
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
-    trNumberController.text = await SharedPref.getString(key: PrefsValue.trNumber);
+    trNumberController.text = await SharedPref.getString(key: PrefsValue.crNumber);
     assignedDateController.text = await SharedPref.getString(key: PrefsValue.assignLmcDate);
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     proposedDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
@@ -140,6 +140,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
     checkFeasibleValue = event.checkFeasibility;
+    print(" event.checkFeasibility;-->${ event.checkFeasibility}");
+    print(" checkFeasibleValue-->${ checkFeasibleValue}");
     _eventCompleted(emit);
   }
 
@@ -156,7 +158,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     );
     if (res != null) {
       listOfAllMaterial = res;
-      tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
+      tempList = List.generate(listOfAllMaterial.length, (i) => listOfAllMaterial[i].id!);
       listOfAllMaterialId.addAll(tempList);
       listOfMaterial = List.generate(
         listOfAllMaterial.length,
@@ -165,10 +167,11 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
             unit: '${listOfAllMaterial[i].materialUnit}',
-            controller: TextEditingController(text: "0")),
+            controller: TextEditingController()),
       );
       materialList.addAll(listOfMaterial);
-      listOfQtyLMC = listOfMaterial.asMap().values.map((e) => e.controller.text).toList();
+      listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+      print("listOfQtyLMC-->${listOfQtyLMC}");
       return res;
     }
   }
@@ -179,9 +182,11 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       MaterialItem dataOfAllMaterial = listOfMaterial[i];
       if(dataOfAllMaterial.name.toLowerCase().contains("pipe")){
         if(dataOfAllMaterial.controller.text != ""){
+          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
           sumOfPipes +=  double.parse(dataOfAllMaterial.controller.text);
         }else{
-          dataOfAllMaterial.controller.text = '0';
+          dataOfAllMaterial.controller.text = '';
+          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         }
       }
     }
@@ -217,10 +222,12 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       var validationCheck = await FormFeasibilityHelper.validationSubmit(
         context: event.context,
         feasibilityDate: feasibilityDateController.text.trim().toString(),
+        pipeLength: listOfQtyLMC.toString().trim().replaceAll(' ', ''),
         isFeasible: checkFeasibleValue,
         lmcReasonValue: lmcReasonValue,
         proposedDate: proposedDateController.text.trim().toString(),
         reason: reasonController.text.trim().toString(),
+        followUpDate: followUpDateController.text.trim().toString(),
       );
       if (validationCheck == true) {
         isBtnLoader = true;

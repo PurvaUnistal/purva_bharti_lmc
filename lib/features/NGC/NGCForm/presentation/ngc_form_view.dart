@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -19,6 +21,7 @@ import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/image_widget.dart';
+import 'package:lmc/features/Installation/LMCInstallation/presentation/Widgets/cameraPopWidget.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_bloc.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
@@ -124,6 +127,20 @@ class _NGCFormViewState extends State<NGCFormView> {
               Flexible(flex: 1,child: _proposedNgcDateController(dataState : dataState)),
             ],
           ),
+          CommonStyle.vertical(context: context),
+          _contractorWidget(dataState : dataState),
+          CommonStyle.vertical(context: context),
+          RowWidget(
+              widget1: _burnerNoWidget(dataState : dataState),
+              widget2: _noOfFamilyMembersController(dataState : dataState)
+          ),
+          CommonStyle.vertical(context: context),
+          RowWidget(
+              widget1: _contactNoWidget(dataState : dataState),
+              widget2: _altContactNoWidget(dataState : dataState)
+          ),
+          CommonStyle.vertical(context: context),
+          _emailWidget(dataState : dataState),
            CommonStyle.vertical(context: context),
           _meterConnectionDropdown(dataState: dataState),
            CommonStyle.vertical(context: context),
@@ -133,7 +150,16 @@ class _NGCFormViewState extends State<NGCFormView> {
           _delayReasonControllerWidget(dataState : dataState),
           _meterReplaceCheck(dataState : dataState),
            CommonStyle.vertical(context: context),
-          _meterReplaceController(dataState : dataState),
+          Row(
+            children: [
+              Flexible(
+                  flex: 8,
+                  child: _meterReplaceController(dataState : dataState)),
+              Flexible(
+                  flex: 4,
+                  child: _meterConnectionControllerWidget(dataState : dataState)),
+            ],
+          ),
           _meterTypeDropdown(dataState : dataState),
           _reasonMeterChangeController(dataState : dataState),
           CommonStyle.vertical(context: context),
@@ -141,23 +167,9 @@ class _NGCFormViewState extends State<NGCFormView> {
           _regulatorTypeDropdown(dataState : dataState),
           _srNumberController(dataState : dataState),
           _regulatorController(dataState : dataState),
-          _mrPhoto(dataState : dataState),
+          _photoWidget(dataState : dataState),
           _locationOfSR(dataState : dataState),
           _locationOfMR(dataState : dataState),
-          CommonStyle.vertical(context: context),
-          _contractorWidget(dataState : dataState),
-           CommonStyle.vertical(context: context),
-          RowWidget(
-              widget1: _burnerNoWidget(dataState : dataState),
-              widget2: _noOfFamilyMembersController(dataState : dataState)
-          ),
-           CommonStyle.vertical(context: context),
-          RowWidget(
-              widget1: _contactNoWidget(dataState : dataState),
-              widget2: _altContactNoWidget(dataState : dataState)
-          ),
-           CommonStyle.vertical(context: context),
-          _emailWidget(dataState : dataState),
            CommonStyle.vertical(context: context),
           RowWidget(
               widget1: _meterPhoto(dataState : dataState),
@@ -185,8 +197,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
   Widget _proposedNgcDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.proposedNgcDate,
-      hintText: AppString.proposedNgcDate,
+      label: AppString.ngConversionDate,
+      hintText: AppString.ngConversionDate,
       enabled: false,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.text,
@@ -309,6 +321,16 @@ class _NGCFormViewState extends State<NGCFormView> {
               );
             });
       },
+    );
+  }
+
+  Widget _meterConnectionControllerWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      star: AppString.star,
+      label: AppString.meterConnection,
+      hintText: AppString.meterConnection,
+      enabled: false,
+      controller: dataState.meterConnectionMeterController,
     );
   }
 
@@ -462,129 +484,104 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _locationOfMR({required NGCFormDataState dataState}) {
     return dataState.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
       context: context,
-      child: Row(
-        children: [
-          Flexible(
-            flex: 3,
-            child: TextFieldWidget(
-              enabled: false,
-              star: AppString.star,
-              hintText: AppString.latOfMR,
-              label: AppString.latOfMR,
-              controller: dataState.latOfMRController,
-            ),
-          ),
-          CommonStyle.widthSpace(context: context),
-          Flexible(
-            flex: 3,
-            child: TextFieldWidget(
-              enabled: false,
-              star: AppString.star,
-              hintText: AppString.longOfMR,
-              label: AppString.longOfMR,
-              controller: dataState.longOfMRController,
-            ),
-          ),
-          CommonStyle.widthSpace(context: context),
+      child: RowWidget(
+        widget1: TextFieldWidget(
+          enabled: false,
+          star: AppString.star,
+          hintText: AppString.latOfMR,
+          label: AppString.latOfMR,
+          controller: dataState.latOfMRController,
+        ),
+       widget2: TextFieldWidget(
+         enabled: false,
+         star: AppString.star,
+         hintText: AppString.longOfMR,
+         label: AppString.longOfMR,
+         controller: dataState.longOfMRController,
+       ),
+         /* CommonStyle.widthSpace(context: context),
           IconButtonWidget(
             iconData: Icons.location_on,
             onPressed: () {
               BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfMREvent(context: context));
             },
-          )
-        ],
+          )*/
+
       ),
     ) : Container();
   }
   Widget _locationOfSR({required NGCFormDataState dataState}) {
     return  dataState.regulatorTypeValue?.name == "SR" ? CommonStyle.col(
       context: context,
-      child: Row(
-        children: [
-          Flexible(
-            flex: 3,
-            child: TextFieldWidget(
-              enabled: false,
-              star: AppString.star,
-              hintText: AppString.latOfSR,
-              label: AppString.latOfSR,
-              controller: dataState.latOfSRController,
-            ),
-          ),
-          CommonStyle.widthSpace(context: context),
-          Flexible(
-            flex: 3,
-            child: TextFieldWidget(
-              enabled: false,
-              star: AppString.star,
-              hintText: AppString.longOfSR,
-              label: AppString.longOfSR,
-              controller: dataState.longOfSRController,
-            ),
-          ),
-          CommonStyle.widthSpace(context: context),
+      child: RowWidget(
+        widget1: TextFieldWidget(
+           enabled: false,
+           star: AppString.star,
+           hintText: AppString.latOfSR,
+           label: AppString.latOfSR,
+           controller: dataState.latOfSRController,
+         ),
+         widget2: TextFieldWidget(
+           enabled: false,
+           star: AppString.star,
+           hintText: AppString.longOfSR,
+           label: AppString.longOfSR,
+           controller: dataState.longOfSRController,
+         ),
+       /*   CommonStyle.widthSpace(context: context),
           IconButtonWidget(
             iconData: Icons.location_on,
             onPressed: () {
               BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfSREvent(context: context));
             },
-          )
-        ],
+          )*/
       ),
     ): Container();
   }
 
-  Widget _mrPhoto({required NGCFormDataState dataState}){
+  Widget _photoWidget({required NGCFormDataState dataState}){
     return dataState.regulatorTypeValue?.name == "SR" ?  CommonStyle.col(
       context: context,
       child: RowWidget(
-        widget1: ImageWidget(
-          star: AppString.star,
-          title: AppString.mrPhoto,
-          imgFile: dataState.mrPhoto,
-          onPressed: () {
-            showModalBottomSheet(
-                enableDrag: true,
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return ImagePopWidget(
-                    onTapCamera: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
-                    },
-                    onTapGallery: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryMREvent());
-                    },
-                  );
-                });
-          },
-        ),
-        widget2: ImageWidget(
-          star: AppString.star,
-          title: AppString.srPhoto,
-          imgFile: dataState.srPhoto,
-          onPressed: () {
-            showModalBottomSheet(
-                enableDrag: true,
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return ImagePopWidget(
-                    onTapCamera: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraSREvent());
-                    },
-                    onTapGallery: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<NGCFormBloc>(context).add(CaptureGallerySREvent());
-                    },
-                  );
-                });
-          },
-        ),
-      ),
+         widget1: ImageWidget(
+              star: AppString.star,
+              title: AppString.mrPhoto,
+              imgFile: dataState.mrPhoto,
+              onPressed: () {
+                showModalBottomSheet(
+                    enableDrag: true,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CameraPopWidget(
+                        onTapCamera: () async {
+                          Navigator.of(context).pop();
+                          BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
+                        },
+                      );
+                    });
+              },
+            ),
+       widget2: ImageWidget(
+              star: AppString.star,
+              title: AppString.srPhoto,
+              imgFile: dataState.srPhoto,
+              onPressed: () {
+                showModalBottomSheet(
+                    enableDrag: true,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CameraPopWidget(
+                        onTapCamera: () async {
+                          Navigator.of(context).pop();
+                          BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraSREvent());
+                        },
+                      );
+                    });
+              },
+            ),
+      )
     ) : Container();
   }
 
@@ -626,6 +623,7 @@ class _NGCFormViewState extends State<NGCFormView> {
     return TextFieldWidget(
       star: AppString.star,
       maxLength: 10,
+      enabled: false,
       label: AppString.mobileNumber,
       hintText: AppString.mobileNumber,
       textInputAction: TextInputAction.done,

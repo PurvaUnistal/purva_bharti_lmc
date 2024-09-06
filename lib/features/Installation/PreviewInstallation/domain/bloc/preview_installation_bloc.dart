@@ -31,6 +31,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
   String street = '';
   String district = '';
   String pinCode = '';
+  String rfcProcessStatus = '';
+  String lmcInstallId = '';
 
   _pageLoad(PreviewInstallationPageLoadEvent event, emit) async {
     emit(PreviewInstallationInitialState());
@@ -42,7 +44,7 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
       key: PrefsValue.feasibilityVisitDate,
     );
     bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
-    trNumber = await SharedPref.getString(key: PrefsValue.trNumber);
+    trNumber = await SharedPref.getString(key: PrefsValue.crNumber);
     userName = await SharedPref.getString(key: PrefsValue.userName);
     schema = await SharedPref.getString(key: PrefsValue.schema);
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
@@ -60,6 +62,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
     street = await SharedPref.getString(key: PrefsValue.state);
     district = await SharedPref.getString(key: PrefsValue.district);
     pinCode = await SharedPref.getString(key: PrefsValue.pinCode);
+    lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
+    rfcProcessStatus = await SharedPref.getString(key: PrefsValue.rfcProcessStatus);
     _eventCompleted(emit);
   }
 
@@ -87,6 +91,8 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
       street: street,
       district: district,
       pinCode: pinCode,
+      lmcInstallId: lmcInstallId,
+      rfcProcessStatus: rfcProcessStatus,
     ));
   }
 }

@@ -6,6 +6,7 @@ import 'dart:convert';
 
 List<LmcReasonModel> lmcReasonModelFromJson(String str) => List<LmcReasonModel>.from(json.decode(str).map((x) => LmcReasonModel.fromJson(x)));
 
+
 String lmcReasonModelToJson(List<LmcReasonModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class LmcReasonModel {

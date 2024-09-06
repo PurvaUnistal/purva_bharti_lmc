@@ -49,7 +49,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     custRegNo = await SharedPref.getString(
       key: PrefsValue.custRegNo,
     );
-    trNumber = await SharedPref.getString(key: PrefsValue.trNumber);
+    trNumber = await SharedPref.getString(key: PrefsValue.crNumber);
     bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
     chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
     areaName = await SharedPref.getString(key: PrefsValue.areaName);

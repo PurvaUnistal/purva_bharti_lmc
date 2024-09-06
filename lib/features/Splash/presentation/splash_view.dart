@@ -48,7 +48,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     print("newVersion--${newVersion}");
     print("oldVersion--${oldVersion}");
     Timer(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
           () async {
         if(oldVersion == newVersion){
           if (email.isNotEmpty || password.isNotEmpty) {
@@ -78,8 +78,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
               AssetPath.appLogo,
-              width: 200,
-              height: 200,
+             height: MediaQuery.of(context).size.height * 0.3,
+              width: MediaQuery.of(context).size.width * 0.6,
             ),
           ),
         ),
