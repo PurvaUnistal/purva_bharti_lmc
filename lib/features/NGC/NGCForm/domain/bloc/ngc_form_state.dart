@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -45,6 +46,13 @@ class NGCFormDataState extends NGCFormState {
   List<String> listOfRegulatorId;
   List<LmcReasonModel> listOfRegulatorType;
   List<LmcReasonModel> listOfMeterType;
+  FocusNode meterIniReading1FocusNode;
+  FocusNode meterIniReading2FocusNode;
+  FocusNode meterIniReading3FocusNode;
+  TextEditingController meterIniReading1Controller;
+  TextEditingController meterIniReading2Controller;
+  TextEditingController meterIniReading3Controller;
+  TextEditingController meterInitialReadingController;
   TextEditingController regulatorSerialController;
   TextEditingController meterConnectionMeterController;
   TextEditingController proposedNgcDateController;
@@ -57,7 +65,6 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController meterNumberSerialController;
   TextEditingController bpNumberController;
   TextEditingController delayReasonController;
-  TextEditingController meterInitialReading;
   TextEditingController reasonMeterChangeController;
   TextEditingController noOfBurnersController;
   TextEditingController meterSerialController;
@@ -86,12 +93,9 @@ class NGCFormDataState extends NGCFormState {
     required this.baseUrl,
     required this.listOfTypeOfNr,
     required this.typeOfNrValue,
-
     required this.listOfMeterNumber,
     required this.listOfMeterNumberSerial,
     required this.listOfMeterNumberId,
-
-
     required this.listOfRegulator,
     required this.listOfRegulatorSerial,
     required this.listOfSRSerial,
@@ -100,8 +104,13 @@ class NGCFormDataState extends NGCFormState {
     required this.listOfMeterType,
     required this.regulatorTypeValue,
     required this.meterTypeValue,
-
-
+    required this.meterIniReading1FocusNode,
+    required this.meterIniReading2FocusNode,
+    required this.meterIniReading3FocusNode,
+    required this.meterIniReading1Controller,
+    required this.meterIniReading2Controller,
+    required this.meterIniReading3Controller,
+    required this.meterInitialReadingController,
     required this.regulatorSerialController,
     required this.meterConnectionMeterController,
     required this.proposedNgcDateController,
@@ -114,7 +123,6 @@ class NGCFormDataState extends NGCFormState {
     required this.meterNumberSerialController,
     required this.bpNumberController,
     required this.delayReasonController,
-    required this.meterInitialReading,
     required this.reasonMeterChangeController,
     required this.noOfBurnersController,
     required this.meterSerialController,
@@ -133,60 +141,63 @@ class NGCFormDataState extends NGCFormState {
   });
   @override
   List<Object?> get props => [
-    isPageLoader,
-    isMeterReplace,
-    isBtnLoader,
-    isDelayReason,
-    isCheckMeterMismatch,
-    meterPhoto,
-    ngcReportPhoto,
-    isRegulator,
-    schema,
-    lmcPath,
-    baseUrl,
-    userName,
-    listOfTypeOfNr,
-    typeOfNrValue,
-
-    listOfMeterNumber,
-    listOfMeterNumberSerial,
-    listOfMeterNumberId,
-
-    listOfRegulator,
-    listOfRegulatorSerial,
-    listOfSRSerial,
-    listOfRegulatorId,
-    listOfRegulatorType,
-    listOfMeterType,
-    regulatorTypeValue,
-    meterTypeValue,
-    regulatorSerialController,
-    proposedNgcDateController,
-    ngConversionDateController,
-    latOfSRController,
-    longOfSRController,
-
-    meterConnectionMeterController,
-    nameContractorController,
-    noOfFamilyMembersController,
-    meterNumberSerialController,
-    srNumberController,
-    bpNumberController,
-    delayReasonController,
-    meterInitialReading,
-    noOfBurnersController,
-    meterSerialController,
-    mobileNumberController,
-    altMobileNumberController,
-    emailIdController,
-    ngChargeDateController,
-    typeOfNrController,
-    dateInstallationController,
-    delayReasonValue,
-    listOfDelayReason,
-    longOfMRController,
-    latOfMRController,
-    srPhoto,
-    mrPhoto,
-  ];
+        isPageLoader,
+        isMeterReplace,
+        isBtnLoader,
+        isDelayReason,
+        isCheckMeterMismatch,
+        meterPhoto,
+        ngcReportPhoto,
+        isRegulator,
+        schema,
+        lmcPath,
+        baseUrl,
+        userName,
+        listOfTypeOfNr,
+        typeOfNrValue,
+        listOfMeterNumber,
+        listOfMeterNumberSerial,
+        listOfMeterNumberId,
+        listOfRegulator,
+        listOfRegulatorSerial,
+        listOfSRSerial,
+        listOfRegulatorId,
+        listOfRegulatorType,
+        listOfMeterType,
+        regulatorTypeValue,
+        meterTypeValue,
+        meterIniReading1FocusNode,
+        meterIniReading2FocusNode,
+        meterIniReading3FocusNode,
+        meterIniReading1Controller,
+        meterIniReading2Controller,
+        meterIniReading3Controller,
+        meterInitialReadingController,
+        regulatorSerialController,
+        proposedNgcDateController,
+        ngConversionDateController,
+        latOfSRController,
+        longOfSRController,
+        meterConnectionMeterController,
+        nameContractorController,
+        noOfFamilyMembersController,
+        meterNumberSerialController,
+        srNumberController,
+        bpNumberController,
+        delayReasonController,
+        noOfBurnersController,
+        meterSerialController,
+        mobileNumberController,
+        altMobileNumberController,
+        emailIdController,
+        ngChargeDateController,
+        typeOfNrController,
+        dateInstallationController,
+        delayReasonValue,
+        listOfDelayReason,
+        longOfMRController,
+        latOfMRController,
+        srPhoto,
+        mrPhoto,
+      ];
 }

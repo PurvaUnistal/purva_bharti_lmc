@@ -47,7 +47,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   List<MaterialItem> materialList = [];
   List<MaterialItem> listOfMaterial = [];
   List<String> listOfQtyLMC = [];
-  String  qtyData = "";
+  String qtyData = "";
   List<GetConstantModel> listOfAllRFC = [];
 
   TextEditingController bpNumberController = TextEditingController();
@@ -77,8 +77,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     listOfMaterial = [];
     listOfQtyLMC = [];
     listOfAllRFC = [];
-     extraPipe = "0";
-     extraPrice = "0";
+    extraPipe = "0";
+    extraPrice = "0";
     extraPipeController.text = "0";
     extraPriceController.text = "0";
     proposedDateController.text = '';
@@ -140,8 +140,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
     checkFeasibleValue = event.checkFeasibility;
-    print(" event.checkFeasibility;-->${ event.checkFeasibility}");
-    print(" checkFeasibleValue-->${ checkFeasibleValue}");
+    print(" event.checkFeasibility;-->${event.checkFeasibility}");
+    print(" checkFeasibleValue-->${checkFeasibleValue}");
     _eventCompleted(emit);
   }
 
@@ -178,28 +178,28 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
     double sumOfPipes = 0.0;
-    for(int i = 0; i< listOfMaterial.length; i++){
+    for (int i = 0; i < listOfMaterial.length; i++) {
       MaterialItem dataOfAllMaterial = listOfMaterial[i];
-      if(dataOfAllMaterial.name.toLowerCase().contains("pipe")){
-        if(dataOfAllMaterial.controller.text != ""){
+      if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
+        if (dataOfAllMaterial.controller.text != "") {
           listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
-          sumOfPipes +=  double.parse(dataOfAllMaterial.controller.text);
-        }else{
+          sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
+        } else {
           dataOfAllMaterial.controller.text = '';
           listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         }
       }
     }
     print("sumOfPipes---> $sumOfPipes");
-    if(sumOfPipes > 15.0){
+    if (sumOfPipes > 15.0) {
       isExtraPipe = true;
       _eventCompleted(emit);
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
+      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
       extraPriceController.text = "";
       extraPipeController.text = "";
       extraPipe = "";
       extraPrice = "";
-      if(res != null){
+      if (res != null) {
         isExtraPipe = false;
         _eventCompleted(emit);
         extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
@@ -208,7 +208,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         extraPrice = res.qty.toString();
         _eventCompleted(emit);
       }
-    }else{
+    } else {
       isExtraPipe = false;
       _eventCompleted(emit);
       extraPriceController.text = '0';
@@ -222,7 +222,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
       var validationCheck = await FormFeasibilityHelper.validationSubmit(
         context: event.context,
         feasibilityDate: feasibilityDateController.text.trim().toString(),
-        pipeLength: listOfQtyLMC.toString().trim().replaceAll(' ', ''),
+        pipeLength: listOfQtyLMC,
         isFeasible: checkFeasibleValue,
         lmcReasonValue: lmcReasonValue,
         proposedDate: proposedDateController.text.trim().toString(),
@@ -242,7 +242,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           extraPipe: extraPipe,
           extraPrice: extraPrice,
           materialId: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-          qtyLMC:listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+          qtyLMC: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;

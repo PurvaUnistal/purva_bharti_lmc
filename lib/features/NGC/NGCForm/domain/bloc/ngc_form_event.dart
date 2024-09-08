@@ -13,6 +13,11 @@ class NGCFormLoadEvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
+class MeterInitReadingEvent extends NGCFormEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class SelectTypeNRValueEvent extends NGCFormEvent {
   final GetConstantModel typeOfNRValue;
   SelectTypeNRValueEvent({required this.typeOfNRValue});
@@ -27,7 +32,7 @@ class SelectMeterReplaceEvent extends NGCFormEvent {
   SelectMeterReplaceEvent({required this.context, required this.meterReplace});
   @override
   // TODO: implement props
-  List<Object> get props => [context,meterReplace];
+  List<Object> get props => [context, meterReplace];
 }
 
 class SelectMeterNumberValueEvent extends NGCFormEvent {
@@ -36,15 +41,19 @@ class SelectMeterNumberValueEvent extends NGCFormEvent {
   SelectMeterNumberValueEvent({required this.context, required this.meterReadingValue});
   @override
   // TODO: implement props
-  List<Object> get props => [context,meterReadingValue];
+  List<Object> get props => [context, meterReadingValue];
 }
 
 class SelectNGConversionDateEvent extends NGCFormEvent {
   final BuildContext context;
-  SelectNGConversionDateEvent({required this.context, });
+  SelectNGConversionDateEvent({
+    required this.context,
+  });
   @override
   // TODO: implement props
-  List<Object> get props => [context,];
+  List<Object> get props => [
+        context,
+      ];
 }
 
 class SelectRegulatorTypeValueEvent extends NGCFormEvent {
@@ -56,7 +65,7 @@ class SelectRegulatorTypeValueEvent extends NGCFormEvent {
   });
   @override
   // TODO: implement props
-  List<Object> get props => [regulatorTypeValue,context];
+  List<Object> get props => [regulatorTypeValue, context];
 }
 
 class SelectRegulatorsValueEvent extends NGCFormEvent {
@@ -65,7 +74,7 @@ class SelectRegulatorsValueEvent extends NGCFormEvent {
   SelectRegulatorsValueEvent({required this.regulatorsValue, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [regulatorsValue,context];
+  List<Object> get props => [regulatorsValue, context];
 }
 
 class SelectSRegulatorsEvent extends NGCFormEvent {
@@ -74,7 +83,7 @@ class SelectSRegulatorsEvent extends NGCFormEvent {
   SelectSRegulatorsEvent({required this.sRegulators, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [sRegulators,context];
+  List<Object> get props => [sRegulators, context];
 }
 
 class SelectDelayReasonValueEvent extends NGCFormEvent {
@@ -100,6 +109,7 @@ class SelectLocationOfSREvent extends NGCFormEvent {
   // TODO: implement props
   List<Object> get props => [context];
 }
+
 class SelectLocationOfMREvent extends NGCFormEvent {
   final BuildContext context;
   SelectLocationOfMREvent({required this.context});
@@ -108,49 +118,49 @@ class SelectLocationOfMREvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
-
-class CaptureGalleryMeterEvent extends NGCFormEvent{
+class CaptureGalleryMeterEvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureCameraMeterEvent extends NGCFormEvent{
+class CaptureCameraMeterEvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureGalleryNGCReportEvent extends NGCFormEvent{
+class CaptureGalleryNGCReportEvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureCameraNGCReportEvent extends NGCFormEvent{
+class CaptureCameraNGCReportEvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureGalleryMREvent extends NGCFormEvent{
+class CaptureGalleryMREvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureCameraMREvent extends NGCFormEvent{
+class CaptureCameraMREvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
 
-class CaptureGallerySREvent extends NGCFormEvent{
+class CaptureGallerySREvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];
 }
-class CaptureCameraSREvent extends NGCFormEvent{
+
+class CaptureCameraSREvent extends NGCFormEvent {
   @override
   // TODO: implement props
   List<Object> get props => [];

@@ -1,10 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:collection/collection.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
@@ -193,9 +194,13 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(key: PrefsValue.schema,);
-    userName = await SharedPref.getString(key: PrefsValue.userName,);
-    currentDate =  await DateFormat(AppString.dateFormat).format(DateTime.now());
+    schema = await SharedPref.getString(
+      key: PrefsValue.schema,
+    );
+    userName = await SharedPref.getString(
+      key: PrefsValue.userName,
+    );
+    currentDate = await DateFormat(AppString.dateFormat).format(DateTime.now());
 
     meterReadingDate.text = currentDate;
     installationDateController.text = currentDate;
@@ -209,8 +214,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchDelayReasonApi(context: event.context);
     await fetchRegulatorTypeApi(context: event.context);
-    await fetchRFCApi(context: event.context,);
-    await fetchFreeMaterialApi(context: event.context,);
+    await fetchRFCApi(
+      context: event.context,
+    );
+    await fetchFreeMaterialApi(
+      context: event.context,
+    );
     await checkDelayReason();
     _eventCompleted(emit);
   }
@@ -226,15 +235,15 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       installationDateController.text = await formattedDate.toString();
-       checkDelayReason();
+      checkDelayReason();
       _eventCompleted(emit);
     }
   }
 
-  checkDelayReason(){
-    DateTime  proposedDate = DateFormat(AppString.dateFormat).parse(proposedDateController.text);
-    DateTime  installationDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
-    if (installationDate.compareTo(proposedDate) <= 0 ) {
+  checkDelayReason() {
+    DateTime proposedDate = DateFormat(AppString.dateFormat).parse(proposedDateController.text);
+    DateTime installationDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
+    if (installationDate.compareTo(proposedDate) <= 0) {
       isDelayReason = false;
     } else {
       isDelayReason = true;
@@ -243,12 +252,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectNGConversionDate(SelectNGConversionDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
-    DateTime? dateTime = await showDatePicker(
-        context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: assignDate,
-        lastDate: DateTime(2050)
-    );
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       ngConversionDateController.text = formattedDate.toString();
@@ -258,12 +262,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectRFCDate(SelectRFCDateEvent event, emit) async {
     var assignDate = DateFormat(AppString.dateFormat).parse(installationDateController.text);
-    DateTime? dateTime = await showDatePicker(
-        context: event.context,
-        initialDate: DateTime.now(),
-        firstDate: assignDate,
-        lastDate: DateTime(2050)
-    );
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       rfcDateController.text = formattedDate.toString();
@@ -283,9 +282,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectInstallRegulator(SelectInstallRegulatorEvent event, emit) async {
     isInstallRegulator = event.installRegulator;
-    if(isInstallRegulator == true){
+    if (isInstallRegulator == true) {
       installRegulator = "1";
-    }else{
+    } else {
       installRegulator = "0";
       regulatorTypeValue = LmcReasonModel();
       regulatorSerialController.text = "";
@@ -345,7 +344,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
   }
 
-
   fetchFreeMaterialApi({required BuildContext context}) async {
     List<String> tempList = [];
     var res = await FormFeasibilityHelper.getAllFreeMaterialApi(
@@ -357,7 +355,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       listOfAllMaterialId.addAll(tempList);
       listOfMaterial = List.generate(
         listOfAllMaterial.length,
-            (i) => MaterialItem(
+        (i) => MaterialItem(
             value: '0',
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
@@ -372,13 +370,13 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
     double sumOfPipes = 0.0;
-    for(int i = 0; i< listOfMaterial.length; i++){
+    for (int i = 0; i < listOfMaterial.length; i++) {
       MaterialItem dataOfAllMaterial = listOfMaterial[i];
-      if(dataOfAllMaterial.name.toLowerCase().contains("pipe")){
-        if(dataOfAllMaterial.controller.text != ""){
-          sumOfPipes +=  double.parse(dataOfAllMaterial.controller.text);
+      if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
+        if (dataOfAllMaterial.controller.text != "") {
+          sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
           listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
-        }else{
+        } else {
           dataOfAllMaterial.controller.text = '';
           listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         }
@@ -386,15 +384,15 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
     _eventCompleted(emit);
     print("sumOfPipes---> $sumOfPipes");
-    if(sumOfPipes > 15.0){
+    if (sumOfPipes > 15.0) {
       isExtraPipe = true;
       _eventCompleted(emit);
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty : sumOfPipes.toString());
+      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
       extraPriceController.text = "";
       extraPipeController.text = "";
       extraPipe = "";
       extraPrice = "";
-      if(res != null){
+      if (res != null) {
         isExtraPipe = false;
         _eventCompleted(emit);
         extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
@@ -403,7 +401,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         extraPrice = res.qty.toString();
         _eventCompleted(emit);
       }
-    }else{
+    } else {
       isExtraPipe = false;
       _eventCompleted(emit);
       extraPriceController.text = '0';
@@ -421,6 +419,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     log("meterInitialReadingController-->${meterInitialReadingController.text}");
     _eventCompleted(emit);
   }
+
   fetchMetersApi({required BuildContext context, required String meterSerial}) async {
     var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
     if (res != null) {
@@ -429,6 +428,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       return res;
     }
   }
+
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
     var res = await FormInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
     if (res != null) {
@@ -438,6 +438,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       return res;
     }
   }
+
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
     materialId = "";
     meterConnectionMeterController.text = "";
@@ -445,9 +446,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
     meterConnectionMeterController.text = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.meterConnection ?? "";
 
-    if(event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
+    if (event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
       isCheckMeterMismatch = true;
-    }else{
+    } else {
       isCheckMeterMismatch = false;
     }
     _eventCompleted(emit);
@@ -456,9 +457,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
     regulatorSerialController.text = event.regulatorsValue;
     regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
-    if(event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
+    if (event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
       isCheckRegulatorMismatch = true;
-    }else{
+    } else {
       isCheckRegulatorMismatch = false;
     }
     _eventCompleted(emit);
@@ -467,9 +468,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _selectSR(SelectSREvent event, emit) async {
     srNumberController.text = event.sRegulators;
     sRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
-    if(event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
+    if (event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
       isCheckSR = true;
-    }else{
+    } else {
       isCheckSR = false;
     }
     _eventCompleted(emit);
@@ -569,7 +570,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-
   _captureCameraHouse(CaptureCameraHouseEvent event, Emitter<FormInstallationState> emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
@@ -580,9 +580,10 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-
   fetchRFCApi({required BuildContext context}) async {
-    var res = await FormFeasibilityHelper.getRFCApi(context: context,);
+    var res = await FormFeasibilityHelper.getRFCApi(
+      context: context,
+    );
     if (res != null) {
       listOfAllRFC = res;
       return res;
@@ -593,13 +594,13 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     emit(FormInstallationInitialState());
     isSelected = event.isSelected;
     listOfAllRFC[event.index].isSelected = isSelected;
-    if(listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == true){
+    if (listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == true) {
       meterTesting = "1";
-    } else if(listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == true){
+    } else if (listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == true) {
       paintingOfGIPipe = "1";
-    } else if(listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == false){
+    } else if (listOfAllRFC[event.index].value == "Meter testing" && listOfAllRFC[event.index].isSelected == false) {
       meterTesting = "0";
-    } else if(listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == false){
+    } else if (listOfAllRFC[event.index].value == "Painting of GI pipe" && listOfAllRFC[event.index].isSelected == false) {
       paintingOfGIPipe = "0";
     }
     log("${listOfAllRFC[event.index]}-->${listOfAllRFC[event.index].isSelected}");
@@ -627,6 +628,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+        pipeLength: listOfQtyLMC,
         meterPhoto: meterPhoto.path.toString(),
         rfcPhoto: rfcCardPhoto.path.toString(),
         housePhoto: housePhoto.path.toString(),
@@ -640,7 +642,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           extraPipe: extraPipe.toString(),
           extraPrice: extraPrice.toString(),
           workCompletedDate: installationDateController.text.trim().toString(),
-          rfcDate:rfcDateController.text.trim().toString(),
+          rfcDate: rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
           meterNo: materialId,
           latitudeHg: latOfHouseController.text.trim().toString(),
@@ -671,9 +673,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           await Utils.successSnackBar(msg: res.data!, context: event.context);
           await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(event.context, MaterialPageRoute(builder: (BuildContext context) => HomeView()), (Route<dynamic> route) => false);
-        } else if (res != null && res.error == true){
+        } else if (res != null && res.error == true) {
           await Utils.errorSnackBar(msg: res.data!, context: event.context);
-        }else {
+        } else {
           isBtnLoader = false;
           _eventCompleted(emit);
         }

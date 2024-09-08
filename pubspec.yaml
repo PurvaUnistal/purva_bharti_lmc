@@ -33,7 +33,7 @@ dependencies:
   image_picker: ^1.0.8
   device_info_plus: ^9.1.2
   substring_highlight: ^1.0.33
-  package_info_plus: ^8.0.2
+  package_info_plus: ^5.0.1
   dio: ^5.6.0
 
 dev_dependencies:

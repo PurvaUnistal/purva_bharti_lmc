@@ -1,13 +1,12 @@
-
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
@@ -44,11 +43,13 @@ class FormFeasibilityHelper {
     return null;
   }
 
-  static Future<List<FreeMaterialData>?> getAllFreePipeMaterial({required BuildContext context,}) async {
+  static Future<List<FreeMaterialData>?> getAllFreePipeMaterial({
+    required BuildContext context,
+  }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema":schema,
+        "schema": schema,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
@@ -60,11 +61,13 @@ class FormFeasibilityHelper {
     return null;
   }
 
-  static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({required BuildContext context,}) async {
+  static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({
+    required BuildContext context,
+  }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema":schema,
+        "schema": schema,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);
@@ -95,10 +98,10 @@ class FormFeasibilityHelper {
   static Future<void> clearCache() async {
     Directory path = Directory("/data/user/0/com.app.pbg.lmc/cache/");
 
-    if(await path.exists()) {
+    if (await path.exists()) {
       List<FileSystemEntity> files = path.listSync();
-      for(FileSystemEntity f in files) {
-        if(f is File) {
+      for (FileSystemEntity f in files) {
+        if (f is File) {
           await f.delete();
         }
       }
@@ -106,7 +109,7 @@ class FormFeasibilityHelper {
 
     Directory path2 = Directory("/data/user/0/com.app.pbg.lmc/cache/file_picker/");
 
-    if(await path2.exists()) {
+    if (await path2.exists()) {
       path2.deleteSync(recursive: true);
     }
   }
@@ -114,7 +117,7 @@ class FormFeasibilityHelper {
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String feasibilityDate,
-    required String pipeLength,
+    required List<String> pipeLength,
     required String proposedDate,
     required GetConstantModel isFeasible,
     required GetConstantModel lmcReasonValue,
@@ -128,24 +131,25 @@ class FormFeasibilityHelper {
       } else if (isFeasible.key == null) {
         Utils.errorSnackBar(msg: "The Is Feasible field is required.", context: context);
         return false;
-      } else if (pipeLength.isEmpty) {
+      } else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
         Utils.errorSnackBar(msg: "At-least one field is required.", context: context);
         return false;
-      }else if (proposedDate.isEmpty) {
+      } else if (proposedDate.isEmpty) {
         Utils.errorSnackBar(msg: "The LMC Proposed Date field is required.", context: context);
         return false;
-      } else if(isFeasible.key == "2" || isFeasible.key == "3"){
+      } else if (isFeasible.key == "2" || isFeasible.key == "3") {
         if (lmcReasonValue.key == null) {
           Utils.errorSnackBar(msg: "The LMC Reason field is required.", context: context);
           return false;
-        } else if(lmcReasonValue.key == "Others"){
-          if(reason.isEmpty){
+        } else if (lmcReasonValue.key == "Others") {
+          if (reason.isEmpty) {
             Utils.errorSnackBar(msg: "The Reason field is required.", context: context);
             return false;
           }
         }
-      } if(isFeasible.key == "3"){
-        if(followUpDate.isEmpty){
+      }
+      if (isFeasible.key == "3") {
+        if (followUpDate.isEmpty) {
           Utils.errorSnackBar(msg: "The Follow Up Date field is required.", context: context);
           return false;
         }
@@ -182,7 +186,7 @@ class FormFeasibilityHelper {
         "feasibility_visit_date": feasibilityDate,
         "schema": schema,
         "is_feasible": isFeasible.key,
-        "comment":comment,
+        "comment": comment,
         "follow_up_date": followUpDate,
         "material_id_lmc": materialId,
         "qty_lmc": qtyLMC,
@@ -191,9 +195,9 @@ class FormFeasibilityHelper {
       };
       log("para-->${para}");
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);
-      if(res != null && res["error"] == false){
+      if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
-      } else if(res != null && res["error"] == true){
+      } else if (res != null && res["error"] == true) {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
