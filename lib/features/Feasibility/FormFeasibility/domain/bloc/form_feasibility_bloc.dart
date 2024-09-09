@@ -95,7 +95,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     trNumberController.text = await SharedPref.getString(key: PrefsValue.crNumber);
     assignedDateController.text = await SharedPref.getString(key: PrefsValue.assignLmcDate);
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    proposedDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     await fetchCheckFeasibilityApi(context: event.context);
     await fetchLMCReasonApi(context: event.context);
     await fetchFreeMaterialApi(

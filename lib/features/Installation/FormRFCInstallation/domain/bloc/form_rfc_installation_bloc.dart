@@ -16,6 +16,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility
 import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
+import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_event.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_state.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
@@ -214,10 +215,11 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
     feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
+    await fetchDelayReasonApi(context: event.context);
     await fetchRFCInstallationApi(context: event.context);
     await fetchReadyForNgcApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
-    await fetchDelayReasonApi(context: event.context);
+
     await fetchRegulatorTypeApi(context: event.context);
     await fetchRFCApi(
       context: event.context,
@@ -312,7 +314,14 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
       if (res.data?.lmc != null) {
         rfcInstallationLmc = res.data!.lmc!;
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
-        delayReasonValue.name = rfcInstallationLmc.delayReason!;
+        await SharedPref.setString(key: PrefsValue.installationId, value: rfcInstallationLmc.installationId!);
+        installationDateController.text = rfcInstallationLmc.workCompletedDate!;
+       // delayReasonValue.name = rfcInstallationLmc.delayReason!;
+        for(var i = 0; i < listOfDelayReason.length; i++){
+          if(rfcInstallationLmc.delayReason == listOfDelayReason[i].name.toString()){
+            delayReasonValue.name = listOfDelayReason[i].name;
+          }
+        }
         latOfHouseController.text = rfcInstallationLmc.latitudeHg!;
         longOfHouseController.text = rfcInstallationLmc.longitudeHg!;
         meterInitialReadingController.text = rfcInstallationLmc.meterReading ?? "";
@@ -371,13 +380,15 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         listOfRFCInstallationMaterial = res.data!.material!;
         listOfQtyLMC = listOfRFCInstallationMaterial.map((e) => e.materialQty!).toList();
         print("listOfQtyLMC------>${listOfQtyLMC}");
+      }else{
+
       }
       return res;
     }
   }
 
   fetchReadyForNgcApi({required BuildContext context}) async {
-    var res = await FormRFCInstallationHelper.getReadyForNgcApi(context: context);
+    var res = await FormInstallationHelper.getReadyForNgcApi(context: context);
     if (res != null) {
       listOfReadyNGC = res;
       return res;
@@ -385,7 +396,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   }
 
   fetchDelayReasonApi({required BuildContext context}) async {
-    var res = await FormRFCInstallationHelper.lmcReasonApi(context: context);
+    var res = await FormInstallationHelper.lmcReasonApi(context: context);
     if (res != null) {
       listOfDelayReason = res;
       return res;
@@ -393,7 +404,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   }
 
   fetchRegulatorTypeApi({required BuildContext context}) async {
-    var res = await FormRFCInstallationHelper.regulatorTypeApi(context: context);
+    var res = await FormInstallationHelper.regulatorTypeApi(context: context);
     if (res != null) {
       listOfRegulatorType = res;
       return res;
@@ -443,7 +454,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     if (sumOfPipes > 15.0) {
       isExtraPipe = true;
       _eventCompleted(emit);
-      var res = await FormRFCInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
+      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
       extraPriceController.text = "";
       extraPipeController.text = "";
       extraPipe = "";
@@ -477,7 +488,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   }
 
   fetchMetersApi({required BuildContext context, required String meterSerial}) async {
-    var res = await FormRFCInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
+    var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
     if (res != null) {
       listOfMeterNumber = res;
       listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
@@ -486,7 +497,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    var res = await FormRFCInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+    var res = await FormInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();

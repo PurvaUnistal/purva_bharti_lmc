@@ -43,98 +43,6 @@ class FormRFCInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
-    try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
-      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
-      return response;
-    } catch (e) {
-      log("lmcReasonApi-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
-    try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
-      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
-      return response;
-    } catch (e) {
-      log("regulatorTypeApi-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<GetConstantModel>?> getReadyForNgcApi({required BuildContext context}) async {
-    try {
-      Map<String, String> para = {
-        "key": "isCustomerReadyForNgc",
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
-      List<GetConstantModel> response = GetConstantModel.mapToList(res);
-      return response;
-    } catch (e) {
-      log("getReadyForNgcApi-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context, required String meterSerial}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    try {
-      Map<String, String> para = {
-        "schema": schema,
-        "meterSerial": meterSerial,
-        "user_id": userId,
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getMeters + json, context: context);
-      MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
-      return meterNoModel.data;
-    } catch (e) {
-      log("getMetersApi-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    try {
-      Map<String, String> para = {
-        "schema": schema,
-        "regulatorSerial": regulatorSerial,
-        "user_id": userId,
-        "regulatorType": regulatorType,
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getRegulators + json, context: context);
-      print(res);
-      MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
-      return meterNoModel.data;
-    } catch (e) {
-      log("getRegulators-->${e.toString()}");
-    }
-    return null;
-  }
-
-  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context, required String pipeQty}) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    try {
-      Map<String, String> para = {
-        "schema": schema,
-        "pipeQty": pipeQty,
-      };
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails, context: context, formData: para);
-      return ExtraPipePriceData.fromJson(res['data']);
-    } catch (e) {
-      log("getExtraPipeDetails-->${e.toString()}");
-    }
-    return null;
-  }
-
   static Future<dynamic> validationSubmit({
     required BuildContext context,
     required String dateInstallation,
@@ -174,6 +82,9 @@ class FormRFCInstallationHelper {
         return false;
       } else if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
+        return false;
+      } else if(isInstallRegulator == false){
+        Utils.errorSnackBar(msg: "The Install Regulator check field is required.", context: context);
         return false;
       } else if (isInstallRegulator == true) {
         if (regulatorType.name == null) {
@@ -267,11 +178,13 @@ class FormRFCInstallationHelper {
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
+    String installationId = await SharedPref.getString(key: PrefsValue.installationId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
-    try {
+  //  try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
+        "installation_id": installationId.isEmpty ? " " : installationId,
         "schema": schema,
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading.isEmpty ? "" : meterReading,
@@ -318,10 +231,10 @@ class FormRFCInstallationHelper {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
-    } catch (e) {
+   /* } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
       return null;
-    }
+    }*/
   }
 
   static Future<File> cameraCapture() async {
