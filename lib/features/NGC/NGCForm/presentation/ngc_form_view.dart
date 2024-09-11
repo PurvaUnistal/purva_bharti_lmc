@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
@@ -117,25 +118,17 @@ class _NGCFormViewState extends State<NGCFormView> {
             textAlign: TextAlign.center,
           ),
           CommonStyle.vertical(context: context),
+          RowWidget(widget1: _bpNumberWidget(dataState: dataState), widget2: _dateInstallationController(dataState: dataState),),
           CommonStyle.vertical(context: context),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(flex: 1, child: _bpNumberWidget(dataState: dataState)),
-              CommonStyle.widthSpace(context: context),
-              Flexible(flex: 1, child: _dateInstallationController(dataState: dataState)),
-              CommonStyle.widthSpace(context: context),
-              Flexible(flex: 1, child: _proposedNgcDateController(dataState: dataState)),
-            ],
-          ),
+          RowWidget(widget1: _proposedNgcDateController(dataState: dataState), widget2: _rfcDateController(dataState: dataState),),
           CommonStyle.vertical(context: context),
-          _contractorWidget(dataState: dataState),
+          RowWidget(widget1: _extraPipeController(dataState: dataState), widget2: _extraPriceController(dataState: dataState),),
+          CommonStyle.vertical(context: context),
+          RowWidget(widget1: _mobileNumberController(dataState: dataState), widget2: _altContactNoWidget(dataState: dataState)),
+          CommonStyle.vertical(context: context),
+          RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
           CommonStyle.vertical(context: context),
           RowWidget(widget1: _burnerNoWidget(dataState: dataState), widget2: _noOfFamilyMembersController(dataState: dataState)),
-          CommonStyle.vertical(context: context),
-          RowWidget(widget1: _contactNoWidget(dataState: dataState), widget2: _altContactNoWidget(dataState: dataState)),
-          CommonStyle.vertical(context: context),
-          _emailWidget(dataState: dataState),
           CommonStyle.vertical(context: context),
           /* _meterConnectionDropdown(dataState: dataState),
           CommonStyle.vertical(context: context),*/
@@ -162,7 +155,15 @@ class _NGCFormViewState extends State<NGCFormView> {
           _locationOfSR(dataState: dataState),
           _locationOfMR(dataState: dataState),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _meterPhoto(dataState: dataState), widget2: _ngcReportPhoto(dataState: dataState)),
+          Row(
+            children: [
+              Flexible(child: RowWidget(widget1: _meterPhoto(dataState: dataState), widget2: _ngcReportPhoto(dataState: dataState))),
+              dataState.regulatorCheck == "1"
+                  ? Flexible(child: RowWidget(widget1: _rfcPhoto(dataState: dataState), widget2: _pneumaticPhoto(dataState: dataState)))
+                  :Container(),
+            ],
+          ),
+
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
           _submitBtnWidget(dataState: dataState),
@@ -178,8 +179,6 @@ class _NGCFormViewState extends State<NGCFormView> {
       label: AppString.dateInstallation,
       hintText: AppString.dateInstallation,
       enabled: false,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
       controller: dataState.dateInstallationController,
     );
   }
@@ -189,11 +188,94 @@ class _NGCFormViewState extends State<NGCFormView> {
       label: AppString.ngConversionDate,
       hintText: AppString.ngConversionDate,
       enabled: false,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
       controller: dataState.proposedNgcDateController,
     );
   }
+  Widget _rfcDateController({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.rfcDate,
+      hintText: AppString.rfcDate,
+      enabled: false,
+      controller: dataState.rfcDateController,
+    );
+  }
+  Widget _extraPipeController({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.extraPipe,
+      hintText: AppString.extraPipe,
+      enabled: false,
+      controller: dataState.extraPipeController,
+    );
+  }
+  Widget _extraPriceController({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.extraPrice,
+      hintText: AppString.extraPrice,
+      enabled: false,
+      controller: dataState.extraPriceController,
+    );
+  }
+
+  Widget _burnerNoWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      star: AppString.star,
+      label: AppString.burnersNo,
+      hintText: AppString.burnersNo,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.text,
+      controller: dataState.noOfBurnersController,
+    );
+  }
+
+  Widget _noOfFamilyMembersController({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      enabled: true,
+      label: AppString.noOfFamilyMembers,
+      hintText: AppString.noOfFamilyMembers,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.text,
+      controller: dataState.noOfFamilyMembersController,
+    );
+  }
+
+  Widget _contractorWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.contractor,
+      hintText: AppString.contractor,
+      enabled: false,
+      controller: dataState.nameContractorController,
+    );
+  }
+
+  Widget _mobileNumberController({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.mobileNumber,
+      hintText: AppString.mobileNumber,
+      enabled: false,
+      controller: dataState.mobileNumberController,
+    );
+  }
+
+  Widget _altContactNoWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      maxLength: 10,
+      hintText: AppString.altMobileNo,
+      label: AppString.altMobileNo,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.number,
+      controller: dataState.altMobileNumberController,
+    );
+  }
+
+  Widget _emailWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.email,
+      hintText: AppString.email,
+      enabled: false,
+      controller: dataState.emailIdController,
+    );
+  }
+
 
   Widget _bpNumberWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
@@ -201,8 +283,6 @@ class _NGCFormViewState extends State<NGCFormView> {
       label: AppString.bpNumber,
       hintText: AppString.bpNumber,
       enabled: false,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
       controller: dataState.bpNumberController,
     );
   }
@@ -311,6 +391,58 @@ class _NGCFormViewState extends State<NGCFormView> {
                 onTapGallery: () async {
                   Navigator.of(context).pop();
                   BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryMeterEvent());
+                },
+              );
+            });
+      },
+    );
+  }
+
+  Widget _rfcPhoto({required NGCFormDataState dataState}) {
+    return NetworkImageWidget(
+      title: AppString.rfc,
+      baseUrl: dataState.baseUrl,
+      networkPath: dataState.rfcPhoto,
+      onPressed: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraRfcEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryRfcEvent());
+                },
+              );
+            });
+      },
+    );
+  }
+
+  Widget _pneumaticPhoto({required NGCFormDataState dataState}) {
+    return NetworkImageWidget(
+      title: AppString.pneumatic,
+      baseUrl: dataState.baseUrl,
+      networkPath: dataState.pneumaticPhoto,
+      onPressed: () {
+        showModalBottomSheet(
+            enableDrag: true,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return ImagePopWidget(
+                onTapCamera: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraPneumaticEvent());
+                },
+                onTapGallery: () async {
+                  Navigator.of(context).pop();
+                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryPneumaticEvent());
                 },
               );
             });
@@ -706,74 +838,6 @@ class _NGCFormViewState extends State<NGCFormView> {
               ),
             ))
         : Container();
-  }
-
-  Widget _burnerNoWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.burnersNo,
-      hintText: AppString.burnersNo,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
-      controller: dataState.noOfBurnersController,
-    );
-  }
-
-  Widget _noOfFamilyMembersController({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      enabled: true,
-      label: AppString.noOfFamilyMembers,
-      hintText: AppString.noOfFamilyMembers,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
-      controller: dataState.noOfFamilyMembersController,
-    );
-  }
-
-  Widget _contractorWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.contractor,
-      hintText: AppString.contractor,
-      enabled: true,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
-      controller: dataState.nameContractorController,
-    );
-  }
-
-  Widget _contactNoWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      maxLength: 10,
-      enabled: false,
-      label: AppString.mobileNumber,
-      hintText: AppString.mobileNumber,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.number,
-      controller: dataState.mobileNumberController,
-    );
-  }
-
-  Widget _altContactNoWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      maxLength: 10,
-      hintText: AppString.altMobileNo,
-      label: AppString.altMobileNo,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.number,
-      controller: dataState.altMobileNumberController,
-    );
-  }
-
-  Widget _emailWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      label: AppString.email,
-      hintText: AppString.email,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.emailAddress,
-      controller: dataState.emailIdController,
-    );
   }
 
   Widget _ngcReportPhoto({required NGCFormDataState dataState}) {

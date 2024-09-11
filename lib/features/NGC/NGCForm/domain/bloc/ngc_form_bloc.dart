@@ -36,6 +36,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<SelectMeterTypeValueEvent>(_selectMeterTypeValue);
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
+    on<CaptureGalleryPneumaticEvent>(_captureGalleryPneumatic);
+    on<CaptureCameraPneumaticEvent>(_captureCameraPneumatic);
+    on<CaptureGalleryRfcEvent>(_captureGalleryRfc);
+    on<CaptureCameraRfcEvent>(_captureCameraRfc);
     on<CaptureGalleryMREvent>(_captureGalleryMR);
     on<CaptureCameraMREvent>(_captureCameraMR);
     on<CaptureGallerySREvent>(_captureGallerySR);
@@ -47,6 +51,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   bool isRegulator = false;
   File mrPhoto = File("");
   File srPhoto = File("");
+  File pneumaticPhoto = File("");
+  File rfcPhoto = File("");
   File _meterPhoto = File("");
   File get meterPhoto => _meterPhoto;
 
@@ -79,6 +85,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   String lmcPath = "";
   String baseUrl = '';
   String networkMeterPhoto = "";
+  String networkRfcPhoto = "";
+  String networkPneumaticPhoto = "";
+  String regulatorCheck = "";
 
   TextEditingController meterIniReading1Controller = TextEditingController();
   TextEditingController meterIniReading2Controller = TextEditingController();
@@ -107,6 +116,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController dateInstallationController = TextEditingController();
   TextEditingController delayReasonController = TextEditingController();
   TextEditingController proposedNgcDateController = TextEditingController();
+  TextEditingController extraPipeController = TextEditingController();
+  TextEditingController extraPriceController = TextEditingController();
+  TextEditingController rfcDateController = TextEditingController();
 
   FocusNode meterIniReading1FocusNode = FocusNode();
   FocusNode meterIniReading2FocusNode = FocusNode();
@@ -197,7 +209,12 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
     networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
+    networkPneumaticPhoto = await SharedPref.getString(key: PrefsValue.pneumaticPhoto);
+    networkRfcPhoto = await SharedPref.getString(key: PrefsValue.rfcPhoto);
+    regulatorCheck = await SharedPref.getString(key: PrefsValue.regulatorCheck);
     _meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
+    rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+    pneumaticPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
     dmaUserId = await SharedPref.getString(key: PrefsValue.dmaUserId) ?? "";
     isInstall = await SharedPref.getString(key: PrefsValue.isInstall);
     lmcInstallationId = await SharedPref.getString(key: PrefsValue.lmcInstallationId);
@@ -219,6 +236,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     typeOfNrController.text = await SharedPref.getString(key: PrefsValue.typeOfNr) ?? "";
     dateInstallationController.text = await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
     proposedNgcDateController.text = await SharedPref.getString(key: PrefsValue.proposedNgcDate) ?? "";
+    extraPipeController.text = await SharedPref.getString(key: PrefsValue.extraPipe) ?? "";
+    extraPriceController.text = await SharedPref.getString(key: PrefsValue.extraPrice) ?? "";
+    rfcDateController.text = await SharedPref.getString(key: PrefsValue.rfcDate) ?? "";
     ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     //  await fetchDelayReasonApi(context: event.context);
     await fetchTypeOfNrApi(context: event.context);
@@ -428,6 +448,44 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     }
     _eventCompleted(emit);
   }
+
+  _captureGalleryPneumatic(CaptureGalleryPneumaticEvent event, emit) async {
+    var photoPath = await NGCFormHelper.galleryCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      pneumaticPhoto = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+  _captureCameraPneumatic(CaptureCameraPneumaticEvent event, emit) async {
+    var photoPath = await NGCFormHelper.cameraCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      pneumaticPhoto = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+  _captureGalleryRfc(CaptureGalleryRfcEvent event, emit) async {
+    var photoPath = await NGCFormHelper.galleryCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      rfcPhoto = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+  _captureCameraRfc(CaptureCameraRfcEvent event, emit) async {
+    var photoPath = await NGCFormHelper.cameraCapture();
+    log("photo-->$photoPath");
+    if (photoPath.path.isNotEmpty) {
+      rfcPhoto = photoPath;
+    }
+    _eventCompleted(emit);
+  }
+
+
 
   _captureGalleryNGCReport(CaptureGalleryNGCReportEvent event, emit) async {
     var photoPath = await NGCFormHelper.galleryCapture();
@@ -664,6 +722,13 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         typeOfNrValue: typeOfNrValue,
         baseUrl: baseUrl,
         lmcPath: lmcPath,
-        listOfSRSerial: listOfSRSerial));
+        listOfSRSerial: listOfSRSerial,
+      regulatorCheck : regulatorCheck,
+      rfcPhoto : rfcPhoto,
+      pneumaticPhoto : pneumaticPhoto,
+      extraPipeController: extraPipeController,
+      extraPriceController: extraPriceController,
+      rfcDateController: rfcDateController,
+    ));
   }
 }

@@ -7,10 +7,11 @@ class Apis {
   static final String? baseUrl = AppConfig.of(context!)!.getBaseUrl;*/
 
   static String baseLiveUrl = 'http://pbgpl.smartgasnet.com/api/';
-  static String baseUatUrl = 'http://142.79.231.30:8097/api/';
+ //  static String baseUatUrl = 'http://142.79.231.30:8097/api/';
+  static String baseUatUrl = 'http://142.79.231.30:9097/api/';
 
-   static String baseUrl = 'http://142.79.231.30:8097/api/';
-  static String basePath = 'http://142.79.231.30:8097/';
+   static String baseUrl = 'http://142.79.231.30:9097/api/';
+  static String basePath = 'http://142.79.231.30:9097/';
 
   static String loginUrl = baseUrl + "auth";
   static String areaList = baseUrl + "getAllArea?schema=";

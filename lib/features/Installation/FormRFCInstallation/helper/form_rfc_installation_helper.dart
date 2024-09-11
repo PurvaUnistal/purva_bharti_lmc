@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,12 +9,10 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPipeDetailsModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/api_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormRFCInstallationHelper {
@@ -36,7 +34,7 @@ class FormRFCInstallationHelper {
     String json = Uri(queryParameters: para).query;
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.getlmcRFCInstallationApi + json, context: context);
-      return RFCInstallationModel.fromJson(res);
+      return RFCInstallationModel.fromJson(jsonDecode(res));
     } catch (e) {
       log("getlmcRFCInstallationApi-->${e.toString()}");
     }
@@ -62,16 +60,19 @@ class FormRFCInstallationHelper {
     required String srNumber,
     required String ngConversionDate,
     required String fittingDetails,
+    required List<String> pipeLength,
     required String meterPhoto,
     required String rfcPhoto,
     required String pneumaticTestReportPhoto,
+    required String houseLat,
+    required String houseLong,
     required String housePhoto,
   }) async {
     try {
       if (dateInstallation.isEmpty) {
         Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
         return false;
-      } else if (isDelayReason == true && delayReason.id == null) {
+      } else if (isDelayReason == true && delayReason.name == null) {
         Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
         return false;
       } else if (meterNumber.isEmpty) {
@@ -82,9 +83,6 @@ class FormRFCInstallationHelper {
         return false;
       } else if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
-        return false;
-      } else if(isInstallRegulator == false){
-        Utils.errorSnackBar(msg: "The Install Regulator check field is required.", context: context);
         return false;
       } else if (isInstallRegulator == true) {
         if (regulatorType.name == null) {
@@ -124,6 +122,9 @@ class FormRFCInstallationHelper {
       if (fittingDetails.isEmpty) {
         Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
         return false;
+      }  else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
+        Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
+        return false;
       } else if (meterPhoto.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
         return false;
@@ -135,6 +136,10 @@ class FormRFCInstallationHelper {
       Utils.errorSnackBar(msg: "The Pneumatic Test Report Photo field is required.", context: context);
       return false;
     }*/
+      else if (houseLat == "0" ||houseLong == "0") {
+        Utils.errorSnackBar(msg: "The House Latitude and Longitude Point is required.", context: context);
+        return false;
+      }
       else if (housePhoto.isEmpty) {
         Utils.errorSnackBar(msg: "The House Photo field is required.", context: context);
         return false;
@@ -146,7 +151,7 @@ class FormRFCInstallationHelper {
     }
   }
 
-  static Future<SaveFeasibleModel?> saveLMCInstallation({
+  static Future<SaveFeasibleModel?> saveLmcRFCInstallation({
     required BuildContext context,
     required String meterNo,
     required String sRegulatorsId,
@@ -217,7 +222,6 @@ class FormRFCInstallationHelper {
       log("para-->${para}");
       var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context, imageRequestObject: [
         ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-        //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
         ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
         ImageRequestObject("pneumatic_image", pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
         ImageRequestObject("house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),

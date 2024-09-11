@@ -165,6 +165,28 @@ class CaptureCameraSREvent extends NGCFormEvent {
   // TODO: implement props
   List<Object> get props => [];
 }
+class CaptureGalleryPneumaticEvent extends NGCFormEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureCameraPneumaticEvent extends NGCFormEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+class CaptureGalleryRfcEvent extends NGCFormEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class CaptureCameraRfcEvent extends NGCFormEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
 
 class NGCSubmitEvent extends NGCFormEvent {
   final BuildContext context;

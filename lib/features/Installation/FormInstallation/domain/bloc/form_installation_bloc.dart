@@ -287,8 +287,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     } else {
       installRegulator = "0";
       regulatorTypeValue = LmcReasonModel();
+      ngConversionDateController.text = "";
+      rfcDateController.text = "";
       regulatorSerialController.text = "";
       srNumberController.text = "";
+      regulatorId = '';
+      sRegulatorId = '';
     }
     _eventCompleted(emit);
   }
@@ -630,9 +634,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
         pipeLength: listOfQtyLMC,
         meterPhoto: meterPhoto.path.toString(),
-        rfcPhoto: rfcCardPhoto.path.toString(),
+        houseLat: latOfHouseController.text.trim().toString(),
+        houseLong: longOfHouseController.text.trim().toString(),
         housePhoto: housePhoto.path.toString(),
-        pneumaticTestReportPhoto: pneumaticTestReportPhoto.path.toString(),
       );
       if (validationCheck == true) {
         isBtnLoader = true;

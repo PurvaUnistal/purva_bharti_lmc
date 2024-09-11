@@ -146,8 +146,8 @@ class FormInstallationHelper {
     required String fittingDetails,
     required List<String> pipeLength,
     required String meterPhoto,
-    required String rfcPhoto,
-    required String pneumaticTestReportPhoto,
+    required String houseLat,
+    required String houseLong,
     required String housePhoto,
   }) async {
     try {
@@ -204,20 +204,18 @@ class FormInstallationHelper {
       if (fittingDetails.isEmpty) {
         Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
         return false;
-      } else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
-        Utils.errorSnackBar(msg: "At-least one field is required.", context: context);
-        return false;
-      } else if (meterPhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
+      }
+      else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
+        Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
         return false;
       }
-      /* else if (rfcPhoto.isEmpty) {
-      Utils.errorSnackBar(msg: "The RFC Photo field is required.", context: context);
-      return false;
-    } else if (pneumaticTestReportPhoto.isEmpty) {
-      Utils.errorSnackBar(msg: "The Pneumatic Test Report Photo field is required.", context: context);
-      return false;
-    }*/
+      else if (meterPhoto.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
+        return false;
+      }else if (houseLat.isEmpty ||houseLong.isEmpty) {
+        Utils.errorSnackBar(msg: "The House Latitude and Longitude Point is required.", context: context);
+        return false;
+      }
       else if (housePhoto.isEmpty) {
         Utils.errorSnackBar(msg: "The House Photo field is required.", context: context);
         return false;

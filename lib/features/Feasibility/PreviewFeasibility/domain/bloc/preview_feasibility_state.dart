@@ -18,9 +18,8 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState {
   final bool isLoader;
   String schema;
   String userName;
-  String trNumber;
+  String crNumber;
   String bpNumber;
-  String custRegNo;
   String chargeArea;
   String areaName;
   String firstName;
@@ -45,8 +44,7 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState {
     required this.isLoader,
     required this.schema,
     required this.userName,
-    required this.custRegNo,
-    required this.trNumber,
+    required this.crNumber,
     required this.bpNumber,
     required this.chargeArea,
     required this.areaName,
@@ -75,9 +73,9 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState {
         schema,
         userName,
         isLoader,
-  trNumber,
+  crNumber,
    bpNumber,
-        custRegNo,
+    
         chargeArea,
         areaName,
         street,

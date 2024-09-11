@@ -22,7 +22,7 @@ class LMCFeasibilityHelper {
       log("getAllAreaModelFromJson-->${e.toString()}");
     }
     return null;
-  } //
+  }
 
   static Future<FeasibilityModel?> getFeasibilityApi({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
     String schema = await SharedPref.getString(

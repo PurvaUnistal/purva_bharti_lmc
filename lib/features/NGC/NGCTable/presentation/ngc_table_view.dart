@@ -228,6 +228,11 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(key: PrefsValue.srRegulatorSerial, value: user.mrRegulatorSerial!);
                               await SharedPref.setString(key: PrefsValue.mrRegulatorId, value: user.regulators!);
                               await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.regulatorSerial!);
+                              await SharedPref.setString(key: PrefsValue.regulatorCheck, value: user.regulatorCheck!);
+                              await SharedPref.setString(key: PrefsValue.rfcPhoto, value: user.rfcForm!);
+                              await SharedPref.setString(key: PrefsValue.pneumaticPhoto, value: user.pneumaticImage!);
+                              await SharedPref.setString(key: PrefsValue.extraPipe, value: user.extraPipe!);
+                              await SharedPref.setString(key: PrefsValue.extraPrice, value: user.extraPrice!);
                               //////////////////////
                               if (user.interested == "0") {
                                 if (user.futureRegNgcEligibleStatus == "1") {

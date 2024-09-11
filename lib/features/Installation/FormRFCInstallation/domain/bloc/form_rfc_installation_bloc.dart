@@ -129,7 +129,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   String baseUrl = '';
 
   File housePhoto = File("");
-  File rfcCardPhoto = File("");
+  File rfcPhoto = File("");
   File meterPhoto = File("");
   File pneumaticTestReportPhoto = File("");
   File installationPhoto = File("");
@@ -147,7 +147,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     isCheckSR = false;
     isExtraPipe = false;
     housePhoto = File("");
-    rfcCardPhoto = File("");
+    rfcPhoto = File("");
     pneumaticTestReportPhoto = File("");
     installationPhoto = File("");
     meterPhoto = File("");
@@ -163,18 +163,17 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     listOfRegulatorSerial = [];
     listOfSRSerial = [];
     listOfRegulatorId = [];
-
     listOfTypeOfNr = [];
     listOfReadyNGC = [];
     listOfDelayReason = [];
     listOfRegulatorType = [];
-
     listOfAllMaterial = [];
     listOfMaterial = [];
     materialList = [];
     listOfAllMaterialId = [];
     listOfQtyLMC = [];
     listOfAllRFC = [];
+    listOfRFCInstallationMaterial = [];
     extraPipe = "0";
     extraPrice = "0";
     meterTesting = "0";
@@ -216,17 +215,14 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
     feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
     await fetchDelayReasonApi(context: event.context);
+    await fetchRFCApi(context: event.context,);
     await fetchRFCInstallationApi(context: event.context);
+    await fetchFreeMaterialApi(context: event.context,);
     await fetchReadyForNgcApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
-
     await fetchRegulatorTypeApi(context: event.context);
-    await fetchRFCApi(
-      context: event.context,
-    );
-    await fetchFreeMaterialApi(
-      context: event.context,
-    );
+
+
     await checkDelayReason();
     _eventCompleted(emit);
   }
@@ -289,8 +285,12 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     } else {
       installRegulator = "0";
       regulatorTypeValue = LmcReasonModel();
+      ngConversionDateController.text = "";
+      rfcDateController.text = "";
       regulatorSerialController.text = "";
       srNumberController.text = "";
+      regulatorId = '';
+      sRegulatorId = '';
     }
     _eventCompleted(emit);
   }
@@ -316,7 +316,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
         await SharedPref.setString(key: PrefsValue.installationId, value: rfcInstallationLmc.installationId!);
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
-       // delayReasonValue.name = rfcInstallationLmc.delayReason!;
+        // delayReasonValue.name = rfcInstallationLmc.delayReason!;
         for(var i = 0; i < listOfDelayReason.length; i++){
           if(rfcInstallationLmc.delayReason == listOfDelayReason[i].name.toString()){
             delayReasonValue.name = listOfDelayReason[i].name;
@@ -330,20 +330,22 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
         meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
         meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
-
         String isValid = rfcInstallationLmc.regulatorCheck!;
+        String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
         if (isValid == "1") {
           isInstallRegulator = bool.parse("true");
+          if (regulatorTypeId == "1") {
+            regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
+            regulatorTypeValue.name = "SR";
+          } else if (regulatorTypeId == "2") {
+            regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
+            regulatorTypeValue.name = "PRV";
+          }else{
+            regulatorTypeValue = LmcReasonModel();
+          }
         } else {
           isInstallRegulator = bool.parse("false");
-        }
-        String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
-        if (regulatorTypeId == "1") {
-          regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
-          regulatorTypeValue.name = "SR";
-        } else if (regulatorTypeId == "0") {
-          regulatorTypeValue.id = rfcInstallationLmc.regulatorTypeId!;
-          regulatorTypeValue.name = "PRV";
+          regulatorTypeValue = LmcReasonModel();
         }
         meterConnectionMeterController.text = rfcInstallationLmc.typeOfNr!;
         srNumberController.text = rfcInstallationLmc.mrRegulatorSerial!;
@@ -354,6 +356,10 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         materialId = rfcInstallationLmc.meterNumber!;
         rfcDateController.text = rfcInstallationLmc.rfcDate!;
         ngConversionDateController.text = rfcInstallationLmc.proposedNgcDate!;
+        extraPipeController.text = rfcInstallationLmc.extraPipe!;
+        extraPriceController.text = rfcInstallationLmc.extraPrice!;
+        extraPipe =rfcInstallationLmc.extraPipe!;
+        extraPrice = rfcInstallationLmc.extraPrice!;
         meterTesting = rfcInstallationLmc.meterTesting!;
         paintingOfGIPipe = rfcInstallationLmc.paintaingofGIpipe!;
         for (int i = 0; i < listOfAllRFC.length; i++) {
@@ -371,10 +377,14 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         String lmcPath = rfcInstallationLmc.lmcpath!;
         String networkMeterPhoto = rfcInstallationLmc.meterPhoto!;
         String networkHouseImage = rfcInstallationLmc.houseImage!;
+        String networkPneumaticPhoto = rfcInstallationLmc.pneumaticImage!;
+        String networkRfcPhoto = rfcInstallationLmc.rfcForm!;
         baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
         String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
         meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
         housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
+        rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+        pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
       }
       if (res.data?.material != null) {
         listOfRFCInstallationMaterial = res.data!.material!;
@@ -422,7 +432,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
       listOfAllMaterialId.addAll(tempList);
       listOfMaterial = List.generate(
         listOfAllMaterial.length,
-        (i) => MaterialItem(
+            (i) => MaterialItem(
             value: '0',
             id: '${listOfAllMaterial[i].id}',
             name: '${listOfAllMaterial[i].materialName}',
@@ -577,7 +587,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      rfcCardPhoto = photoPath;
+      rfcPhoto = photoPath;
     }
     _eventCompleted(emit);
   }
@@ -586,7 +596,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      rfcCardPhoto = photoPath;
+      rfcPhoto = photoPath;
     }
     _eventCompleted(emit);
   }
@@ -695,15 +705,18 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+        pipeLength: listOfQtyLMC,
         meterPhoto: meterPhoto.path.toString(),
-        rfcPhoto: rfcCardPhoto.path.toString(),
+        rfcPhoto: rfcPhoto.path.toString(),
+        houseLat: latOfHouseController.text.trim().toString(),
+        houseLong: longOfHouseController.text.trim().toString(),
         housePhoto: housePhoto.path.toString(),
         pneumaticTestReportPhoto: pneumaticTestReportPhoto.path.toString(),
       );
       if (validationCheck == true) {
         isBtnLoader = true;
         _eventCompleted(emit);
-        var res = await FormRFCInstallationHelper.saveLMCInstallation(
+        var res = await FormRFCInstallationHelper.saveLmcRFCInstallation(
           context: event.context,
           extraPipe: extraPipe.toString(),
           extraPrice: extraPrice.toString(),
@@ -728,10 +741,10 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
           meterTesting: meterTesting.trim().toString(),
           paintingOfGIPipe: paintingOfGIPipe.trim().toString(),
           ngc: readyNGCValue,
-          meterPhoto: meterPhoto.path,
-          housePhoto: housePhoto.path,
+          meterPhoto: meterPhoto.path.toString(),
+          housePhoto: housePhoto.path.toString(),
           pneumaticPhoto: pneumaticTestReportPhoto.path.toString(),
-          isometricPhoto: rfcCardPhoto.path.toString(),
+          isometricPhoto: rfcPhoto.path.toString(),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
@@ -793,7 +806,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
       meterIniReading3FocusNode: meterIniReading3FocusNode,
       listOfQtyLMC: listOfQtyLMC,
       isSelected: isSelected,
-      rfcCardPhoto: rfcCardPhoto,
+      rfcCardPhoto: rfcPhoto,
       pneumaticTestReportPhoto: pneumaticTestReportPhoto,
       installationPhoto: installationPhoto,
       listOfRegulatorSerial: listOfRegulatorSerial,

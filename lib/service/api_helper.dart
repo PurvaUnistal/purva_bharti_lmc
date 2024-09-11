@@ -99,25 +99,19 @@ class ApiHelper {
       request.fields.addAll(body);
       request.headers.addAll(headers);
       var response = await request.send();
+      var responseData = await response.stream.toBytes();
+      var result = json.decode(String.fromCharCodes(responseData));
       if (response.statusCode == 200) {
-        var responseData = await response.stream.toBytes();
-        var result = json.decode(String.fromCharCodes(responseData));
         log("result-->${result.toString()}");
         return result;
       } else if (response.statusCode == 401) {
-        var responseData = await response.stream.toBytes();
-        var result = json.decode(String.fromCharCodes(responseData));
         log("result-->${result.toString()}");
         return result;
       } else if (response.statusCode == 415) {
-        var responseData = await response.stream.toBytes();
-        var result = json.decode(String.fromCharCodes(responseData));
-        log(result.toString());
-        return result;
+        Utils.errorSnackBar(msg: result['data'].toString(), context:context);
+        log(result['data'].toString());
+        return null;
       } else if (response.statusCode == 400) {
-        var responseData = await response.stream.toBytes();
-        var result = json.decode(String.fromCharCodes(responseData));
-        log(result.toString());
         return result;
       } else {
         return null;

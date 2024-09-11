@@ -129,7 +129,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectFollowUpDate(SelectFollowUpDateEvent event, emit) async {
-    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
+    var assignDate = DateFormat(AppString.dateFormat).parse(assignedDateController.text);
+    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime(2050));
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       followUpDateController.text = formattedDate.toString();

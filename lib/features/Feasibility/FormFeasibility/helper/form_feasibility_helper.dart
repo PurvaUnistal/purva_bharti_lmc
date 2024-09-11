@@ -131,13 +131,18 @@ class FormFeasibilityHelper {
       } else if (isFeasible.key == null) {
         Utils.errorSnackBar(msg: "The Is Feasible field is required.", context: context);
         return false;
-      } else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
-        Utils.errorSnackBar(msg: "At-least one field is required.", context: context);
-        return false;
-      } else if (proposedDate.isEmpty) {
-        Utils.errorSnackBar(msg: "The LMC Proposed Date field is required.", context: context);
-        return false;
-      } else if (isFeasible.key == "2" || isFeasible.key == "3") {
+      }
+      else if(isFeasible.key == "1"){
+      /*  if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
+          Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
+          return false;
+        } else */
+          if (proposedDate.isEmpty) {
+          Utils.errorSnackBar(msg: "The LMC Proposed Date field is required.", context: context);
+          return false;
+        }
+      }
+       else if (isFeasible.key == "2" || isFeasible.key == "3") {
         if (lmcReasonValue.key == null) {
           Utils.errorSnackBar(msg: "The LMC Reason field is required.", context: context);
           return false;

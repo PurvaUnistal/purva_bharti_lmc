@@ -184,11 +184,11 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
                           await SharedPref.setString(key: PrefsValue.rfcProcessStatus, value: user.rfcProcessStatus!);
                           await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn!);
                           await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
-                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate == "" ? AppString.dateFormat : user.proposedDate!);
+                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate == "" ? "00-00-0000" : user.proposedDate!);
                           await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
                           await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
                           await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value:user.feasibilityVisitDate!);
-                          await SharedPref.setString(key: PrefsValue.custRegNo, value: user.crn!);
+                          await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn!);
                           await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName!);
                           await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
                           await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);

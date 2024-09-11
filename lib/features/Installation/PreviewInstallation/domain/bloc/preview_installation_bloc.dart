@@ -38,7 +38,7 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
     emit(PreviewInstallationInitialState());
     isLoader = false;
     custRegNo = await SharedPref.getString(
-      key: PrefsValue.custRegNo,
+      key: PrefsValue.crNumber,
     );
     feasibilityVisitDate = await SharedPref.getString(
       key: PrefsValue.feasibilityVisitDate,

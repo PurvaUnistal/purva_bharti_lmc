@@ -23,7 +23,6 @@ class PrefsValue {
 
 
   static String workCompletedDate = "Work Completed Date";
-  static String custRegNo = "customerRegistrationNo";
   static String feasibilityVisitDate = "feasibilityVisitDate";
   static String chargeArea = "chargeArea";
   static String areaName = "areaName";
@@ -83,4 +82,9 @@ class PrefsValue {
   static String mrRegulatorSerial = "mrRegulatorSerial";
   static String lmcInstallId = "lmcInstallId";
   static String rfcProcessStatus = "rfcProcessStatus";
+  static String regulatorCheck = "regulatorCheck";
+  static String rfcPhoto = "rfcPhoto";
+  static String pneumaticPhoto = "pneumaticPhoto";
+  static String extraPipe = "extraPipe";
+  static String extraPrice = "extraPrice";
 }

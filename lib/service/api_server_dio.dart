@@ -105,7 +105,7 @@ class ApiHelper {
             MapEntry(element.key!, await MultipartFile.fromFile(element.path!, contentType:DioMediaType(mimeTypeData[0], mimeTypeData[1]) )),
           );
         } else {
-          body[element.key] = element.path;
+          body[element.key!] = element.path;
         }
       }
       final response = await Dio().post(urlEndPoint, data: formData,);

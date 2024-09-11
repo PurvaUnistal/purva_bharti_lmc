@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-09.09.8.24";
+  static String version = "Version : LMC-2.11.09.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -33,7 +33,6 @@ class AppString {
 
   static String search = "Search";
   static String selectArea = "Select Area";
-  static String custReg = "Customer Registration";
   static String crNumber = "CR Number";
   static String assignedDate = "Assigned Date";
   static String lmcFeaDate = "Date of Feasibility";
@@ -41,7 +40,7 @@ class AppString {
   static String area = "Area";
   static String firstName = "First Name";
   static String lastName = "Last Name";
-  static String mobileNumber = "Mobile Number";
+  static String mobileNumber = "Registered Mobile Number";
   static String altMobileNo = "Alternate Mobile Number";
   static String email = "Email";
   static String guardianName = "Guardian Name";
