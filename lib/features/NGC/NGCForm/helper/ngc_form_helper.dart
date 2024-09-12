@@ -123,8 +123,10 @@ class NGCFormHelper{
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcMeters + json, context: context);
-      MeterNoModel meterNoModel = MeterNoModel.fromJson(jsonDecode(res));
-      return meterNoModel.data;
+     if(res != null){
+       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
+       return meterNoModel.data;
+     }
     } catch (e) {
       log("getMetersApi-->${e.toString()}");
     }
@@ -137,7 +139,7 @@ class NGCFormHelper{
     required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
-    try {
+  //  try {
       Map<String, String> para = {
         "schema":schema,
         "regulatorSerial":regulatorSerial,
@@ -146,12 +148,14 @@ class NGCFormHelper{
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcRegulators + json, context: context);
-      print(res);
-      MeterNoModel meterNoModel = MeterNoModel.fromJson(jsonDecode(res));
-      return meterNoModel.data;
-    } catch (e) {
+      if(res != null){
+        print(res);
+        MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
+        return meterNoModel.data;
+      }
+    /*} catch (e) {
       log("getRegulators-->${e.toString()}");
-    }
+    }*/
     return null;
   }
 
@@ -194,7 +198,7 @@ class NGCFormHelper{
         Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
         return false;
       }else if (changeMeterType == "null") {
-        Utils.errorSnackBar(msg : "The Meter Type is required.",context: context);
+        Utils.errorSnackBar(msg : "The Change Meter Reason is required.",context: context);
         return false;
       } else if (meterInitialReading.isEmpty) {
         Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);

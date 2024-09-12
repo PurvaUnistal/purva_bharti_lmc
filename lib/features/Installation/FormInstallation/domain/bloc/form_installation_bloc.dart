@@ -293,6 +293,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       srNumberController.text = "";
       regulatorId = '';
       sRegulatorId = '';
+      rfcCardPhoto = File("");
+      pneumaticTestReportPhoto = File("");
     }
     _eventCompleted(emit);
   }

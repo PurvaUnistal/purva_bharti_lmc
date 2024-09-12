@@ -291,6 +291,8 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
       srNumberController.text = "";
       regulatorId = '';
       sRegulatorId = '';
+      rfcPhoto = File("");
+      pneumaticTestReportPhoto = File("");
     }
     _eventCompleted(emit);
   }
@@ -330,6 +332,17 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
         meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
         meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
+        String lmcPath = rfcInstallationLmc.lmcpath!;
+        String networkMeterPhoto = rfcInstallationLmc.meterPhoto!;
+        String networkHouseImage = rfcInstallationLmc.houseImage!;
+        String networkPneumaticPhoto = rfcInstallationLmc.pneumaticImage!;
+        String networkRfcPhoto = rfcInstallationLmc.rfcForm!;
+        baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+        String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
+        meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
+        housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
+        rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+        pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
         String isValid = rfcInstallationLmc.regulatorCheck!;
         String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
         if (isValid == "1") {
@@ -346,6 +359,10 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         } else {
           isInstallRegulator = bool.parse("false");
           regulatorTypeValue = LmcReasonModel();
+          rfcDateController.text = "";
+          ngConversionDateController.text = "";
+          rfcPhoto = File("");
+          pneumaticTestReportPhoto = File("");
         }
         meterConnectionMeterController.text = rfcInstallationLmc.typeOfNr!;
         srNumberController.text = rfcInstallationLmc.mrRegulatorSerial!;
@@ -374,17 +391,6 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
             listOfAllRFC[i].isSelected = false;
           }
         }
-        String lmcPath = rfcInstallationLmc.lmcpath!;
-        String networkMeterPhoto = rfcInstallationLmc.meterPhoto!;
-        String networkHouseImage = rfcInstallationLmc.houseImage!;
-        String networkPneumaticPhoto = rfcInstallationLmc.pneumaticImage!;
-        String networkRfcPhoto = rfcInstallationLmc.rfcForm!;
-        baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
-        String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
-        meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
-        housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
-        rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
-        pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
       }
       if (res.data?.material != null) {
         listOfRFCInstallationMaterial = res.data!.material!;

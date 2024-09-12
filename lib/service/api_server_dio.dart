@@ -32,8 +32,8 @@ class ApiHelper {
         return res.data;
       }
     } on DioException catch (error) {
-      log(error.message!);
-      await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      log(error.message ??"");
+      await Utils.errorSnackBar(msg: error.message.toString(), context: context);
     } catch (e) {
       log("catchGET-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);

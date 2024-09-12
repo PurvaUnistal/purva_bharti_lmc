@@ -55,9 +55,9 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 1) {
+    if (event.searchBpNumber.length > 9) {
       listOfFilterInstallationByNgc = listOfFilterInstallationByNgc.where((element) => element.bpNumber.toString().contains(event.searchBpNumber) || element.mobileNumber.toString().contains(event.searchBpNumber)).toList();
-    }else if (event.searchBpNumber.length  == 0){
+    }else{
       listOfFilterInstallationByNgc = await listOfInstallationByNgc;
     }
     _eventCompleted(emit);
