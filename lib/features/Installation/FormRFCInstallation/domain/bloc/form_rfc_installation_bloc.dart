@@ -339,10 +339,18 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         String networkRfcPhoto = rfcInstallationLmc.rfcForm!;
         baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
         String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
-        meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
-        housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
-        rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
-        pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
+        if(networkHouseImage != ''){
+          housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
+        }
+        if(networkMeterPhoto != ''){
+          meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
+        }
+        if(networkRfcPhoto != ''){
+          rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+        }
+        if(networkPneumaticPhoto != ""){
+          pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
+        }
         String isValid = rfcInstallationLmc.regulatorCheck!;
         String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
         if (isValid == "1") {

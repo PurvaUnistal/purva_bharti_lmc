@@ -701,9 +701,10 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
           },
         ),
         stateData.isInstallRegulator == true
-            ? ImageWidget(
+            ? NetworkImageWidget(
                 title: AppString.rfc,
-                imgFile: stateData.rfcCardPhoto,
+          baseUrl: stateData.baseUrl,
+          networkPath: stateData.rfcCardPhoto,
                 onPressed: () {
                   showModalBottomSheet(
                       enableDrag: true,
@@ -725,9 +726,10 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
               )
             : Container(),
         stateData.isInstallRegulator == true
-            ? ImageWidget(
+            ? NetworkImageWidget(
                 title: AppString.pneumatic,
-                imgFile: stateData.pneumaticTestReportPhoto,
+          baseUrl: stateData.baseUrl,
+          networkPath: stateData.pneumaticTestReportPhoto,
                 onPressed: () {
                   showModalBottomSheet(
                       enableDrag: true,
