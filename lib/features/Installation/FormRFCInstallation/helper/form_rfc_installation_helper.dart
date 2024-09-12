@@ -186,7 +186,7 @@ class FormRFCInstallationHelper {
     String installationId = await SharedPref.getString(key: PrefsValue.installationId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
-  //  try {
+    try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
         "installation_id": installationId.isEmpty ? " " : installationId,
@@ -220,6 +220,7 @@ class FormRFCInstallationHelper {
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
+      log("para-->${ImageRequestObject}");
       var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context, imageRequestObject: [
         ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
         ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
@@ -235,10 +236,10 @@ class FormRFCInstallationHelper {
         Utils.errorSnackBar(msg: res["data"], context: context);
         return null;
       }
-   /* } catch (e) {
+    } catch (e) {
       log("saveLmcInstallation-->${e.toString()}");
       return null;
-    }*/
+    }
   }
 
   static Future<File> cameraCapture() async {

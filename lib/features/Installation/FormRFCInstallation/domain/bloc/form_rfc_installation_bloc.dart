@@ -755,10 +755,10 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
           meterTesting: meterTesting.trim().toString(),
           paintingOfGIPipe: paintingOfGIPipe.trim().toString(),
           ngc: readyNGCValue,
-          meterPhoto: meterPhoto.path.toString(),
-          housePhoto: housePhoto.path.toString(),
-          pneumaticPhoto: pneumaticTestReportPhoto.path.toString(),
-          isometricPhoto: rfcPhoto.path.toString(),
+          meterPhoto: meterPhoto == " " ? "" :meterPhoto.path.toString(),
+          housePhoto: meterPhoto == " " ? "" :meterPhoto.path.toString(),
+          pneumaticPhoto: pneumaticTestReportPhoto == " " ? "" : pneumaticTestReportPhoto.path.toString(),
+          isometricPhoto: rfcPhoto == " " ? "" : rfcPhoto.path.toString(),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
