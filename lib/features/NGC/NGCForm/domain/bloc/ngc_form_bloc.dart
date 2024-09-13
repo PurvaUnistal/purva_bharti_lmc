@@ -26,6 +26,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<MeterInitReadingEvent>(_meterInitReading);
     on<SelectTypeNRValueEvent>(_selectTypeNRValue);
     on<SelectMeterReplaceEvent>(_selectMeterReplace);
+    on<SelectRegularReplaceEvent>(_selectRegularReplace);
     on<SelectMeterNumberValueEvent>(_selectMeterNumberValue);
     on<SelectRegulatorTypeValueEvent>(_selectRegulatorTypeValue);
     on<SelectRegulatorsValueEvent>(_selectRegulatorsValue);
@@ -67,6 +68,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   bool isMeterReplacement = false;
   bool isMeterReplace = false;
+  bool isRegularReplace = false;
   bool isCheckMeterMismatch = false;
   bool isCheckRegulatorMismatch = false;
   bool isCheckSR = false;
@@ -95,8 +97,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
   TextEditingController meterConnectionMeterController = TextEditingController();
+  TextEditingController regulatorSerialSearchController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
-  TextEditingController srNumberController = TextEditingController();
+  TextEditingController srNumberSearchController = TextEditingController();
+  TextEditingController srSerialNumberController = TextEditingController();
   TextEditingController delayForReasonController = TextEditingController();
   TextEditingController ngConversionDateController = TextEditingController();
   TextEditingController latOfSRController = TextEditingController();
@@ -119,6 +123,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController extraPipeController = TextEditingController();
   TextEditingController extraPriceController = TextEditingController();
   TextEditingController rfcDateController = TextEditingController();
+  TextEditingController regulatorTypeController = TextEditingController();
 
   FocusNode meterIniReading1FocusNode = FocusNode();
   FocusNode meterIniReading2FocusNode = FocusNode();
@@ -153,6 +158,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     isRegulator = false;
     _isBtnLoader = false;
     isMeterReplace = false;
+    isRegularReplace = false;
     isMeterReplacement = false;
     isCheckMeterMismatch = false;
     isCheckRegulatorMismatch = false;
@@ -182,12 +188,14 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     meterReplaceTypeValue = LmcReasonModel();
     reasonMeterChangeController.text = '';
     meterNumberSerialController.text = '';
+    regulatorSerialSearchController.text = '';
     regulatorSerialController.text = '';
     delayReasonController.text = '';
     meterIniReading1Controller.text = "";
     meterIniReading2Controller.text = "";
     meterIniReading3Controller.text = "";
     meterInitialReadingController.text = "";
+    regulatorTypeController.text = "";
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
@@ -199,10 +207,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     longOfMRController.text = "0";
     role = await SharedPref.getString(key: PrefsValue.userRole);
     meterConnectionMeterController.text = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "" : PrefsValue.typeOfNr);
-    regulatorTypeValue.name = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" : PrefsValue.regulatorType);
+    regulatorTypeController.text = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" : PrefsValue.regulatorType);
     regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "" : PrefsValue.regulatorTypeId);
     srRegulatorId = await SharedPref.getString(key: PrefsValue.srRegulatorId);
-    srNumberController.text = await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
+    srSerialNumberController.text = await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
     regulatorId = await SharedPref.getString(key: PrefsValue.mrRegulatorId);
     regulatorSerialController.text = await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
     lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
@@ -317,14 +325,18 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     }
     _eventCompleted(emit);
   }
+  _selectRegularReplace(SelectRegularReplaceEvent event, emit) {
+    isRegularReplace = event.regularReplace;
+    _eventCompleted(emit);
+  }
 
   _selectRegulatorTypeValue(SelectRegulatorTypeValueEvent event, emit) async {
     isRegulator = true;
     _eventCompleted(emit);
     regulatorTypeValue = event.regulatorTypeValue;
     if (event.regulatorTypeValue.name != null) {
-      regulatorSerialController.text = "";
-      srNumberController.text = "";
+      regulatorSerialSearchController.text = "";
+      srNumberSearchController.text = "";
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
     }
     isRegulator = false;
@@ -384,7 +396,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
-    regulatorSerialController.text = event.regulatorsValue;
+    regulatorSerialSearchController.text = event.regulatorsValue;
     regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
     if (event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
       isCheckRegulatorMismatch = true;
@@ -395,7 +407,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   _selectSRegulators(SelectSRegulatorsEvent event, emit) async {
-    srNumberController.text = event.sRegulators;
+    srNumberSearchController.text = event.sRegulators;
     srRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
     if (event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
       isCheckSR = true;
@@ -582,15 +594,15 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         meterInitialReading: meterInitialReadingController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
         regulatorType: regulatorTypeValue,
-        regulatorId: regulatorSerialController.text.trim().toString(),
+        regulatorId: regulatorSerialSearchController.text.trim().toString(),
         mrPhoto: mrPhoto.path,
         srPhoto: srPhoto.path,
         latMR: latOfMRController.text.trim().toString(),
         longMR: longOfMRController.text.trim().toString(),
         latSR: latOfSRController.text.trim().toString(),
         longSR: longOfSRController.text.trim().toString(),
-        regulatorNumber: regulatorSerialController.text.trim().toString(),
-        srNumber: srNumberController.text.trim().toString(),
+        regulatorNumber: isRegularReplace == true ? regulatorSerialController.text.trim().toString() :regulatorSerialSearchController.text.trim().toString(),
+        srNumber: isRegularReplace == true ? srSerialNumberController.text.trim().toString():srNumberSearchController.text.trim().toString(),
         isCheckSR: isCheckSR,
         bpNumber: bpNumberController.text.trim().toString(),
         ngChargeDate: ngConversionDateController.text.trim().toString(),
@@ -629,7 +641,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           replaceMeter: meterReplace.toString(),
           changeMeterType: meterReplaceTypeValue,
           regulatorTypeId: regulatorTypeValue,
-          srNumber: srNumberController.text.trim().toString(),
+          srNumber: srNumberSearchController.text.trim().toString(),
           srRegulatorId: srRegulatorId.toString(),
           mrRegulatorId: regulatorId.toString(),
           latitudeMR: latOfMRController.text.trim().toString(),
@@ -677,11 +689,13 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         meterIniReading3FocusNode: meterIniReading3FocusNode,
         isCheckMeterMismatch: isCheckMeterMismatch,
         isMeterReplace: isMeterReplace,
+      isRegularReplace: isRegularReplace,
         isRegulator: isRegulator,
         listOfMeterNumber: listOfMeterNumber,
         listOfMeterNumberSerial: listOfMeterNumberSerial,
         meterConnectionMeterController: meterConnectionMeterController,
-        regulatorSerialController: regulatorSerialController,
+      regulatorSerialSearchController: regulatorSerialSearchController,
+      regulatorSerialController: regulatorSerialController,
         proposedNgcDateController: proposedNgcDateController,
         listOfMeterNumberId: listOfMeterNumberId,
         listOfRegulator: listOfRegulator,
@@ -691,7 +705,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         meterTypeValue: meterReplaceTypeValue,
         listOfRegulatorType: listOfRegulatorType,
         listOfMeterType: listOfMeterReplaceType,
-        srNumberController: srNumberController,
+      srNumberSearchController: srNumberSearchController,
+      srSerialNumberController: srSerialNumberController,
         meterNumberSerialController: meterNumberSerialController,
         noOfFamilyMembersController: noOfFamilyMembersController,
         ngConversionDateController: ngConversionDateController,
@@ -729,6 +744,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       extraPipeController: extraPipeController,
       extraPriceController: extraPriceController,
       rfcDateController: rfcDateController,
+      regulatorTypeController: regulatorTypeController,
     ));
   }
 }

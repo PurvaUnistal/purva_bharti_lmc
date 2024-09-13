@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-2.11.09.24";
+  static String version = "Version : LMC-2.13.09.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -101,6 +101,7 @@ class AppString {
   static String contractor = "Contractor";
   static String meterReading = "Meter Reading";
   static String meterReplace = "Do you want to replace meter?";
+  static String regulatorReplace = "Do you want to replace Regulator?";
   static String installRegulator = "Do you want to Install Regulator";
   static String burnersNo = "Burners No";
   static String ngChargeDate = "NG Charge Date";
@@ -110,7 +111,7 @@ class AppString {
   static String ngProposedDate = "Proposed NG Conversion Date";
   static String reasonForDelay = "Reason for Delay";
   static String meterType = "Change Meter Reason";
-  static String reasonMeterChange = "Remarks";
+  static String regularType = "Change Regular Reason";
   static String meterInitialReading = "Meter Initial Reading";
   static String delayStatus = "Delay Status";
   static String delayReason = "Delay Reason";

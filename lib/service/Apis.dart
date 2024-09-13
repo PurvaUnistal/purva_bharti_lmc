@@ -9,8 +9,8 @@ class Apis {
   static String baseLiveUrl = 'http://pbgpl.smartgasnet.com/api/';
   static String baseUatUrl = 'http://142.79.231.30:9097/api/';
 
-  // static String baseUrl = 'http://142.79.231.30:9097/api/';
-   static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+   static String baseUrl = 'http://142.79.231.30:9097/api/';
+//  static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
   static String basePath = 'http://142.79.231.30:9097/';
 
   static String loginUrl = baseUrl + "auth";

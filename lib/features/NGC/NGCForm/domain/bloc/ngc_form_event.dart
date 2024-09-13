@@ -34,6 +34,14 @@ class SelectMeterReplaceEvent extends NGCFormEvent {
   // TODO: implement props
   List<Object> get props => [context, meterReplace];
 }
+class SelectRegularReplaceEvent extends NGCFormEvent {
+  final BuildContext context;
+  final bool regularReplace;
+  SelectRegularReplaceEvent({required this.context, required this.regularReplace});
+  @override
+  // TODO: implement props
+  List<Object> get props => [context, regularReplace];
+}
 
 class SelectMeterNumberValueEvent extends NGCFormEvent {
   final BuildContext context;

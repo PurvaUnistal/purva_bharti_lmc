@@ -23,6 +23,7 @@ class NGCFormDataState extends NGCFormState {
   bool isBtnLoader;
   bool isCheckMeterMismatch;
   bool isMeterReplace;
+  bool isRegularReplace;
   bool isDelayReason;
   String userName;
   String schema;
@@ -56,6 +57,7 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController meterIniReading2Controller;
   TextEditingController meterIniReading3Controller;
   TextEditingController meterInitialReadingController;
+  TextEditingController regulatorSerialSearchController;
   TextEditingController regulatorSerialController;
   TextEditingController meterConnectionMeterController;
   TextEditingController proposedNgcDateController;
@@ -64,7 +66,8 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController latOfSRController;
   TextEditingController longOfSRController;
   TextEditingController nameContractorController;
-  TextEditingController srNumberController;
+  TextEditingController srNumberSearchController;
+  TextEditingController srSerialNumberController;
   TextEditingController meterNumberSerialController;
   TextEditingController bpNumberController;
   TextEditingController delayReasonController;
@@ -77,6 +80,7 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController ngChargeDateController;
   TextEditingController typeOfNrController;
   TextEditingController dateInstallationController;
+  TextEditingController regulatorTypeController;
   LmcReasonModel? delayReasonValue;
   List<LmcReasonModel> listOfDelayReason;
   TextEditingController latOfMRController;
@@ -93,6 +97,7 @@ class NGCFormDataState extends NGCFormState {
     required this.isDelayReason,
     required this.isCheckMeterMismatch,
     required this.isMeterReplace,
+    required this.isRegularReplace,
     required this.meterPhoto,
     required this.ngcReportPhoto,
     required this.isRegulator,
@@ -120,6 +125,7 @@ class NGCFormDataState extends NGCFormState {
     required this.meterIniReading2Controller,
     required this.meterIniReading3Controller,
     required this.meterInitialReadingController,
+    required this.regulatorSerialSearchController,
     required this.regulatorSerialController,
     required this.meterConnectionMeterController,
     required this.proposedNgcDateController,
@@ -128,7 +134,8 @@ class NGCFormDataState extends NGCFormState {
     required this.latOfSRController,
     required this.longOfSRController,
     required this.nameContractorController,
-    required this.srNumberController,
+    required this.srNumberSearchController,
+    required this.srSerialNumberController,
     required this.meterNumberSerialController,
     required this.bpNumberController,
     required this.delayReasonController,
@@ -141,6 +148,7 @@ class NGCFormDataState extends NGCFormState {
     required this.ngChargeDateController,
     required this.typeOfNrController,
     required this.dateInstallationController,
+    required this.regulatorTypeController,
     required this.delayReasonValue,
     required this.listOfDelayReason,
     required this.longOfMRController,
@@ -158,6 +166,7 @@ class NGCFormDataState extends NGCFormState {
     rfcPhoto,
     pneumaticPhoto,
     isMeterReplace,
+    isRegularReplace,
     isBtnLoader,
     isDelayReason,
     isCheckMeterMismatch,
@@ -188,6 +197,7 @@ class NGCFormDataState extends NGCFormState {
     meterIniReading2Controller,
     meterIniReading3Controller,
     meterInitialReadingController,
+    regulatorSerialSearchController,
     regulatorSerialController,
     proposedNgcDateController,
     ngConversionDateController,
@@ -197,7 +207,8 @@ class NGCFormDataState extends NGCFormState {
     nameContractorController,
     noOfFamilyMembersController,
     meterNumberSerialController,
-    srNumberController,
+    srNumberSearchController,
+    srSerialNumberController,
     bpNumberController,
     delayReasonController,
     noOfBurnersController,
@@ -208,6 +219,7 @@ class NGCFormDataState extends NGCFormState {
     ngChargeDateController,
     typeOfNrController,
     dateInstallationController,
+    regulatorTypeController,
     delayReasonValue,
     listOfDelayReason,
     longOfMRController,
