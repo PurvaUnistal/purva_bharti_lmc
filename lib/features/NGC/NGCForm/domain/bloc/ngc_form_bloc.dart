@@ -35,6 +35,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<SelectLocationOfSREvent>(_locationOfSR);
     on<SelectLocationOfMREvent>(_locationOfMR);
     on<SelectMeterTypeValueEvent>(_selectMeterTypeValue);
+    on<SelectRegulatorTypeReasonValueEvent>(_selectRegulatorTypeReasonValue);
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
     on<CaptureGalleryPneumaticEvent>(_captureGalleryPneumatic);
@@ -110,6 +111,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController nameContractorController = TextEditingController();
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController reasonMeterChangeController = TextEditingController();
+  TextEditingController reasonRegulatorChangeController = TextEditingController();
   TextEditingController noOfBurnersController = TextEditingController();
   TextEditingController meterSerialController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
@@ -132,6 +134,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   LmcReasonModel delayReasonValue = LmcReasonModel();
   LmcReasonModel regulatorTypeValue = LmcReasonModel();
   LmcReasonModel meterReplaceTypeValue = LmcReasonModel();
+  LmcReasonModel regulatorTypeReasonValue = LmcReasonModel();
 
   List<ListOfMeterNo> listOfMeterNumber = [];
   List<String> listOfMeterNumberSerial = [];
@@ -151,6 +154,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   List<LmcReasonModel> listOfDelayReason = [];
   List<LmcReasonModel> listOfNgcDelayStatus = [];
   List<LmcReasonModel> listOfMeterReplaceType = [];
+  List<LmcReasonModel> listOfRegulatorTypeReason = [];
 
   _pageLoad(NGCFormLoadEvent event, emit) async {
     emit(NGCFormPageLoadState());
@@ -183,10 +187,13 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     listOfRegulatorId = [];
     listOfDelayReason = [];
     listOfMeterReplaceType = [];
+    listOfRegulatorTypeReason = [];
     delayReasonValue = LmcReasonModel();
     regulatorTypeValue = LmcReasonModel();
     meterReplaceTypeValue = LmcReasonModel();
+    regulatorTypeReasonValue = LmcReasonModel();
     reasonMeterChangeController.text = '';
+    reasonRegulatorChangeController.text = '';
     meterNumberSerialController.text = '';
     regulatorSerialSearchController.text = '';
     regulatorSerialController.text = '';
@@ -248,16 +255,15 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     extraPriceController.text = await SharedPref.getString(key: PrefsValue.extraPrice) ?? "";
     rfcDateController.text = await SharedPref.getString(key: PrefsValue.rfcDate) ?? "";
     ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    //  await fetchDelayReasonApi(context: event.context);
     await fetchTypeOfNrApi(context: event.context);
     await fetchNgcReasonApi(context: event.context);
     await fetchMeterReplaceTypeApi(context: event.context);
     await fetchRegulatorTypeApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await checkDelayReason();
-    if (regulatorTypeValue.id != null) {
+    /* if (regulatorTypeValue.id != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: regulatorTypeValue.id.toString());
-    }
+    }*/
     _eventCompleted(emit);
   }
 
@@ -427,6 +433,11 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
+  _selectRegulatorTypeReasonValue(SelectRegulatorTypeReasonValueEvent event, emit) {
+    regulatorTypeReasonValue = event.regulatorTypeReasonValue;
+    _eventCompleted(emit);
+  }
+
   fetchNgcReasonApi({required BuildContext context}) async {
     var res = await NGCFormHelper.ngcReasonApi(context: context);
     if (res != null) {
@@ -439,6 +450,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var res = await NGCFormHelper.meterReplaceTypeApi(context: context);
     if (res != null) {
       listOfMeterReplaceType = res;
+      listOfRegulatorTypeReason = listOfMeterReplaceType;
       return res;
     }
   }
@@ -601,8 +613,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         longMR: longOfMRController.text.trim().toString(),
         latSR: latOfSRController.text.trim().toString(),
         longSR: longOfSRController.text.trim().toString(),
-        regulatorNumber: isRegularReplace == true ? regulatorSerialController.text.trim().toString() :regulatorSerialSearchController.text.trim().toString(),
-        srNumber: isRegularReplace == true ? srSerialNumberController.text.trim().toString():srNumberSearchController.text.trim().toString(),
+        regulatorNumber: isRegularReplace == false ? regulatorSerialController.text.trim().toString() :regulatorSerialSearchController.text.trim().toString(),
+        srNumber: isRegularReplace == false ? srSerialNumberController.text.trim().toString():srNumberSearchController.text.trim().toString(),
         isCheckSR: isCheckSR,
         bpNumber: bpNumberController.text.trim().toString(),
         ngChargeDate: ngConversionDateController.text.trim().toString(),
@@ -611,6 +623,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         noOfBurners: noOfBurnersController.text.trim().toString(),
         noOfFamily: noOfFamilyMembersController.text.trim().toString(),
         phoneNo: mobileNumberController.text.trim().toString(),
+        changeRegulatorType: isRegularReplace  == false ? "" : regulatorTypeReasonValue.id.toString(),
       );
       if (await validationCheck == true) {
         _isBtnLoader = true;
@@ -676,68 +689,71 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _eventCompleted(emit) {
     emit(NGCFormDataState(
-        userName: userName,
-        schema: schema,
-        isPageLoader: isPageLoader,
-        isBtnLoader: isBtnLoader,
-        meterIniReading1Controller: meterIniReading1Controller,
-        meterIniReading2Controller: meterIniReading2Controller,
-        meterIniReading3Controller: meterIniReading3Controller,
-        meterInitialReadingController: meterInitialReadingController,
-        meterIniReading1FocusNode: meterIniReading1FocusNode,
-        meterIniReading2FocusNode: meterIniReading2FocusNode,
-        meterIniReading3FocusNode: meterIniReading3FocusNode,
-        isCheckMeterMismatch: isCheckMeterMismatch,
-        isMeterReplace: isMeterReplace,
+      userName: userName,
+      schema: schema,
+      isPageLoader: isPageLoader,
+      isBtnLoader: isBtnLoader,
+      meterIniReading1Controller: meterIniReading1Controller,
+      meterIniReading2Controller: meterIniReading2Controller,
+      meterIniReading3Controller: meterIniReading3Controller,
+      meterInitialReadingController: meterInitialReadingController,
+      meterIniReading1FocusNode: meterIniReading1FocusNode,
+      meterIniReading2FocusNode: meterIniReading2FocusNode,
+      meterIniReading3FocusNode: meterIniReading3FocusNode,
+      isCheckMeterMismatch: isCheckMeterMismatch,
+      isMeterReplace: isMeterReplace,
       isRegularReplace: isRegularReplace,
-        isRegulator: isRegulator,
-        listOfMeterNumber: listOfMeterNumber,
-        listOfMeterNumberSerial: listOfMeterNumberSerial,
-        meterConnectionMeterController: meterConnectionMeterController,
+      isRegulator: isRegulator,
+      listOfMeterNumber: listOfMeterNumber,
+      listOfMeterNumberSerial: listOfMeterNumberSerial,
+      meterConnectionMeterController: meterConnectionMeterController,
       regulatorSerialSearchController: regulatorSerialSearchController,
       regulatorSerialController: regulatorSerialController,
-        proposedNgcDateController: proposedNgcDateController,
-        listOfMeterNumberId: listOfMeterNumberId,
-        listOfRegulator: listOfRegulator,
-        listOfRegulatorSerial: listOfRegulatorSerial,
-        listOfRegulatorId: listOfRegulatorId,
-        regulatorTypeValue: regulatorTypeValue,
-        meterTypeValue: meterReplaceTypeValue,
-        listOfRegulatorType: listOfRegulatorType,
-        listOfMeterType: listOfMeterReplaceType,
+      proposedNgcDateController: proposedNgcDateController,
+      listOfMeterNumberId: listOfMeterNumberId,
+      listOfRegulator: listOfRegulator,
+      listOfRegulatorSerial: listOfRegulatorSerial,
+      listOfRegulatorId: listOfRegulatorId,
+      regulatorTypeValue: regulatorTypeValue,
+      meterTypeValue: meterReplaceTypeValue,
+      regulatorTypeReasonValue: regulatorTypeReasonValue,
+      listOfRegulatorType: listOfRegulatorType,
+      listOfMeterType: listOfMeterReplaceType,
+      listOfRegulatorTypeReason: listOfRegulatorTypeReason,
       srNumberSearchController: srNumberSearchController,
       srSerialNumberController: srSerialNumberController,
-        meterNumberSerialController: meterNumberSerialController,
-        noOfFamilyMembersController: noOfFamilyMembersController,
-        ngConversionDateController: ngConversionDateController,
-        latOfSRController: latOfSRController,
-        longOfSRController: longOfSRController,
-        nameContractorController: nameContractorController,
-        bpNumberController: bpNumberController,
-        reasonMeterChangeController: reasonMeterChangeController,
-        noOfBurnersController: noOfBurnersController,
-        meterSerialController: meterSerialController,
-        mobileNumberController: mobileNumberController,
-        altMobileNumberController: altMobileNumberController,
-        emailIdController: emailIdController,
-        ngChargeDateController: ngConversionDateController,
-        typeOfNrController: typeOfNrController,
-        dateInstallationController: dateInstallationController,
-        delayReasonController: delayReasonController,
-        delayReasonValue: delayReasonValue,
-        listOfDelayReason: listOfDelayReason,
-        meterPhoto: meterPhoto,
-        ngcReportPhoto: ngcReportPhoto,
-        latOfMRController: latOfMRController,
-        longOfMRController: longOfMRController,
-        mrPhoto: mrPhoto,
-        srPhoto: srPhoto,
-        isDelayReason: isDelayReason,
-        listOfTypeOfNr: listOfTypeOfNr,
-        typeOfNrValue: typeOfNrValue,
-        baseUrl: baseUrl,
-        lmcPath: lmcPath,
-        listOfSRSerial: listOfSRSerial,
+      meterNumberSerialController: meterNumberSerialController,
+      noOfFamilyMembersController: noOfFamilyMembersController,
+      ngConversionDateController: ngConversionDateController,
+      latOfSRController: latOfSRController,
+      longOfSRController: longOfSRController,
+      nameContractorController: nameContractorController,
+      bpNumberController: bpNumberController,
+      reasonMeterChangeController: reasonMeterChangeController,
+      reasonRegulatorChangeController: reasonRegulatorChangeController,
+      noOfBurnersController: noOfBurnersController,
+      meterSerialController: meterSerialController,
+      mobileNumberController: mobileNumberController,
+      altMobileNumberController: altMobileNumberController,
+      emailIdController: emailIdController,
+      ngChargeDateController: ngConversionDateController,
+      typeOfNrController: typeOfNrController,
+      dateInstallationController: dateInstallationController,
+      delayReasonController: delayReasonController,
+      delayReasonValue: delayReasonValue,
+      listOfDelayReason: listOfDelayReason,
+      meterPhoto: meterPhoto,
+      ngcReportPhoto: ngcReportPhoto,
+      latOfMRController: latOfMRController,
+      longOfMRController: longOfMRController,
+      mrPhoto: mrPhoto,
+      srPhoto: srPhoto,
+      isDelayReason: isDelayReason,
+      listOfTypeOfNr: listOfTypeOfNr,
+      typeOfNrValue: typeOfNrValue,
+      baseUrl: baseUrl,
+      lmcPath: lmcPath,
+      listOfSRSerial: listOfSRSerial,
       regulatorCheck : regulatorCheck,
       rfcPhoto : rfcPhoto,
       pneumaticPhoto : pneumaticPhoto,

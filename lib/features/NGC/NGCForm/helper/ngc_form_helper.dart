@@ -123,10 +123,10 @@ class NGCFormHelper{
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcMeters + json, context: context);
-     if(res != null){
-       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
-       return meterNoModel.data;
-     }
+      if(res != null){
+        MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
+        return meterNoModel.data;
+      }
     } catch (e) {
       log("getMetersApi-->${e.toString()}");
     }
@@ -139,20 +139,20 @@ class NGCFormHelper{
     required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
-  //  try {
-      Map<String, String> para = {
-        "schema":schema,
-        "regulatorSerial":regulatorSerial,
-        "user_id": userId,
-        "regulatorType": regulatorType,
-      };
-      String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcRegulators + json, context: context);
-      if(res != null){
-        print(res);
-        MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
-        return meterNoModel.data;
-      }
+    //  try {
+    Map<String, String> para = {
+      "schema":schema,
+      "regulatorSerial":regulatorSerial,
+      "user_id": userId,
+      "regulatorType": regulatorType,
+    };
+    String json = Uri(queryParameters: para).query;
+    var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcRegulators + json, context: context);
+    if(res != null){
+      print(res);
+      MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
+      return meterNoModel.data;
+    }
     /*} catch (e) {
       log("getRegulators-->${e.toString()}");
     }*/
@@ -186,6 +186,7 @@ class NGCFormHelper{
     required File meterImg,
     required String ngChargeDate,
     required String changeMeterType,
+    required String changeRegulatorType,
   }) async {
     try {
       if(isDelayReason == true && delayReason.id == null){
@@ -203,33 +204,37 @@ class NGCFormHelper{
       } else if (meterInitialReading.isEmpty) {
         Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
         return false;
-      }   if(regulatorType.name == null){
+      }
+      if(regulatorType.name == null){
         Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
       } else if(regulatorType.name == "SR"){
-        if(regulatorNumber.isEmpty){
+        if (srNumber.isEmpty) {
+          Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+          return false;
+        } else if (isCheckSR == true) {
+          Utils.errorSnackBar(msg: "The SR Number is mismatch. Please check your SR Number.", context: context);
+          return false;
+        }else if(regulatorNumber.isEmpty){
           Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
           return false;
         } else if (isCheckRegulatorMismatch == true) {
           Utils.errorSnackBar(msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.", context: context);
           return false;
-        } else if (srNumber.isEmpty) {
-          Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+        }  else if (changeRegulatorType == "null") {
+          Utils.errorSnackBar(msg : "The Change Regulator Type Reason is required.",context: context);
           return false;
-        } else if (isCheckSR == true) {
-          Utils.errorSnackBar(msg: "The SR Number is mismatch. Please check your SR Number.", context: context);
+        }else if(latSR.isEmpty && longSR.isEmpty) {
+          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
+          return false;
+        } else if(srPhoto.isEmpty){
+          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
           return false;
         } else if (mrPhoto.isEmpty) {
           Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
           return false;
         } else if(latMR.isEmpty && longMR.isEmpty) {
           Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
-          return false;
-        } else if(latSR.isEmpty && longSR.isEmpty) {
-          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
-          return false;
-        } else if(srPhoto.isEmpty){
-          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
           return false;
         }
       } else if(regulatorType.name == "PRV"){
@@ -238,6 +243,9 @@ class NGCFormHelper{
           return false;
         }else if (isCheckRegulatorMismatch == true) {
           Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+          return false;
+        } else if (changeRegulatorType == "null") {
+          Utils.errorSnackBar(msg : "The Change Regulator Type Reason is required.",context: context);
           return false;
         }
       } else if (bpNumber.isEmpty) {
@@ -324,7 +332,7 @@ class NGCFormHelper{
       "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
       "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
       "tf_number": srNumber.isEmpty ? "" : srNumber,
-     /* "regulators_number": srRegulatorId ?? "",
+      /* "regulators_number": srRegulatorId ?? "",
       "mr_regulator_id": mrRegulatorId,*/
       "regulators_number": mrRegulatorId,
       "mr_regulator_id": srRegulatorId,

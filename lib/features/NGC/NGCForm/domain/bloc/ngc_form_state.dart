@@ -41,6 +41,7 @@ class NGCFormDataState extends NGCFormState {
   GetConstantModel? typeOfNrValue;
   LmcReasonModel? regulatorTypeValue;
   LmcReasonModel? meterTypeValue;
+  LmcReasonModel? regulatorTypeReasonValue;
   List<ListOfMeterNo> listOfMeterNumber;
   List<String> listOfMeterNumberSerial;
   List<String> listOfMeterNumberId;
@@ -50,6 +51,7 @@ class NGCFormDataState extends NGCFormState {
   List<String> listOfRegulatorId;
   List<LmcReasonModel> listOfRegulatorType;
   List<LmcReasonModel> listOfMeterType;
+  List<LmcReasonModel> listOfRegulatorTypeReason;
   FocusNode meterIniReading1FocusNode;
   FocusNode meterIniReading2FocusNode;
   FocusNode meterIniReading3FocusNode;
@@ -72,6 +74,7 @@ class NGCFormDataState extends NGCFormState {
   TextEditingController bpNumberController;
   TextEditingController delayReasonController;
   TextEditingController reasonMeterChangeController;
+  TextEditingController reasonRegulatorChangeController;
   TextEditingController noOfBurnersController;
   TextEditingController meterSerialController;
   TextEditingController mobileNumberController;
@@ -116,8 +119,10 @@ class NGCFormDataState extends NGCFormState {
     required this.listOfRegulatorId,
     required this.listOfRegulatorType,
     required this.listOfMeterType,
+    required this.listOfRegulatorTypeReason,
     required this.regulatorTypeValue,
     required this.meterTypeValue,
+    required this.regulatorTypeReasonValue,
     required this.meterIniReading1FocusNode,
     required this.meterIniReading2FocusNode,
     required this.meterIniReading3FocusNode,
@@ -140,6 +145,7 @@ class NGCFormDataState extends NGCFormState {
     required this.bpNumberController,
     required this.delayReasonController,
     required this.reasonMeterChangeController,
+    required this.reasonRegulatorChangeController,
     required this.noOfBurnersController,
     required this.meterSerialController,
     required this.mobileNumberController,
@@ -188,8 +194,10 @@ class NGCFormDataState extends NGCFormState {
     listOfRegulatorId,
     listOfRegulatorType,
     listOfMeterType,
+    listOfRegulatorTypeReason,
     regulatorTypeValue,
     meterTypeValue,
+    regulatorTypeReasonValue,
     meterIniReading1FocusNode,
     meterIniReading2FocusNode,
     meterIniReading3FocusNode,
@@ -198,6 +206,8 @@ class NGCFormDataState extends NGCFormState {
     meterIniReading3Controller,
     meterInitialReadingController,
     regulatorSerialSearchController,
+    reasonMeterChangeController,
+    reasonRegulatorChangeController,
     regulatorSerialController,
     proposedNgcDateController,
     ngConversionDateController,

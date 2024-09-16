@@ -188,8 +188,8 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _proposedNgcDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.ngConversionDate,
-      hintText: AppString.ngConversionDate,
+      label: AppString.ngProposedDate,
+      hintText: AppString.ngProposedDate,
       enabled: false,
       controller: dataState.proposedNgcDateController,
     );
@@ -683,33 +683,33 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _regulatorController({required NGCFormDataState dataState}) {
     return dataState.isRegularReplace == true ? dataState.isRegulator == false
         ? dataState.regulatorTypeValue?.name != null
-            ? CommonStyle.col(
-             context: context,
-              child: AutoCompleteTextFieldWidget(
-                        star: AppString.star,
-                        label: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-                        hintText: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-                        suggestions: dataState.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : dataState.listOfRegulatorSerial,
-                        keyboardType: TextInputType.text,
-                        controller: dataState.regulatorSerialSearchController,
-                        onSelected: (val) {
-              formKey.currentState?.validate();
-              BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-                        },
-                        validator: (value) {
-              if (value != null && value.isNotEmpty && !dataState.listOfRegulatorSerial.contains(value)) {
-                return AppString.regulatorNoErrorMsg;
-              }
-              return null;
-                        },
-                        onChanged: (val) async {
-              await formKey.currentState?.validate();
-              BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-                        },
-                      ),
-            )
-            : Container() : DottedLoaderWidget()
-    : CommonStyle.col(
+        ? CommonStyle.col(
+      context: context,
+      child: AutoCompleteTextFieldWidget(
+        star: AppString.star,
+        label: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
+        hintText: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
+        suggestions: dataState.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : dataState.listOfRegulatorSerial,
+        keyboardType: TextInputType.text,
+        controller: dataState.regulatorSerialSearchController,
+        onSelected: (val) {
+          formKey.currentState?.validate();
+          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
+        },
+        validator: (value) {
+          if (value != null && value.isNotEmpty && !dataState.listOfRegulatorSerial.contains(value)) {
+            return AppString.regulatorNoErrorMsg;
+          }
+          return null;
+        },
+        onChanged: (val) async {
+          await formKey.currentState?.validate();
+          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
+        },
+      ),
+    )
+        : Container() : DottedLoaderWidget()
+        : CommonStyle.col(
       context: context,
       child: TextFieldWidget(
         star: AppString.star,
@@ -725,39 +725,39 @@ class _NGCFormViewState extends State<NGCFormView> {
     return dataState.isRegulator == false
         ? dataState.regulatorTypeValue?.name == "SR"
         ? dataState.isRegularReplace == true ? CommonStyle.col(
-           context: context,
-          child: AutoCompleteTextFieldWidget(
-            star: AppString.star,
-            label: AppString.srNumber,
-            hintText: AppString.srNumber,
-            suggestions: dataState.listOfSRSerial.length == 0 ? ["No Data Found"] : dataState.listOfSRSerial,
-            keyboardType: TextInputType.text,
-            controller: dataState.srNumberSearchController,
-            onSelected: (val) {
-              formKey.currentState?.validate();
-              BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
-            },
-            validator: (value) {
-              if (value != null && value.isNotEmpty && !dataState.listOfSRSerial.contains(value)) {
-                return AppString.srNoErrorMsg;
-              }
-              return null;
-            },
-            onChanged: (val) async {
-              await formKey.currentState?.validate();
-              BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
-            },
-          ),
-        ) : CommonStyle.col(
-            context: context,
-          child: TextFieldWidget(
-            star: AppString.star,
-            label:  AppString.srNumber,
-            hintText:  AppString.srNumber,
-            enabled: false,
-            controller: dataState.srSerialNumberController,
-          ),
-        )
+      context: context,
+      child: AutoCompleteTextFieldWidget(
+        star: AppString.star,
+        label: AppString.srNumber,
+        hintText: AppString.srNumber,
+        suggestions: dataState.listOfSRSerial.length == 0 ? ["No Data Found"] : dataState.listOfSRSerial,
+        keyboardType: TextInputType.text,
+        controller: dataState.srNumberSearchController,
+        onSelected: (val) {
+          formKey.currentState?.validate();
+          BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
+        },
+        validator: (value) {
+          if (value != null && value.isNotEmpty && !dataState.listOfSRSerial.contains(value)) {
+            return AppString.srNoErrorMsg;
+          }
+          return null;
+        },
+        onChanged: (val) async {
+          await formKey.currentState?.validate();
+          BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
+        },
+      ),
+    ) : CommonStyle.col(
+      context: context,
+      child: TextFieldWidget(
+        star: AppString.star,
+        label:  AppString.srNumber,
+        hintText:  AppString.srNumber,
+        enabled: false,
+        controller: dataState.srSerialNumberController,
+      ),
+    )
         : Container()
         : DottedLoaderWidget();
   }
@@ -770,11 +770,11 @@ class _NGCFormViewState extends State<NGCFormView> {
         star: AppString.star,
         label: AppString.regularType,
         hint: AppString.regularType,
-        dropdownValue: dataState.meterTypeValue?.name == null ? null : dataState.meterTypeValue,
-        items: dataState.listOfMeterType,
+        dropdownValue: dataState.regulatorTypeReasonValue?.name == null ? null : dataState.regulatorTypeReasonValue,
+        items: dataState.listOfRegulatorTypeReason,
         onChanged: (val) {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectMeterTypeValueEvent(
-            meterTypeValue: val!,
+          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeReasonValueEvent(
+            regulatorTypeReasonValue: val!,
           ));
         },
       ),
@@ -791,7 +791,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         hintText: AppString.remarks,
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.text,
-        controller: dataState.reasonMeterChangeController,
+        controller: dataState.reasonRegulatorChangeController,
       ),
     )
         : Container();

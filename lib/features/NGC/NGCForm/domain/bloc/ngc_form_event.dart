@@ -110,6 +110,14 @@ class SelectMeterTypeValueEvent extends NGCFormEvent {
   List<Object> get props => [meterTypeValue];
 }
 
+class SelectRegulatorTypeReasonValueEvent extends NGCFormEvent {
+  final LmcReasonModel regulatorTypeReasonValue;
+  SelectRegulatorTypeReasonValueEvent({required this.regulatorTypeReasonValue});
+  @override
+  // TODO: implement props
+  List<Object> get props => [regulatorTypeReasonValue];
+}
+
 class SelectLocationOfSREvent extends NGCFormEvent {
   final BuildContext context;
   SelectLocationOfSREvent({required this.context});

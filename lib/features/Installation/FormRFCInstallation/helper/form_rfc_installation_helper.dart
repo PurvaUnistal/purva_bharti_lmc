@@ -122,10 +122,11 @@ class FormRFCInstallationHelper {
       if (fittingDetails.isEmpty) {
         Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
         return false;
-      }  else if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
+      }  else if (double.parse(pipeLength.reduce((value, element) => (double.parse(value) + double.parse(element)).toString())) <= 0) {
         Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
         return false;
-      } else if (meterPhoto.isEmpty) {
+      }
+      if (meterPhoto.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
         return false;
       }

@@ -30,8 +30,8 @@ class LoginModel {
     error: json["error"] ?? "",
     messages: json["messages"] ?? "",
     token: json["token"] ?? "",
-    user: User.fromJson(json["user"]),
-    exptime: json["exptime"] ?? "",
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
+    exptime: json["exptime"] == null ? null : json["exptime"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

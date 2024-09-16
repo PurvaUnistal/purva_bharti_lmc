@@ -54,15 +54,7 @@ class ApiHelper {
         return null;
       }
       String token = await SharedPref.getString(key: PrefsValue.token);
-      var res = await Dio().post(
-        urlEndPoint,
-        data: param ?? FormData.fromMap(formData),
-        options: Options(
-          headers:  {
-        "Authorization": token,
-        },
-        )
-      );
+      var res = await Dio().post(urlEndPoint, data: param ?? FormData.fromMap(formData), options: Options(headers:  {"Authorization": token,},));
       log("url-->${urlEndPoint}");
       log("resData-->${res.data}");
       if (res.statusCode == 200) {
@@ -78,7 +70,7 @@ class ApiHelper {
       }
     } on DioException catch (error) {
       log(error.message!);
-      await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      await Utils.errorSnackBar(msg: error.response!.data["messages"], context: context);
     } catch (e) {
       log("catchPOST-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
