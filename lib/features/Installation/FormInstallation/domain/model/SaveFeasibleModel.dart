@@ -11,7 +11,7 @@ String saveFeasibleModelToJson(SaveFeasibleModel data) => json.encode(data.toJso
 class SaveFeasibleModel {
   int? success;
   bool? error;
-  String? data;
+  dynamic data;
 
   SaveFeasibleModel({
      this.success,
@@ -22,7 +22,7 @@ class SaveFeasibleModel {
   factory SaveFeasibleModel.fromJson(Map<String, dynamic> json) => SaveFeasibleModel(
     success: json["success"] ?? "",
     error: json["error"] ?? "",
-    data: json["data"] ?? "",
+    data:  json["data"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

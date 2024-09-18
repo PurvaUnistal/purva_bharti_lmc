@@ -205,10 +205,10 @@ class NGCFormHelper{
         Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
         return false;
       }
-      if(regulatorType.name == null){
+      if(regulatorType.id == null){
         Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
-      } else if(regulatorType.name == "SR"){
+      } else if(regulatorType.id == "1"){
         if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
           return false;
@@ -237,7 +237,7 @@ class NGCFormHelper{
           Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
           return false;
         }
-      } else if(regulatorType.name == "PRV"){
+      } else if(regulatorType.id == "2"){
         if(regulatorNumber.isEmpty){
           Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
           return false;

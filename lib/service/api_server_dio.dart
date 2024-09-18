@@ -70,7 +70,7 @@ class ApiHelper {
       }
     } on DioException catch (error) {
       log(error.message!);
-      await Utils.errorSnackBar(msg: error.response!.data["messages"], context: context);
+      await Utils.errorSnackBar(msg: error.response!.data["messages"].toString(), context: context);
     } catch (e) {
       log("catchPOST-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
@@ -105,18 +105,14 @@ class ApiHelper {
       log("resData-->${response.data}");
       if (response.statusCode == 200) {
         return response.data;
-      } else if (response.statusCode == 401) {
-        return response.data;
-      } else if (response.statusCode == 415) {
-        return response.data;
-      } else if (response.statusCode == 400) {
-        return response.data;
-      } else {
-        return response.data;
       }
     } on DioException catch (error) {
       log(error.message!);
-      await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      if(error.response?.statusCode == 415){
+        return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
+      } else{
+        return await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      }
     } catch (e) {
       log("MultipartFile-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);

@@ -8,6 +8,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPipeDetailsModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
@@ -144,13 +145,20 @@ class FormInstallationHelper {
     required String srNumber,
     required String ngConversionDate,
     required String fittingDetails,
-    required List<String> pipeLength,
+    required List<MaterialItem> pipeLength,
     required String meterPhoto,
     required String houseLat,
     required String houseLong,
     required String housePhoto,
   }) async {
     try {
+
+      List<String> meterPipeValues = [];
+      for(MaterialItem m in pipeLength) {
+        if(m.unit == "Meter"){
+          meterPipeValues.add(m.controller.text.isEmpty ? "0" : m.controller.text);
+        }
+      }
       if (dateInstallation.isEmpty) {
         Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
         return false;
@@ -205,7 +213,7 @@ class FormInstallationHelper {
         Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
         return false;
       }
-      else if (double.parse(pipeLength.reduce((value, element) => (double.parse(value) + double.parse(element)).toString())) <= 0) {
+      else if (double.parse(meterPipeValues.reduce((value, element) => (double.parse(value) + double.parse(element)).toString())) <= 0) {
         Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
         return false;
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-1.16.09.24";
+  static String version = "Version : LMC-1.18.09.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -107,6 +107,7 @@ class AppString {
   static String ngChargeDate = "NG Charge Date";
   static String followUpDate = "Follow Up Date";
   static String dateInstallation = "Date of Installation";
+  static String dateInstallationRFC = "Date of Installation(RFC Date)";
   static String ngConversionDate = "NG Conversion Date";
   static String ngProposedDate = "Proposed NG Conversion Date";
   static String reasonForDelay = "Reason for Delay";

@@ -11,7 +11,7 @@ String saveFeasibleModelToJson(SaveFeasibleModel data) => json.encode(data.toJso
 class SaveFeasibleModel {
   int? success;
   bool? error;
-  String? data;
+  dynamic data;
 
   SaveFeasibleModel({
      this.success,

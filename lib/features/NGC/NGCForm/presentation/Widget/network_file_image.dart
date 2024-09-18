@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/enlarge_widge.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
@@ -51,10 +52,26 @@ class NetworkImageWidget extends StatelessWidget {
                       width: MediaQuery.of(context).size.width *0.23,
                       height:MediaQuery.of(context).size.height* 0.12,
                     ),
-                    Container(
+                    Positioned(
+                      top: -15,
+                      right: -20,
+                      /* width: MediaQuery.of(context).size.width/3,
+                      height:MediaQuery.of(context).size.height/3,*/
+
+                      child: TextButton(
+                        child: Container(
+                            color: AppColor.primer,
+                            child: Icon(Icons.zoom_out_map,color: AppColor.white,)),
+                        onPressed: () async {
+                          await showBottomSheet(
+                              context: context,
+                              builder: (_) => EnlargeWidget(text: title,photoPath: networkPath,));
+                        },),
+                    ),
+                    /*Container(
                         width: MediaQuery.of(context).size.width/3,
                         height:MediaQuery.of(context).size.width/3,
-                        child: Center(child: Icon(Icons.refresh, color: AppColor.primer,))),
+                        child: Center(child: Icon(Icons.refresh, color: AppColor.primer,))),*/
                   ],
 
                 ),

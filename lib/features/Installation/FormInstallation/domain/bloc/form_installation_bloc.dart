@@ -634,7 +634,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-        pipeLength: listOfQtyLMC,
+        pipeLength: listOfMaterial,
         meterPhoto: meterPhoto.path.toString(),
         houseLat: latOfHouseController.text.trim().toString(),
         houseLong: longOfHouseController.text.trim().toString(),

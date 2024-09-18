@@ -719,7 +719,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-        pipeLength: listOfQtyLMC,
+        pipeLength: listOfMaterial,
         meterPhoto: meterPhoto.path.toString(),
         rfcPhoto: rfcPhoto.path.toString(),
         houseLat: latOfHouseController.text.trim().toString(),

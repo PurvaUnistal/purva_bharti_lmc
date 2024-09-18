@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/Utils/common_widgets/enlarge_widge.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
@@ -29,9 +31,11 @@ class ImageWidget extends StatelessWidget {
             height:MediaQuery.of(context).size.height* 0.12,
             child: InkWell(
               onTap: onPressed,
+
               child: imgFile.path.isNotEmpty
                   ? Card(
                 child: Stack(
+                  clipBehavior: Clip.none,
                   children: <Widget>[
                     Image.file(
                       imgFile,
@@ -39,11 +43,22 @@ class ImageWidget extends StatelessWidget {
                       width: MediaQuery.of(context).size.width *0.23,
                       height:MediaQuery.of(context).size.height* 0.12,
                     ),
-                    Container(
-                        width: MediaQuery.of(context).size.width/3,
-                        height:MediaQuery.of(context).size.width/3,
-                      //  color : Colors.white.withOpacity(0.6),
-                        child: Center(child: Icon(Icons.refresh, color: AppColor.primer,))),
+                    Positioned(
+                      top: -15,
+                      right: -20,
+                     /* width: MediaQuery.of(context).size.width/3,
+                      height:MediaQuery.of(context).size.height/3,*/
+
+                      child: TextButton(
+                        child: Container(
+                          color: AppColor.primer,
+                            child: Icon(Icons.zoom_out_map,color: AppColor.white,)),
+                        onPressed: () async {
+                          await showBottomSheet(
+                              context: context,
+                              builder: (_) => EnlargeWidget(text: title, photoPath: imgFile,));
+                        },),
+                    ),
                   ],
 
                 ),

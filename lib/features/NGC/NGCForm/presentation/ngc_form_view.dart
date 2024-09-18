@@ -125,9 +125,11 @@ class _NGCFormViewState extends State<NGCFormView> {
           CommonStyle.vertical(context: context),
           RowWidget(widget1: _mobileNumberController(dataState: dataState), widget2: _altContactNoWidget(dataState: dataState)),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
-          CommonStyle.vertical(context: context),
+         /* RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
+          CommonStyle.vertical(context: context),*/
           RowWidget(widget1: _burnerNoWidget(dataState: dataState), widget2: _noOfFamilyMembersController(dataState: dataState)),
+          CommonStyle.vertical(context: context),
+          _emailWidget(dataState: dataState),
           CommonStyle.vertical(context: context),
           _ngConversionDateController(dataState: dataState),
           CommonStyle.vertical(context: context),
