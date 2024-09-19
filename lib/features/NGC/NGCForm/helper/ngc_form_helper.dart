@@ -245,7 +245,7 @@ class NGCFormHelper{
           Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
           return false;
         } else if (changeRegulatorType == "null") {
-          Utils.errorSnackBar(msg : "The Change Regulator Type Reason is required.",context: context);
+          Utils.errorSnackBar(msg : "The Change Regulator Reason is required.",context: context);
           return false;
         }
       } else if (bpNumber.isEmpty) {
