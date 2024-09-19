@@ -818,13 +818,6 @@ class _NGCFormViewState extends State<NGCFormView> {
           label: AppString.longOfMR,
           controller: dataState.longOfMRController,
         ),
-        /* CommonStyle.widthSpace(context: context),
-          IconButtonWidget(
-            iconData: Icons.location_on,
-            onPressed: () {
-              BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfMREvent(context: context));
-            },
-          )*/
       ),
     )
         : Container();
@@ -849,13 +842,6 @@ class _NGCFormViewState extends State<NGCFormView> {
           label: AppString.longOfSR,
           controller: dataState.longOfSRController,
         ),
-        /*   CommonStyle.widthSpace(context: context),
-          IconButtonWidget(
-            iconData: Icons.location_on,
-            onPressed: () {
-              BlocProvider.of<NGCFormBloc>(context).add(SelectLocationOfSREvent(context: context));
-            },
-          )*/
       ),
     )
         : Container();
@@ -939,7 +925,6 @@ class _NGCFormViewState extends State<NGCFormView> {
       child: ButtonWidget(
           text: AppString.submit,
           onPressed: () async {
-            //   await  formKey.currentState?.validate();
             FocusScope.of(context).unfocus();
             BlocProvider.of<NGCFormBloc>(context).add(NGCSubmitEvent(
               context: context,

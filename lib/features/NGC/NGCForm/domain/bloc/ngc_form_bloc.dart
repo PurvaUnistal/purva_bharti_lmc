@@ -605,7 +605,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         changeMeterType: meterReplace == "1" ? meterReplaceTypeValue.id.toString() : "",
         meterInitialReading: meterInitialReadingController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
-        regulatorType: regulatorTypeValue,
+        regulatorType: isRegularReplace == false ? regulatorTypeController.text.trim().toString() : regulatorTypeValue.id.toString(),
         regulatorId: regulatorSerialSearchController.text.trim().toString(),
         mrPhoto: mrPhoto.path,
         srPhoto: srPhoto.path,
@@ -630,7 +630,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         _eventCompleted(emit);
         var res = await NGCFormHelper.setNGCReportData(
           context: event.context,
-          schema: schema,
           dmaUserId: dmaUserId,
           alternateMobile: altMobileNumberController.text.trim().toString(),
           comment: "",

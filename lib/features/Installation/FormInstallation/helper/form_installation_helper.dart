@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +14,6 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReaso
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
-// import 'package:lmc/service/api_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
@@ -269,18 +267,18 @@ class FormInstallationHelper {
     String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
+    String userId = await SharedPref.getString(key: PrefsValue.userId);
     try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
         "schema": schema,
+        "user_id": userId,
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading.isEmpty ? "" : meterReading,
         "dma_id": meterDma,
         "meter_number": meterNo,
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
-        /*  "regulators": sRegulatorsId,
-        "mr_regulator_id": mRegulatorsId,*/
         "tf_number": srNumber,
         "regulators": mRegulatorsId,
         "mr_regulator_id": sRegulatorsId,

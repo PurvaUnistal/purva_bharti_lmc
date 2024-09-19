@@ -139,7 +139,7 @@ class NGCFormHelper{
     required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
-    //  try {
+      try {
     Map<String, String> para = {
       "schema":schema,
       "regulatorSerial":regulatorSerial,
@@ -153,9 +153,9 @@ class NGCFormHelper{
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     }
-    /*} catch (e) {
+    } catch (e) {
       log("getRegulators-->${e.toString()}");
-    }*/
+    }
     return null;
   }
 
@@ -165,7 +165,7 @@ class NGCFormHelper{
     required LmcReasonModel delayReason,
     required String meterNumber,
     required bool isCheckMeterMismatch,
-    required LmcReasonModel regulatorType,
+    required String regulatorType,
     required String regulatorNumber,
     required bool isCheckRegulatorMismatch,
     required String srNumber,
@@ -205,10 +205,10 @@ class NGCFormHelper{
         Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
         return false;
       }
-      if(regulatorType.id == null){
+      if(regulatorType == ""){
         Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
-      } else if(regulatorType.id == "1"){
+      } else if(regulatorType == "1"){
         if (srNumber.isEmpty) {
           Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
           return false;
@@ -237,7 +237,7 @@ class NGCFormHelper{
           Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
           return false;
         }
-      } else if(regulatorType.id == "2"){
+      } else if(regulatorType == "2"){
         if(regulatorNumber.isEmpty){
           Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
           return false;
@@ -273,7 +273,6 @@ class NGCFormHelper{
 
   static Future<SubmitNgcReportModel?> setNGCReportData({
     required BuildContext context,
-    required String schema,
     required String nameOfContractor,
     required String meterReading,
     required String jmrNo,
@@ -308,8 +307,11 @@ class NGCFormHelper{
     required String meterPhoto,
     required String ngcReportPhoto,
   }) async {
+    String userId = await SharedPref.getString(key: PrefsValue.userId);
+    String schema = await SharedPref.getString(key: PrefsValue.schema);
     Map<String, String> body = {
       "schema": schema,
+      "user_id": userId,
       "name_of_contractor": nameOfContractor.isEmpty ? "" : nameOfContractor,
       "meter_reading": meterReading.isEmpty ? "" :meterReading,
       "jmr_no": jmrNo.isEmpty ? "" :jmrNo,
