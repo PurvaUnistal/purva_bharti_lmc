@@ -11,7 +11,7 @@
         android:required="true"
         tools:ignore="UnusedAttribute" />
    <application
-        android:label="LMC"
+        android:label="PBG LMC"
        android:icon="@mipmap/pbg_logo">
         <activity
             android:name=".MainActivity"

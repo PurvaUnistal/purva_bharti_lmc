@@ -236,11 +236,24 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     nameContractorController.text = await SharedPref.getString(key: PrefsValue.userName) ?? "";
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber) ?? "0";
     meterInitialReadingController.text = await SharedPref.getString(key: PrefsValue.meterReading) ?? "0";
-    List<String> meterNumberStringArrayValues = (meterInitialReadingController.text ?? "0.000").split("");
-    int length = meterNumberStringArrayValues.length;
-    meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
-    meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
-    meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
+    if(meterInitialReadingController.text.length == 5){
+      List<String> meterNumberStringArrayValues = (meterInitialReadingController.text ?? "0.000").split("");
+      int length = meterNumberStringArrayValues.length;
+      meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
+      meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
+      meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
+    } else if(meterInitialReadingController.text == "0"){
+      meterIniReading1Controller.text = "0";
+      meterIniReading2Controller.text = "0";
+      meterIniReading3Controller.text = "0";
+    } else{
+      double meterIniReadingAdd = double.parse(meterInitialReadingController.text);
+      String newMeterInitialReading = (meterIniReadingAdd * 1000).toString();
+      List<String> meterNumberStringArrayValues = (newMeterInitialReading.trim().split("")).toList();
+      meterIniReading1Controller.text = meterNumberStringArrayValues[0];
+      meterIniReading2Controller.text = meterNumberStringArrayValues[1];
+      meterIniReading3Controller.text = meterNumberStringArrayValues[2];
+    }
     materialId = await SharedPref.getString(key: PrefsValue.meterNumberId) ?? "0";
     meterSerialController.text = await SharedPref.getString(key: PrefsValue.meterNumberSerial) ?? "0";
     mobileNumberController.text = await SharedPref.getString(key: PrefsValue.mobileNumber) ?? "";

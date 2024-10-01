@@ -26,16 +26,23 @@ class ApiHelper {
         return res.data;
       }
     } on DioException catch (error) {
-      log(error.message ??"");
-    //  await Utils.errorSnackBar(msg: error.message.toString(), context: context);
-      if(error.response?.statusCode == 415){
+      log(error.message!);
+      if(error.response?.statusCode == 400){
+        return error.response!.data;
+      }else if(error.response?.statusCode == 401){
+        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 404){
+        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 415){
         return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if (error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: "Internal Server Error ", context: context);
-      }else{
-        return await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      } else if(error.response?.statusCode == 500){
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      } else{
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
       }
-    } catch (e) {
+    }catch (e) {
       log("catchGET-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
       throw 'Something Went Wrong';
@@ -60,15 +67,22 @@ class ApiHelper {
       }
     } on DioException catch (error) {
       log(error.message!);
-   //   await Utils.errorSnackBar(msg: error.response!.data["messages"].toString(), context: context);
-      if(error.response?.statusCode == 415){
+      if(error.response?.statusCode == 400){
+        return error.response!.data;
+      }else if(error.response?.statusCode == 401){
+        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 404){
+        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 415){
         return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if (error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: "Internal Server Error ", context: context);
-      }else{
-        return await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      } else if(error.response?.statusCode == 500){
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      } else{
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
       }
-    } catch (e) {
+    }catch (e) {
       log("catchPOST-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
       throw 'Something Went Wrong';
@@ -107,14 +121,22 @@ class ApiHelper {
       }
     } on DioException catch (error) {
       log(error.message!);
-      if(error.response?.statusCode == 415){
+      if(error.response?.statusCode == 400){
+        return error.response!.data;
+      }else if(error.response?.statusCode == 401){
+        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 404){
+        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      }else if(error.response?.statusCode == 415){
         return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if (error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: "Internal Server Error ", context: context);
-      }else{
-        return await Utils.errorSnackBar(msg: error.message!.toString(), context: context);
+      } else if(error.response?.statusCode == 500){
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
+      } else{
+        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
       }
-    } catch (e) {
+    }catch (e) {
       log("MultipartFile-->${e.toString()}");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
       throw 'Something Went Wrong';

@@ -71,6 +71,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
+      listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));
       return res;
     }
   }

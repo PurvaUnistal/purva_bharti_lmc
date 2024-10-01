@@ -67,6 +67,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     var res = await NgcTableHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
+      listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));
       return res;
     }
   }

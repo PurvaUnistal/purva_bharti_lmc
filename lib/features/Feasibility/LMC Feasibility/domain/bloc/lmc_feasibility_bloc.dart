@@ -70,6 +70,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
+      listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));
       return res;
     }
   }
@@ -89,9 +90,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     emit(LMCFeasibilityInitialState());
     scrollController.addListener(() async {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-
         pageNo++;
-        // await fetchFeasibility(context: context, pageNumber: pageNo, bpNumber: bpNumberController.text, areaId: '');
         _eventCompleted(emit);
       }
     });
