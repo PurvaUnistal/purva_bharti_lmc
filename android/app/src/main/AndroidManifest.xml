@@ -12,7 +12,7 @@
         tools:ignore="UnusedAttribute" />
    <application
         android:label="PBG LMC"
-       android:icon="@mipmap/pbg_logo">
+       android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
