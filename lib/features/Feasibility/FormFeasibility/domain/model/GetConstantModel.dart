@@ -1,0 +1,39 @@
+class GetConstantModel {
+   dynamic key;
+   String? value;
+  bool isSelected;
+
+  GetConstantModel({
+     this.key,
+     this.value,
+    this.isSelected = false,
+  });
+
+  factory GetConstantModel.fromJson(Map<String, dynamic> json) => GetConstantModel(
+    key: json["key"],
+    value: json["value"],
+  );
+  static List<GetConstantModel> mapToList(Map<String, dynamic> mapData) {
+    return mapData.entries.map((e) => GetConstantModel(key: e.key, value: e.value)).toList();
+  }
+
+  Map<String, dynamic> toJson() => {
+    "key": key,
+    "value": value,
+  };
+
+   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GetConstantModel &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() {
+    return this.value ?? "";
+  }
+}
