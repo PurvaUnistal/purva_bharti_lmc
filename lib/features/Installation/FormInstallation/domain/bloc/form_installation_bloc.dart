@@ -403,8 +403,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         _eventCompleted(emit);
         extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
         extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
-        extraPipe = res.price.toString();
-        extraPrice = res.qty.toString();
+        extraPipe = res.qty.toString();
+        extraPrice = res.price.toString();
         _eventCompleted(emit);
       }
     } else {

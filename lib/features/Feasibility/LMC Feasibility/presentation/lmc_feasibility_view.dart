@@ -181,7 +181,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                             CommonStyle.dataColumn(label: "Mobile Number"),
                             CommonStyle.dataColumn(label: "BP Number"),
                             CommonStyle.dataColumn(label: "Area"),
-                            CommonStyle.dataColumn(label: "Name"),
+                            CommonStyle.dataColumn(label: "First Name"),
+                            CommonStyle.dataColumn(label: "Last Name"),
                           ],
                           rows: dataState.listOfFilterFeasibilityRow
                               .mapIndexed((index, user) => DataRow(
@@ -217,6 +218,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                         CommonStyle.dataCell(label: user.bpNumber.toString()),
                                         CommonStyle.dataCell(label: user.areaName.toString()),
                                         CommonStyle.dataCell(label: user.firstName.toString()),
+                                        CommonStyle.dataCell(label: user.lastName.toString()),
                                       ]))
                               .toList(),
                         ),

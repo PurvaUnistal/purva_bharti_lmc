@@ -156,9 +156,9 @@ class _NGCFormViewState extends State<NGCFormView> {
           _regulatorController(dataState: dataState),
           _changeRegulatorReasonDropdown(dataState: dataState),
           _remarkRegulatorChangeController(dataState: dataState),
-          _photoWidget(dataState: dataState),
-          _locationOfSR(dataState: dataState),
-          _locationOfMR(dataState: dataState),
+          _conditionOfPhotoSR(dataState: dataState),
+          _conditionOfSR(dataState: dataState),
+          _conditionOfMR(dataState: dataState),
           CommonStyle.vertical(context: context),
           Row(
             children: [
@@ -308,17 +308,16 @@ class _NGCFormViewState extends State<NGCFormView> {
     return TextFieldWidget(
       label: AppString.ngConversionDate,
       hintText: AppString.ngConversionDate,
-      enabled: true,
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
       controller: dataState.ngConversionDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectNGConversionDateEvent(context: context));
-        },
+      textInputAction: TextInputAction.done,
+      enableInteractiveSelection: false,
+      suffixIcon: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Icon(Icons.calendar_today, color: AppColor.primer,),
       ),
+      keyboardType: TextInputType.datetime,
       onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
         BlocProvider.of<NGCFormBloc>(context).add(SelectNGConversionDateEvent(context: context));
       },
     );
@@ -683,7 +682,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _regulatorController({required NGCFormDataState dataState}) {
-    return dataState.isRegularReplace == true ? dataState.isRegulator == false
+    return dataState.isRegularReplace == true ? dataState.isRegulatorLoader == false
         ? dataState.regulatorTypeValue?.name != null
         ? CommonStyle.col(
       context: context,
@@ -724,11 +723,11 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _srNumberController({required NGCFormDataState dataState}) {
-    return dataState.isRegulator == false
-        ? dataState.regulatorTypeValue?.name == "SR"
-        ? dataState.isRegularReplace == true ? CommonStyle.col(
+    return dataState.isRegulatorLoader == false
+        ? dataState.regulatorTypeValue?.name == "SR" && dataState.isRegularReplace == true
+        ?  CommonStyle.col(
       context: context,
-      child: AutoCompleteTextFieldWidget(
+      child:AutoCompleteTextFieldWidget(
         star: AppString.star,
         label: AppString.srNumber,
         hintText: AppString.srNumber,
@@ -750,7 +749,7 @@ class _NGCFormViewState extends State<NGCFormView> {
           BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
         },
       ),
-    ) : CommonStyle.col(
+    ) : dataState.regulatorTypeController != "SR" && dataState.isRegularReplace == true ? Container(): CommonStyle.col(
       context: context,
       child: TextFieldWidget(
         star: AppString.star,
@@ -760,7 +759,6 @@ class _NGCFormViewState extends State<NGCFormView> {
         controller: dataState.srSerialNumberController,
       ),
     )
-        : Container()
         : DottedLoaderWidget();
   }
 
@@ -798,10 +796,17 @@ class _NGCFormViewState extends State<NGCFormView> {
     )
         : Container();
   }
-
-  Widget _locationOfMR({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
+  Widget _conditionOfMR({required NGCFormDataState dataState}) {
+    return  dataState.regulatorTypeController.text =="SR" &&  dataState.isRegularReplace == false
         ? CommonStyle.col(
+      context: context,
+      child: _locationOfMRWidget(dataState: dataState),
+    ) : dataState.regulatorTypeValue?.name == "SR" &&  dataState.isRegularReplace == true? _locationOfMRWidget(dataState: dataState)
+        : Container();
+  }
+
+  Widget _locationOfMRWidget({required NGCFormDataState dataState}) {
+    return CommonStyle.col(
       context: context,
       child: RowWidget(
         widget1: TextFieldWidget(
@@ -819,13 +824,20 @@ class _NGCFormViewState extends State<NGCFormView> {
           controller: dataState.longOfMRController,
         ),
       ),
-    )
+    );
+  }
+
+  Widget _conditionOfSR({required NGCFormDataState dataState}) {
+    return  dataState.regulatorTypeController.text =="SR" &&  dataState.isRegularReplace == false
+        ? CommonStyle.col(
+       context: context,
+      child: _locationOfSRWidget(dataState: dataState),
+    ) : dataState.regulatorTypeValue?.name == "SR" &&  dataState.isRegularReplace == true? _locationOfSRWidget(dataState: dataState)
         : Container();
   }
 
-  Widget _locationOfSR({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
-        ? CommonStyle.col(
+  Widget _locationOfSRWidget({required NGCFormDataState dataState}){
+    return CommonStyle.col(
       context: context,
       child: RowWidget(
         widget1: TextFieldWidget(
@@ -843,13 +855,20 @@ class _NGCFormViewState extends State<NGCFormView> {
           controller: dataState.longOfSRController,
         ),
       ),
-    )
+    );
+  }
+
+  Widget _conditionOfPhotoSR({required NGCFormDataState dataState}) {
+    return  dataState.regulatorTypeController.text =="SR" &&  dataState.isRegularReplace == false
+        ? CommonStyle.col(
+      context: context,
+      child: _photoSRWidget(dataState: dataState),
+    ) : dataState.regulatorTypeValue?.name == "SR" &&  dataState.isRegularReplace == true? _photoSRWidget(dataState: dataState)
         : Container();
   }
 
-  Widget _photoWidget({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
-        ? CommonStyle.col(
+  Widget _photoSRWidget({required NGCFormDataState dataState}) {
+    return CommonStyle.col(
         context: context,
         child: RowWidget(
           widget1: ImageWidget(
@@ -890,8 +909,8 @@ class _NGCFormViewState extends State<NGCFormView> {
                   });
             },
           ),
-        ))
-        : Container();
+        )
+    );
   }
 
   Widget _ngcReportPhoto({required NGCFormDataState dataState}) {

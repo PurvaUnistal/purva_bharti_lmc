@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:new_lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:new_lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:new_lmc/Utils/common_widgets/res/app_color.dart';
@@ -29,7 +30,28 @@ class _MyAppState extends State<MyApp> {
 
   void initState() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+    checkForUpdate();
     super.initState();
+  }
+
+  AppUpdateInfo? _updateInfo;
+  bool _flexibleUpdateAvailable = false;
+
+  // Method to check for updates
+  void checkForUpdate() async {
+    try {
+      _updateInfo = await InAppUpdate.checkForUpdate();
+      if (_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+        print("Current Update Info: ${_updateInfo?.updateAvailability ?? 'No info'}");
+        // Start immediate update if available
+        InAppUpdate.performImmediateUpdate()
+            .catchError((e) => print(e)); // Handle the error as needed
+      } else {
+        print('No update available');
+      }
+    } catch (e) {
+      print('Failed to check for updates: $e');
+    }
   }
 
   @override

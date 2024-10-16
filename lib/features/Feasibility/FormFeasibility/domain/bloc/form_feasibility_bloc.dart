@@ -31,6 +31,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   bool isSelected = false;
   bool isExtraPipe = false;
 
+  double sumOfPipes = 0.0;
   String schema = "";
   String userName = "";
   String extraPipe = "0";
@@ -79,6 +80,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     listOfAllRFC = [];
     extraPipe = "0";
     extraPrice = "0";
+    sumOfPipes = 0.0;
     extraPipeController.text = "0";
     extraPriceController.text = "0";
     proposedDateController.text = '';
@@ -177,7 +179,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
-    double sumOfPipes = 0.0;
+    sumOfPipes = 0.0;
     for (int i = 0; i < listOfMaterial.length; i++) {
       MaterialItem dataOfAllMaterial = listOfMaterial[i];
       if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
@@ -204,8 +206,8 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
         _eventCompleted(emit);
         extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
         extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
-        extraPipe = res.price.toString();
-        extraPrice = res.qty.toString();
+        extraPipe = res.qty.toString();
+        extraPrice = res.price.toString();
         _eventCompleted(emit);
       }
     } else {
@@ -243,6 +245,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           extraPrice: extraPrice,
           materialId: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
           qtyLMC: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+          bom: sumOfPipes.toString()  == "0.0" ? "" :"1",
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;

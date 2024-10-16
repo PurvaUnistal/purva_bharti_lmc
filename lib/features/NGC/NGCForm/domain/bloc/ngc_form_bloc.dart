@@ -17,6 +17,8 @@ import 'package:new_lmc/features/Installation/FormInstallation/helper/form_insta
 import 'package:new_lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:new_lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
 import 'package:new_lmc/features/NGC/NGCForm/helper/ngc_form_helper.dart';
+import 'package:new_lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
+import 'package:new_lmc/features/NGC/NGCTable/helper/ngc_table_helper.dart';
 import 'package:new_lmc/service/Apis.dart';
 
 class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
@@ -50,7 +52,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<CaptureCameraNGCReportEvent>(_captureCameraNGCReport);
     on<NGCSubmitEvent>(_submit);
   }
-  bool isRegulator = false;
+  bool isRegulatorLoader = false;
   File mrPhoto = File("");
   File srPhoto = File("");
   File pneumaticPhoto = File("");
@@ -156,10 +158,14 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   List<LmcReasonModel> listOfMeterReplaceType = [];
   List<LmcReasonModel> listOfRegulatorTypeReason = [];
 
+  List<InstallationByNgcData> listOfInstallationByNgc = [];
+  List<InstallationByNgcData> listOfFilterInstallationByNgc = [];
+  LMCInstallationByNgcModel? lmcInstallationByNgcModel;
+
   _pageLoad(NGCFormLoadEvent event, emit) async {
     emit(NGCFormPageLoadState());
     _isPageLoader = false;
-    isRegulator = false;
+    isRegulatorLoader = false;
     _isBtnLoader = false;
     isMeterReplace = false;
     isRegularReplace = false;
@@ -206,83 +212,143 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(key: PrefsValue.schema);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
     latOfSRController.text = "0";
     longOfSRController.text = "0";
     latOfMRController.text = "0";
     longOfMRController.text = "0";
+    listOfInstallationByNgc = [];
+     listOfFilterInstallationByNgc = [];
+   lmcInstallationByNgcModel = LMCInstallationByNgcModel();
+    schema = await SharedPref.getString(key: PrefsValue.schema);
+    userName = await SharedPref.getString(key: PrefsValue.userName);
     role = await SharedPref.getString(key: PrefsValue.userRole);
-    meterConnectionMeterController.text = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "" : PrefsValue.typeOfNr);
-    regulatorTypeController.text = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" : PrefsValue.regulatorType);
-    regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "" : PrefsValue.regulatorTypeId);
-    srRegulatorId = await SharedPref.getString(key: PrefsValue.srRegulatorId);
-    srSerialNumberController.text = await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
-    regulatorId = await SharedPref.getString(key: PrefsValue.mrRegulatorId);
-    regulatorSerialController.text = await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
-    lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
-    String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
-    networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
-    networkPneumaticPhoto = await SharedPref.getString(key: PrefsValue.pneumaticPhoto);
-    networkRfcPhoto = await SharedPref.getString(key: PrefsValue.rfcPhoto);
-    regulatorCheck = await SharedPref.getString(key: PrefsValue.regulatorCheck);
-    _meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
-    rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
-    pneumaticPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
-    dmaUserId = await SharedPref.getString(key: PrefsValue.dmaUserId) ?? "";
-    isInstall = await SharedPref.getString(key: PrefsValue.isInstall);
-    lmcInstallationId = await SharedPref.getString(key: PrefsValue.lmcInstallationId);
-    nameContractorController.text = await SharedPref.getString(key: PrefsValue.userName) ?? "";
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber) ?? "0";
-    meterInitialReadingController.text = await SharedPref.getString(key: PrefsValue.meterReading) ?? "0";
-    if(meterInitialReadingController.text.length == 5){
-      List<String> meterNumberStringArrayValues = (meterInitialReadingController.text ?? "0.000").split("");
-      int length = meterNumberStringArrayValues.length;
-      meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
-      meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
-      meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
-    } else if(meterInitialReadingController.text == "0"){
-      meterIniReading1Controller.text = "0";
-      meterIniReading2Controller.text = "0";
-      meterIniReading3Controller.text = "0";
-    } else{
-      double meterIniReadingAdd = double.parse(meterInitialReadingController.text);
-      String newMeterInitialReading = (meterIniReadingAdd * 1000).toString();
-      List<String> meterNumberStringArrayValues = (newMeterInitialReading.trim().split("")).toList();
-      meterIniReading1Controller.text = meterNumberStringArrayValues[0];
-      meterIniReading2Controller.text = meterNumberStringArrayValues[1];
-      meterIniReading3Controller.text = meterNumberStringArrayValues[2];
-    }
-    materialId = await SharedPref.getString(key: PrefsValue.meterNumberId) ?? "0";
-    meterSerialController.text = await SharedPref.getString(key: PrefsValue.meterNumberSerial) ?? "0";
-    mobileNumberController.text = await SharedPref.getString(key: PrefsValue.mobileNumber) ?? "";
-    emailIdController.text = await SharedPref.getString(key: PrefsValue.email) ?? "-";
-    altMobileNumberController.text = await SharedPref.getString(key: PrefsValue.alternateMobileNo) ?? "";
-    noOfFamilyMembersController.text = await SharedPref.getString(key: PrefsValue.noOfFamilyMembers) ?? "";
-    noOfBurnersController.text = await SharedPref.getString(key: PrefsValue.ngOfBurners) == "" ? "2" : await SharedPref.getString(key: PrefsValue.ngOfBurners);
-    typeOfNrController.text = await SharedPref.getString(key: PrefsValue.typeOfNr) ?? "";
-    dateInstallationController.text = await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
-    proposedNgcDateController.text = await SharedPref.getString(key: PrefsValue.proposedNgcDate) ?? "";
-    extraPipeController.text = await SharedPref.getString(key: PrefsValue.extraPipe) ?? "";
-    extraPriceController.text = await SharedPref.getString(key: PrefsValue.extraPrice) ?? "";
-    rfcDateController.text = await SharedPref.getString(key: PrefsValue.rfcDate) ?? "";
-    ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
+    await fetchInstallationByNgc(context: event.context,areaId: "");
     await fetchTypeOfNrApi(context: event.context);
     await fetchNgcReasonApi(context: event.context);
     await fetchMeterReplaceTypeApi(context: event.context);
     await fetchRegulatorTypeApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await checkDelayReason();
-    /* if (regulatorTypeValue.id != null) {
-      await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: regulatorTypeValue.id.toString());
-    }*/
     _eventCompleted(emit);
+  }
+
+  fetchInstallationByNgc({required BuildContext context, required String areaId}) async {
+    if(bpNumberController.text.trim().isNotEmpty) {
+      var res = await NgcTableHelper.getLmcInstallationByNgcApi(
+          context: context, bpNumber: bpNumberController.text, areaId: areaId);
+      if (res != null) {
+        print("res-->${res.data}");
+        lmcInstallationByNgcModel = res;
+        if (lmcInstallationByNgcModel?.success != 400) {
+          listOfInstallationByNgc = lmcInstallationByNgcModel!.data!;
+          listOfFilterInstallationByNgc = listOfInstallationByNgc;
+            meterConnectionMeterController.text =
+            await listOfFilterInstallationByNgc[0].typeOfNr!;
+            regulatorTypeController.text =
+            await listOfFilterInstallationByNgc[0].regulatorType!;
+            regulatorTypeValue.id =
+            await listOfFilterInstallationByNgc[0].regulatorTypeId!;
+            srRegulatorId =
+            await listOfFilterInstallationByNgc[0].mrRegulatorId!;
+            srSerialNumberController.text =
+            await listOfFilterInstallationByNgc[0].mrRegulatorSerial!;
+            regulatorId = await listOfFilterInstallationByNgc[0].regulators!;
+            regulatorSerialController.text =
+            await listOfFilterInstallationByNgc[0].regulatorSerial!;
+            lmcPath = await listOfFilterInstallationByNgc[0].lmcpath!;
+            String pathKye = await baseUrl == Apis.basePath
+                ? "uploads/"
+                : "public/uploads/";
+            networkMeterPhoto =
+            await listOfFilterInstallationByNgc[0].meterPhoto!;
+            networkPneumaticPhoto =
+            await listOfFilterInstallationByNgc[0].pneumaticImage!;
+            networkRfcPhoto = await listOfFilterInstallationByNgc[0].rfcForm!;
+            regulatorCheck =
+            await listOfFilterInstallationByNgc[0].regulatorCheck!;
+            _meterPhoto = File(baseUrl + pathKye + lmcPath + "/" +
+                networkMeterPhoto.toString());
+            rfcPhoto = File(
+                baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+            pneumaticPhoto = File(baseUrl + pathKye + lmcPath + "/" +
+                networkPneumaticPhoto.toString());
+            dmaUserId = await listOfFilterInstallationByNgc[0].dmaUserId!;
+            isInstall = await listOfFilterInstallationByNgc[0].isInstall!;
+            lmcInstallationId =
+            await listOfFilterInstallationByNgc[0].lmcInstallationId!;
+            nameContractorController.text =
+            await listOfFilterInstallationByNgc[0].name!;
+            meterInitialReadingController.text =
+                await listOfFilterInstallationByNgc[0].meterreading ?? "0";
+            if (meterInitialReadingController.text.length == 5) {
+              List<
+                  String> meterNumberStringArrayValues = (meterInitialReadingController
+                  .text ?? "0.000").split("");
+              int length = meterNumberStringArrayValues.length;
+              meterIniReading1Controller.text =
+              meterNumberStringArrayValues[length - 3];
+              meterIniReading2Controller.text =
+              meterNumberStringArrayValues[length - 2];
+              meterIniReading3Controller.text =
+              meterNumberStringArrayValues[length - 1];
+            } else if (meterInitialReadingController.text == "0") {
+              meterIniReading1Controller.text = "0";
+              meterIniReading2Controller.text = "0";
+              meterIniReading3Controller.text = "0";
+            } else {
+              double meterIniReadingAdd = double.parse(
+                  meterInitialReadingController.text);
+              String newMeterInitialReading = (meterIniReadingAdd * 1000)
+                  .toString();
+              List<
+                  String> meterNumberStringArrayValues = (newMeterInitialReading
+                  .trim().split("")).toList();
+              meterIniReading1Controller.text = meterNumberStringArrayValues[0];
+              meterIniReading2Controller.text = meterNumberStringArrayValues[1];
+              meterIniReading3Controller.text = meterNumberStringArrayValues[2];
+            }
+            materialId =
+                await listOfFilterInstallationByNgc[0].meterNumber ?? "0";
+            meterSerialController.text =
+                await listOfFilterInstallationByNgc[0].meterSerial ?? "0";
+            mobileNumberController.text =
+                await listOfFilterInstallationByNgc[0].mobileNumber ?? "";
+            emailIdController.text =
+                await listOfFilterInstallationByNgc[0].email ?? "NA";
+            altMobileNumberController.text =
+                await listOfFilterInstallationByNgc[0].alternateMobileNo ?? "NA";
+            noOfFamilyMembersController.text =
+                await listOfFilterInstallationByNgc[0].dmafamily ?? "";
+            noOfBurnersController.text =
+            await listOfFilterInstallationByNgc[0].ngOfBurners == "" ? "2" : await listOfFilterInstallationByNgc[0].ngOfBurners;
+            typeOfNrController.text =
+                await listOfFilterInstallationByNgc[0].typeOfNr ?? "";
+            dateInstallationController.text =
+                await listOfFilterInstallationByNgc[0].lmcInstallationDate ?? "";
+            proposedNgcDateController.text =
+                await listOfFilterInstallationByNgc[0].lmcProposedNgcDate ?? "";
+            extraPipeController.text =
+                await listOfFilterInstallationByNgc[0].extraPipe ?? "";
+            extraPriceController.text =
+                await listOfFilterInstallationByNgc[0].extraPrice ?? "";
+            rfcDateController.text =
+                await listOfFilterInstallationByNgc[0].rfcDate ?? "";
+            ngConversionDateController.text =
+                DateFormat(AppString.dateFormat).format(DateTime.now());
+
+        }
+      }
+    }
   }
 
   checkDelayReason() {
     DateTime proposedDate = DateFormat(AppString.dateFormat).parse(proposedNgcDateController.text);
-    DateTime installationDate = DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
+ //   DateTime installationDate = DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
+    DateTime installationDate = DateFormat(AppString.dateFormat).parse(ngConversionDateController.text);
+    print("proposedDate-->${proposedDate}");
+    print("installationDate-->${installationDate}");
     if (installationDate.compareTo(proposedDate) <= 0) {
       isDelayReason = false;
     } else {
@@ -295,7 +361,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime.now());
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
-      ngConversionDateController.text = formattedDate.toString();
+      ngConversionDateController.text = await formattedDate.toString();
       checkDelayReason();
       _eventCompleted(emit);
     }
@@ -350,7 +416,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   _selectRegulatorTypeValue(SelectRegulatorTypeValueEvent event, emit) async {
-    isRegulator = true;
+    isRegulatorLoader = true;
     _eventCompleted(emit);
     regulatorTypeValue = event.regulatorTypeValue;
     if (event.regulatorTypeValue.name != null) {
@@ -358,7 +424,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       srNumberSearchController.text = "";
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
     }
-    isRegulator = false;
+    isRegulatorLoader = false;
     _eventCompleted(emit);
   }
 
@@ -715,7 +781,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       isCheckMeterMismatch: isCheckMeterMismatch,
       isMeterReplace: isMeterReplace,
       isRegularReplace: isRegularReplace,
-      isRegulator: isRegulator,
+      isRegulatorLoader: isRegulatorLoader,
       listOfMeterNumber: listOfMeterNumber,
       listOfMeterNumberSerial: listOfMeterNumberSerial,
       meterConnectionMeterController: meterConnectionMeterController,

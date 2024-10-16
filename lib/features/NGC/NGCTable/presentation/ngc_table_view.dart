@@ -8,7 +8,6 @@ import 'package:new_lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:new_lmc/Utils/common_widgets/background_widget.dart';
 import 'package:new_lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:new_lmc/Utils/common_widgets/icon_button.dart';
-import 'package:new_lmc/Utils/common_widgets/pop_two_widget.dart';
 import 'package:new_lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:new_lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:new_lmc/Utils/common_widgets/res/app_string.dart';
@@ -189,50 +188,8 @@ class _NgcTableViewState extends State<NgcTableView> {
                     rows: dataState.listOfFilterInstallationByNgc.mapIndexed((index, user) =>
                         DataRow(
                             onSelectChanged: (newValue) async {
-                              await SharedPref.setString(
-                                  key: PrefsValue.dmaUserId, value: user.dmaUserId ?? "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.lmcInstallationId, value: user
-                                  .lmcInstallationId ?? "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.isInstall, value: user.isInstall ??
-                                  "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.bpNumber, value: user.bpNumber ??
-                                  "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.meterReading, value: user
-                                  .meterreading ?? "");
-                              await SharedPref.setString(key: PrefsValue.meterNumberId, value: user.meterNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.meterNumberSerial, value: user.meterSerial ?? "");
-                              await SharedPref.setString(
-                                  key: PrefsValue.mobileNumber, value: user.mobileNumber ?? "");
-                              await SharedPref.setString(key: PrefsValue.alternateMobileNo, value: user.alternateMobileNo ?? "");
-                              await SharedPref.setString(key: PrefsValue.email, value: user.email ?? "");
-                              await SharedPref.setString(key: PrefsValue.ngOfBurners, value: user.ngOfBurners ?? "");
-                              await SharedPref.setString(key: PrefsValue.noOfFamilyMembers, value: user.dmafamily ?? "");
-                              await SharedPref.setString(key: PrefsValue.workCompletedDate, value: user.workCompletedDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.typeOfNr, value: user.typeOfNr ?? "");
-                              await SharedPref.setString(key: PrefsValue.rfcDate, value: user.rfcDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.lmcInstallationDate, value: user.lmcInstallationDate ?? "");
-                              await SharedPref.setString(key: PrefsValue.proposedNgcDate, value: user.lmcProposedNgcDate ?? AppString.dateFormat);
-                              await SharedPref.setString(key: PrefsValue.lmcPath, value: user.lmcpath!);
-                              await SharedPref.setString(key: PrefsValue.meterPhoto, value: user.meterPhoto!);
-                              await SharedPref.setString(key: PrefsValue.regulatorType, value: user.regulatorType!);
-                              await SharedPref.setString(key: PrefsValue.regulatorTypeId, value: user.regulatorTypeId!);
-                          /*    await SharedPref.setString(key: PrefsValue.srRegulatorId, value: user.regulators!);
-                              await SharedPref.setString(key: PrefsValue.srRegulatorSerial, value: user.regulatorSerial!);
-                              await SharedPref.setString(key: PrefsValue.mrRegulatorId, value: user.mrRegulatorId!);
-                              await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.mrRegulatorSerial!);*/
-                              await SharedPref.setString(key: PrefsValue.srRegulatorId, value: user.mrRegulatorId!);
-                              await SharedPref.setString(key: PrefsValue.srRegulatorSerial, value: user.mrRegulatorSerial!);
-                              await SharedPref.setString(key: PrefsValue.mrRegulatorId, value: user.regulators!);
-                              await SharedPref.setString(key: PrefsValue.mrRegulatorSerial, value: user.regulatorSerial!);
-                              await SharedPref.setString(key: PrefsValue.regulatorCheck, value: user.regulatorCheck!);
-                              await SharedPref.setString(key: PrefsValue.rfcPhoto, value: user.rfcForm!);
-                              await SharedPref.setString(key: PrefsValue.pneumaticPhoto, value: user.pneumaticImage!);
-                              await SharedPref.setString(key: PrefsValue.extraPipe, value: user.extraPipe!);
-                              await SharedPref.setString(key: PrefsValue.extraPrice, value: user.extraPrice!);
+
+                              await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (context) => NGCFormView()));
                             },
@@ -245,7 +202,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                               CommonStyle.dataCell(label: user.bpNumber.toString()),
                               CommonStyle.dataCell(label: user.areaName.toString()),
                               CommonStyle.dataCell(label: user.firstName.toString()),
-                              CommonStyle.dataCell(label: user.dateOfRegistration.toString()),
+                              CommonStyle.dataCell(label: user.lmcInstallationDate.toString()),
                             ]))
                         .toList(),
                   ),

@@ -35,7 +35,7 @@ class NGCFormDataState extends NGCFormState {
   File ngcReportPhoto;
   File mrPhoto;
   File srPhoto;
-  bool isRegulator;
+  bool isRegulatorLoader;
   String regulatorCheck;
   List<GetConstantModel> listOfTypeOfNr;
   GetConstantModel? typeOfNrValue;
@@ -103,7 +103,7 @@ class NGCFormDataState extends NGCFormState {
     required this.isRegularReplace,
     required this.meterPhoto,
     required this.ngcReportPhoto,
-    required this.isRegulator,
+    required this.isRegulatorLoader,
     required this.userName,
     required this.schema,
     required this.lmcPath,
@@ -178,7 +178,7 @@ class NGCFormDataState extends NGCFormState {
     isCheckMeterMismatch,
     meterPhoto,
     ngcReportPhoto,
-    isRegulator,
+    isRegulatorLoader,
     schema,
     lmcPath,
     baseUrl,

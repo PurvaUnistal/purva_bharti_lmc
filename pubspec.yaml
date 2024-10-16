@@ -53,6 +53,7 @@ dependencies:
   package_info_plus: ^5.0.1
   dio: ^5.6.0
   dropdown_search: ^5.0.1
+  in_app_update: ^4.2.3
 
 dev_dependencies:
   flutter_test:

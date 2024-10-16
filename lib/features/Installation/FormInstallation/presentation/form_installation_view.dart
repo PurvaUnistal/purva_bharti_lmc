@@ -179,16 +179,16 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       star: AppString.star,
       hintText: AppString.installationDate,
       label: AppString.installationDate,
-      textInputAction: TextInputAction.next,
-      enabled: true,
       controller: stateData.installationDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
-          BlocProvider.of<FormInstallationBloc>(context).add(SelectInstallationDateEvent(context: context));
-        },
+      textInputAction: TextInputAction.done,
+      enableInteractiveSelection: false,
+      suffixIcon: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Icon(Icons.calendar_today, color: AppColor.primer,),
       ),
+      keyboardType: TextInputType.datetime,
       onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
         BlocProvider.of<FormInstallationBloc>(context).add(SelectInstallationDateEvent(context: context));
       },
     );
@@ -486,16 +486,16 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         star: AppString.star,
         hintText: AppString.rfcDate,
         label: AppString.rfcDate,
-        textInputAction: TextInputAction.next,
-        enabled: true,
         controller: stateData.rfcDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormInstallationBloc>(context).add(SelectRFCDateEvent(context: context));
-          },
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(Icons.calendar_today, color: AppColor.primer,),
         ),
+        keyboardType: TextInputType.datetime,
         onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
           BlocProvider.of<FormInstallationBloc>(context).add(SelectRFCDateEvent(context: context));
         },
       ),
@@ -510,13 +510,15 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         hintText: AppString.ngProposedDate,
         label: AppString.ngProposedDate,
         controller: stateData.ngConversionDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
-          },
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(Icons.calendar_today, color: AppColor.primer,),
         ),
+        keyboardType: TextInputType.datetime,
         onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
           BlocProvider.of<FormInstallationBloc>(context).add(SelectNGConversionDateEvent(context: context));
         },
       ),

@@ -175,6 +175,7 @@ class FormFeasibilityHelper {
     required String qtyLMC,
     required String extraPipe,
     required String extraPrice,
+    required String bom,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
@@ -195,6 +196,7 @@ class FormFeasibilityHelper {
         "qty_lmc": qtyLMC,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
+        "bom" : bom
       };
       log("para-->${para}");
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);

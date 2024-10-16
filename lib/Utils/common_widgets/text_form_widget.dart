@@ -16,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? labelText;
   final ValueChanged<String>? onChanged;
   final bool? obscureText;
+  final bool? enableInteractiveSelection;
   final TextInputType? inputType;
   final int? maxLength;
   final int? maxLine;
@@ -46,6 +47,7 @@ class TextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.inputType,
     this.maxLength,
+    this.enableInteractiveSelection,
     this.maxLine,
     this.onTap,
     this.onFieldSubmitted,
@@ -65,6 +67,7 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       cursorColor: AppColor.primer,
+      enableInteractiveSelection: enableInteractiveSelection,
       focusNode: focusNode,
       autofillHints: autofillHints,
       onTap: onTap,
@@ -102,7 +105,7 @@ class TextFieldWidget extends StatelessWidget {
         filled: true,
         fillColor: AppColor.white,
         isDense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
+        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
         border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
         focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
         disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
@@ -111,7 +114,7 @@ class TextFieldWidget extends StatelessWidget {
         hintText: hintText,
         hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
         label: Padding(
-          padding: const EdgeInsets.only(left: 2.0),
+          padding: const EdgeInsets.symmetric( horizontal: 2.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

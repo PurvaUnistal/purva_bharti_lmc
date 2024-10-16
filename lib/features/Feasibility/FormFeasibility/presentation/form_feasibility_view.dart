@@ -159,15 +159,16 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         star: AppString.star,
         hintText: AppString.lmcFeaDate,
         label: AppString.lmcFeaDate,
-        enabled: true,
         controller: stateData.feasibilityDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
-          },
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(Icons.calendar_today, color: AppColor.primer,),
         ),
+        keyboardType: TextInputType.datetime,
         onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
           BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
         },
       ),
@@ -280,13 +281,15 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       label: AppString.lmcProDate,
       enabled: true,
       controller: stateData.proposedDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectProposedDateEvent(context: context));
-        },
+      textInputAction: TextInputAction.done,
+      enableInteractiveSelection: false,
+      suffixIcon:Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Icon(Icons.calendar_today, color: AppColor.primer,),
       ),
+      keyboardType: TextInputType.datetime,
       onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
         BlocProvider.of<FormFeasibilityBloc>(context).add(SelectProposedDateEvent(context: context));
       },
     );
@@ -353,15 +356,16 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         star: AppString.star,
         hintText: AppString.followUpDate,
         label: AppString.followUpDate,
-        enabled: true,
         controller: stateData.followUpDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFollowUpDateEvent(context: context));
-          },
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(Icons.calendar_today, color: AppColor.primer,),
         ),
+        keyboardType: TextInputType.datetime,
         onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
           BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFollowUpDateEvent(context: context));
         },
       ),

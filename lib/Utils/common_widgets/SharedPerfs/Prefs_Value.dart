@@ -1,4 +1,5 @@
 class PrefsValue {
+  static String updateAppDate = "updateAppDate";
   static String isUserLogIn = "IsUserLogIn";
   static String emailVal = "Email";
   static String passwordVal = "Password";
