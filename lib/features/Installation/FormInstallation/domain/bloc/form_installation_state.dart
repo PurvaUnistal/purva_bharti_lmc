@@ -25,6 +25,7 @@ class FormInstallationDataState extends FormInstallationState {
   String userName;
   bool isLoader;
   bool isExtraPipe;
+  bool isLatLongOfHouseLoader;
   bool isInstallRegulator;
   bool isCheckMeterMismatch;
   bool isCheckRegulatorMismatch;
@@ -83,6 +84,7 @@ class FormInstallationDataState extends FormInstallationState {
     required this.isInstallRegulator,
     required this.isLoader,
     required this.isExtraPipe,
+    required this.isLatLongOfHouseLoader,
     required this.isCheckRegulatorMismatch,
     required this.isCheckMeterMismatch,
     required this.isBtnLoader,
@@ -146,6 +148,7 @@ class FormInstallationDataState extends FormInstallationState {
         isCheckMeterMismatch,
         isBtnLoader,
         isDelayReason,
+    isLatLongOfHouseLoader,
         isRegulator,
         meterPhoto,
     housePhoto,

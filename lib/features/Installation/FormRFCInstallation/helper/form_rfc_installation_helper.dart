@@ -264,12 +264,4 @@ class FormRFCInstallationHelper {
     File files = File(file!.path);
     return files;
   }
-
-  static Future<Position> getCurrentLocation() async {
-    await Geolocator.requestPermission();
-    await Permission.locationAlways.request();
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    log('latitude : ${position.latitude} longitude : ${position.longitude}');
-    return position;
-  }
 }

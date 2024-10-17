@@ -205,7 +205,7 @@ class NGCFormHelper{
         Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
         return false;
       }
-      if(regulatorType == ""){
+      if(regulatorType == "" || regulatorType == "null"){
         Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
       } else if(regulatorType == "1"){
@@ -306,6 +306,9 @@ class NGCFormHelper{
     required String noOfFamily,
     required String meterPhoto,
     required String ngcReportPhoto,
+    required String replaceRegulator,
+    required LmcReasonModel changeRegulatorType,
+    required String regulatorChangeReason,
   }) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
@@ -330,12 +333,10 @@ class NGCFormHelper{
       "is_install": isInstall.isEmpty ? "" : isInstall,
       "comment": comment.isEmpty ? "" : comment,
       "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
-      "meter_change_reason": meterChangeReason.isEmpty ? "": meterChangeReason,
       "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
       "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
+      "meter_change_reason": meterChangeReason.isEmpty ? "": meterChangeReason,
       "tf_number": srNumber.isEmpty ? "" : srNumber,
-      /* "regulators_number": srRegulatorId ?? "",
-      "mr_regulator_id": mrRegulatorId,*/
       "regulators_number": mrRegulatorId,
       "mr_regulator_id": srRegulatorId,
       "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
@@ -343,6 +344,9 @@ class NGCFormHelper{
       "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,
       "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
       "no_of_family": noOfFamily.isEmpty ? "0" : noOfFamily,
+      "replace_regulator": replaceRegulator.isEmpty ? "0" : replaceRegulator,
+      "change_regulator_type": changeRegulatorType.id == null ? "0" : changeRegulatorType.id.toString(),
+      "regulator_change_reason":  regulatorChangeReason.isEmpty ? "": regulatorChangeReason,
     };
     log("jsonBody-->${body}");
     try {

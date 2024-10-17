@@ -26,6 +26,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationState {
   String baseUrl;
   bool isLoader;
   bool isExtraPipe;
+  bool isLatLongOfHouseLoader;
   bool isInstallRegulator;
   bool isCheckMeterMismatch;
   bool isCheckRegulatorMismatch;
@@ -85,6 +86,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationState {
     required this.isInstallRegulator,
     required this.isLoader,
     required this.isExtraPipe,
+    required this.isLatLongOfHouseLoader,
     required this.isCheckRegulatorMismatch,
     required this.isCheckMeterMismatch,
     required this.isBtnLoader,
@@ -144,6 +146,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationState {
     userName,
     isLoader,
     isExtraPipe,
+    isLatLongOfHouseLoader,
     isInstallRegulator,
     isCheckRegulatorMismatch,
     isCheckMeterMismatch,

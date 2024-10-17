@@ -531,34 +531,25 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       children: [
         Flexible(
           flex: 3,
-          child: TextFieldWidget(
+          child: stateData.isLatLongOfHouseLoader == false ? TextFieldWidget(
             enabled: false,
             star: AppString.star,
             hintText: AppString.latOfHouse,
             label: AppString.latOfHouse,
             controller: stateData.latOfHouseController,
-          ),
+          ) : DottedLoaderWidget(),
         ),
         CommonStyle.widthSpace(context: context),
         Flexible(
           flex: 3,
-          child: TextFieldWidget(
+          child: stateData.isLatLongOfHouseLoader == false ? TextFieldWidget(
             enabled: false,
             star: AppString.star,
             hintText: AppString.longOfHouse,
             label: AppString.longOfHouse,
             controller: stateData.longOfHouseController,
-          ),
+          ) : DottedLoaderWidget(),
         ),
-        /* SizedBox(
-          width: MediaQuery.of(context).size.width * 0.02,
-        ),
-        IconButtonWidget(
-          iconData: Icons.location_on,
-          onPressed: () {
-            BlocProvider.of<FormInstallationBloc>(context).add(SelectLocationOfSREvent(context: context));
-          },
-        )*/
       ],
     );
   }
@@ -759,10 +750,10 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                 enableDrag: true,
                 isScrollControlled: true,
                 context: context,
-                builder: (BuildContext context) {
+                builder: (BuildContext mContext) {
                   return CameraPopWidget(
                     onTapCamera: () async {
-                      Navigator.of(context).pop();
+                      Navigator.of(mContext).pop();
                       BlocProvider.of<FormInstallationBloc>(context).add(CaptureCameraHouseEvent());
                     },
                   );

@@ -25,6 +25,8 @@ class NGCFormDataState extends NGCFormState {
   bool isMeterReplace;
   bool isRegularReplace;
   bool isDelayReason;
+  bool isLatLongOfSRLoader;
+  bool isLatLongOfMRLoader;
   String userName;
   String schema;
   String lmcPath;
@@ -98,6 +100,8 @@ class NGCFormDataState extends NGCFormState {
     required this.pneumaticPhoto,
     required this.isBtnLoader,
     required this.isDelayReason,
+    required this.isLatLongOfSRLoader,
+    required this.isLatLongOfMRLoader,
     required this.isCheckMeterMismatch,
     required this.isMeterReplace,
     required this.isRegularReplace,
@@ -175,6 +179,8 @@ class NGCFormDataState extends NGCFormState {
     isRegularReplace,
     isBtnLoader,
     isDelayReason,
+    isLatLongOfSRLoader,
+    isLatLongOfMRLoader,
     isCheckMeterMismatch,
     meterPhoto,
     ngcReportPhoto,

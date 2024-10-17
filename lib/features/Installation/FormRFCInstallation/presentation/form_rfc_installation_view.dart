@@ -18,7 +18,6 @@ import 'package:new_lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:new_lmc/Utils/common_widgets/row_widget.dart';
 import 'package:new_lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
-import 'package:new_lmc/features/Installation/FormInstallation/presentation/Widgets/image_widget.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/presentation/Widgets/meter_no_widget.dart';
 import 'package:new_lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_bloc.dart';
 import 'package:new_lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_event.dart';
@@ -526,34 +525,25 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       children: [
         Flexible(
           flex: 3,
-          child: TextFieldWidget(
+          child: stateData.isLatLongOfHouseLoader == false ?  TextFieldWidget(
             enabled: false,
             star: AppString.star,
             hintText: AppString.latOfHouse,
             label: AppString.latOfHouse,
             controller: stateData.latOfHouseController,
-          ),
+          ) : DottedLoaderWidget(),
         ),
         CommonStyle.widthSpace(context: context),
         Flexible(
           flex: 3,
-          child: TextFieldWidget(
+          child:stateData.isLatLongOfHouseLoader == false ? TextFieldWidget(
             enabled: false,
             star: AppString.star,
             hintText: AppString.longOfHouse,
             label: AppString.longOfHouse,
             controller: stateData.longOfHouseController,
-          ),
+          ) : DottedLoaderWidget(),
         ),
-        /* SizedBox(
-          width: MediaQuery.of(context).size.width * 0.02,
-        ),
-        IconButtonWidget(
-          iconData: Icons.location_on,
-          onPressed: () {
-            BlocProvider.of<FormRFCInstallationBloc>(context).add(SelectLocationOfSREvent(context: context));
-          },
-        )*/
       ],
     );
   }

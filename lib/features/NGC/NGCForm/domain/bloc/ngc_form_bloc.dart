@@ -34,8 +34,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<SelectRegulatorsValueEvent>(_selectRegulatorsValue);
     on<SelectSRegulatorsEvent>(_selectSRegulators);
     on<SelectDelayReasonValueEvent>(_selectDelayReasonValue);
-    on<SelectLocationOfSREvent>(_locationOfSR);
-    on<SelectLocationOfMREvent>(_locationOfMR);
     on<SelectMeterTypeValueEvent>(_selectMeterTypeValue);
     on<SelectRegulatorTypeReasonValueEvent>(_selectRegulatorTypeReasonValue);
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
@@ -44,15 +42,15 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<CaptureCameraPneumaticEvent>(_captureCameraPneumatic);
     on<CaptureGalleryRfcEvent>(_captureGalleryRfc);
     on<CaptureCameraRfcEvent>(_captureCameraRfc);
-    on<CaptureGalleryMREvent>(_captureGalleryMR);
     on<CaptureCameraMREvent>(_captureCameraMR);
-    on<CaptureGallerySREvent>(_captureGallerySR);
     on<CaptureCameraSREvent>(_captureCameraSR);
     on<CaptureGalleryNGCReportEvent>(_captureGalleryNGCReport);
     on<CaptureCameraNGCReportEvent>(_captureCameraNGCReport);
     on<NGCSubmitEvent>(_submit);
   }
   bool isRegulatorLoader = false;
+  bool isLatLongOfMRLoader = false;
+  bool isLatLongOfSRLoader = false;
   File mrPhoto = File("");
   File srPhoto = File("");
   File pneumaticPhoto = File("");
@@ -87,6 +85,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   String srRegulatorId = '';
   String materialId = '';
   String meterReplace = "0";
+  String regulatorReplace = "0";
   String lmcPath = "";
   String baseUrl = '';
   String networkMeterPhoto = "";
@@ -172,11 +171,14 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     isMeterReplacement = false;
     isCheckMeterMismatch = false;
     isCheckRegulatorMismatch = false;
+    isLatLongOfMRLoader = false;
+    isLatLongOfSRLoader = false;
     isCheckSR = false;
     regulatorId = '';
     srRegulatorId = '';
     materialId = '';
     meterReplace = "0";
+    regulatorReplace = "0";
     mrPhoto = File("");
     srPhoto = File("");
     _meterPhoto = File("");
@@ -334,7 +336,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
             extraPriceController.text =
                 await listOfFilterInstallationByNgc[0].extraPrice ?? "";
             rfcDateController.text =
-                await listOfFilterInstallationByNgc[0].rfcDate ?? "";
+                await listOfFilterInstallationByNgc[0].rfcDate ?? "00-00-0000";
             ngConversionDateController.text =
                 DateFormat(AppString.dateFormat).format(DateTime.now());
 
@@ -411,7 +413,15 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
   _selectRegularReplace(SelectRegularReplaceEvent event, emit) {
+    regulatorTypeValue = LmcReasonModel();
     isRegularReplace = event.regularReplace;
+    if (event.regularReplace == true) {
+      regulatorReplace = "1";
+      print("regulatorReplace-->${regulatorReplace}");
+    } else {
+      regulatorReplace = "0";
+      print("regulatorReplace-->${regulatorReplace}");
+    }
     _eventCompleted(emit);
   }
 
@@ -608,67 +618,41 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
-  _setSRLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfSRController.text = getLocation.latitude.toString();
-    longOfSRController.text = getLocation.longitude.toString();
-    return getLocation;
-  }
 
-  _setMRLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfMRController.text = getLocation.latitude.toString();
-    longOfMRController.text = getLocation.longitude.toString();
-    return getLocation;
-  }
 
-  _locationOfSR(SelectLocationOfSREvent event, emit) async {
-    await _setSRLocation();
-    _eventCompleted(emit);
-  }
 
-  _locationOfMR(SelectLocationOfMREvent event, emit) async {
-    await _setMRLocation();
-    _eventCompleted(emit);
-  }
 
   _captureCameraMR(CaptureCameraMREvent event, emit) async {
+    latOfMRController.text = "";
+    longOfMRController.text = "";
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       mrPhoto = photoPath;
-      _setMRLocation();
+      isLatLongOfMRLoader = true;
       _eventCompleted(emit);
-      ;
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfMRController.text = getLocation.latitude.toString();
+      longOfMRController.text = getLocation.longitude.toString();
+      isLatLongOfMRLoader = false;
+      _eventCompleted(emit);
     }
   }
 
-  _captureGalleryMR(CaptureGalleryMREvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
-    if (photoPath.path.isNotEmpty) {
-      mrPhoto = photoPath;
-      _setMRLocation();
-      log("photo-->$photoPath");
-      _eventCompleted(emit);
-    }
-  }
 
   _captureCameraSR(CaptureCameraSREvent event, emit) async {
+    latOfSRController.text = '';
+    longOfSRController.text = '';
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       srPhoto = photoPath;
-      _setSRLocation();
+      isLatLongOfSRLoader = true;
       _eventCompleted(emit);
-    }
-  }
-
-  _captureGallerySR(CaptureGallerySREvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
-    log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
-      srPhoto = photoPath;
-      _setSRLocation();
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfSRController.text = getLocation.latitude.toString();
+      longOfSRController.text = getLocation.longitude.toString();
+      isLatLongOfSRLoader = false;
       _eventCompleted(emit);
     }
   }
@@ -684,7 +668,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         changeMeterType: meterReplace == "1" ? meterReplaceTypeValue.id.toString() : "",
         meterInitialReading: meterInitialReadingController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
-        regulatorType: isRegularReplace == false ? regulatorTypeController.text.trim().toString() : regulatorTypeValue.id.toString(),
+        regulatorType: isRegularReplace  == true ?  regulatorTypeValue.id.toString() : regulatorTypeValue.id.toString(),
         regulatorId: regulatorSerialSearchController.text.trim().toString(),
         mrPhoto: mrPhoto.path,
         srPhoto: srPhoto.path,
@@ -721,8 +705,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           meterReading: meterInitialReadingController.text.trim().toString(),
           mismatchMeterNo: materialId,
           meterNumberId: materialId,
-          /* mismatchMeterNo:isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),
-          meterNumberId: isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),*/
           nameOfContractor: nameContractorController.text.trim().toString(),
           nOfBurners: noOfBurnersController.text.trim().toString(),
           delayReasonValue: delayReasonValue.name == null ? "" : delayReasonValue.name.toString(),
@@ -744,6 +726,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           srPhoto: srPhoto.path.toString(),
           ngcReportPhoto: ngcReportPhoto.path.toString(),
           noOfFamily: noOfFamilyMembersController.text.trim().toString(),
+          replaceRegulator: regulatorReplace.toString(),
+          changeRegulatorType:  regulatorTypeReasonValue,
+          regulatorChangeReason: reasonRegulatorChangeController.text.trim().toString(),
         );
         if (res != null) {
           _isBtnLoader = false;
@@ -771,6 +756,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       schema: schema,
       isPageLoader: isPageLoader,
       isBtnLoader: isBtnLoader,
+      isLatLongOfSRLoader: isLatLongOfSRLoader,
+      isLatLongOfMRLoader: isLatLongOfMRLoader,
       meterIniReading1Controller: meterIniReading1Controller,
       meterIniReading2Controller: meterIniReading2Controller,
       meterIniReading3Controller: meterIniReading3Controller,

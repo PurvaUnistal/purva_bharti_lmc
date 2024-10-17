@@ -38,12 +38,10 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     on<MeterInitReadingEvent>(_meterInitReading);
     on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectRFCDateEvent>(_selectRFCDate);
-    on<SelectLocationOfHouseEvent>(_selectLocationOfHouse);
     on<CaptureGalleryRFCCardEvent>(_captureGalleryRFCCard);
     on<CaptureCameraRFCCardEvent>(_captureCameraRFCCard);
     on<CaptureGalleryPneumaticEvent>(_captureGalleryPneumatic);
     on<CaptureCameraPneumaticEvent>(_captureCameraPneumatic);
-    on<CaptureGalleryHouseEvent>(_captureGalleryHouse);
     on<CaptureCameraHouseEvent>(_captureCameraHouse);
     on<CaptureGalleryInstallationEvent>(_captureGalleryInstallation);
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
@@ -62,6 +60,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   bool isCheckRegulatorMismatch = false;
   bool isCheckSR = false;
   bool isExtraPipe = false;
+  bool isLatLongOfHouseLoader = false;
 
   String schema = "";
   String userName = "";
@@ -146,6 +145,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     isCheckRegulatorMismatch = false;
     isCheckSR = false;
     isExtraPipe = false;
+    isLatLongOfHouseLoader = false;
     housePhoto = File("");
     rfcPhoto = File("");
     pneumaticTestReportPhoto = File("");
@@ -221,8 +221,6 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     await fetchReadyForNgcApi(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchRegulatorTypeApi(context: event.context);
-
-
     await checkDelayReason();
     _eventCompleted(emit);
   }
@@ -580,18 +578,6 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     _eventCompleted(emit);
   }
 
-  _setHouseLocation() async {
-    var getLocation = await FormRFCInstallationHelper.getCurrentLocation();
-    latOfHouseController.text = getLocation.latitude.toString();
-    longOfHouseController.text = getLocation.longitude.toString();
-    return getLocation;
-  }
-
-  _selectLocationOfHouse(SelectLocationOfHouseEvent event, emit) {
-    _setHouseLocation();
-    _eventCompleted(emit);
-  }
-
   _captureGalleryMeter(CaptureGalleryMeterEvent event, emit) async {
     var photoPath = await FormRFCInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
@@ -664,24 +650,22 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     _eventCompleted(emit);
   }
 
-  _captureGalleryHouse(CaptureGalleryHouseEvent event, emit) async {
-    var photoPath = await FormRFCInstallationHelper.galleryCapture();
-    log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
-      housePhoto = photoPath;
-    }
-    _eventCompleted(emit);
-  }
 
   _captureCameraHouse(CaptureCameraHouseEvent event, Emitter<FormRFCInstallationState> emit) async {
+    latOfHouseController.text = '';
+    longOfHouseController.text = '';
     var photoPath = await FormRFCInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
       housePhoto = photoPath;
+      isLatLongOfHouseLoader = true;
+      _eventCompleted(emit);
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfHouseController.text = getLocation.latitude.toString();
+      longOfHouseController.text = getLocation.longitude.toString();
+      isLatLongOfHouseLoader = false;
+      _eventCompleted(emit);
     }
-    _eventCompleted(emit);
   }
 
   fetchRFCApi({required BuildContext context}) async {
@@ -800,6 +784,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
       schema: schema,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,
+      isLatLongOfHouseLoader: isLatLongOfHouseLoader,
       isInstallRegulator: isInstallRegulator,
       isCheckRegulatorMismatch: isCheckRegulatorMismatch,
       isCheckMeterMismatch: isCheckMeterMismatch,

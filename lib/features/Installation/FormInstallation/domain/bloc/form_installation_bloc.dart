@@ -19,6 +19,7 @@ import 'package:new_lmc/features/Installation/FormInstallation/domain/bloc/form_
 import 'package:new_lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
+import 'package:new_lmc/features/Installation/FormRFCInstallation/helper/form_rfc_installation_helper.dart';
 
 class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationState> {
   FormInstallationBloc() : super(FormInstallationInitialState()) {
@@ -42,7 +43,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureCameraRFCCardEvent>(_captureCameraRFCCard);
     on<CaptureGalleryPneumaticEvent>(_captureGalleryPneumatic);
     on<CaptureCameraPneumaticEvent>(_captureCameraPneumatic);
-    on<CaptureGalleryHouseEvent>(_captureGalleryHouse);
     on<CaptureCameraHouseEvent>(_captureCameraHouse);
     on<CaptureGalleryInstallationEvent>(_captureGalleryInstallation);
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
@@ -61,6 +61,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   bool isCheckRegulatorMismatch = false;
   bool isCheckSR = false;
   bool isExtraPipe = false;
+  bool isLatLongOfHouseLoader = false;
 
   String schema = "";
   String userName = "";
@@ -142,6 +143,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     isCheckRegulatorMismatch = false;
     isCheckSR = false;
     isExtraPipe = false;
+    isLatLongOfHouseLoader = false;
     housePhoto = File("");
     rfcCardPhoto = File("");
     pneumaticTestReportPhoto = File("");
@@ -506,7 +508,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _captureCameraMeter(CaptureCameraMeterEvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       meterPhoto = photoPath;
     }
     _eventCompleted(emit);
@@ -524,7 +526,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _captureCameraRFCCard(CaptureCameraRFCCardEvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       rfcCardPhoto = photoPath;
     }
     _eventCompleted(emit);
@@ -542,7 +544,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _captureCameraPneumatic(CaptureCameraPneumaticEvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       pneumaticTestReportPhoto = photoPath;
     }
     _eventCompleted(emit);
@@ -560,30 +562,26 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   _captureCameraInstallation(CaptureCameraInstallationEvent event, emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
+    if (photoPath!.path.isNotEmpty) {
       installationPhoto = photoPath;
     }
     _eventCompleted(emit);
   }
 
-  _captureGalleryHouse(CaptureGalleryHouseEvent event, emit) async {
-    var photoPath = await FormInstallationHelper.galleryCapture();
-    log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
-      housePhoto = photoPath;
-    }
-    _eventCompleted(emit);
-  }
 
   _captureCameraHouse(CaptureCameraHouseEvent event, Emitter<FormInstallationState> emit) async {
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
-    if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
+    if (photoPath!.path.isNotEmpty) {
       housePhoto = photoPath;
+      isLatLongOfHouseLoader = true;
+      _eventCompleted(emit);
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfHouseController.text = getLocation.latitude.toString();
+      longOfHouseController.text = getLocation.longitude.toString();
+      isLatLongOfHouseLoader = false;
+      _eventCompleted(emit);
     }
-    _eventCompleted(emit);
   }
 
   fetchRFCApi({required BuildContext context}) async {
@@ -699,6 +697,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       schema: schema,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,
+      isLatLongOfHouseLoader: isLatLongOfHouseLoader,
       isInstallRegulator: isInstallRegulator,
       isCheckRegulatorMismatch: isCheckRegulatorMismatch,
       isCheckMeterMismatch: isCheckMeterMismatch,

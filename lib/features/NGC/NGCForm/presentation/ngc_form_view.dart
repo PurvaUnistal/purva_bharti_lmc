@@ -749,7 +749,7 @@ class _NGCFormViewState extends State<NGCFormView> {
           BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
         },
       ),
-    ) : dataState.regulatorTypeController != "SR" && dataState.isRegularReplace == true ? Container(): CommonStyle.col(
+    ) : dataState.regulatorTypeValue != null && dataState.regulatorTypeController.text == "SR" && dataState.isRegularReplace == false ? CommonStyle.col(
       context: context,
       child: TextFieldWidget(
         star: AppString.star,
@@ -758,7 +758,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         enabled: false,
         controller: dataState.srSerialNumberController,
       ),
-    )
+    ) :Container()
         : DottedLoaderWidget();
   }
 
@@ -809,20 +809,20 @@ class _NGCFormViewState extends State<NGCFormView> {
     return CommonStyle.col(
       context: context,
       child: RowWidget(
-        widget1: TextFieldWidget(
+        widget1: dataState.isLatLongOfMRLoader == false ? TextFieldWidget(
           enabled: false,
           star: AppString.star,
           hintText: AppString.latOfMR,
           label: AppString.latOfMR,
           controller: dataState.latOfMRController,
-        ),
-        widget2: TextFieldWidget(
+        ) : DottedLoaderWidget(),
+        widget2:  dataState.isLatLongOfMRLoader == false ? TextFieldWidget(
           enabled: false,
           star: AppString.star,
           hintText: AppString.longOfMR,
           label: AppString.longOfMR,
           controller: dataState.longOfMRController,
-        ),
+        ): DottedLoaderWidget(),
       ),
     );
   }
@@ -840,20 +840,20 @@ class _NGCFormViewState extends State<NGCFormView> {
     return CommonStyle.col(
       context: context,
       child: RowWidget(
-        widget1: TextFieldWidget(
+        widget1: dataState.isLatLongOfSRLoader == false ? TextFieldWidget(
           enabled: false,
           star: AppString.star,
           hintText: AppString.latOfSR,
           label: AppString.latOfSR,
           controller: dataState.latOfSRController,
-        ),
-        widget2: TextFieldWidget(
+        ) : DottedLoaderWidget(),
+        widget2: dataState.isLatLongOfSRLoader == false ? TextFieldWidget(
           enabled: false,
           star: AppString.star,
           hintText: AppString.longOfSR,
           label: AppString.longOfSR,
           controller: dataState.longOfSRController,
-        ),
+        ): DottedLoaderWidget(),
       ),
     );
   }
@@ -871,26 +871,7 @@ class _NGCFormViewState extends State<NGCFormView> {
     return CommonStyle.col(
         context: context,
         child: RowWidget(
-          widget1: ImageWidget(
-            star: AppString.star,
-            title: AppString.mrPhoto,
-            imgFile: dataState.mrPhoto,
-            onPressed: () {
-              showModalBottomSheet(
-                  enableDrag: true,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CameraPopWidget(
-                      onTapCamera: () async {
-                        Navigator.of(context).pop();
-                        BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
-                      },
-                    );
-                  });
-            },
-          ),
-          widget2: ImageWidget(
+          widget1:  ImageWidget(
             star: AppString.star,
             title: AppString.srPhoto,
             imgFile: dataState.srPhoto,
@@ -909,6 +890,25 @@ class _NGCFormViewState extends State<NGCFormView> {
                   });
             },
           ),
+          widget2: ImageWidget(
+          star: AppString.star,
+          title: AppString.mrPhoto,
+          imgFile: dataState.mrPhoto,
+          onPressed: () {
+            showModalBottomSheet(
+                enableDrag: true,
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return CameraPopWidget(
+                    onTapCamera: () async {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
+                    },
+                  );
+                });
+          },
+        ),
         )
     );
   }
