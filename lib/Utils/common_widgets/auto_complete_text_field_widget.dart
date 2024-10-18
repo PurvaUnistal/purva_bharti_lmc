@@ -86,6 +86,7 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
           validator: validator,
           style: Styles.texts,
           onChanged: onChanged,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             counterText: "",
             prefixIcon: prefixIcon,

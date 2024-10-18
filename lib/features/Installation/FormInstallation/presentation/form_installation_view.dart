@@ -437,7 +437,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           return null;
         },
         onChanged: (val) async {
-          await formKey.currentState?.validate();
+          formKey.currentState?.validate();
           BlocProvider.of<FormInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
         },
       ),
@@ -470,7 +470,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           return null;
         },
         onChanged: (val) async {
-          await formKey.currentState?.validate();
+          formKey.currentState?.validate();
           BlocProvider.of<FormInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
         },
       ),
@@ -571,6 +571,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         label: AppString.pipe,
                         initialValue: e.name,
                         enabled: false,
+                        textInputAction: TextInputAction.done,
                       ),
                     )
                         : Flexible(
@@ -580,6 +581,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         label: AppString.material,
                         initialValue: e.name,
                         enabled: false,
+                        textInputAction: TextInputAction.done,
                       ),
                     ),
                     CommonStyle.widthSpace(context: context),
@@ -591,6 +593,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
                         onChanged: (val) {
                           BlocProvider.of<FormInstallationBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
                         },
@@ -604,6 +607,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
                       ),
                     )
                   ],

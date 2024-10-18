@@ -223,8 +223,10 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
             keyboardType: TextInputType.text,
             controller: stateData.meterNumberSerialController,
             validator: (value) {
-              if (value != null && value.isNotEmpty && !stateData.listOfMeterNumberSerial.contains(value)) {
-                return AppString.meterNoErrorMsg;
+              if(stateData.meterNumberSerialController.text.isEmpty){
+                if (value != null && value.isNotEmpty && !stateData.listOfMeterNumberSerial.contains(value)) {
+                  return AppString.meterNoErrorMsg;
+                }
               }
               return null;
             },
@@ -417,12 +419,13 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                       keyboardType: TextInputType.text,
                       controller: stateData.regulatorSerialController,
                       onSelected: (val) {
-                        formKey.currentState?.validate();
                         BlocProvider.of<FormRFCInstallationBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
                       },
                       validator: (value) {
-                        if (value != null && value.isNotEmpty && !stateData.listOfRegulatorSerial.contains(value)) {
-                          return AppString.regulatorNoErrorMsg;
+                        if(stateData.regulatorSerialController.text.isEmpty){
+                          if (value != null && value.isNotEmpty && !stateData.listOfRegulatorSerial.contains(value)) {
+                            return AppString.regulatorNoErrorMsg;
+                          }
                         }
                         return null;
                       },
@@ -455,13 +458,15 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                         BlocProvider.of<FormRFCInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
                       },
                       validator: (value) {
-                        if (value != null && value.isNotEmpty && !stateData.listOfSRSerial.contains(value)) {
-                          return AppString.srNoErrorMsg;
+                        if(stateData.srNumberController.text.isEmpty){
+                          if (value != null && value.isNotEmpty && !stateData.listOfSRSerial.contains(value)) {
+                            return AppString.srNoErrorMsg;
+                          }
                         }
                         return null;
                       },
                       onChanged: (val) async {
-                        await formKey.currentState?.validate();
+                        formKey.currentState?.validate();
                         BlocProvider.of<FormRFCInstallationBloc>(context).add(SelectSREvent(context: context, sRegulators: val));
                       },
                     ),
@@ -565,6 +570,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                               label: AppString.pipe,
                               initialValue: e.name,
                               enabled: false,
+                              textInputAction: TextInputAction.done,
                             ),
                           )
                         : Flexible(
@@ -574,6 +580,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                               label: AppString.material,
                               initialValue: e.name,
                               enabled: false,
+                              textInputAction: TextInputAction.done,
                             ),
                           ),
                     CommonStyle.widthSpace(context: context),
@@ -586,6 +593,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
                               onChanged: (val) {
                                 BlocProvider.of<FormRFCInstallationBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
                               },
@@ -599,6 +607,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
                             ),
                           )
                   ],
@@ -752,10 +761,10 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                 enableDrag: true,
                 isScrollControlled: true,
                 context: context,
-                builder: (BuildContext context) {
+                builder: (BuildContext mContext) {
                   return CameraPopWidget(
                     onTapCamera: () async {
-                      Navigator.of(context).pop();
+                      Navigator.of(mContext).pop();
                       BlocProvider.of<FormRFCInstallationBloc>(context).add(CaptureCameraHouseEvent());
                     },
                   );

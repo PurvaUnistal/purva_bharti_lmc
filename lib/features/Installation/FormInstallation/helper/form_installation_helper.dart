@@ -303,7 +303,6 @@ class FormInstallationHelper {
       var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcInstallation, body: para, context: context,
           imageRequestObject: [
         ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-        //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
         ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
         ImageRequestObject("pneumatic_image", pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
         ImageRequestObject("house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),

@@ -391,22 +391,6 @@ class _NGCFormViewState extends State<NGCFormView> {
       baseUrl: dataState.baseUrl,
       networkPath: dataState.rfcPhoto,
       onPressed: () {
-        showModalBottomSheet(
-            enableDrag: true,
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext context) {
-              return ImagePopWidget(
-                onTapCamera: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraRfcEvent());
-                },
-                onTapGallery: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryRfcEvent());
-                },
-              );
-            });
       },
     );
   }
@@ -417,22 +401,6 @@ class _NGCFormViewState extends State<NGCFormView> {
       baseUrl: dataState.baseUrl,
       networkPath: dataState.pneumaticPhoto,
       onPressed: () {
-        showModalBottomSheet(
-            enableDrag: true,
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext context) {
-              return ImagePopWidget(
-                onTapCamera: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraPneumaticEvent());
-                },
-                onTapGallery: () async {
-                  Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryPneumaticEvent());
-                },
-              );
-            });
       },
     );
   }
@@ -493,6 +461,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         : TextFieldWidget(
       star: AppString.star,
       label: AppString.meterNumber,
+      enabled: false,
       hintText: AppString.meterNumber,
       controller: dataState.meterSerialController,
     );
@@ -668,6 +637,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       label: AppString.regulatorType,
       hint: AppString.regulatorType,
       dropdownValue: dataState.regulatorTypeValue?.name == null ? null : dataState.regulatorTypeValue,
+
       items: dataState.listOfRegulatorType,
       onChanged: (val) {
         BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeValueEvent(regulatorTypeValue: val!, context: context));
@@ -880,10 +850,10 @@ class _NGCFormViewState extends State<NGCFormView> {
                   enableDrag: true,
                   isScrollControlled: true,
                   context: context,
-                  builder: (BuildContext context) {
+                  builder: (BuildContext mContext) {
                     return CameraPopWidget(
                       onTapCamera: () async {
-                        Navigator.of(context).pop();
+                        Navigator.of(mContext).pop();
                         BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraSREvent());
                       },
                     );
@@ -899,10 +869,10 @@ class _NGCFormViewState extends State<NGCFormView> {
                 enableDrag: true,
                 isScrollControlled: true,
                 context: context,
-                builder: (BuildContext context) {
+                builder: (BuildContext mContext) {
                   return CameraPopWidget(
                     onTapCamera: () async {
-                      Navigator.of(context).pop();
+                      Navigator.of(mContext).pop();
                       BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
                     },
                   );

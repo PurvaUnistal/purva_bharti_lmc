@@ -115,7 +115,7 @@ class AppString {
   static String ngProposedDate = "Proposed NG Conversion Date";
   static String reasonForDelay = "Reason for Delay";
   static String meterType = "Change Meter Reason";
-  static String regularType = "Change Regular Reason";
+  static String regularType = "Change Regulators Reason";
   static String meterInitialReading = "Meter Initial Reading";
   static String delayStatus = "Delay Status";
   static String delayReason = "Delay Reason";

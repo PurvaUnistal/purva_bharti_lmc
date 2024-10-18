@@ -206,6 +206,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                         label: AppString.pipe,
                         initialValue: e.name,
                         enabled: false,
+                        textInputAction: TextInputAction.done,
                       ),
                     )
                         : Flexible(
@@ -215,6 +216,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                         label: AppString.material,
                         initialValue: e.name,
                         enabled: false,
+                        textInputAction: TextInputAction.done,
                       ),
                     ),
                     CommonStyle.widthSpace(context: context),
@@ -226,6 +228,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
                         onChanged: (val) {
                           BlocProvider.of<FormFeasibilityBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
                         },
@@ -238,6 +241,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                         label: e.unit,
                         controller: e.controller,
                         enabled: true,
+                        textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.number,
                       ),
                     )

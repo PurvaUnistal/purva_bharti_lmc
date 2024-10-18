@@ -70,6 +70,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   String extraPrice = "0";
   String meterTesting = "0";
   String paintingOfGIPipe = "0";
+  String regulatorTypeId = "";
 
   ListOfMeterNo meterNoValue = ListOfMeterNo();
   GetConstantModel typeOfNrValue = GetConstantModel();
@@ -195,6 +196,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     meterInitialReadingController.text = "";
     ngConversionDateController.text = "";
     rfcDateController.text = "";
+    regulatorTypeId = "";
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
@@ -222,6 +224,9 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchRegulatorTypeApi(context: event.context);
     await checkDelayReason();
+    if(regulatorTypeId != ''){
+      await fetchRegulatorsApi(context: event.context, regulatorSerial: "",regulatorType: regulatorTypeId);
+    }
     _eventCompleted(emit);
   }
 
@@ -316,7 +321,6 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
         await SharedPref.setString(key: PrefsValue.installationId, value: rfcInstallationLmc.installationId!);
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
-        // delayReasonValue.name = rfcInstallationLmc.delayReason!;
         for(var i = 0; i < listOfDelayReason.length; i++){
           if(rfcInstallationLmc.delayReason == listOfDelayReason[i].name.toString()){
             delayReasonValue.name = listOfDelayReason[i].name;
@@ -363,7 +367,7 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
           pneumaticTestReportPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
         }
         String isValid = rfcInstallationLmc.regulatorCheck!;
-        String regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
+        regulatorTypeId = rfcInstallationLmc.regulatorTypeId!;
         if (isValid == "1") {
           isInstallRegulator = bool.parse("true");
           if (regulatorTypeId == "1") {
@@ -532,12 +536,16 @@ class FormRFCInstallationBloc extends Bloc<FormRFCInstallationEvent, FormRFCInst
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    var res = await FormInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
-    if (res != null) {
-      listOfRegulator = res;
-      listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
-      listOfSRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
-      return res;
+    if(regulatorTypeId.isNotEmpty || regulatorType.isNotEmpty ){
+      var res = await FormInstallationHelper.getRegulatorsApi(context: context,
+          regulatorSerial: regulatorSerial,
+          regulatorType: regulatorType == ""? regulatorTypeId : regulatorType);
+      if (res != null) {
+        listOfRegulator = res;
+        listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+        listOfSRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+        return res;
+      }
     }
   }
 

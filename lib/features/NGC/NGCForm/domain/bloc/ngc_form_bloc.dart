@@ -127,6 +127,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController extraPriceController = TextEditingController();
   TextEditingController rfcDateController = TextEditingController();
   TextEditingController regulatorTypeController = TextEditingController();
+  TextEditingController regulatorTypeIdController = TextEditingController();
 
   FocusNode meterIniReading1FocusNode = FocusNode();
   FocusNode meterIniReading2FocusNode = FocusNode();
@@ -211,6 +212,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     meterIniReading3Controller.text = "";
     meterInitialReadingController.text = "";
     regulatorTypeController.text = "";
+    regulatorTypeIdController.text = "";
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
@@ -250,8 +252,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
             await listOfFilterInstallationByNgc[0].typeOfNr!;
             regulatorTypeController.text =
             await listOfFilterInstallationByNgc[0].regulatorType!;
-            regulatorTypeValue.id =
-            await listOfFilterInstallationByNgc[0].regulatorTypeId!;
+            regulatorTypeIdController.text = await await listOfFilterInstallationByNgc[0].regulatorTypeId!;
+             regulatorTypeValue.id = await regulatorTypeIdController.text;
             srRegulatorId =
             await listOfFilterInstallationByNgc[0].mrRegulatorId!;
             srSerialNumberController.text =
@@ -668,7 +670,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         changeMeterType: meterReplace == "1" ? meterReplaceTypeValue.id.toString() : "",
         meterInitialReading: meterInitialReadingController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
-        regulatorType: isRegularReplace  == true ?  regulatorTypeValue.id.toString() : regulatorTypeValue.id.toString(),
+        regulatorType: isRegularReplace  == true ?  regulatorTypeValue.id.toString() : regulatorTypeIdController.text.toString(),
         regulatorId: regulatorSerialSearchController.text.trim().toString(),
         mrPhoto: mrPhoto.path,
         srPhoto: srPhoto.path,
