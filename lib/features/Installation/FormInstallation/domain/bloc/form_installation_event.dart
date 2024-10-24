@@ -147,13 +147,6 @@ class SelectQTYLMCEvent extends FormInstallationEvent {
 }
 
 
-class SelectLocationOfHouseEvent extends FormInstallationEvent {
-  final BuildContext context;
-  SelectLocationOfHouseEvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
 
 class CaptureGalleryRFCCardEvent extends FormInstallationEvent{
   @override

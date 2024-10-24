@@ -360,7 +360,8 @@ class FormInstallationHelper {
     await Geolocator.requestPermission();
     await Permission.locationAlways.request();
     Position position = await Geolocator.getCurrentPosition(
-      forceAndroidLocationManager: true, desiredAccuracy: LocationAccuracy.high);
+    //  forceAndroidLocationManager: true,
+        desiredAccuracy: LocationAccuracy.high);
     log('latitude : ${position.latitude} longitude : ${position.longitude}');
     return position;
   }

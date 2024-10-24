@@ -3,7 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:new_lmc/Utils/common_widgets/res/app_color.dart';
 
 class AppString {
-  static String version = "Version : LMC-1.18.10.24";
+  static String version = "Version : LMC-1.24.10.24";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";

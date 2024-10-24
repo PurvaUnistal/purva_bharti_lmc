@@ -108,8 +108,6 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
           _delayReasonDropdown(stateData: dataState),
           CommonStyle.vertical(context: context),
           _meterNumberController(stateData: dataState),
-          /* CommonStyle.vertical(context: context),
-          _meterConnectionDropdown(stateData: dataState),*/
           _initialMeterReading(stateData: dataState),
           _installRegulatorCheck(stateData: dataState),
           _regulatorTypeDropdown(stateData: dataState),

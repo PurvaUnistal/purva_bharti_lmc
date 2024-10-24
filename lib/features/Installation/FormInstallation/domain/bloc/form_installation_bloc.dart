@@ -19,7 +19,6 @@ import 'package:new_lmc/features/Installation/FormInstallation/domain/bloc/form_
 import 'package:new_lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:new_lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
-import 'package:new_lmc/features/Installation/FormRFCInstallation/helper/form_rfc_installation_helper.dart';
 
 class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationState> {
   FormInstallationBloc() : super(FormInstallationInitialState()) {
@@ -38,7 +37,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<MeterInitReadingEvent>(_meterInitReading);
     on<SelectNGConversionDateEvent>(_selectNGConversionDate);
     on<SelectRFCDateEvent>(_selectRFCDate);
-    on<SelectLocationOfHouseEvent>(_selectLocationOfHouse);
     on<CaptureGalleryRFCCardEvent>(_captureGalleryRFCCard);
     on<CaptureCameraRFCCardEvent>(_captureCameraRFCCard);
     on<CaptureGalleryPneumaticEvent>(_captureGalleryPneumatic);
@@ -481,18 +479,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     } else {
       isCheckSR = false;
     }
-    _eventCompleted(emit);
-  }
-
-  _setHouseLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfHouseController.text = getLocation.latitude.toString();
-    longOfHouseController.text = getLocation.longitude.toString();
-    return getLocation;
-  }
-
-  _selectLocationOfHouse(SelectLocationOfHouseEvent event, emit) {
-    _setHouseLocation();
     _eventCompleted(emit);
   }
 

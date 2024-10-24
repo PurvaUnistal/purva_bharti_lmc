@@ -99,6 +99,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
   TextEditingController meterConnectionMeterController = TextEditingController();
+  TextEditingController meterConnectionOldController = TextEditingController();
   TextEditingController regulatorSerialSearchController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController srNumberSearchController = TextEditingController();
@@ -248,7 +249,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         if (lmcInstallationByNgcModel?.success != 400) {
           listOfInstallationByNgc = lmcInstallationByNgcModel!.data!;
           listOfFilterInstallationByNgc = listOfInstallationByNgc;
-            meterConnectionMeterController.text =
+          meterConnectionOldController.text =
             await listOfFilterInstallationByNgc[0].typeOfNr!;
             regulatorTypeController.text =
             await listOfFilterInstallationByNgc[0].regulatorType!;
@@ -774,6 +775,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       listOfMeterNumber: listOfMeterNumber,
       listOfMeterNumberSerial: listOfMeterNumberSerial,
       meterConnectionMeterController: meterConnectionMeterController,
+      meterConnectionOldController: meterConnectionOldController,
       regulatorSerialSearchController: regulatorSerialSearchController,
       regulatorSerialController: regulatorSerialController,
       proposedNgcDateController: proposedNgcDateController,

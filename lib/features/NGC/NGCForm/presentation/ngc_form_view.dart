@@ -125,8 +125,6 @@ class _NGCFormViewState extends State<NGCFormView> {
           CommonStyle.vertical(context: context),
           RowWidget(widget1: _mobileNumberController(dataState: dataState), widget2: _altContactNoWidget(dataState: dataState)),
           CommonStyle.vertical(context: context),
-         /* RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
-          CommonStyle.vertical(context: context),*/
           RowWidget(widget1: _burnerNoWidget(dataState: dataState), widget2: _noOfFamilyMembersController(dataState: dataState)),
           CommonStyle.vertical(context: context),
           _emailWidget(dataState: dataState),
@@ -405,16 +403,6 @@ class _NGCFormViewState extends State<NGCFormView> {
     );
   }
 
-  Widget _meterConnectionControllerWidget({required NGCFormDataState dataState}) {
-    return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.meterConnection,
-      hintText: AppString.meterConnection,
-      enabled: false,
-      controller: dataState.meterConnectionMeterController,
-    );
-  }
-
   Widget _meterReplaceCheck({required NGCFormDataState dataState}) {
     return Card(
       child: Row(
@@ -464,6 +452,23 @@ class _NGCFormViewState extends State<NGCFormView> {
       enabled: false,
       hintText: AppString.meterNumber,
       controller: dataState.meterSerialController,
+    );
+  }
+
+  Widget _meterConnectionControllerWidget({required NGCFormDataState dataState}) {
+    return dataState.isMeterReplace == true
+        ? TextFieldWidget(
+      star: AppString.star,
+      label: AppString.meterConnection,
+      hintText: AppString.meterConnection,
+      enabled: false,
+      controller: dataState.meterConnectionMeterController,
+    ) : TextFieldWidget(
+      star: AppString.star,
+      label: AppString.meterConnection,
+      hintText: AppString.meterConnection,
+      enabled: false,
+      controller: dataState.meterConnectionOldController,
     );
   }
 
