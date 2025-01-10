@@ -27,8 +27,8 @@ class FeasibilityView extends StatefulWidget {
 }
 
 class _FeasibilityViewState extends State<FeasibilityView> {
-  ScrollController _horizontalScrollController = ScrollController();
-  ScrollController _verticalScrollController = ScrollController();
+    ScrollController _horizontalScrollController = ScrollController();
+    ScrollController _verticalScrollController = ScrollController();
 
   @override
   void initState() {

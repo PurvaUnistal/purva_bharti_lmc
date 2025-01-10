@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/common_session_dialog_box.dart';
 import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
 import 'package:mime/mime.dart';
 

@@ -300,7 +300,9 @@ class FormInstallationHelper {
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcInstallation, body: para, context: context, imageRequestObject: [
+      var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcInstallation,
+          body: para, context: context,
+          imageRequestObject: [
         ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
         //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
         ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
