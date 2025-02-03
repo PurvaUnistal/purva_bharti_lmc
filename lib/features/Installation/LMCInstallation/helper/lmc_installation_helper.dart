@@ -25,6 +25,7 @@ class LMCInstallationHelper{
     String json = Uri(queryParameters: para).query;
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
+      print("getLMCInstallation-->${ Apis.getLMCInstallation + json}");
       if (res != null) {
         return InstallationDoneModel.fromJson(res);
       }

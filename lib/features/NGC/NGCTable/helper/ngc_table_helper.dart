@@ -46,6 +46,7 @@ class NgcTableHelper {
         urlEndPoint:url,
         context: context,
       );
+      print("getLmcInstallationByNgc-->${url}");
       if (res != null) {
         return LMCInstallationByNgcModel.fromJson(res);
       }
