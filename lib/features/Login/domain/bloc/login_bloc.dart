@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
@@ -66,12 +67,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _isPageLoader = true;
         _eventCompleted(emit);
         var res = await LoginHelper.loginData(emailId: emailId, password: password, context: event.context);
-        if (res != null) {
+        if (res != null && res.user!.role == "ngc" || res!.user!.role == "lmc") {
           _isPageLoader = false;
           _eventCompleted(emit);
           if (res.user != null) {
             _loginModel = res;
             if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc') ){
+              await Utils.successSnackBar(msg: res.messages!, context: event.context);
               await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
               await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
               await SharedPref.setString(key: PrefsValue.userId,value: res.user!.id!);
@@ -98,11 +100,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
                 Navigator.pushReplacementNamed(event.context, RoutesName.home,);
               }
+            }else{
+              _isPageLoader = false;
+              _eventCompleted(emit);
+              return Utils.errorSnackBar(msg:"Invalid user accessed", context: event.context);
             }
           }
         } else {
           _isPageLoader = false;
           _eventCompleted(emit);
+          return Utils.errorSnackBar(msg:"Invalid user accessed", context: event.context);
         }
       } catch (e) {
         _isPageLoader = false;

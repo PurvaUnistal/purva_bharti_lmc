@@ -24,6 +24,7 @@ class FormInstallationHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      log("${Apis.getConstant}-->${Apis.getConstant + json}");
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -35,6 +36,7 @@ class FormInstallationHelper {
   static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
+      log("${Apis.lmcReason}-->${Apis.lmcReason}");
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -46,6 +48,7 @@ class FormInstallationHelper {
   static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
     try {
       var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
+      log("${Apis.regulatorType}-->${Apis.regulatorType}");
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -61,6 +64,7 @@ class FormInstallationHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      log("${Apis.getRegulators}-->${Apis.getRegulators + json}");
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -80,6 +84,7 @@ class FormInstallationHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getMeters + json, context: context);
+      log("${Apis.getRegulators}-->${Apis.getRegulators + json}");
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -100,7 +105,7 @@ class FormInstallationHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getRegulators + json, context: context);
-      print(res);
+      log("${Apis.getRegulators}-->${Apis.getRegulators + json}");
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -117,6 +122,7 @@ class FormInstallationHelper {
         "pipeQty": pipeQty,
       };
       var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails, context: context, formData: para);
+      log("${Apis.getExtraPipeDetails}-->${Apis.getExtraPipeDetails}");
       return ExtraPipePriceData.fromJson(res['data']);
     } catch (e) {
       log("getExtraPipeDetails-->${e.toString()}");

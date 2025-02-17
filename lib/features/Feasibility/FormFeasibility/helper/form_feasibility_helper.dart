@@ -18,6 +18,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      log("${Apis.getConstant}-->${Apis.getConstant + json}");
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -33,6 +34,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      log("${Apis.getConstant}-->${Apis.getConstant + json}");
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -51,6 +53,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
+      log("${Apis.getAllFreePipeMaterial}-->${Apis.getAllFreePipeMaterial + json}");
       AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {
@@ -69,6 +72,7 @@ class FormFeasibilityHelper {
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);
+      log("${Apis.getAllFreeMaterial}-->${Apis.getAllFreeMaterial + json}");
       AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {

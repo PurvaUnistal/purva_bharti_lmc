@@ -53,7 +53,6 @@ class LoginHelper {
           urlEndPoint: Apis.loginUrl,
           param: para, context: context);
       if (res != null && res["error"] == false) {
-        await Utils.successSnackBar(msg: res["messages"], context: context);
         String str = Apis.loginUrl;
         await SharedPref.setString(key: PrefsValue.baseUrl, value: str.replaceAll("api/auth", ""));
         print(str.replaceAll("api/auth", ""));

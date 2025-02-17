@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
+import 'package:lmc/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
@@ -17,6 +20,8 @@ import 'package:lmc/features/Home/presentation/widget/logout_widget.dart';
 import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_installation_view.dart';
 import 'package:lmc/features/NGC/NGCTable/presentation/ngc_table_view.dart';
 import 'package:lmc/service/Apis.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -28,8 +33,63 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
+    _checkForUpdate();
     BlocProvider.of<HomeBloc>(context).add(HomeLoadEvent(context: context));
     super.initState();
+  }
+
+
+  Future<void> _checkForUpdate() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
+    String currentVersion = packageInfo.version;
+    print("oldVersion-->${oldVersion}");
+    print("currentVersion-->${currentVersion}");
+
+    if (_isVersionOutdated(oldVersion,currentVersion)) {
+      print("oldVersion-->${oldVersion}");
+      print("currentVersion-->${currentVersion}");
+      _showUpdateDialog();
+    }
+  }
+
+  bool _isVersionOutdated(String currentVersion, String latestVersion) {
+    List<int> current = currentVersion.split('.').map(int.parse).toList();
+    List<int> latest = latestVersion.split('.').map(int.parse).toList();
+
+    for (int i = 0; i < latest.length; i++) {
+      if (current.length <= i || current[i] < latest[i]) {
+        return true;
+      } else if (current[i] > latest[i]) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  void _showUpdateDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return  AppUpdateMessage.showAlertDialog(context: context,onPressed: _openAppStoreLink,);
+      },
+    );
+  }
+
+
+  void _openAppStoreLink() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String applicationId = packageInfo.packageName.toString();
+    String androidPlayStoreUrl =
+        "https://play.google.com/store/apps/details?id=${applicationId}&hl=en&gl=US";
+    String url =androidPlayStoreUrl;
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
