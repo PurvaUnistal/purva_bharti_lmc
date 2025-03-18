@@ -40,6 +40,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     pendingNgc = await SharedPref.getString(key: PrefsValue.pendingNgc);
     var json = await SharedPref.getString(key: PrefsValue.accessRight);
     listOFAccessRight = Accessright.accessrightListFromJson(json);
+    listOFAccessRight = await listOFAccessRight.toSet().toList();
+
     listOFAccessRight.sort((a,b) => a.menuCode!.compareTo(b.menuCode!));
     pageIndex = 0;
     currentIndex = 0;

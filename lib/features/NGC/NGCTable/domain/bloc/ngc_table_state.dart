@@ -10,23 +10,22 @@ class NgcTableInitialState extends NgcTableState {
   List<Object> get props => [];
 }
 
-class NgcTablePageLoadState extends NgcTableState {
+class NgcTablePageLoadState extends NgcTableInitialState {
   @override
   List<Object> get props => [];
 }
 
-//ignore: must_be_immutable
-class FetchNgcTableDataState extends NgcTableState {
+class FetchNgcTableDataState extends NgcTableInitialState {
   final bool isLoader;
   final bool isAreaFilter;
   final int pageNo;
   final String schema;
   final String userName;
-  final dynamic allAreaValue;
+  final GetAllAreaModel allAreaValue;
   final List<GetAllAreaModel> listOfAllArea;
   final List<InstallationByNgcData> listOfFilterInstallationByNgc;
-  final LMCInstallationByNgcModel? lmcInstallationByNgcModel;
-  final  TextEditingController bpNumberController;
+  final LMCInstallationByNgcModel lmcInstallationByNgcModel;
+  final TextEditingController bpNumberController;
 
   FetchNgcTableDataState({
     required this.isLoader,
@@ -39,21 +38,20 @@ class FetchNgcTableDataState extends NgcTableState {
     required this.listOfFilterInstallationByNgc,
     required this.lmcInstallationByNgcModel,
     required this.bpNumberController,
-
   });
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
-    isLoader,
-    isAreaFilter,
-    schema,
-    userName,
-    pageNo,
-    allAreaValue,
-    listOfAllArea,
-    listOfFilterInstallationByNgc,
-    lmcInstallationByNgcModel,
-    bpNumberController,
-  ];
+  List<Object> get props => [
+        isLoader,
+        isAreaFilter,
+        schema,
+        userName,
+        pageNo,
+        allAreaValue,
+        listOfAllArea,
+        listOfFilterInstallationByNgc,
+        lmcInstallationByNgcModel,
+        bpNumberController,
+      ];
 }

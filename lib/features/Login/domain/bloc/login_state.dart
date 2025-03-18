@@ -16,6 +16,7 @@ class LoginFetchDataState extends LoginInitState {
     required this.isPageLoader,
     required this.isPassword,
   });
+
   @override
   List<Object> get props => [
         isPageLoader,

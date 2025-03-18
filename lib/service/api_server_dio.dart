@@ -1,159 +1,160 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
 import 'package:mime/mime.dart';
+import 'package:lmc/Utils/Utils.dart';
+import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
+import 'package:lmc/service/Apis.dart';
 
 class ApiHelper {
-  static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
-    try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
-        return null;
-      }
-      final res = await Dio().get(urlEndPoint);
-      log("url-->${urlEndPoint}");
-      log("resData-->${res.data}");
-      if (res.statusCode == 200) {
-        return res.data;
-      }  else {
-        return res.data;
-      }
-    } on DioException catch (error) {
-      log(error.message!);
-      if(error.response?.statusCode == 400){
-        return error.response!.data;
-      }else if(error.response?.statusCode == 401){
-        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 404){
-        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 415){
-        return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if(error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      } else{
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }
-    }catch (e) {
-      log("catchGET-->${e.toString()}");
-      await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
-      throw 'Something Went Wrong';
-    }
-  }
 
-  static Future<dynamic> postData({required BuildContext context,
-    required String urlEndPoint, Map<String, dynamic>? param, String? contentType, formData,
-      }) async {
-    try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
-        return null;
-      }
-      String token = await SharedPref.getString(key: PrefsValue.token);
-      var res = await Dio().post(urlEndPoint, data: param ?? FormData.fromMap(formData), options: Options(headers:  {"Authorization": token,},));
-      log("url-->${urlEndPoint}");
-      log("resData-->${res.data}");
-      if (res.statusCode == 200) {
-        return res.data;
-      } else {
-        return res.data;
-      }
-    } on DioException catch (error) {
-      log(error.message!);
-      if(error.response?.statusCode == 400){
-        return error.response!.data;
-      }else if(error.response?.statusCode == 401){
-        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 404){
-        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 415){
-        return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if(error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      } else{
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }
-    }catch (e) {
-      log("catchPOST-->${e.toString()}");
-      await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
-      throw 'Something Went Wrong';
-    }
-  }
 
-  static Future<dynamic> postDataWithFile({
-    var urlEndPoint,
-    var body,
-    required List<ImageRequestObject> imageRequestObject,
-    required BuildContext context
+  static Future<dynamic> getData({
+    required String urlEndPoint,
+    required BuildContext context,
   }) async {
     try {
-      if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
+      if (!await ConnectivityHelper.allConnectivityCheck(context: context)) {
         return null;
       }
+      final url = Uri.parse("$urlEndPoint");
+      final response = await Dio().get(url.toString());
+      log("URL --> $url");
+      log("Response Data --> ${response.data}");
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return response.data;
+    } on DioException catch (error) {
+      log("Dio Error --> ${error.message}");
+
+      final statusCode = error.response?.statusCode;
+      final errorMessage = error.response?.data?.toString() ?? "Unknown Error";
+
+      await _handleError(statusCode, errorMessage, context);
+    } catch (e) {
+      log("Catch Error --> $e");
+      await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
+      throw 'Something Went Wrong';
+    }
+  }
+
+
+  static Future<dynamic> postData({
+    required BuildContext context,
+    required String urlEndPoint,
+    Map<String, dynamic>? param,
+    Map<String, String>? headers,
+    String? contentType,
+    formData,
+  }) async {
+    try {
+      if (!await ConnectivityHelper.allConnectivityCheck(context: context)) {
+        return null;
+      }
+
+      final url = Uri.parse("$urlEndPoint");
+      var options = Options(
+        headers: headers ?? {},
+        contentType: contentType ?? (formData != null ? "multipart/form-data" : null),
+      );
+      var response = await Dio().post(url.toString(),
+          options: options, data: param ?? FormData.fromMap(formData));
+      log("URL --> $url");
+      log("Response Data --> ${response.data}");
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return response.data;
+    } on DioException catch (error) {
+      log("Dio Error --> ${error.message}");
+      final statusCode = error.response?.statusCode;
+      final errorMessage = error.response?.data?.toString() ?? "Unknown Error";
+      await _handleError(statusCode, errorMessage, context);
+    } catch (e) {
+      log("Multipart Error --> $e");
+      await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
+      throw 'Something Went Wrong';
+    }
+  }
+
+
+  static Future<dynamic> postDataWithFile({
+    required String urlEndPoint,
+    required Map<String, dynamic> body,
+    required List<ImageRequestObject> imageRequestObject,
+    required BuildContext context,
+  }) async {
+    try {
+      if (!await ConnectivityHelper.allConnectivityCheck(context: context)) {
+        return null;
+      }
+
       final formData = FormData.fromMap(body);
-      for(int i=0; i< imageRequestObject.length ; i++) {
-        var element = imageRequestObject[i];
+
+      // Process image files
+      for (var element in imageRequestObject) {
         if (element.path!.isNotEmpty && !element.path!.startsWith("http")) {
-          final mimeTypeData = lookupMimeType(element.path!, headerBytes: [0xFF, 0xD8])!.split('/');
-          formData.files.add(
-            MapEntry(element.key!, await MultipartFile.fromFile(element.path!, contentType:DioMediaType(mimeTypeData[0], mimeTypeData[1]) )),
-          );
+          final mimeTypeData = lookupMimeType(element.path!, headerBytes: [0xFF, 0xD8])?.split('/');
+          if (mimeTypeData != null && mimeTypeData.length == 2) {
+            formData.files.add(
+              MapEntry(
+                element.key!,
+                await MultipartFile.fromFile(
+                  element.path!,
+                  contentType: DioMediaType(mimeTypeData[0], mimeTypeData[1]),
+                ),
+              ),
+            );
+          }
         } else {
           body[element.key!] = element.path;
         }
       }
-      final response = await Dio().post(urlEndPoint, data: formData,);
-      log("url-->${urlEndPoint}");
-      log("resData-->${response.data}");
+
+      final url = Uri.parse("$urlEndPoint");
+      final response = await Dio().post(url.toString(), data: formData);
+
+      debugPrint("URL --> $url");
+      debugPrint("Response Data --> ${response.data}");
+
       if (response.statusCode == 200) {
         return response.data;
-      }else{
-        return response.data;
       }
+
+      return response.data;
     } on DioException catch (error) {
-      log(error.message!);
-      if(error.response?.statusCode == 400){
-        return error.response!.data;
-      }else if(error.response?.statusCode == 401){
-        log("errorStatus(401)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 404){
-        log("errorStatus(404)-->${error.response!.statusMessage!.toString()}");
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }else if(error.response?.statusCode == 415){
-        return await Utils.errorSnackBar(msg: error.response!.data["data"].toString(), context: context);
-      } else if(error.response?.statusCode == 500){
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      } else{
-        return await Utils.errorSnackBar(msg: error.response!.statusMessage!.toString(), context: context);
-      }
-    }catch (e) {
-      log("MultipartFile-->${e.toString()}");
+      debugPrint("Dio Error --> ${error.message}");
+
+      final statusCode = error.response?.statusCode;
+      final errorMessage = error.response?.data?.toString() ?? "Unknown Error";
+
+      await _handleError(statusCode, errorMessage, context);
+    } catch (e) {
+      debugPrint("Multipart Error --> $e");
       await Utils.errorSnackBar(msg: "Something Went Wrong", context: context);
       throw 'Something Went Wrong';
-
     }
   }
 
-  static Future<bool> isInternetConnected() async {
-    bool isConnect = false;
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        isConnect = true;
-      }
-    } on SocketException catch (_) {}
 
-    return isConnect;
+  static Future<void> _handleError(int? statusCode, String errorMessage, BuildContext context) async {
+    switch (statusCode) {
+      case 400:
+      case 401:
+      case 404:
+      case 415:
+      case 500:
+        await Utils.errorSnackBar(msg: errorMessage.replaceAll("{", "").replaceAll("}", ""), context: context);
+        break;
+      default:
+        await Utils.errorSnackBar(msg: "Unexpected Error: $errorMessage", context: context);
+        break;
+    }
   }
 }
+
 
 class ImageRequestObject {
   String? key;

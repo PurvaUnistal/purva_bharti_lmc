@@ -21,11 +21,11 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   bool isLoader = false;
   bool isAreaFilter = false;
   int pageNo = 1;
-  GetAllAreaModel? areaValue;
+  GetAllAreaModel areaValue = GetAllAreaModel();
   List<GetAllAreaModel> listOfAllArea = [];
   List<InstallationDoneRows> listOfInstallationRow = [];
   List<InstallationDoneRows> listOfFilterInstallationRow = [];
-  InstallationDoneModel? installationDoneModel;
+  InstallationDoneModel installationDoneModel = InstallationDoneModel();
   ScrollController scrollController = ScrollController();
   TextEditingController bpNumberController = TextEditingController();
 
@@ -33,7 +33,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     emit(LMCInstallationInitialState());
     isLoader = false;
     isAreaFilter = false;
-    areaValue = null;
+    areaValue = GetAllAreaModel();
     pageNo = 1;
     listOfAllArea = [];
     listOfInstallationRow = [];
@@ -42,8 +42,15 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     installationDoneModel = InstallationDoneModel();
     schema = await SharedPref.getString(key: PrefsValue.schema,);
     userName = await SharedPref.getString(key: PrefsValue.userName,);
-    await fetchAllArea(context: event.context);
-    await fetchInstallation(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: "");
+    await Future.wait(<Future>[
+      fetchAllArea(context: event.context),
+      fetchInstallation(
+        context: event.context,
+        pageNumber: 1,
+        bpNumber: bpNumberController.text.trim(),
+        areaId: "",
+      ),
+    ]);
     _eventCompleted(emit);
   }
 
@@ -80,8 +87,8 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     var res = await LMCInstallationHelper.getLMCInstallationApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
     if (res != null) {
       installationDoneModel = res;
-      if (installationDoneModel?.success != 400) {
-        listOfInstallationRow = installationDoneModel!.data!;
+      if (installationDoneModel.success != 400) {
+        listOfInstallationRow = installationDoneModel.data!;
         listOfFilterInstallationRow = listOfInstallationRow;
       }
     }

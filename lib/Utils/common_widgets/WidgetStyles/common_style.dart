@@ -24,7 +24,7 @@ class CommonStyle {
       height: MediaQuery
           .of(context)
           .size
-          .height * 0.016,
+          .height * 0.009,
     );
   }
 

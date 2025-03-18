@@ -62,7 +62,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   TextEditingController extraPriceController = TextEditingController(text: "0");
 
   _pageLoad(FormFeasibilityPageLoadEvent event, emit) async {
-    emit(FormFeasibilityInitialState());
+    emit(FormFeasibilityPageLoadState());
     isLoader = false;
     isBtnLoader = false;
     isSelected = false;
@@ -85,21 +85,25 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     reasonController.text = '';
     remarksController.text = '';
     followUpDateController.text = '';
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
-    bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
-    trNumberController.text = await SharedPref.getString(key: PrefsValue.crNumber);
-    assignedDateController.text = await SharedPref.getString(key: PrefsValue.assignLmcDate);
+    final results = await Future.wait(<Future>[
+      SharedPref.getString(key: PrefsValue.schema),
+      SharedPref.getString(key: PrefsValue.userName),
+      SharedPref.getString(key: PrefsValue.bpNumber),
+      SharedPref.getString(key: PrefsValue.crNumber),
+      SharedPref.getString(key: PrefsValue.assignLmcDate),
+    ]);
+
+    schema = results[0] ?? "";
+    userName = results[1] ?? "";
+    bpNumberController.text = results[2] ?? "";
+    trNumberController.text = results[3] ?? "";
+    assignedDateController.text = results[4] ?? "";
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    await fetchCheckFeasibilityApi(context: event.context);
-    await fetchLMCReasonApi(context: event.context);
-    await fetchFreeMaterialApi(
-      context: event.context,
-    );
+    await Future.wait(<Future>[
+      fetchCheckFeasibilityApi(context: event.context),
+      fetchLMCReasonApi(context: event.context),
+      fetchFreeMaterialApi(context: event.context),
+    ]);
     _eventCompleted(emit);
   }
 

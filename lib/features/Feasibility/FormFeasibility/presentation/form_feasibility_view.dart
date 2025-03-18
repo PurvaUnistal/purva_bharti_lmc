@@ -32,7 +32,8 @@ class FormFeasibilityView extends StatefulWidget {
 class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   @override
   void initState() {
-    BlocProvider.of<FormFeasibilityBloc>(context).add(FormFeasibilityPageLoadEvent(context: context));
+    BlocProvider.of<FormFeasibilityBloc>(context)
+        .add(FormFeasibilityPageLoadEvent(context: context));
     super.initState();
   }
 
@@ -40,14 +41,11 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: Scaffold(
-        backgroundColor: AppColor.green50,
-        body: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
+      child: BackgroundWidget(
+        child: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
           builder: (context, state) {
             if (state is FormFeasibilityDataState) {
-              return BackgroundWidget(
-                child: _itemBuilder(dataState: state),
-              );
+              return _itemBuilder(dataState: state);
             } else {
               return Center(child: SpinLoader());
             }
@@ -59,14 +57,17 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
-        context: context,
-        builder: (BuildContext mContext) =>
-            MessageBoxTwoButtonPopWidget(message: "Do you want to Feasibility Installation?", okButtonText: "Exit", onPressed: () => Navigator.of(context).pop(true)))) ??
+            context: context,
+            builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+                message: "Do you want to Feasibility Installation?",
+                okButtonText: "Exit",
+                onPressed: () => Navigator.of(context).pop(true)))) ??
         false;
   }
 
   _itemBuilder({required FormFeasibilityDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.lmcFeaH,
         boolLeading: true,
@@ -92,16 +93,24 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       body: ListView(
         padding: EdgeInsets.all(8),
         children: [
-          Text(AppString.feasibilityForm,style: Styles.text,textAlign: TextAlign.center,),
+          Text(
+            AppString.feasibilityForm,
+            style: Styles.text,
+            textAlign: TextAlign.center,
+          ),
           CommonStyle.vertical(context: context),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(flex: 1,child: _bpNumberController(stateData: dataState)),
+              Flexible(
+                  flex: 1, child: _bpNumberController(stateData: dataState)),
               CommonStyle.widthSpace(context: context),
-              Flexible(flex: 1,child: _trNumberController(stateData: dataState)),
+              Flexible(
+                  flex: 1, child: _trNumberController(stateData: dataState)),
               CommonStyle.widthSpace(context: context),
-              Flexible(flex: 1,child: _assignedDateController(stateData: dataState)),
+              Flexible(
+                  flex: 1,
+                  child: _assignedDateController(stateData: dataState)),
             ],
           ),
           _feasibilityDateController(stateData: dataState),
@@ -124,7 +133,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-
   Widget _bpNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.bpNumber,
@@ -133,6 +141,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       controller: stateData.bpNumberController,
     );
   }
+
   Widget _trNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.crNumber,
@@ -142,7 +151,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  Widget _assignedDateController({required FormFeasibilityDataState stateData}) {
+  Widget _assignedDateController(
+      {required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.assignedDate,
       label: AppString.assignedDate,
@@ -151,38 +161,47 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  Widget _feasibilityDateController({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
-        ? Container() : CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        star: AppString.star,
-        hintText: AppString.lmcFeaDate,
-        label: AppString.lmcFeaDate,
-        enabled: true,
-        controller: stateData.feasibilityDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
-          },
-        ),
-        onTap: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFeasibilityDateEvent(context: context));
-        },
-      ),
-    );
+  Widget _feasibilityDateController(
+      {required FormFeasibilityDataState stateData}) {
+    return stateData.checkFeasibleValue?.key == "2" ||
+            stateData.checkFeasibleValue?.key == "3"
+        ? Container()
+        : CommonStyle.col(
+            context: context,
+            child: TextFieldWidget(
+              star: AppString.star,
+              hintText: AppString.lmcFeaDate,
+              label: AppString.lmcFeaDate,
+              enabled: true,
+              controller: stateData.feasibilityDateController,
+              suffixIcon: IconButtonWidget(
+                iconData: Icons.calendar_today,
+                onPressed: () {
+                  BlocProvider.of<FormFeasibilityBloc>(context)
+                      .add(SelectFeasibilityDateEvent(context: context));
+                },
+              ),
+              onTap: () {
+                BlocProvider.of<FormFeasibilityBloc>(context)
+                    .add(SelectFeasibilityDateEvent(context: context));
+              },
+            ),
+          );
   }
 
-  Widget _checkFeasibilityDropdown({required FormFeasibilityDataState stateData}) {
+  Widget _checkFeasibilityDropdown(
+      {required FormFeasibilityDataState stateData}) {
     return DropdownWidget<GetConstantModel>(
       star: AppString.star,
       label: AppString.checkFeasibility,
       hint: AppString.checkFeasibility,
-      dropdownValue: stateData.checkFeasibleValue?.value == null ? null : stateData.checkFeasibleValue,
+      dropdownValue: stateData.checkFeasibleValue?.value == null
+          ? null
+          : stateData.checkFeasibleValue,
       items: stateData.listOfCheckFeasible,
       onChanged: (val) {
-        BlocProvider.of<FormFeasibilityBloc>(context).add(SelectCheckFeasibilityValueEvent(checkFeasibility: val));
+        BlocProvider.of<FormFeasibilityBloc>(context)
+            .add(SelectCheckFeasibilityValueEvent(checkFeasibility: val));
       },
     );
   }
@@ -190,79 +209,85 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget _materialList({required FormFeasibilityDataState dataState}) {
     return dataState.checkFeasibleValue?.key == "1"
         ? Column(
-      children: [
-        Column(
-          children: dataState.materialList.mapIndexed((index, e) {
-            return Column(
-              children: [
-                Row(
-                  children: [
-                    e.name.toLowerCase().contains("pipe") ?
-                    Flexible(
-                      flex: 7,
-                      child: TextFieldWidget(
-                        hintText: AppString.pipe,
-                        label: AppString.pipe,
-                        initialValue: e.name,
-                        enabled: false,
+            children: [
+              Column(
+                children: dataState.materialList.mapIndexed((index, e) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          e.name.toLowerCase().contains("pipe")
+                              ? Flexible(
+                                  flex: 7,
+                                  child: TextFieldWidget(
+                                    hintText: AppString.pipe,
+                                    label: AppString.pipe,
+                                    initialValue: e.name,
+                                    enabled: false,
+                                  ),
+                                )
+                              : Flexible(
+                                  flex: 7,
+                                  child: TextFieldWidget(
+                                    hintText: AppString.material,
+                                    label: AppString.material,
+                                    initialValue: e.name,
+                                    enabled: false,
+                                  ),
+                                ),
+                          CommonStyle.widthSpace(context: context),
+                          e.name.toLowerCase().contains("pipe")
+                              ? Flexible(
+                                  flex: 3,
+                                  child: TextFieldWidget(
+                                    hintText: e.unit,
+                                    label: e.unit,
+                                    controller: e.controller,
+                                    enabled: true,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (val) {
+                                      BlocProvider.of<FormFeasibilityBloc>(
+                                              context)
+                                          .add(SelectQTYLMCEvent(
+                                              context: context, qtyValue: val));
+                                    },
+                                  ),
+                                )
+                              : Flexible(
+                                  flex: 3,
+                                  child: TextFieldWidget(
+                                    hintText: e.unit,
+                                    label: e.unit,
+                                    controller: e.controller,
+                                    enabled: true,
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                )
+                        ],
                       ),
-                    )
-                        : Flexible(
-                      flex: 7,
-                      child: TextFieldWidget(
-                        hintText: AppString.material,
-                        label: AppString.material,
-                        initialValue: e.name,
-                        enabled: false,
-                      ),
-                    ),
-                    CommonStyle.widthSpace(context: context),
-                    e.name.toLowerCase().contains("pipe") ?  Flexible(
-                      flex: 3,
-                      child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
-                        controller: e.controller,
-                        enabled: true,
-                        keyboardType: TextInputType.number,
-                        onChanged: (val) {
-                          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectQTYLMCEvent(context: context, qtyValue: val));
-                        },
-                      ),
-                    ):
-                    Flexible(
-                      flex: 3,
-                      child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
-                        controller: e.controller,
-                        enabled: true,
-                        keyboardType: TextInputType.number,
-                      ),
-                    )
-                  ],
-                ),
-                CommonStyle.vertical(context: context),
-              ],
-            );
-          }).toList(),
-        ),
-        dataState.isExtraPipe == false ?
-        _extraPipeWidget(dataState: dataState) : DottedLoaderWidget(),
-        CommonStyle.vertical(context: context),
-      ],
-    )
+                      CommonStyle.vertical(context: context),
+                    ],
+                  );
+                }).toList(),
+              ),
+              dataState.isExtraPipe == false
+                  ? _extraPipeWidget(dataState: dataState)
+                  : DottedLoaderWidget(),
+              CommonStyle.vertical(context: context),
+            ],
+          )
         : Container();
   }
-  Widget _extraPipeWidget({required FormFeasibilityDataState dataState}){
+
+  Widget _extraPipeWidget({required FormFeasibilityDataState dataState}) {
     return RowWidget(
-      widget1:  TextFieldWidget(
+      widget1: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPipe,
         label: AppString.extraPipe,
         controller: dataState.extraPipeController,
       ),
-      widget2:  TextFieldWidget(
+      widget2: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPrice,
         label: AppString.extraPrice,
@@ -271,111 +296,125 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  Widget _proposedDateController({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
+  Widget _proposedDateController(
+      {required FormFeasibilityDataState stateData}) {
+    return stateData.checkFeasibleValue?.key == "2" ||
+            stateData.checkFeasibleValue?.key == "3"
         ? Container()
         : TextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.lmcProDate,
-      label: AppString.lmcProDate,
-      enabled: true,
-      controller: stateData.proposedDateController,
-      suffixIcon: IconButtonWidget(
-        iconData: Icons.calendar_today,
-        onPressed: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectProposedDateEvent(context: context));
-        },
-      ),
-      onTap: () {
-        BlocProvider.of<FormFeasibilityBloc>(context).add(SelectProposedDateEvent(context: context));
-      },
-    );
+            star: AppString.star,
+            hintText: AppString.lmcProDate,
+            label: AppString.lmcProDate,
+            enabled: true,
+            controller: stateData.proposedDateController,
+            suffixIcon: IconButtonWidget(
+              iconData: Icons.calendar_today,
+              onPressed: () {
+                BlocProvider.of<FormFeasibilityBloc>(context)
+                    .add(SelectProposedDateEvent(context: context));
+              },
+            ),
+            onTap: () {
+              BlocProvider.of<FormFeasibilityBloc>(context)
+                  .add(SelectProposedDateEvent(context: context));
+            },
+          );
   }
 
   Widget _lmcReasonDropdown({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
+    return stateData.checkFeasibleValue?.key == "2" ||
+            stateData.checkFeasibleValue?.key == "3"
         ? Center(
-      child: DropdownWidget<GetConstantModel>(
-        star: AppString.star,
-        label: AppString.lmcReason,
-        hint: AppString.lmcReason,
-        dropdownValue: stateData.lmcReasonValue?.key == null ? null : stateData.lmcReasonValue,
-        items: stateData.listOfLMCReason,
-        onChanged: (val) {
-          print("stateData.lmcReasonValue -->${stateData.lmcReasonValue}");
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectLMCReasonValueEvent(lmcReasonValue: val));
-        },
-      ),
-    )
+            child: DropdownWidget<GetConstantModel>(
+              star: AppString.star,
+              label: AppString.lmcReason,
+              hint: AppString.lmcReason,
+              dropdownValue: stateData.lmcReasonValue?.key == null
+                  ? null
+                  : stateData.lmcReasonValue,
+              items: stateData.listOfLMCReason,
+              onChanged: (val) {
+                print(
+                    "stateData.lmcReasonValue -->${stateData.lmcReasonValue}");
+                BlocProvider.of<FormFeasibilityBloc>(context)
+                    .add(SelectLMCReasonValueEvent(lmcReasonValue: val));
+              },
+            ),
+          )
         : Container();
   }
 
   Widget _reasonController({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" || stateData.checkFeasibleValue?.key == "3"
+    return stateData.checkFeasibleValue?.key == "2" ||
+            stateData.checkFeasibleValue?.key == "3"
         ? stateData.lmcReasonValue?.key == "Others"
-        ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        star: AppString.star,
-        hintText: AppString.reason,
-        label: AppString.reason,
-        enabled: true,
-        maxLine: 2,
-        inputType: TextInputType.text,
-        controller: stateData.reasonController,
-      ),
-    )
-        : Container()
+            ? CommonStyle.col(
+                context: context,
+                child: TextFieldWidget(
+                  star: AppString.star,
+                  hintText: AppString.reason,
+                  label: AppString.reason,
+                  enabled: true,
+                  maxLine: 2,
+                  inputType: TextInputType.text,
+                  controller: stateData.reasonController,
+                ),
+              )
+            : Container()
         : Container();
   }
 
   Widget _remarksController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "3"
         ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        hintText: AppString.remarks,
-        label: AppString.remarks,
-        enabled: true,
-        maxLine: 3,
-        inputType: TextInputType.text,
-        controller: stateData.remarksController,
-      ),
-    )
+            context: context,
+            child: TextFieldWidget(
+              hintText: AppString.remarks,
+              label: AppString.remarks,
+              enabled: true,
+              maxLine: 3,
+              inputType: TextInputType.text,
+              controller: stateData.remarksController,
+            ),
+          )
         : Container();
   }
 
-  Widget _followUpDateController({required FormFeasibilityDataState stateData}) {
+  Widget _followUpDateController(
+      {required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue?.key == "3"
         ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        star: AppString.star,
-        hintText: AppString.followUpDate,
-        label: AppString.followUpDate,
-        enabled: true,
-        controller: stateData.followUpDateController,
-        suffixIcon: IconButtonWidget(
-          iconData: Icons.calendar_today,
-          onPressed: () {
-            BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFollowUpDateEvent(context: context));
-          },
-        ),
-        onTap: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SelectFollowUpDateEvent(context: context));
-        },
-      ),
-    )
+            context: context,
+            child: TextFieldWidget(
+              star: AppString.star,
+              hintText: AppString.followUpDate,
+              label: AppString.followUpDate,
+              enabled: true,
+              controller: stateData.followUpDateController,
+              suffixIcon: IconButtonWidget(
+                iconData: Icons.calendar_today,
+                onPressed: () {
+                  BlocProvider.of<FormFeasibilityBloc>(context)
+                      .add(SelectFollowUpDateEvent(context: context));
+                },
+              ),
+              onTap: () {
+                BlocProvider.of<FormFeasibilityBloc>(context)
+                    .add(SelectFollowUpDateEvent(context: context));
+              },
+            ),
+          )
         : Container();
   }
 
   Widget _button({required FormFeasibilityDataState dataState}) {
     return dataState.isBtnLoader == false
         ? ButtonWidget(
-        text: AppString.submit,
-        onPressed: () {
-          BlocProvider.of<FormFeasibilityBloc>(context).add(SubmitFormFeasibilityEvent(context: context));
-        })
+            text: AppString.submit,
+            onPressed: () {
+              BlocProvider.of<FormFeasibilityBloc>(context)
+                  .add(SubmitFormFeasibilityEvent(context: context));
+            })
         : DottedLoaderWidget();
   }
 }

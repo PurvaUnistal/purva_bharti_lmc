@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,13 +88,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].menuCode!);
                   await SharedPref.setString(key: PrefsValue.feasibilityName,value: res.user!.accessright![1].menuCode!);
                   await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![2].menuCode!);
-                  List<Accessright> accessrightList = await res.user!.accessright!;
+                  List<Accessright> accessrightList = await res.user!.accessright!.toSet().toList();
                   await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
 
                   Navigator.pushReplacementNamed(event.context, RoutesName.home,);
               } else if(res.user!.role == "ngc"){
                 await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![0].menuCode!);
-                List<Accessright> accessrightList = await res.user!.accessright!;
+                List<Accessright> accessrightList = await res.user!.accessright!.toSet().toList();
                 await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
 
                 Navigator.pushReplacementNamed(event.context, RoutesName.home,);

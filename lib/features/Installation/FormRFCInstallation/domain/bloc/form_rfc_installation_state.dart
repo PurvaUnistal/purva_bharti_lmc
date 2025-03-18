@@ -15,68 +15,68 @@ class FormRFCInstallationInitialState extends FormRFCInstallationState {
   List<Object> get props => [];
 }
 
-class FormInstallationPageLoadState extends FormRFCInstallationState {
+class FormInstallationPageLoadState extends FormRFCInstallationInitialState {
   @override
   List<Object> get props => [];
 }
 
-class FormRFCInstallationDataState extends FormRFCInstallationState {
-  String schema;
-  String userName;
-  String baseUrl;
-  bool isLoader;
-  bool isExtraPipe;
-  bool isInstallRegulator;
-  bool isCheckMeterMismatch;
-  bool isCheckRegulatorMismatch;
-  bool isBtnLoader;
-  bool isDelayReason;
-  bool isRegulator;
-  bool isSelected;
-  File rfcCardPhoto;
-  File pneumaticTestReportPhoto;
-  File installationPhoto;
-  File meterPhoto;
-  File housePhoto;
-  ListOfMeterNo? meterNoValue;
-  LmcReasonModel? delayReasonValue;
-  GetConstantModel? typeOfNrValue;
-  LmcReasonModel? regulatorTypeValue;
-  List<ListOfMeterNo> listOfMeterNumber;
-  List<GetConstantModel> listOfTypeOfNr;
-  List<LmcReasonModel> listOfDelayReason;
-  List<LmcReasonModel> listOfRegulatorType;
-  List<String> listOfMeterNumberSerial;
-  List<String> listOfRegulatorSerial;
-  List<String> listOfSRSerial;
-  List<ListOfMeterNo> listOfRegulator;
-  List<String> listOfQtyLMC;
-  List<FreeMaterialData> listOfAllMaterial;
-  List<GetConstantModel> listOfAllRFC;
-  List<MaterialItem> materialList;
-  FocusNode meterIniReading1FocusNode;
-  FocusNode meterIniReading2FocusNode;
-  FocusNode meterIniReading3FocusNode;
+class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
+ final String schema;
+ final String userName;
+ final String baseUrl;
+ final bool isLoader;
+ final bool isExtraPipe;
+ final bool isInstallRegulator;
+ final bool isCheckMeterMismatch;
+ final bool isCheckRegulatorMismatch;
+ final bool isBtnLoader;
+ final bool isDelayReason;
+ final bool isRegulator;
+ final bool isSelected;
+ final File rfcCardPhoto;
+ final File pneumaticTestReportPhoto;
+ final File installationPhoto;
+ final File meterPhoto;
+ final File housePhoto;
+ final ListOfMeterNo meterNoValue;
+ final LmcReasonModel delayReasonValue;
+ final GetConstantModel typeOfNrValue;
+ final LmcReasonModel regulatorTypeValue;
+ final List<ListOfMeterNo> listOfMeterNumber;
+ final List<GetConstantModel> listOfTypeOfNr;
+ final List<LmcReasonModel> listOfDelayReason;
+ final List<LmcReasonModel> listOfRegulatorType;
+ final List<String> listOfMeterNumberSerial;
+ final List<String> listOfRegulatorSerial;
+ final List<String> listOfSRSerial;
+ final  List<ListOfMeterNo> listOfRegulator;
+ final List<String> listOfQtyLMC;
+ final List<FreeMaterialData> listOfAllMaterial;
+ final List<GetConstantModel> listOfAllRFC;
+ final List<MaterialItem> materialList;
+ final FocusNode meterIniReading1FocusNode;
+ final FocusNode meterIniReading2FocusNode;
+ final FocusNode meterIniReading3FocusNode;
 
-  TextEditingController latOfHouseController;
-  TextEditingController longOfHouseController;
-  TextEditingController srNumberController;
-  TextEditingController ngConversionDateController;
-  TextEditingController extraPipeController;
-  TextEditingController extraPriceController;
-  TextEditingController meterConnectionMeterController;
-  TextEditingController bpNumberController;
-  TextEditingController trNumberController;
-  TextEditingController proposedDateController;
-  TextEditingController rfcDateController;
-  TextEditingController feasibilityDateController;
-  TextEditingController installationDateController;
-  TextEditingController meterIniReading1Controller;
-  TextEditingController meterIniReading2Controller;
-  TextEditingController meterIniReading3Controller;
-  TextEditingController meterInitialReadingController;
-  TextEditingController meterNumberSerialController;
-  TextEditingController regulatorSerialController;
+ final TextEditingController latOfHouseController;
+ final TextEditingController longOfHouseController;
+ final  TextEditingController srNumberController;
+ final TextEditingController ngConversionDateController;
+ final  TextEditingController extraPipeController;
+ final TextEditingController extraPriceController;
+ final TextEditingController meterConnectionMeterController;
+ final TextEditingController bpNumberController;
+ final TextEditingController trNumberController;
+ final TextEditingController proposedDateController;
+ final TextEditingController rfcDateController;
+ final TextEditingController feasibilityDateController;
+ final TextEditingController installationDateController;
+ final TextEditingController meterIniReading1Controller;
+ final TextEditingController meterIniReading2Controller;
+ final TextEditingController meterIniReading3Controller;
+ final TextEditingController meterInitialReadingController;
+ final TextEditingController meterNumberSerialController;
+ final TextEditingController regulatorSerialController;
 
   FormRFCInstallationDataState({
     required this.userName,
@@ -138,7 +138,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
     schema,
     baseUrl,
     userName,

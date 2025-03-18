@@ -10,26 +10,26 @@ class FormFeasibilityInitialState extends FormFeasibilityState {
   List<Object> get props => [];
 }
 
-class FormFeasibilityPageLoadState extends FormFeasibilityState {
+class FormFeasibilityPageLoadState extends FormFeasibilityInitialState {
   @override
   List<Object> get props => [];
 }
 
-class FormFeasibilityDataState extends FormFeasibilityState {
+class FormFeasibilityDataState extends FormFeasibilityInitialState {
   final bool isLoader;
   final bool isBtnLoader;
   final bool isSelected;
   final bool isExtraPipe;
-  String schema;
-  String userName;
-  final GetConstantModel? checkFeasibleValue;
-  final GetConstantModel? lmcReasonValue;
+  final String schema;
+  final String userName;
+  final GetConstantModel checkFeasibleValue;
+  final GetConstantModel lmcReasonValue;
   final List<GetConstantModel> listOfCheckFeasible;
   final List<GetConstantModel> listOfLMCReason;
-  List<GetConstantModel> listOfAllRFC;
-  List<MaterialItem> materialList;
-  TextEditingController extraPipeController;
-  TextEditingController extraPriceController;
+  final List<GetConstantModel> listOfAllRFC;
+  final List<MaterialItem> materialList;
+  final TextEditingController extraPipeController;
+  final TextEditingController extraPriceController;
   final TextEditingController bpNumberController;
   final TextEditingController trNumberController;
   final TextEditingController proposedDateController;
@@ -66,13 +66,13 @@ class FormFeasibilityDataState extends FormFeasibilityState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
         isLoader,
         schema,
         userName,
         isBtnLoader,
         isSelected,
-    isExtraPipe,
+        isExtraPipe,
         checkFeasibleValue,
         lmcReasonValue,
         listOfCheckFeasible,
@@ -80,14 +80,14 @@ class FormFeasibilityDataState extends FormFeasibilityState {
         materialList,
         listOfAllRFC,
         bpNumberController,
-    trNumberController,
+        trNumberController,
         proposedDateController,
         feasibilityDateController,
         assignedDateController,
         reasonController,
         remarksController,
         followUpDateController,
-extraPipeController,
- extraPriceController,
+        extraPipeController,
+        extraPriceController,
       ];
 }

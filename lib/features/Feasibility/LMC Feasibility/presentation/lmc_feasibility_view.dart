@@ -38,9 +38,8 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.green50,
-      body: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
+    return BackgroundWidget(
+     child:  BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
         builder: (context, state) {
           if (state is LMCFeasibilityDataState) {
             return _itemBuilder(dataState: state);
@@ -56,6 +55,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _itemBuilder({required LMCFeasibilityDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.lmcFeaH,
         boolLeading: true,
@@ -78,28 +78,26 @@ class _FeasibilityViewState extends State<FeasibilityView> {
           ),
         ],
       ),
-      body: BackgroundWidget(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                children: [
-                  CommonStyle.vertical(context: context),
-                  _areaDropDown(dataState: dataState),
-                  CommonStyle.vertical(context: context),
-                  _searchTextField(dataState: dataState),
-                ],
-              ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                CommonStyle.vertical(context: context),
+                _areaDropDown(dataState: dataState),
+                CommonStyle.vertical(context: context),
+                _searchTextField(dataState: dataState),
+              ],
             ),
-            CommonStyle.vertical(context: context),
-            Text("Click on row to open Feasibility Form", style: Styles.labels,),
-            Flexible(child: Padding(
-              padding: const EdgeInsets.only(bottom: 18.0),
-              child: _dataTableWidget(dataState: dataState),
-            )),
-          ],
-        ),
+          ),
+          CommonStyle.vertical(context: context),
+          Text("Click on row to open Feasibility Form", style: Styles.labels,),
+          Flexible(child: Padding(
+            padding: const EdgeInsets.only(bottom: 18.0),
+            child: _dataTableWidget(dataState: dataState),
+          )),
+        ],
       ),
     );
   }
@@ -108,7 +106,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return DropdownWidget<GetAllAreaModel>(
       label: AppString.area,
       hint:AppString.area,
-      dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
+      dropdownValue: dataState.allAreaValue.gid != null ? dataState.allAreaValue : null,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
         BlocProvider.of<LMCFeasibilityBloc>(context).add(SelectAreaValueEvent(
@@ -141,7 +139,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _dataTableWidget({required LMCFeasibilityDataState dataState}) {
     return dataState.isAreaFilter == false
-        ? dataState.feasibilityModel?.success == 400
+        ? dataState.feasibilityModel.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
             data: ThemeData(highlightColor: AppColor.primer1),

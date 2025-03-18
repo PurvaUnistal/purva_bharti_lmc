@@ -10,6 +10,7 @@ class BackgroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       body: Stack(
         children: [
           child,
@@ -19,25 +20,22 @@ class BackgroundWidget extends StatelessWidget {
               right: 0,
               child: Container(
                   decoration: BoxDecoration(color: AppColor.primer),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                            child: Text(
-                          AppString.companyName,
-                          textAlign: TextAlign.start,
-                          style: Styles.rel,
-                        )),
-                        Flexible(
-                            child: Text(
-                              AppString.version,
-                              textAlign: TextAlign.start,
-                              style: Styles.rel,
-                            )),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                          child: Text(
+                        AppString.companyName,
+                        textAlign: TextAlign.start,
+                        style: Styles.rel,
+                      )),
+                      Flexible(
+                          child: Text(
+                            AppString.version,
+                            textAlign: TextAlign.start,
+                            style: Styles.rel,
+                          )),
+                    ],
                   )))
         ],
       ),

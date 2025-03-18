@@ -35,10 +35,12 @@ class NGCFormView extends StatefulWidget {
 
 class _NGCFormViewState extends State<NGCFormView> {
   final formGlobalKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     // TODO: implement initState
-    BlocProvider.of<NGCFormBloc>(context).add(NGCFormLoadEvent(context: context));
+    BlocProvider.of<NGCFormBloc>(context)
+        .add(NGCFormLoadEvent(context: context));
     super.initState();
   }
 
@@ -48,9 +50,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: Scaffold(
-        backgroundColor: AppColor.green50,
-        body: BlocBuilder<NGCFormBloc, NGCFormState>(
+      child: BackgroundWidget(
+        child: BlocBuilder<NGCFormBloc, NGCFormState>(
           builder: (context, state) {
             if (state is NGCFormPageLoadState) {
               return Center(
@@ -59,10 +60,8 @@ class _NGCFormViewState extends State<NGCFormView> {
             } else if (state is NGCFormDataState) {
               return Form(
                 key: formKey,
-                child: BackgroundWidget(
-                  child: _buildLayout(
-                    dataState: state,
-                  ),
+                child: _buildLayout(
+                  dataState: state,
                 ),
               );
             } else {
@@ -78,14 +77,17 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
-        context: context,
-        builder: (BuildContext mContext) =>
-            MessageBoxTwoButtonPopWidget(message: "Do you want to NGC  Report??", okButtonText: "Exit", onPressed: () => Navigator.of(context).pop(true)))) ??
+            context: context,
+            builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+                message: "Do you want to NGC  Report??",
+                okButtonText: "Exit",
+                onPressed: () => Navigator.of(context).pop(true)))) ??
         false;
   }
 
   _buildLayout({required NGCFormDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.ngConH,
         boolLeading: true,
@@ -117,17 +119,30 @@ class _NGCFormViewState extends State<NGCFormView> {
             textAlign: TextAlign.center,
           ),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _bpNumberWidget(dataState: dataState), widget2: _dateInstallationController(dataState: dataState),),
+          RowWidget(
+            widget1: _bpNumberWidget(dataState: dataState),
+            widget2: _dateInstallationController(dataState: dataState),
+          ),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _proposedNgcDateController(dataState: dataState), widget2: _rfcDateController(dataState: dataState),),
+          RowWidget(
+            widget1: _proposedNgcDateController(dataState: dataState),
+            widget2: _rfcDateController(dataState: dataState),
+          ),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _extraPipeController(dataState: dataState), widget2: _extraPriceController(dataState: dataState),),
+          RowWidget(
+            widget1: _extraPipeController(dataState: dataState),
+            widget2: _extraPriceController(dataState: dataState),
+          ),
           CommonStyle.vertical(context: context),
-          RowWidget(widget1: _mobileNumberController(dataState: dataState), widget2: _altContactNoWidget(dataState: dataState)),
+          RowWidget(
+              widget1: _mobileNumberController(dataState: dataState),
+              widget2: _altContactNoWidget(dataState: dataState)),
           CommonStyle.vertical(context: context),
-         /* RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
+          /* RowWidget(widget1: _contractorWidget(dataState: dataState), widget2: _emailWidget(dataState: dataState),),
           CommonStyle.vertical(context: context),*/
-          RowWidget(widget1: _burnerNoWidget(dataState: dataState), widget2: _noOfFamilyMembersController(dataState: dataState)),
+          RowWidget(
+              widget1: _burnerNoWidget(dataState: dataState),
+              widget2: _noOfFamilyMembersController(dataState: dataState)),
           CommonStyle.vertical(context: context),
           _emailWidget(dataState: dataState),
           CommonStyle.vertical(context: context),
@@ -139,9 +154,14 @@ class _NGCFormViewState extends State<NGCFormView> {
           CommonStyle.vertical(context: context),
           Row(
             children: [
-              Flexible(flex: 8, child: _meterReplaceController(dataState: dataState)),
+              Flexible(
+                  flex: 8,
+                  child: _meterReplaceController(dataState: dataState)),
               CommonStyle.widthSpace(context: context),
-              Flexible(flex: 4, child: _meterConnectionControllerWidget(dataState: dataState)),
+              Flexible(
+                  flex: 4,
+                  child:
+                      _meterConnectionControllerWidget(dataState: dataState)),
             ],
           ),
           _changeMeterReasonDropdown(dataState: dataState),
@@ -162,13 +182,18 @@ class _NGCFormViewState extends State<NGCFormView> {
           CommonStyle.vertical(context: context),
           Row(
             children: [
-              Flexible(child: RowWidget(widget1: _meterPhoto(dataState: dataState), widget2: _ngcReportPhoto(dataState: dataState))),
+              Flexible(
+                  child: RowWidget(
+                      widget1: _meterPhoto(dataState: dataState),
+                      widget2: _ngcReportPhoto(dataState: dataState))),
               dataState.regulatorCheck == "1"
-                  ? Flexible(child: RowWidget(widget1: _rfcPhoto(dataState: dataState), widget2: _pneumaticPhoto(dataState: dataState)))
-                  :Container(),
+                  ? Flexible(
+                      child: RowWidget(
+                          widget1: _rfcPhoto(dataState: dataState),
+                          widget2: _pneumaticPhoto(dataState: dataState)))
+                  : Container(),
             ],
           ),
-
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
           _submitBtnWidget(dataState: dataState),
@@ -196,6 +221,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.proposedNgcDateController,
     );
   }
+
   Widget _rfcDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       label: AppString.rfcDate,
@@ -204,6 +230,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.rfcDateController,
     );
   }
+
   Widget _extraPipeController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       label: AppString.extraPipe,
@@ -212,6 +239,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.extraPipeController,
     );
   }
+
   Widget _extraPriceController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       label: AppString.extraPrice,
@@ -281,7 +309,6 @@ class _NGCFormViewState extends State<NGCFormView> {
     );
   }
 
-
   Widget _bpNumberWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
@@ -296,10 +323,13 @@ class _NGCFormViewState extends State<NGCFormView> {
     return DropdownWidget<GetConstantModel>(
       label: AppString.meterConnection,
       hint: AppString.meterConnection,
-      dropdownValue: dataState.typeOfNrValue!.value!.isEmpty ? null : dataState.typeOfNrValue,
+      dropdownValue: dataState.typeOfNrValue!.value!.isEmpty
+          ? null
+          : dataState.typeOfNrValue,
       items: dataState.listOfTypeOfNr,
       onChanged: (val) {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectTypeNRValueEvent(typeOfNRValue: val!));
+        BlocProvider.of<NGCFormBloc>(context)
+            .add(SelectTypeNRValueEvent(typeOfNRValue: val!));
       },
     );
   }
@@ -315,11 +345,13 @@ class _NGCFormViewState extends State<NGCFormView> {
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
         onPressed: () {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectNGConversionDateEvent(context: context));
+          BlocProvider.of<NGCFormBloc>(context)
+              .add(SelectNGConversionDateEvent(context: context));
         },
       ),
       onTap: () {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectNGConversionDateEvent(context: context));
+        BlocProvider.of<NGCFormBloc>(context)
+            .add(SelectNGConversionDateEvent(context: context));
       },
     );
   }
@@ -327,37 +359,38 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _delayReasonDropdown({required NGCFormDataState dataState}) {
     return dataState.isDelayReason == true
         ? CommonStyle.col(
-      context: context,
-      child: DropdownWidget<LmcReasonModel>(
-        star: AppString.star,
-        label: AppString.delayStatus,
-        hint: AppString.delayStatus,
-        dropdownValue: dataState.delayReasonValue?.name == null ? null : dataState.delayReasonValue,
-        items: dataState.listOfDelayReason,
-        onChanged: (val) {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectDelayReasonValueEvent(delayReasonValue: val!));
-        },
-      ),
-    )
+            context: context,
+            child: DropdownWidget<LmcReasonModel>(
+              star: AppString.star,
+              label: AppString.delayStatus,
+              hint: AppString.delayStatus,
+              dropdownValue: dataState.delayReasonValue?.name == null
+                  ? null
+                  : dataState.delayReasonValue,
+              items: dataState.listOfDelayReason,
+              onChanged: (val) {
+                BlocProvider.of<NGCFormBloc>(context)
+                    .add(SelectDelayReasonValueEvent(delayReasonValue: val!));
+              },
+            ),
+          )
         : Container();
   }
 
   Widget _delayReasonControllerWidget({required NGCFormDataState dataState}) {
     return dataState.isDelayReason == true
         ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        label: AppString.delayReason,
-        hintText: AppString.delayReason,
-        textInputAction: TextInputAction.done,
-        controller: dataState.delayReasonController,
-        maxLine: 2,
-      ),
-    )
+            context: context,
+            child: TextFieldWidget(
+              label: AppString.delayReason,
+              hintText: AppString.delayReason,
+              textInputAction: TextInputAction.done,
+              controller: dataState.delayReasonController,
+              maxLine: 2,
+            ),
+          )
         : Container();
   }
-
-
 
   Widget _meterPhoto({required NGCFormDataState dataState}) {
     return NetworkImageWidget(
@@ -374,11 +407,13 @@ class _NGCFormViewState extends State<NGCFormView> {
               return ImagePopWidget(
                 onTapCamera: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMeterEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureCameraMeterEvent(context: context));
                 },
                 onTapGallery: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryMeterEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureGalleryMeterEvent(context: context));
                 },
               );
             });
@@ -400,11 +435,13 @@ class _NGCFormViewState extends State<NGCFormView> {
               return ImagePopWidget(
                 onTapCamera: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraRfcEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureCameraRfcEvent(context: context));
                 },
                 onTapGallery: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryRfcEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureGalleryRfcEvent(context: context));
                 },
               );
             });
@@ -426,11 +463,13 @@ class _NGCFormViewState extends State<NGCFormView> {
               return ImagePopWidget(
                 onTapCamera: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraPneumaticEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureCameraPneumaticEvent(context: context));
                 },
                 onTapGallery: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryPneumaticEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureGalleryPneumaticEvent(context: context));
                 },
               );
             });
@@ -438,7 +477,8 @@ class _NGCFormViewState extends State<NGCFormView> {
     );
   }
 
-  Widget _meterConnectionControllerWidget({required NGCFormDataState dataState}) {
+  Widget _meterConnectionControllerWidget(
+      {required NGCFormDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
       label: AppString.meterConnection,
@@ -455,7 +495,8 @@ class _NGCFormViewState extends State<NGCFormView> {
           Checkbox(
             value: dataState.isMeterReplace,
             onChanged: (newVal) {
-              BlocProvider.of<NGCFormBloc>(context).add(SelectMeterReplaceEvent(context: context, meterReplace: newVal!));
+              BlocProvider.of<NGCFormBloc>(context).add(SelectMeterReplaceEvent(
+                  context: context, meterReplace: newVal!));
             },
           ),
           Text(
@@ -470,67 +511,78 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _meterReplaceController({required NGCFormDataState dataState}) {
     return dataState.isMeterReplace == true
         ? AutoCompleteTextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.meterNumber,
-      label: AppString.meterNumber,
-      suggestions: dataState.listOfMeterNumberSerial.length == 0 ? ["No Data Found"] : dataState.listOfMeterNumberSerial,
-      keyboardType: TextInputType.text,
-      controller: dataState.meterNumberSerialController,
-      validator: (value) {
-        if (value != null && value.isNotEmpty && !dataState.listOfMeterNumberSerial.contains(value)) {
-          return AppString.meterNoErrorMsg;
-        }
-        return null;
-      },
-      onSelected: (val) {
-        formKey.currentState?.validate();
-        BlocProvider.of<NGCFormBloc>(context).add(SelectMeterNumberValueEvent(context: context, meterReadingValue: val));
-      },
-      onChanged: (val) async {
-        await formKey.currentState?.validate();
-        BlocProvider.of<NGCFormBloc>(context).add(SelectMeterNumberValueEvent(context: context, meterReadingValue: val));
-      },
-    )
+            star: AppString.star,
+            hintText: AppString.meterNumber,
+            label: AppString.meterNumber,
+            suggestions: dataState.listOfMeterNumberSerial.length == 0
+                ? ["No Data Found"]
+                : dataState.listOfMeterNumberSerial,
+            keyboardType: TextInputType.text,
+            controller: dataState.meterNumberSerialController,
+            validator: (value) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  !dataState.listOfMeterNumberSerial.contains(value)) {
+                return AppString.meterNoErrorMsg;
+              }
+              return null;
+            },
+            onSelected: (val) {
+              formKey.currentState?.validate();
+              BlocProvider.of<NGCFormBloc>(context).add(
+                  SelectMeterNumberValueEvent(
+                      context: context, meterReadingValue: val));
+            },
+            onChanged: (val) async {
+              await formKey.currentState?.validate();
+              BlocProvider.of<NGCFormBloc>(context).add(
+                  SelectMeterNumberValueEvent(
+                      context: context, meterReadingValue: val));
+            },
+          )
         : TextFieldWidget(
-      star: AppString.star,
-      label: AppString.meterNumber,
-      hintText: AppString.meterNumber,
-      controller: dataState.meterSerialController,
-    );
+            star: AppString.star,
+            label: AppString.meterNumber,
+            hintText: AppString.meterNumber,
+            controller: dataState.meterSerialController,
+          );
   }
 
   Widget _changeMeterReasonDropdown({required NGCFormDataState dataState}) {
     return dataState.isMeterReplace == true
         ? CommonStyle.col(
-      context: context,
-      child: DropdownWidget<LmcReasonModel>(
-        star: AppString.star,
-        label: AppString.meterType,
-        hint: AppString.meterType,
-        dropdownValue: dataState.meterTypeValue?.name == null ? null : dataState.meterTypeValue,
-        items: dataState.listOfMeterType,
-        onChanged: (val) {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectMeterTypeValueEvent(
-            meterTypeValue: val!,
-          ));
-        },
-      ),
-    )
+            context: context,
+            child: DropdownWidget<LmcReasonModel>(
+              star: AppString.star,
+              label: AppString.meterType,
+              hint: AppString.meterType,
+              dropdownValue: dataState.meterTypeValue?.name == null
+                  ? null
+                  : dataState.meterTypeValue,
+              items: dataState.listOfMeterType,
+              onChanged: (val) {
+                BlocProvider.of<NGCFormBloc>(context)
+                    .add(SelectMeterTypeValueEvent(
+                  meterTypeValue: val!,
+                ));
+              },
+            ),
+          )
         : Container();
   }
 
   Widget _remarkMeterChangeController({required NGCFormDataState dataState}) {
     return dataState.isMeterReplace == true
         ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        label: AppString.remarks,
-        hintText: AppString.remarks,
-        textInputAction: TextInputAction.done,
-        keyboardType: TextInputType.text,
-        controller: dataState.reasonMeterChangeController,
-      ),
-    )
+            context: context,
+            child: TextFieldWidget(
+              label: AppString.remarks,
+              hintText: AppString.remarks,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              controller: dataState.reasonMeterChangeController,
+            ),
+          )
         : Container();
   }
 
@@ -587,7 +639,8 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.meterIniReading1Controller,
       focusNode: dataState.meterIniReading1FocusNode,
       onFieldSubmitted: (String value) {
-        FocusScope.of(context).requestFocus(dataState.meterIniReading1FocusNode);
+        FocusScope.of(context)
+            .requestFocus(dataState.meterIniReading1FocusNode);
       },
       onChanged: (val) {
         if (dataState.meterIniReading1Controller.text.length == 1) {
@@ -609,7 +662,8 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.meterIniReading2Controller,
       focusNode: dataState.meterIniReading2FocusNode,
       onFieldSubmitted: (String value) {
-        FocusScope.of(context).requestFocus(dataState.meterIniReading2FocusNode);
+        FocusScope.of(context)
+            .requestFocus(dataState.meterIniReading2FocusNode);
       },
       onChanged: (val) {
         if (dataState.meterIniReading2Controller.text.length == 1) {
@@ -631,7 +685,8 @@ class _NGCFormViewState extends State<NGCFormView> {
       controller: dataState.meterIniReading3Controller,
       focusNode: dataState.meterIniReading3FocusNode,
       onFieldSubmitted: (String value) {
-        FocusScope.of(context).requestFocus(dataState.meterIniReading3FocusNode);
+        FocusScope.of(context)
+            .requestFocus(dataState.meterIniReading3FocusNode);
       },
       onChanged: (val) {
         if (dataState.meterIniReading3Controller.text.length == 1) {
@@ -651,7 +706,9 @@ class _NGCFormViewState extends State<NGCFormView> {
           Checkbox(
             value: dataState.isRegularReplace,
             onChanged: (newVal) {
-              BlocProvider.of<NGCFormBloc>(context).add(SelectRegularReplaceEvent(context: context, regularReplace: newVal!));
+              BlocProvider.of<NGCFormBloc>(context).add(
+                  SelectRegularReplaceEvent(
+                      context: context, regularReplace: newVal!));
             },
           ),
           Text(
@@ -664,233 +721,273 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _regulatorTypeDropdown({required NGCFormDataState dataState}) {
-    return dataState.isRegularReplace == true ? DropdownWidget<LmcReasonModel>(
-      star: AppString.star,
-      label: AppString.regulatorType,
-      hint: AppString.regulatorType,
-      dropdownValue: dataState.regulatorTypeValue?.name == null ? null : dataState.regulatorTypeValue,
-      items: dataState.listOfRegulatorType,
-      onChanged: (val) {
-        BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeValueEvent(regulatorTypeValue: val!, context: context));
-      },
-    ) : TextFieldWidget(
-      star: AppString.star,
-      label: AppString.regulatorType,
-      hintText: AppString.regulatorType,
-      enabled: false,
-      controller: dataState.regulatorTypeController,
-    );
+    return dataState.isRegularReplace == true
+        ? DropdownWidget<LmcReasonModel>(
+            star: AppString.star,
+            label: AppString.regulatorType,
+            hint: AppString.regulatorType,
+            dropdownValue: dataState.regulatorTypeValue?.name == null
+                ? null
+                : dataState.regulatorTypeValue,
+            items: dataState.listOfRegulatorType,
+            onChanged: (val) {
+              BlocProvider.of<NGCFormBloc>(context).add(
+                  SelectRegulatorTypeValueEvent(
+                      regulatorTypeValue: val!, context: context));
+            },
+          )
+        : TextFieldWidget(
+            star: AppString.star,
+            label: AppString.regulatorType,
+            hintText: AppString.regulatorType,
+            enabled: false,
+            controller: dataState.regulatorTypeController,
+          );
   }
 
   Widget _regulatorController({required NGCFormDataState dataState}) {
-    return dataState.isRegularReplace == true ? dataState.isRegulator == false
-        ? dataState.regulatorTypeValue?.name != null
-        ? CommonStyle.col(
-      context: context,
-      child: AutoCompleteTextFieldWidget(
-        star: AppString.star,
-        label: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        hintText: dataState.regulatorTypeValue?.name != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        suggestions: dataState.listOfRegulatorSerial.length == 0 ? ["No Data Found"] : dataState.listOfRegulatorSerial,
-        keyboardType: TextInputType.text,
-        controller: dataState.regulatorSerialSearchController,
-        onSelected: (val) {
-          formKey.currentState?.validate();
-          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-        },
-        validator: (value) {
-          if (value != null && value.isNotEmpty && !dataState.listOfRegulatorSerial.contains(value)) {
-            return AppString.regulatorNoErrorMsg;
-          }
-          return null;
-        },
-        onChanged: (val) async {
-          await formKey.currentState?.validate();
-          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorsValueEvent(context: context, regulatorsValue: val));
-        },
-      ),
-    )
-        : Container() : DottedLoaderWidget()
+    return dataState.isRegularReplace == true
+        ? dataState.isRegulator == false
+            ? dataState.regulatorTypeValue?.name != null
+                ? CommonStyle.col(
+                    context: context,
+                    child: AutoCompleteTextFieldWidget(
+                      star: AppString.star,
+                      label: dataState.regulatorTypeValue?.name != "PRV"
+                          ? AppString.meterRegulator
+                          : AppString.regulator,
+                      hintText: dataState.regulatorTypeValue?.name != "PRV"
+                          ? AppString.meterRegulator
+                          : AppString.regulator,
+                      suggestions: dataState.listOfRegulatorSerial.length == 0
+                          ? ["No Data Found"]
+                          : dataState.listOfRegulatorSerial,
+                      keyboardType: TextInputType.text,
+                      controller: dataState.regulatorSerialSearchController,
+                      onSelected: (val) {
+                        formKey.currentState?.validate();
+                        BlocProvider.of<NGCFormBloc>(context).add(
+                            SelectRegulatorsValueEvent(
+                                context: context, regulatorsValue: val));
+                      },
+                      validator: (value) {
+                        if (value != null &&
+                            value.isNotEmpty &&
+                            !dataState.listOfRegulatorSerial.contains(value)) {
+                          return AppString.regulatorNoErrorMsg;
+                        }
+                        return null;
+                      },
+                      onChanged: (val) async {
+                        await formKey.currentState?.validate();
+                        BlocProvider.of<NGCFormBloc>(context).add(
+                            SelectRegulatorsValueEvent(
+                                context: context, regulatorsValue: val));
+                      },
+                    ),
+                  )
+                : Container()
+            : DottedLoaderWidget()
         : CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        star: AppString.star,
-        label:  dataState.regulatorTypeController.text != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        hintText:  dataState.regulatorTypeController.text != "PRV" ? AppString.meterRegulator : AppString.regulator,
-        enabled: false,
-        controller: dataState.regulatorSerialController,
-      ),
-    );
+            context: context,
+            child: TextFieldWidget(
+              star: AppString.star,
+              label: dataState.regulatorTypeController.text != "PRV"
+                  ? AppString.meterRegulator
+                  : AppString.regulator,
+              hintText: dataState.regulatorTypeController.text != "PRV"
+                  ? AppString.meterRegulator
+                  : AppString.regulator,
+              enabled: false,
+              controller: dataState.regulatorSerialController,
+            ),
+          );
   }
 
   Widget _srNumberController({required NGCFormDataState dataState}) {
     return dataState.isRegulator == false
         ? dataState.regulatorTypeValue?.name == "SR"
-        ? dataState.isRegularReplace == true ? CommonStyle.col(
-      context: context,
-      child: AutoCompleteTextFieldWidget(
-        star: AppString.star,
-        label: AppString.srNumber,
-        hintText: AppString.srNumber,
-        suggestions: dataState.listOfSRSerial.length == 0 ? ["No Data Found"] : dataState.listOfSRSerial,
-        keyboardType: TextInputType.text,
-        controller: dataState.srNumberSearchController,
-        onSelected: (val) {
-          formKey.currentState?.validate();
-          BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
-        },
-        validator: (value) {
-          if (value != null && value.isNotEmpty && !dataState.listOfSRSerial.contains(value)) {
-            return AppString.srNoErrorMsg;
-          }
-          return null;
-        },
-        onChanged: (val) async {
-          await formKey.currentState?.validate();
-          BlocProvider.of<NGCFormBloc>(context).add(SelectSRegulatorsEvent(context: context, sRegulators: val));
-        },
-      ),
-    ) : CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        star: AppString.star,
-        label:  AppString.srNumber,
-        hintText:  AppString.srNumber,
-        enabled: false,
-        controller: dataState.srSerialNumberController,
-      ),
-    )
-        : Container()
+            ? dataState.isRegularReplace == true
+                ? CommonStyle.col(
+                    context: context,
+                    child: AutoCompleteTextFieldWidget(
+                      star: AppString.star,
+                      label: AppString.srNumber,
+                      hintText: AppString.srNumber,
+                      suggestions: dataState.listOfSRSerial.length == 0
+                          ? ["No Data Found"]
+                          : dataState.listOfSRSerial,
+                      keyboardType: TextInputType.text,
+                      controller: dataState.srNumberSearchController,
+                      onSelected: (val) {
+                        formKey.currentState?.validate();
+                        BlocProvider.of<NGCFormBloc>(context).add(
+                            SelectSRegulatorsEvent(
+                                context: context, sRegulators: val));
+                      },
+                      validator: (value) {
+                        if (value != null &&
+                            value.isNotEmpty &&
+                            !dataState.listOfSRSerial.contains(value)) {
+                          return AppString.srNoErrorMsg;
+                        }
+                        return null;
+                      },
+                      onChanged: (val) async {
+                        await formKey.currentState?.validate();
+                        BlocProvider.of<NGCFormBloc>(context).add(
+                            SelectSRegulatorsEvent(
+                                context: context, sRegulators: val));
+                      },
+                    ),
+                  )
+                : CommonStyle.col(
+                    context: context,
+                    child: TextFieldWidget(
+                      star: AppString.star,
+                      label: AppString.srNumber,
+                      hintText: AppString.srNumber,
+                      enabled: false,
+                      controller: dataState.srSerialNumberController,
+                    ),
+                  )
+            : Container()
         : DottedLoaderWidget();
   }
 
   Widget _changeRegulatorReasonDropdown({required NGCFormDataState dataState}) {
     return dataState.isRegularReplace == true
         ? CommonStyle.col(
-      context: context,
-      child: DropdownWidget<LmcReasonModel>(
-        star: AppString.star,
-        label: AppString.regularType,
-        hint: AppString.regularType,
-        dropdownValue: dataState.regulatorTypeReasonValue?.name == null ? null : dataState.regulatorTypeReasonValue,
-        items: dataState.listOfRegulatorTypeReason,
-        onChanged: (val) {
-          BlocProvider.of<NGCFormBloc>(context).add(SelectRegulatorTypeReasonValueEvent(
-            regulatorTypeReasonValue: val!,
-          ));
-        },
-      ),
-    )
+            context: context,
+            child: DropdownWidget<LmcReasonModel>(
+              star: AppString.star,
+              label: AppString.regularType,
+              hint: AppString.regularType,
+              dropdownValue: dataState.regulatorTypeReasonValue?.name == null
+                  ? null
+                  : dataState.regulatorTypeReasonValue,
+              items: dataState.listOfRegulatorTypeReason,
+              onChanged: (val) {
+                BlocProvider.of<NGCFormBloc>(context)
+                    .add(SelectRegulatorTypeReasonValueEvent(
+                  regulatorTypeReasonValue: val!,
+                ));
+              },
+            ),
+          )
         : Container();
   }
 
-  Widget _remarkRegulatorChangeController({required NGCFormDataState dataState}) {
+  Widget _remarkRegulatorChangeController(
+      {required NGCFormDataState dataState}) {
     return dataState.isRegularReplace == true
         ? CommonStyle.col(
-      context: context,
-      child: TextFieldWidget(
-        label: AppString.remarks,
-        hintText: AppString.remarks,
-        textInputAction: TextInputAction.done,
-        keyboardType: TextInputType.text,
-        controller: dataState.reasonRegulatorChangeController,
-      ),
-    )
+            context: context,
+            child: TextFieldWidget(
+              label: AppString.remarks,
+              hintText: AppString.remarks,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              controller: dataState.reasonRegulatorChangeController,
+            ),
+          )
         : Container();
   }
 
   Widget _locationOfMR({required NGCFormDataState dataState}) {
     return dataState.regulatorTypeValue?.name == "SR"
         ? CommonStyle.col(
-      context: context,
-      child: RowWidget(
-        widget1: TextFieldWidget(
-          enabled: false,
-          star: AppString.star,
-          hintText: AppString.latOfMR,
-          label: AppString.latOfMR,
-          controller: dataState.latOfMRController,
-        ),
-        widget2: TextFieldWidget(
-          enabled: false,
-          star: AppString.star,
-          hintText: AppString.longOfMR,
-          label: AppString.longOfMR,
-          controller: dataState.longOfMRController,
-        ),
-      ),
-    )
+            context: context,
+            child: RowWidget(
+              widget1: TextFieldWidget(
+                enabled: false,
+                star: AppString.star,
+                hintText: AppString.latOfMR,
+                label: AppString.latOfMR,
+                controller: dataState.latOfMRController,
+              ),
+              widget2: TextFieldWidget(
+                enabled: false,
+                star: AppString.star,
+                hintText: AppString.longOfMR,
+                label: AppString.longOfMR,
+                controller: dataState.longOfMRController,
+              ),
+            ),
+          )
         : Container();
   }
 
   Widget _locationOfSR({required NGCFormDataState dataState}) {
     return dataState.regulatorTypeValue?.name == "SR"
         ? CommonStyle.col(
-      context: context,
-      child: RowWidget(
-        widget1: TextFieldWidget(
-          enabled: false,
-          star: AppString.star,
-          hintText: AppString.latOfSR,
-          label: AppString.latOfSR,
-          controller: dataState.latOfSRController,
-        ),
-        widget2: TextFieldWidget(
-          enabled: false,
-          star: AppString.star,
-          hintText: AppString.longOfSR,
-          label: AppString.longOfSR,
-          controller: dataState.longOfSRController,
-        ),
-      ),
-    )
+            context: context,
+            child: RowWidget(
+              widget1: TextFieldWidget(
+                enabled: false,
+                star: AppString.star,
+                hintText: AppString.latOfSR,
+                label: AppString.latOfSR,
+                controller: dataState.latOfSRController,
+              ),
+              widget2: TextFieldWidget(
+                enabled: false,
+                star: AppString.star,
+                hintText: AppString.longOfSR,
+                label: AppString.longOfSR,
+                controller: dataState.longOfSRController,
+              ),
+            ),
+          )
         : Container();
   }
 
   Widget _photoWidget({required NGCFormDataState dataState}) {
     return dataState.regulatorTypeValue?.name == "SR"
         ? CommonStyle.col(
-        context: context,
-        child: RowWidget(
-          widget1: ImageWidget(
-            star: AppString.star,
-            title: AppString.mrPhoto,
-            imgFile: dataState.mrPhoto,
-            onPressed: () {
-              showModalBottomSheet(
-                  enableDrag: true,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CameraPopWidget(
-                      onTapCamera: () async {
-                        Navigator.of(context).pop();
-                        BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraMREvent());
-                      },
-                    );
-                  });
-            },
-          ),
-          widget2: ImageWidget(
-            star: AppString.star,
-            title: AppString.srPhoto,
-            imgFile: dataState.srPhoto,
-            onPressed: () {
-              showModalBottomSheet(
-                  enableDrag: true,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CameraPopWidget(
-                      onTapCamera: () async {
-                        Navigator.of(context).pop();
-                        BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraSREvent());
-                      },
-                    );
-                  });
-            },
-          ),
-        ))
+            context: context,
+            child: RowWidget(
+              widget1: ImageWidget(
+                star: AppString.star,
+                title: AppString.mrPhoto,
+                imgFile: dataState.mrPhoto,
+                onPressed: () {
+                  showModalBottomSheet(
+                      enableDrag: true,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CameraPopWidget(
+                          onTapCamera: () async {
+                            Navigator.of(context).pop();
+                            BlocProvider.of<NGCFormBloc>(context)
+                                .add(CaptureCameraMREvent(context: context));
+                          },
+                        );
+                      });
+                },
+              ),
+              widget2: ImageWidget(
+                star: AppString.star,
+                title: AppString.srPhoto,
+                imgFile: dataState.srPhoto,
+                onPressed: () {
+                  showModalBottomSheet(
+                      enableDrag: true,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CameraPopWidget(
+                          onTapCamera: () async {
+                            Navigator.of(context).pop();
+                            BlocProvider.of<NGCFormBloc>(context)
+                                .add(CaptureCameraSREvent(context: context));
+                          },
+                        );
+                      });
+                },
+              ),
+            ))
         : Container();
   }
 
@@ -907,11 +1004,13 @@ class _NGCFormViewState extends State<NGCFormView> {
               return ImagePopWidget(
                 onTapCamera: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureCameraNGCReportEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureCameraNGCReportEvent(context: context));
                 },
                 onTapGallery: () async {
                   Navigator.of(context).pop();
-                  BlocProvider.of<NGCFormBloc>(context).add(CaptureGalleryNGCReportEvent());
+                  BlocProvider.of<NGCFormBloc>(context)
+                      .add(CaptureGalleryNGCReportEvent(context: context));
                 },
               );
             });
@@ -922,15 +1021,15 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _submitBtnWidget({required NGCFormDataState dataState}) {
     return dataState.isBtnLoader == false
         ? Center(
-      child: ButtonWidget(
-          text: AppString.submit,
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
-            BlocProvider.of<NGCFormBloc>(context).add(NGCSubmitEvent(
-              context: context,
-            ));
-          }),
-    )
+            child: ButtonWidget(
+                text: AppString.submit,
+                onPressed: () async {
+                  FocusScope.of(context).unfocus();
+                  BlocProvider.of<NGCFormBloc>(context).add(NGCSubmitEvent(
+                    context: context,
+                  ));
+                }),
+          )
         : DottedLoaderWidget();
   }
 }

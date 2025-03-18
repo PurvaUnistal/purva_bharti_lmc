@@ -1,18 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:lmc/Utils/Environment/AppConfig.dart';
-import 'package:lmc/Utils/Environment/singleton.dart';
-
 class Apis {
- /* static BuildContext? context = Singleton.instanceInit()?.context;
-  static final String? baseUrl = AppConfig.of(context!)!.getBaseUrl;*/
 
-  static String baseLiveUrl = 'http://pbgpl.smartgasnet.com/api/';
-  static String baseUatUrl = 'http://142.79.231.30:9097/api/';
-
- // static String baseUrl = 'http://142.79.231.30:9097/api/';
-   static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
-  // static String baseUrl = 'https://nmpplstations1.smartgasnet.com/api/';
-  static String basePath = 'http://142.79.231.30:9097/';
+  // static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+   static String baseUrl = 'https://pbgpluat.smartgasnet.com/api/';
+  static String basePath = 'https://pbgpluat.smartgasnet.com/';
 
   static String loginUrl = baseUrl + "auth";
   static String areaList = baseUrl + "getAllArea?schema=";

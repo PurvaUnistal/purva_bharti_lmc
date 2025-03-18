@@ -1,21 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'res/app_color.dart';
+import 'res/app_styles.dart';
 
 class AppUpdateMessage {
   static showAlertDialog(
-      {required BuildContext context, required VoidCallback onPressed, bool? isLater}) {
+      {required BuildContext context, required String url, bool? isLater}) {
     Widget cancelButton = TextButton(
       child: isLater == null
           ? Text(
-              "Update Later",style: TextStyle(fontSize: 14),
-
+              "Update Later",
+              style: Styles.labels,
             )
           : isLater == true
               ? const SizedBox.shrink()
               : Text(
-                  "Update Later",style: TextStyle(fontSize: 14),
+                  "Update Later",
+                  style: Styles.labels,
                 ),
       onPressed: () {
         Navigator.pop(context);
@@ -23,21 +24,31 @@ class AppUpdateMessage {
     );
     Widget continueButton = TextButton(
       child: Text(
-        "Update Now",style: TextStyle(fontSize: 14,color: AppColor.primer, fontWeight: FontWeight.w700),
+        "Update Now",
+        style: Styles.labels,
       ),
-      onPressed:onPressed
+      onPressed: () async {
+        if (!await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.externalApplication,
+        )) {
+          throw Exception('Could not launch ');
+        }
+      },
     );
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
+    AlertDialog alert = AlertDialog(
       title: Builder(builder: (context) {
         return Text(
-          "Update Available",style: TextStyle(fontSize: 16,color: AppColor.primer, fontWeight: FontWeight.w700),
+          "Update Available",
+          style: Styles.labels,
         );
       }),
       content: Text(
-        "Please update the app to continue",style: TextStyle(fontSize: 14),
+        "Please update the app to continue",
+        style: Styles.texts,
       ),
       actions: [
-       // cancelButton,
+        // cancelButton,
         continueButton,
       ],
     );

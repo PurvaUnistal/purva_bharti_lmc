@@ -20,11 +20,11 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   bool isAreaFilter = false;
   String schema = "";
   String userName = "";
-  GetAllAreaModel? areaValue;
+  GetAllAreaModel areaValue = GetAllAreaModel();
   List<GetAllAreaModel> listOfAllArea = [];
   List<InstallationByNgcData> listOfInstallationByNgc = [];
   List<InstallationByNgcData> listOfFilterInstallationByNgc = [];
-  LMCInstallationByNgcModel? lmcInstallationByNgcModel;
+  LMCInstallationByNgcModel lmcInstallationByNgcModel = LMCInstallationByNgcModel();
   TextEditingController bpNumberController = TextEditingController();
 
   _pageLoad(NgcTablePageLoadEvent event, emit) async {
@@ -32,16 +32,26 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     isLoader = false;
     isAreaFilter = false;
     pageNo = 1;
-    areaValue = null;
+    areaValue = GetAllAreaModel();
     listOfAllArea = [];
     listOfInstallationByNgc = [];
     bpNumberController.text = "";
     lmcInstallationByNgcModel = LMCInstallationByNgcModel();
-    schema = await SharedPref.getString(key: PrefsValue.schema);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
-    await fetchAllArea(context: event.context);
-    await fetchInstallationByNgc(context: event.context, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
-    _eventCompleted(emit);
+    final results = await Future.wait(<Future>[
+      SharedPref.getString(key: PrefsValue.schema),
+      SharedPref.getString(key: PrefsValue.userName),
+    ]);
+    schema = results[0] ?? "";
+    userName = results[1] ?? "";
+
+    await Future.wait(<Future>[
+      fetchAllArea(context: event.context),
+      fetchInstallationByNgc(
+        context: event.context,
+        bpNumber: bpNumberController.text.trim().toString(),
+        areaId: areaValue.gid == null ? "" : areaValue.gid!,
+      ),
+    ]);_eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
@@ -76,8 +86,8 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     var res = await NgcTableHelper.getLmcInstallationByNgcApi(context: context, bpNumber: bpNumber, areaId: areaId);
     if (res != null) {
       lmcInstallationByNgcModel = res;
-      if (lmcInstallationByNgcModel?.success != 400) {
-        listOfInstallationByNgc = lmcInstallationByNgcModel!.data!;
+      if (lmcInstallationByNgcModel.success != 400) {
+        listOfInstallationByNgc = lmcInstallationByNgcModel.data!;
         listOfFilterInstallationByNgc = listOfInstallationByNgc;
       }
     }

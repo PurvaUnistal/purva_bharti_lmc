@@ -12,7 +12,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
 
   bool isLoader = false;
   List<FeasibilityData> listOfFeasibilityRow = [];
-  FeasibilityModel? feasibilityModel;
+  FeasibilityModel feasibilityModel = FeasibilityModel();
   FeasibilityData feasibilityRowsModel = FeasibilityData();
   String crNumber = '';
   String bpNumber = '';
@@ -36,33 +36,52 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   String pinCode = '';
 
   _pageLoad(PreviewFeasibilityPageLoadEvent event, emit) async {
-    emit(PreviewFeasibilityInitialState());
+    emit(PreviewFeasibilityPageLoadState());
     isLoader = false;
     feasibilityRowsModel = FeasibilityData();
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    crNumber = await SharedPref.getString(key: PrefsValue.crNumber);
-    bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
-    chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
-    areaName = await SharedPref.getString(key: PrefsValue.areaName);
-    firstName = await SharedPref.getString(key: PrefsValue.firstName);
-    lastName = await SharedPref.getString(key: PrefsValue.lastName);
-    mobileNumber = await SharedPref.getString(key: PrefsValue.mobileNumber);
-    guardianName = await SharedPref.getString(key: PrefsValue.guardianName);
-    proCateName = await SharedPref.getString(key: PrefsValue.proCateName);
-    propClass = await SharedPref.getString(key: PrefsValue.propClass);
-    buildingNumber = await SharedPref.getString(key: PrefsValue.buildingNumber);
-    houseNumber = await SharedPref.getString(key: PrefsValue.houseNumber);
-    locality = await SharedPref.getString(key: PrefsValue.locality);
-    colony = await SharedPref.getString(key: PrefsValue.address2);
-    town = await SharedPref.getString(key: PrefsValue.town);
-    street = await SharedPref.getString(key: PrefsValue.state);
-    district = await SharedPref.getString(key: PrefsValue.district);
-    pinCode = await SharedPref.getString(key: PrefsValue.pinCode);
+    final results = await Future.wait(<Future>[
+      SharedPref.getString(key: PrefsValue.userName),
+      SharedPref.getString(key: PrefsValue.schema),
+      SharedPref.getString(key: PrefsValue.crNumber),
+      SharedPref.getString(key: PrefsValue.bpNumber),
+      SharedPref.getString(key: PrefsValue.chargeArea),
+      SharedPref.getString(key: PrefsValue.areaName),
+      SharedPref.getString(key: PrefsValue.firstName),
+      SharedPref.getString(key: PrefsValue.lastName),
+      SharedPref.getString(key: PrefsValue.mobileNumber),
+      SharedPref.getString(key: PrefsValue.guardianName),
+      SharedPref.getString(key: PrefsValue.proCateName),
+      SharedPref.getString(key: PrefsValue.propClass),
+      SharedPref.getString(key: PrefsValue.buildingNumber),
+      SharedPref.getString(key: PrefsValue.houseNumber),
+      SharedPref.getString(key: PrefsValue.locality),
+      SharedPref.getString(key: PrefsValue.address2), // for colony
+      SharedPref.getString(key: PrefsValue.town),
+      SharedPref.getString(key: PrefsValue.state), // for street
+      SharedPref.getString(key: PrefsValue.district),
+      SharedPref.getString(key: PrefsValue.pinCode),
+    ]);
+
+    userName = results[0] ?? "";
+    schema = results[1] ?? "";
+    crNumber = results[2] ?? "";
+    bpNumber = results[3] ?? "";
+    chargeArea = results[4] ?? "";
+    areaName = results[5] ?? "";
+    firstName = results[6] ?? "";
+    lastName = results[7] ?? "";
+    mobileNumber = results[8] ?? "";
+    guardianName = results[9] ?? "";
+    proCateName = results[10] ?? "";
+    propClass = results[11] ?? "";
+    buildingNumber = results[12] ?? "";
+    houseNumber = results[13] ?? "";
+    locality = results[14] ?? "";
+    colony = results[15] ?? "";
+    town = results[16] ?? "";
+    street = results[17] ?? "";
+    district = results[18] ?? "";
+    pinCode = results[19] ?? "";
     _eventCompleted(emit);
   }
 

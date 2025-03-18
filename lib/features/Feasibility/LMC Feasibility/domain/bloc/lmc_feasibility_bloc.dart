@@ -21,30 +21,40 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   bool isLoader = false;
   bool isAreaFilter = false;
   int pageNo = 1;
-  GetAllAreaModel? areaValue;
+  GetAllAreaModel areaValue = GetAllAreaModel();
   List<GetAllAreaModel> listOfAllArea = [];
   List<FeasibilityData> listOfFeasibilityRow = [];
   List<FeasibilityData> listOfFilterFeasibilityRow = [];
-  FeasibilityModel? feasibilityModel;
+  FeasibilityModel feasibilityModel = FeasibilityModel();
   ScrollController scrollController = ScrollController();
   TextEditingController bpNumberController = TextEditingController();
 
   _pageLoad(LMCFeasibilityPageLoadEvent event, emit) async {
-    emit(LMCFeasibilityInitialState());
+    emit(LMCFeasibilityPageLoadState());
     isLoader = false;
     isAreaFilter = false;
-    areaValue = null;
+    areaValue = GetAllAreaModel();
     pageNo = 1;
     listOfAllArea = [];
     listOfFeasibilityRow = [];
     bpNumberController.text = "";
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
-    schema = await SharedPref.getString(key: PrefsValue.schema);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
-    await fetchAllArea(context: event.context);
-    await fetchFeasibility(context: event.context, pageNumber: 1, bpNumber: bpNumberController.text.trim().toString(), areaId: areaValue == null ? "" : areaValue!.gid!);
-    _eventCompleted(emit);
+    final results = await Future.wait(<Future>[
+      SharedPref.getString(key: PrefsValue.schema),
+      SharedPref.getString(key: PrefsValue.userName),
+    ]);
+    schema = results[0] ?? "";
+    userName = results[1] ?? "";
+    await Future.wait(<Future>[
+      fetchAllArea(context: event.context),
+      fetchFeasibility(
+        context: event.context,
+        pageNumber: 1,
+        bpNumber: bpNumberController.text.trim(),
+        areaId: areaValue.gid ?? "",
+      ),
+    ]);_eventCompleted(emit);
   }
 
   _selectAreaValue(SelectAreaValueEvent event, emit) async {
@@ -79,8 +89,8 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     var res = await LMCFeasibilityHelper.getFeasibilityApi(context: context, bpNumber: bpNumber, page: pageNumber.toString(), areaId: areaId);
     if (res != null) {
       feasibilityModel = res;
-      if (feasibilityModel?.success != 400) {
-        listOfFeasibilityRow = feasibilityModel!.data!;
+      if (feasibilityModel.success != 400) {
+        listOfFeasibilityRow = feasibilityModel.data!;
         listOfFilterFeasibilityRow = listOfFeasibilityRow;
       }
     }

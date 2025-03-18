@@ -135,73 +135,97 @@ class SelectLocationOfMREvent extends NGCFormEvent {
 }
 
 class CaptureGalleryMeterEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGalleryMeterEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraMeterEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraMeterEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureGalleryNGCReportEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGalleryNGCReportEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraNGCReportEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraNGCReportEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureGalleryMREvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGalleryMREvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraMREvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraMREvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureGallerySREvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGallerySREvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraSREvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraSREvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 class CaptureGalleryPneumaticEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGalleryPneumaticEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraPneumaticEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraPneumaticEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 class CaptureGalleryRfcEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureGalleryRfcEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class CaptureCameraRfcEvent extends NGCFormEvent {
+  final BuildContext context;
+  CaptureCameraRfcEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class NGCSubmitEvent extends NGCFormEvent {

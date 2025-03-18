@@ -8,37 +8,36 @@ class PreviewFeasibilityInitialState extends PreviewFeasibilityState {
   List<Object> get props => [];
 }
 
-class PreviewFeasibilityPageLoadState extends PreviewFeasibilityState {
+class PreviewFeasibilityPageLoadState extends PreviewFeasibilityInitialState {
   @override
   List<Object> get props => [];
 }
 
-//ignore: must_be_immutable
-class PreviewFeasibilityDataState extends PreviewFeasibilityState {
+class PreviewFeasibilityDataState extends PreviewFeasibilityInitialState {
   final bool isLoader;
-  String schema;
-  String userName;
-  String crNumber;
-  String bpNumber;
-  String chargeArea;
-  String areaName;
-  String firstName;
-  String lastName;
-  String mobileNumber;
-  String guardianName;
-  String proCateName;
-  String propClass;
-  String buildingNumber;
-  String houseNumber;
-  String colony;
-  String locality;
-  String street;
-  String town;
-  String district;
-  String pinCode;
-  FeasibilityData? feasibilityRowsModel;
-  List<FeasibilityData> listOfFeasibilityRow;
-  FeasibilityModel? feasibilityModel;
+  final String schema;
+  final String userName;
+  final String crNumber;
+  final String bpNumber;
+  final String chargeArea;
+  final String areaName;
+  final String firstName;
+  final String lastName;
+  final String mobileNumber;
+  final String guardianName;
+  final String proCateName;
+  final String propClass;
+  final String buildingNumber;
+  final String houseNumber;
+  final String colony;
+  final String locality;
+  final String street;
+  final String town;
+  final String district;
+  final String pinCode;
+  final FeasibilityData feasibilityRowsModel;
+  final List<FeasibilityData> listOfFeasibilityRow;
+  final FeasibilityModel feasibilityModel;
 
   PreviewFeasibilityDataState({
     required this.isLoader,
@@ -69,13 +68,12 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
         schema,
         userName,
         isLoader,
-  crNumber,
-   bpNumber,
-    
+        crNumber,
+        bpNumber,
         chargeArea,
         areaName,
         street,

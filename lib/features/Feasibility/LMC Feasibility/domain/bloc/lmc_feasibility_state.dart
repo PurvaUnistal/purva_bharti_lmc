@@ -11,23 +11,22 @@ class LMCFeasibilityInitialState extends LMCFeasibilityState {
   List<Object> get props => [];
 }
 
-class LMCFeasibilityPageLoadState extends LMCFeasibilityState {
+class LMCFeasibilityPageLoadState extends LMCFeasibilityInitialState {
   @override
   List<Object> get props => [];
 }
 
-//ignore: must_be_immutable
-class LMCFeasibilityDataState extends LMCFeasibilityState {
+class LMCFeasibilityDataState extends LMCFeasibilityInitialState {
   final bool isLoader;
   final bool isAreaFilter;
-  final dynamic allAreaValue;
+  final GetAllAreaModel allAreaValue;
   final int pageNo;
   final String schema;
   final String userName;
   final List<GetAllAreaModel> listOfAllArea;
-  List<FeasibilityData> listOfFilterFeasibilityRow;
-  FeasibilityModel? feasibilityModel;
-  TextEditingController bpNumberController;
+  final List<FeasibilityData> listOfFilterFeasibilityRow;
+  final FeasibilityModel feasibilityModel;
+  final TextEditingController bpNumberController;
   final ScrollController scrollController;
 
   LMCFeasibilityDataState({
@@ -46,7 +45,7 @@ class LMCFeasibilityDataState extends LMCFeasibilityState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
         schema,
         userName,
         isAreaFilter,

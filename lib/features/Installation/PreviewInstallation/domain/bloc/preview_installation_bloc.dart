@@ -37,33 +37,52 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
   _pageLoad(PreviewInstallationPageLoadEvent event, emit) async {
     emit(PreviewInstallationInitialState());
     isLoader = false;
-    custRegNo = await SharedPref.getString(
-      key: PrefsValue.crNumber,
-    );
-    feasibilityVisitDate = await SharedPref.getString(
-      key: PrefsValue.feasibilityVisitDate,
-    );
-    bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
-    trNumber = await SharedPref.getString(key: PrefsValue.crNumber);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
-    schema = await SharedPref.getString(key: PrefsValue.schema);
-    chargeArea = await SharedPref.getString(key: PrefsValue.chargeArea);
-    areaName = await SharedPref.getString(key: PrefsValue.areaName);
-    firstName = await SharedPref.getString(key: PrefsValue.firstName);
-    lastName = await SharedPref.getString(key: PrefsValue.lastName);
-    lastName = await SharedPref.getString(key: PrefsValue.lastName);
-    mobileNumber = await SharedPref.getString(key: PrefsValue.mobileNumber);
-    proCateName = await SharedPref.getString(key: PrefsValue.proCateName);
-    propClass = await SharedPref.getString(key: PrefsValue.propClass);
-    buildingNumber = await SharedPref.getString(key: PrefsValue.buildingNumber);
-    houseNumber = await SharedPref.getString(key: PrefsValue.houseNumber);
-    locality = await SharedPref.getString(key: PrefsValue.locality);
-    town = await SharedPref.getString(key: PrefsValue.town);
-    street = await SharedPref.getString(key: PrefsValue.state);
-    district = await SharedPref.getString(key: PrefsValue.district);
-    pinCode = await SharedPref.getString(key: PrefsValue.pinCode);
-    lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
-    rfcProcessStatus = await SharedPref.getString(key: PrefsValue.rfcProcessStatus);
+    final results = await Future.wait(<Future>[
+      SharedPref.getString(key: PrefsValue.crNumber),
+      SharedPref.getString(key: PrefsValue.feasibilityVisitDate),
+      SharedPref.getString(key: PrefsValue.bpNumber),
+      SharedPref.getString(key: PrefsValue.userName),
+      SharedPref.getString(key: PrefsValue.schema),
+      SharedPref.getString(key: PrefsValue.chargeArea),
+      SharedPref.getString(key: PrefsValue.areaName),
+      SharedPref.getString(key: PrefsValue.firstName),
+      SharedPref.getString(key: PrefsValue.lastName),
+      SharedPref.getString(key: PrefsValue.mobileNumber),
+      SharedPref.getString(key: PrefsValue.proCateName),
+      SharedPref.getString(key: PrefsValue.propClass),
+      SharedPref.getString(key: PrefsValue.buildingNumber),
+      SharedPref.getString(key: PrefsValue.houseNumber),
+      SharedPref.getString(key: PrefsValue.locality),
+      SharedPref.getString(key: PrefsValue.town),
+      SharedPref.getString(key: PrefsValue.state),
+      SharedPref.getString(key: PrefsValue.district),
+      SharedPref.getString(key: PrefsValue.pinCode),
+      SharedPref.getString(key: PrefsValue.lmcInstallId),
+      SharedPref.getString(key: PrefsValue.rfcProcessStatus),
+    ]);
+
+    custRegNo = results[0] ?? "";
+    trNumber = results[0] ?? "";
+    feasibilityVisitDate = results[1] ?? "";
+    bpNumber = results[2] ?? "";
+    userName = results[3] ?? "";
+    schema = results[4] ?? "";
+    chargeArea = results[5] ?? "";
+    areaName = results[6] ?? "";
+    firstName = results[7] ?? "";
+    lastName = results[8] ?? "";
+    mobileNumber = results[9] ?? "";
+    proCateName = results[10] ?? "";
+    propClass = results[11] ?? "";
+    buildingNumber = results[12] ?? "";
+    houseNumber = results[13] ?? "";
+    locality = results[14] ?? "";
+    town = results[15] ?? "";
+    street = results[16] ?? "";
+    district = results[17] ?? "";
+    pinCode = results[18] ?? "";
+    lmcInstallId = results[19] ?? "";
+    rfcProcessStatus = results[20] ?? "";
     _eventCompleted(emit);
   }
 

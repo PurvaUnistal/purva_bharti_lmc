@@ -104,15 +104,19 @@ class CaptureCameraMeterEvent extends FormInstallationEvent{
   List<Object> get props => [];
 }
 class CaptureGalleryHouseEvent extends FormInstallationEvent{
+  final BuildContext context;
+  CaptureGalleryHouseEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context,];
 }
 
 class CaptureCameraHouseEvent extends FormInstallationEvent{
+  final BuildContext context;
+  CaptureCameraHouseEvent({required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [context,];
 }
 
 

@@ -10,22 +10,22 @@ class LMCInstallationInitialState extends LMCInstallationState {
   List<Object> get props => [];
 }
 
-class LMCInstallationPageLoadState extends LMCInstallationState {
+class LMCInstallationPageLoadState extends LMCInstallationInitialState {
   @override
   List<Object> get props => [];
 }
 
-//ignore: must_be_immutable
-class LMCInstallationDataState extends LMCInstallationState {
-  String schema;
-  String userName;
+
+class LMCInstallationDataState extends LMCInstallationInitialState {
+  final String schema;
+  final String userName;
   final bool isLoader;
   final bool isAreaFilter;
-  final dynamic allAreaValue;
+  final GetAllAreaModel allAreaValue;
   final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
-  List<InstallationDoneRows> listOfFilterInstallationRow;
-  InstallationDoneModel? installationDoneModel;
+  final List<InstallationDoneRows> listOfFilterInstallationRow;
+  final InstallationDoneModel installationDoneModel;
   final ScrollController scrollController;
   final TextEditingController bpNumberController;
 
@@ -45,7 +45,7 @@ class LMCInstallationDataState extends LMCInstallationState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
         schema,
         userName,
         isLoader,

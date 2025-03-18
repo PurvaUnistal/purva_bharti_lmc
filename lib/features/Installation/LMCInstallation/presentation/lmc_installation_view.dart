@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
@@ -36,19 +35,17 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   ScrollController _horizontalScrollController = ScrollController();
   ScrollController _verticalScrollController = ScrollController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.green50,
-      body: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
+    return BackgroundWidget(
+      child: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
         builder: (context, state) {
           if (state is LMCInstallationDataState) {
-            return BackgroundWidget(child: _itemBuilder(dataState: state));
+            return _itemBuilder(dataState: state);
           } else {
-            return const Center(
-              child: SpinLoader(),
-            );
+            return Center(child: SpinLoader());
           }
         },
       ),
@@ -57,6 +54,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   Widget _itemBuilder({required LMCInstallationDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.lmcInstallH,
         boolLeading: true,
@@ -107,7 +105,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
     return DropdownWidget<GetAllAreaModel>(
       label: AppString.area,
       hint: AppString.area,
-      dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
+      dropdownValue: dataState.allAreaValue.gid == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
         BlocProvider.of<LMCInstallationBloc>(context).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
@@ -134,7 +132,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   Widget _dataTableWidget({required LMCInstallationDataState dataState}) {
     return dataState.isAreaFilter == false
-        ? dataState.installationDoneModel?.success == 400
+        ? dataState.installationDoneModel.success == 400
         ? Center(child: Text("No records found"))
         : Theme(
       data: ThemeData(highlightColor: AppColor.primer1),

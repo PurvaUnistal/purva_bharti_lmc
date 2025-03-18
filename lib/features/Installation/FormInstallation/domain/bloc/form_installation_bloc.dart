@@ -19,6 +19,7 @@ import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_inst
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationState> {
   FormInstallationBloc() : super(FormInstallationInitialState()) {
@@ -131,7 +132,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   File installationPhoto = File("");
 
   _pageLoad(FormInstallationPageLoadEvent event, emit) async {
-    emit(FormInstallationInitialState());
+    emit(FormInstallationPageLoadState());
     isLoader = false;
     isBtnLoader = false;
     isSelected = false;
@@ -209,18 +210,21 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
     feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
-    await fetchTypeOfNrApi(context: event.context);
-    await fetchReadyForNgcApi(context: event.context);
-    await fetchMetersApi(context: event.context, meterSerial: "");
-    await fetchDelayReasonApi(context: event.context);
-    await fetchRegulatorTypeApi(context: event.context);
-    await fetchRFCApi(
+    Future.wait(<Future>[
+     fetchTypeOfNrApi(context: event.context),
+     fetchReadyForNgcApi(context: event.context),
+     fetchMetersApi(context: event.context, meterSerial: ""),
+     fetchDelayReasonApi(context: event.context),
+     fetchRegulatorTypeApi(context: event.context),
+     fetchRFCApi(
+      context: event.context,
+    ),
+
+    ]);
+    await  fetchFreeMaterialApi(
       context: event.context,
     );
-    await fetchFreeMaterialApi(
-      context: event.context,
-    );
-    await checkDelayReason();
+   await checkDelayReason();
     _eventCompleted(emit);
   }
 
@@ -351,24 +355,21 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   fetchFreeMaterialApi({required BuildContext context}) async {
-    List<String> tempList = [];
     var res = await FormFeasibilityHelper.getAllFreeMaterialApi(
       context: context,
     );
     if (res != null) {
       listOfAllMaterial = res;
-      tempList = List.generate(listOfAllMaterial.length, (i) => ('${listOfAllMaterial[i].id}'));
-      listOfAllMaterialId.addAll(tempList);
-      listOfMaterial = List.generate(
-        listOfAllMaterial.length,
-        (i) => MaterialItem(
-            value: '0',
-            id: '${listOfAllMaterial[i].id}',
-            name: '${listOfAllMaterial[i].materialName}',
-            unit: '${listOfAllMaterial[i].materialUnit}',
-            controller: TextEditingController()),
-      );
-      materialList.addAll(listOfMaterial);
+      materialList.addAll(listOfAllMaterial.map((data) {
+        return MaterialItem(
+          value: '0',
+          id: data.id ?? "",
+          name: data.materialName ?? "",
+          unit: data.materialUnit ?? "",
+          controller: TextEditingController(),
+        );
+      }));
+      listOfAllMaterialId = listOfAllMaterial.map((e) => e.id.toString(),).toList();
       listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
       return res;
     }
@@ -482,15 +483,30 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-  _setHouseLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfHouseController.text = getLocation.latitude.toString();
-    longOfHouseController.text = getLocation.longitude.toString();
-    return getLocation;
+  _setHouseLocation({required BuildContext context}) async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      status = await Permission.location.request();
+    }
+    if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+
+    if (await Permission.location.isGranted) {
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfHouseController =
+          TextEditingController(text: getLocation?.latitude.toString());
+      longOfHouseController =
+          TextEditingController(text: getLocation?.longitude.toString());
+      return getLocation;
+    } else {
+      Utils.errorSnackBar(
+          msg:  "Location permission denied", context: context);
+    }
   }
 
   _selectLocationOfHouse(SelectLocationOfHouseEvent event, emit) {
-    _setHouseLocation();
+    _setHouseLocation(context: event.context);
     _eventCompleted(emit);
   }
 
@@ -570,7 +586,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     var photoPath = await FormInstallationHelper.galleryCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
+      await _setHouseLocation(context: event.context);
       housePhoto = photoPath;
     }
     _eventCompleted(emit);
@@ -580,7 +596,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     var photoPath = await FormInstallationHelper.cameraCapture();
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
-      await _setHouseLocation();
+      await _setHouseLocation(context: event.context);
       housePhoto = photoPath;
     }
     _eventCompleted(emit);

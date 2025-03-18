@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
@@ -21,7 +25,6 @@ import 'package:lmc/features/Installation/LMCInstallation/presentation/lmc_insta
 import 'package:lmc/features/NGC/NGCTable/presentation/ngc_table_view.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -33,65 +36,32 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
-    _checkForUpdate();
+    callMethodeChannel();
     BlocProvider.of<HomeBloc>(context).add(HomeLoadEvent(context: context));
     super.initState();
   }
 
+  static const MethodChannel platform = MethodChannel('pbgpl/lmc');
 
-  Future<void> _checkForUpdate() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
-    String currentVersion = packageInfo.version;
-    print("oldVersion-->${oldVersion}");
-    print("currentVersion-->${currentVersion}");
-
-    if (_isVersionOutdated(oldVersion,currentVersion)) {
-      print("oldVersion-->${oldVersion}");
-      print("currentVersion-->${currentVersion}");
-      _showUpdateDialog();
-    }
-  }
-
-  bool _isVersionOutdated(String currentVersion, String latestVersion) {
-    List<int> current = currentVersion.split('.').map(int.parse).toList();
-    List<int> latest = latestVersion.split('.').map(int.parse).toList();
-
-    for (int i = 0; i < latest.length; i++) {
-      if (current.length <= i || current[i] < latest[i]) {
-        return true;
-      } else if (current[i] > latest[i]) {
-        return false;
+  callMethodeChannel() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      print("packageInfo-->$packageInfo");
+      String applicationId = packageInfo.packageName.toString();
+      String androidPlayStoreUrl =
+          "https://play.google.com/store/apps/details?id=${applicationId}&hl=en&gl=US";
+      if (Platform.isAndroid) {
+        final dynamic result = await platform.invokeMethod('getAppUpdate');
+        if (kDebugMode) {
+          print("Upadet Mesagae ============== $result");
+        }
+        if (result.toString() == "success") {
+          AppUpdateMessage.showAlertDialog(
+              context: context, url: androidPlayStoreUrl);
+        }
       }
-    }
-    return false;
+    } on PlatformException catch (_) {}
   }
-
-  void _showUpdateDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return  AppUpdateMessage.showAlertDialog(context: context,onPressed: _openAppStoreLink,);
-      },
-    );
-  }
-
-
-  void _openAppStoreLink() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String applicationId = packageInfo.packageName.toString();
-    String androidPlayStoreUrl =
-        "https://play.google.com/store/apps/details?id=${applicationId}&hl=en&gl=US";
-    String url =androidPlayStoreUrl;
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,8 +150,8 @@ class _HomeViewState extends State<HomeView> {
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
           if(dataState.role == "lmc")...[
-            for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
-              dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
+            for(int i = 0; i < dataState.listOFAccessRight.toSet().toList().length; i++)...[
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC01" ? CardWidget(
                 icon: Icons.balance_outlined,
                 text: "LMC Feasibility",
                 onTap: () {
@@ -190,7 +160,7 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC02" ? CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
                 text: "LMC Installation",
                 onTap: () {
@@ -199,7 +169,7 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              dataState.listOFAccessRight[i].menuCode == "NGC01" ?
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "NGC01" ?
               CardWidget(
                 icon: Icons.sync,
                 text: "NG Conversion",
@@ -211,8 +181,8 @@ class _HomeViewState extends State<HomeView> {
                   : Container()
             ],
           ] else if(dataState.role == "ngc")...[
-            for(int i = 0; i < dataState.listOFAccessRight.length; i++)...[
-              dataState.listOFAccessRight[i].menuCode == "LMC01" ? CardWidget(
+            for(int i = 0; i < dataState.listOFAccessRight.toSet().toList().length; i++)...[
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC01" ? CardWidget(
                 icon: Icons.balance_outlined,
                 text: "LMC Feasibility",
                 onTap: () {
@@ -221,7 +191,7 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              dataState.listOFAccessRight[i].menuCode == "LMC02" ? CardWidget(
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC02" ? CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
                 text: "LMC Installation",
                 onTap: () {
@@ -230,7 +200,7 @@ class _HomeViewState extends State<HomeView> {
                 },
               )
                   : Container(),
-              dataState.listOFAccessRight[i].menuCode == "NGC01" ?
+              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "NGC01" ?
               CardWidget(
                 icon: Icons.arrow_circle_down_outlined,
                 text: "NG Conversion",

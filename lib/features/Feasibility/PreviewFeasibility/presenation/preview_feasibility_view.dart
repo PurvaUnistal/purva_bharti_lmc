@@ -33,14 +33,11 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.green50,
-      body: BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
+    return BackgroundWidget(
+     child:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
         builder: (context, state) {
           if (state is PreviewFeasibilityDataState) {
-            return BackgroundWidget(
-              child: _itemBuilder(dataState: state, context: context),
-            );
+            return _itemBuilder(dataState: state, context: context);
           } else {
             return Center(child: SpinLoader());
           }
@@ -51,6 +48,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
 
   _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.lmcFeaH,
         boolLeading: true,

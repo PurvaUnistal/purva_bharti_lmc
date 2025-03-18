@@ -8,7 +8,6 @@ import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
-import 'package:lmc/Utils/common_widgets/pop_two_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
@@ -36,14 +35,11 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.green50,
-      body: BlocBuilder<NgcTableBloc, NgcTableState>(
+    return BackgroundWidget(
+      child: BlocBuilder<NgcTableBloc, NgcTableState>(
         builder: (context, state) {
           if (state is FetchNgcTableDataState) {
-            return  BackgroundWidget(
-              child: _buildLayout(dataState: state,),
-            );
+            return  _buildLayout(dataState: state,);
           } else {
             return const Center(
               child: SpinLoader(),
@@ -57,6 +53,7 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   _buildLayout({required FetchNgcTableDataState dataState}) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.ngConH,
         boolLeading: true,
@@ -107,7 +104,7 @@ class _NgcTableViewState extends State<NgcTableView> {
     return DropdownWidget<GetAllAreaModel>(
       label: AppString.selectArea,
       hint: AppString.selectArea,
-      dropdownValue: dataState.allAreaValue == null ? null : dataState.allAreaValue,
+      dropdownValue: dataState.allAreaValue.gid != null ? dataState.allAreaValue : null,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
         BlocProvider.of<NgcTableBloc>(context).add(SelectAreaValueEvent(

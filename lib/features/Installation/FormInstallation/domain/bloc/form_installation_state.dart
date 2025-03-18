@@ -15,12 +15,12 @@ class FormInstallationInitialState extends FormInstallationState {
   List<Object> get props => [];
 }
 
-class FormInstallationPageLoadState extends FormInstallationState {
+class FormInstallationPageLoadState extends FormInstallationInitialState {
   @override
   List<Object> get props => [];
 }
 
-class FormInstallationDataState extends FormInstallationState {
+class FormInstallationDataState extends FormInstallationInitialState {
   final String schema;
   final String userName;
   final bool isLoader;
@@ -37,10 +37,10 @@ class FormInstallationDataState extends FormInstallationState {
   final File installationPhoto;
   final File meterPhoto;
   final File housePhoto;
-  final ListOfMeterNo? meterNoValue;
-  final LmcReasonModel? delayReasonValue;
-  final GetConstantModel? typeOfNrValue;
-  final LmcReasonModel? regulatorTypeValue;
+  final ListOfMeterNo meterNoValue;
+  final LmcReasonModel delayReasonValue;
+  final GetConstantModel typeOfNrValue;
+  final LmcReasonModel regulatorTypeValue;
   final List<ListOfMeterNo> listOfMeterNumber;
   final List<GetConstantModel> listOfTypeOfNr;
   final List<LmcReasonModel> listOfDelayReason;
@@ -136,7 +136,7 @@ class FormInstallationDataState extends FormInstallationState {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
+  List<Object> get props => [
         schema,
         userName,
         isLoader,

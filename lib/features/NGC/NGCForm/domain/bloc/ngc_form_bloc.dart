@@ -18,6 +18,7 @@ import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
 import 'package:lmc/features/NGC/NGCForm/helper/ngc_form_helper.dart';
 import 'package:lmc/service/Apis.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   NGCFormBloc() : super(NGCFormInitialState()) {
@@ -542,27 +543,57 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
-  _setSRLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfSRController.text = getLocation.latitude.toString();
-    longOfSRController.text = getLocation.longitude.toString();
-    return getLocation;
+  _setSRLocation({required BuildContext context}) async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      status = await Permission.location.request();
+    }
+    if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+
+    if (await Permission.location.isGranted) {
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfSRController =
+          TextEditingController(text: getLocation?.latitude.toString());
+      longOfSRController =
+          TextEditingController(text: getLocation?.longitude.toString());
+      return getLocation;
+    } else {
+      Utils.errorSnackBar(
+          msg:  "Location permission denied", context: context);
+    }
   }
 
-  _setMRLocation() async {
-    var getLocation = await FormInstallationHelper.getCurrentLocation();
-    latOfMRController.text = getLocation.latitude.toString();
-    longOfMRController.text = getLocation.longitude.toString();
-    return getLocation;
+  _setMRLocation({required BuildContext context}) async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      status = await Permission.location.request();
+    }
+    if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+
+    if (await Permission.location.isGranted) {
+      var getLocation = await FormInstallationHelper.getCurrentLocation();
+      latOfMRController =
+          TextEditingController(text: getLocation?.latitude.toString());
+      longOfMRController =
+          TextEditingController(text: getLocation?.longitude.toString());
+      return getLocation;
+    } else {
+      Utils.errorSnackBar(
+          msg:  "Location permission denied", context: context);
+    }
   }
 
   _locationOfSR(SelectLocationOfSREvent event, emit) async {
-    await _setSRLocation();
+    await _setSRLocation(context: event.context);
     _eventCompleted(emit);
   }
 
   _locationOfMR(SelectLocationOfMREvent event, emit) async {
-    await _setMRLocation();
+    await _setMRLocation(context: event.context);
     _eventCompleted(emit);
   }
 
@@ -571,7 +602,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       mrPhoto = photoPath;
-      _setMRLocation();
+      _setMRLocation(context: event.context);
       _eventCompleted(emit);
       ;
     }
@@ -581,7 +612,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var photoPath = await FormInstallationHelper.galleryCapture();
     if (photoPath.path.isNotEmpty) {
       mrPhoto = photoPath;
-      _setMRLocation();
+      _setMRLocation(context: event.context);
       log("photo-->$photoPath");
       _eventCompleted(emit);
     }
@@ -592,7 +623,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       srPhoto = photoPath;
-      _setSRLocation();
+      _setSRLocation(context: event.context);
       _eventCompleted(emit);
     }
   }
@@ -602,7 +633,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     log("photo-->$photoPath");
     if (photoPath.path.isNotEmpty) {
       srPhoto = photoPath;
-      _setSRLocation();
+      _setSRLocation(context: event.context);
       _eventCompleted(emit);
     }
   }

@@ -18,79 +18,80 @@ class NGCFormPageLoadState extends NGCFormInitialState {
   List<Object> get props => [];
 }
 
-class NGCFormDataState extends NGCFormState {
-  bool isPageLoader;
-  bool isBtnLoader;
-  bool isCheckMeterMismatch;
-  bool isMeterReplace;
-  bool isRegularReplace;
-  bool isDelayReason;
-  String userName;
-  String schema;
-  String lmcPath;
-  String baseUrl;
-  File meterPhoto;
-  File rfcPhoto;
-  File pneumaticPhoto;
-  File ngcReportPhoto;
-  File mrPhoto;
-  File srPhoto;
-  bool isRegulator;
-  String regulatorCheck;
-  List<GetConstantModel> listOfTypeOfNr;
-  GetConstantModel? typeOfNrValue;
-  LmcReasonModel? regulatorTypeValue;
-  LmcReasonModel? meterTypeValue;
-  LmcReasonModel? regulatorTypeReasonValue;
-  List<ListOfMeterNo> listOfMeterNumber;
-  List<String> listOfMeterNumberSerial;
-  List<String> listOfMeterNumberId;
-  List<ListOfMeterNo> listOfRegulator;
-  List<String> listOfRegulatorSerial;
-  List<String> listOfSRSerial;
-  List<String> listOfRegulatorId;
-  List<LmcReasonModel> listOfRegulatorType;
-  List<LmcReasonModel> listOfMeterType;
-  List<LmcReasonModel> listOfRegulatorTypeReason;
-  FocusNode meterIniReading1FocusNode;
-  FocusNode meterIniReading2FocusNode;
-  FocusNode meterIniReading3FocusNode;
-  TextEditingController meterIniReading1Controller;
-  TextEditingController meterIniReading2Controller;
-  TextEditingController meterIniReading3Controller;
-  TextEditingController meterInitialReadingController;
-  TextEditingController regulatorSerialSearchController;
-  TextEditingController regulatorSerialController;
-  TextEditingController meterConnectionMeterController;
-  TextEditingController proposedNgcDateController;
-  TextEditingController noOfFamilyMembersController;
-  TextEditingController ngConversionDateController;
-  TextEditingController latOfSRController;
-  TextEditingController longOfSRController;
-  TextEditingController nameContractorController;
-  TextEditingController srNumberSearchController;
-  TextEditingController srSerialNumberController;
-  TextEditingController meterNumberSerialController;
-  TextEditingController bpNumberController;
-  TextEditingController delayReasonController;
-  TextEditingController reasonMeterChangeController;
-  TextEditingController reasonRegulatorChangeController;
-  TextEditingController noOfBurnersController;
-  TextEditingController meterSerialController;
-  TextEditingController mobileNumberController;
-  TextEditingController altMobileNumberController;
-  TextEditingController emailIdController;
-  TextEditingController ngChargeDateController;
-  TextEditingController typeOfNrController;
-  TextEditingController dateInstallationController;
-  TextEditingController regulatorTypeController;
-  LmcReasonModel? delayReasonValue;
-  List<LmcReasonModel> listOfDelayReason;
-  TextEditingController latOfMRController;
-  TextEditingController longOfMRController;
-  TextEditingController extraPipeController;
-  TextEditingController extraPriceController;
-  TextEditingController rfcDateController;
+class NGCFormDataState extends NGCFormInitialState {
+  final bool isPageLoader;
+  final bool isBtnLoader;
+  final bool isCheckMeterMismatch;
+  final bool isMeterReplace;
+  final bool isRegularReplace;
+  final bool isDelayReason;
+  final String userName;
+  final String schema;
+  final String lmcPath;
+  final String baseUrl;
+  final File meterPhoto;
+  final File rfcPhoto;
+  final File pneumaticPhoto;
+  final File ngcReportPhoto;
+  final File mrPhoto;
+  final File srPhoto;
+  final bool isRegulator;
+  final String regulatorCheck;
+  final List<GetConstantModel> listOfTypeOfNr;
+  final GetConstantModel typeOfNrValue;
+  final LmcReasonModel regulatorTypeValue;
+  final LmcReasonModel meterTypeValue;
+  final LmcReasonModel regulatorTypeReasonValue;
+  final List<ListOfMeterNo> listOfMeterNumber;
+  final List<String> listOfMeterNumberSerial;
+  final List<String> listOfMeterNumberId;
+  final List<ListOfMeterNo> listOfRegulator;
+  final List<String> listOfRegulatorSerial;
+  final List<String> listOfSRSerial;
+  final List<String> listOfRegulatorId;
+  final List<LmcReasonModel> listOfRegulatorType;
+  final List<LmcReasonModel> listOfMeterType;
+  final List<LmcReasonModel> listOfRegulatorTypeReason;
+  final FocusNode meterIniReading1FocusNode;
+  final FocusNode meterIniReading2FocusNode;
+  final FocusNode meterIniReading3FocusNode;
+  final TextEditingController meterIniReading1Controller;
+  final TextEditingController meterIniReading2Controller;
+  final TextEditingController meterIniReading3Controller;
+  final TextEditingController meterInitialReadingController;
+  final TextEditingController regulatorSerialSearchController;
+  final TextEditingController regulatorSerialController;
+  final TextEditingController meterConnectionMeterController;
+  final TextEditingController proposedNgcDateController;
+  final TextEditingController noOfFamilyMembersController;
+  final TextEditingController ngConversionDateController;
+  final TextEditingController latOfSRController;
+  final TextEditingController longOfSRController;
+  final TextEditingController nameContractorController;
+  final TextEditingController srNumberSearchController;
+  final TextEditingController srSerialNumberController;
+  final TextEditingController meterNumberSerialController;
+  final TextEditingController bpNumberController;
+  final TextEditingController delayReasonController;
+  final TextEditingController reasonMeterChangeController;
+  final TextEditingController reasonRegulatorChangeController;
+  final TextEditingController noOfBurnersController;
+  final TextEditingController meterSerialController;
+  final TextEditingController mobileNumberController;
+  final TextEditingController altMobileNumberController;
+  final TextEditingController emailIdController;
+  final TextEditingController ngChargeDateController;
+  final TextEditingController typeOfNrController;
+  final TextEditingController dateInstallationController;
+  final TextEditingController regulatorTypeController;
+  final LmcReasonModel delayReasonValue;
+  final List<LmcReasonModel> listOfDelayReason;
+  final TextEditingController latOfMRController;
+  final TextEditingController longOfMRController;
+  final TextEditingController extraPipeController;
+  final TextEditingController extraPriceController;
+  final TextEditingController rfcDateController;
+
   NGCFormDataState({
     required this.isPageLoader,
     required this.regulatorCheck,
@@ -165,79 +166,80 @@ class NGCFormDataState extends NGCFormState {
     required this.extraPriceController,
     required this.rfcDateController,
   });
+
   @override
-  List<Object?> get props => [
-    isPageLoader,
-    regulatorCheck,
-    rfcPhoto,
-    pneumaticPhoto,
-    isMeterReplace,
-    isRegularReplace,
-    isBtnLoader,
-    isDelayReason,
-    isCheckMeterMismatch,
-    meterPhoto,
-    ngcReportPhoto,
-    isRegulator,
-    schema,
-    lmcPath,
-    baseUrl,
-    userName,
-    listOfTypeOfNr,
-    typeOfNrValue,
-    listOfMeterNumber,
-    listOfMeterNumberSerial,
-    listOfMeterNumberId,
-    listOfRegulator,
-    listOfRegulatorSerial,
-    listOfSRSerial,
-    listOfRegulatorId,
-    listOfRegulatorType,
-    listOfMeterType,
-    listOfRegulatorTypeReason,
-    regulatorTypeValue,
-    meterTypeValue,
-    regulatorTypeReasonValue,
-    meterIniReading1FocusNode,
-    meterIniReading2FocusNode,
-    meterIniReading3FocusNode,
-    meterIniReading1Controller,
-    meterIniReading2Controller,
-    meterIniReading3Controller,
-    meterInitialReadingController,
-    regulatorSerialSearchController,
-    reasonMeterChangeController,
-    reasonRegulatorChangeController,
-    regulatorSerialController,
-    proposedNgcDateController,
-    ngConversionDateController,
-    latOfSRController,
-    longOfSRController,
-    meterConnectionMeterController,
-    nameContractorController,
-    noOfFamilyMembersController,
-    meterNumberSerialController,
-    srNumberSearchController,
-    srSerialNumberController,
-    bpNumberController,
-    delayReasonController,
-    noOfBurnersController,
-    meterSerialController,
-    mobileNumberController,
-    altMobileNumberController,
-    emailIdController,
-    ngChargeDateController,
-    typeOfNrController,
-    dateInstallationController,
-    regulatorTypeController,
-    delayReasonValue,
-    listOfDelayReason,
-    longOfMRController,
-    latOfMRController,
-    srPhoto,
-    mrPhoto,
-   extraPipeController,
-    extraPriceController,
-    rfcDateController,
-  ];
+  List<Object> get props => [
+        isPageLoader,
+        regulatorCheck,
+        rfcPhoto,
+        pneumaticPhoto,
+        isMeterReplace,
+        isRegularReplace,
+        isBtnLoader,
+        isDelayReason,
+        isCheckMeterMismatch,
+        meterPhoto,
+        ngcReportPhoto,
+        isRegulator,
+        schema,
+        lmcPath,
+        baseUrl,
+        userName,
+        listOfTypeOfNr,
+        typeOfNrValue,
+        listOfMeterNumber,
+        listOfMeterNumberSerial,
+        listOfMeterNumberId,
+        listOfRegulator,
+        listOfRegulatorSerial,
+        listOfSRSerial,
+        listOfRegulatorId,
+        listOfRegulatorType,
+        listOfMeterType,
+        listOfRegulatorTypeReason,
+        regulatorTypeValue,
+        meterTypeValue,
+        regulatorTypeReasonValue,
+        meterIniReading1FocusNode,
+        meterIniReading2FocusNode,
+        meterIniReading3FocusNode,
+        meterIniReading1Controller,
+        meterIniReading2Controller,
+        meterIniReading3Controller,
+        meterInitialReadingController,
+        regulatorSerialSearchController,
+        reasonMeterChangeController,
+        reasonRegulatorChangeController,
+        regulatorSerialController,
+        proposedNgcDateController,
+        ngConversionDateController,
+        latOfSRController,
+        longOfSRController,
+        meterConnectionMeterController,
+        nameContractorController,
+        noOfFamilyMembersController,
+        meterNumberSerialController,
+        srNumberSearchController,
+        srSerialNumberController,
+        bpNumberController,
+        delayReasonController,
+        noOfBurnersController,
+        meterSerialController,
+        mobileNumberController,
+        altMobileNumberController,
+        emailIdController,
+        ngChargeDateController,
+        typeOfNrController,
+        dateInstallationController,
+        regulatorTypeController,
+        delayReasonValue,
+        listOfDelayReason,
+        longOfMRController,
+        latOfMRController,
+        srPhoto,
+        mrPhoto,
+        extraPipeController,
+        extraPriceController,
+        rfcDateController,
+      ];
 }
