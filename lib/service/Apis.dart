@@ -1,7 +1,7 @@
 class Apis {
 
-  // static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
-   static String baseUrl = 'https://pbgpluat.smartgasnet.com/api/';
+   static String baseUrl = 'http://pbgpl.smartgasnet.com/api/';
+ //  static String baseUrl = 'https://pbgpluat.smartgasnet.com/api/';
   static String basePath = 'https://pbgpluat.smartgasnet.com/';
 
   static String loginUrl = baseUrl + "auth";

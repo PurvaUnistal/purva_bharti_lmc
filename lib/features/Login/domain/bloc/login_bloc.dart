@@ -82,7 +82,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await SharedPref.setString(key: PrefsValue.userRole,value: res.user!.role!);
               await SharedPref.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
-              String appVersion = packageInfo.version;
+              String appVersion = packageInfo.buildNumber;
               await SharedPref.setString(key: PrefsValue.appVersion,value: appVersion);
               if(res.user!.role == "lmc"){
                   await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].menuCode!);

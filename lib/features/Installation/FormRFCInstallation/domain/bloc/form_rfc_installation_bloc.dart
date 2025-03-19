@@ -92,7 +92,6 @@ class FormRFCInstallationBloc
   List<LmcReasonModel> listOfDelayReason = [];
   List<LmcReasonModel> listOfRegulatorType = [];
   List<FreeMaterialData> listOfAllMaterial = [];
-  List<MaterialItem> listOfMaterial = [];
   List<MaterialItem> materialList = [];
   List<String> listOfAllMaterialId = [];
   List<String> listOfQtyLMC = [];
@@ -170,7 +169,6 @@ class FormRFCInstallationBloc
     listOfDelayReason = [];
     listOfRegulatorType = [];
     listOfAllMaterial = [];
-    listOfMaterial = [];
     materialList = [];
     listOfAllMaterialId = [];
     listOfQtyLMC = [];
@@ -502,15 +500,15 @@ class FormRFCInstallationBloc
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
     double sumOfPipes = 0.0;
-    for (int i = 0; i < listOfMaterial.length; i++) {
-      MaterialItem dataOfAllMaterial = listOfMaterial[i];
+    for (int i = 0; i < materialList.length; i++) {
+      MaterialItem dataOfAllMaterial = materialList[i];
       if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
         if (dataOfAllMaterial.controller.text != "") {
           sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         } else {
           dataOfAllMaterial.controller.text = '';
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         }
       }
     }
@@ -796,7 +794,7 @@ class FormRFCInstallationBloc
             .toString()
             .replaceAll('[', '')
             .replaceAll(']', ''),
-        pipeLength: listOfMaterial,
+        pipeLength: materialList,
         meterPhoto: meterPhoto.path.toString(),
         rfcPhoto: rfcPhoto.path.toString(),
         houseLat: latOfHouseController.text.trim().toString(),

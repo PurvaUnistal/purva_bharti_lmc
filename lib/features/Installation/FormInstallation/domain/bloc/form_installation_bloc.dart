@@ -90,7 +90,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<LmcReasonModel> listOfDelayReason = [];
   List<LmcReasonModel> listOfRegulatorType = [];
   List<FreeMaterialData> listOfAllMaterial = [];
-  List<MaterialItem> listOfMaterial = [];
   List<MaterialItem> materialList = [];
   List<String> listOfAllMaterialId = [];
   List<String> listOfQtyLMC = [];
@@ -166,7 +165,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     listOfRegulatorType = [];
 
     listOfAllMaterial = [];
-    listOfMaterial = [];
     materialList = [];
     listOfAllMaterialId = [];
     listOfQtyLMC = [];
@@ -369,23 +367,24 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           controller: TextEditingController(),
         );
       }));
+      print("materialList--->${materialList}");
       listOfAllMaterialId = listOfAllMaterial.map((e) => e.id.toString(),).toList();
-      listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+      listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
       return res;
     }
   }
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
     double sumOfPipes = 0.0;
-    for (int i = 0; i < listOfMaterial.length; i++) {
-      MaterialItem dataOfAllMaterial = listOfMaterial[i];
+    for (int i = 0; i < materialList.length; i++) {
+      MaterialItem dataOfAllMaterial = materialList[i];
       if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
         if (dataOfAllMaterial.controller.text != "") {
           sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         } else {
           dataOfAllMaterial.controller.text = '';
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
         }
       }
     }
@@ -650,7 +649,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-        pipeLength: listOfMaterial,
+        pipeLength: materialList,
         meterPhoto: meterPhoto.path.toString(),
         houseLat: latOfHouseController.text.trim().toString(),
         houseLong: longOfHouseController.text.trim().toString(),
