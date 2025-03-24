@@ -9,15 +9,15 @@ class AppUpdateMessage {
     Widget cancelButton = TextButton(
       child: isLater == null
           ? Text(
-              "Update Later",
-              style: Styles.labels,
-            )
+        "Update Later",
+        style: Styles.title,
+      )
           : isLater == true
-              ? const SizedBox.shrink()
-              : Text(
-                  "Update Later",
-                  style: Styles.labels,
-                ),
+          ? const SizedBox.shrink()
+          : Text(
+        "Update Later",
+        style: Styles.title,
+      ),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -25,7 +25,7 @@ class AppUpdateMessage {
     Widget continueButton = TextButton(
       child: Text(
         "Update Now",
-        style: Styles.labels,
+        style: Styles.title,
       ),
       onPressed: () async {
         if (!await launchUrl(
@@ -40,24 +40,29 @@ class AppUpdateMessage {
       title: Builder(builder: (context) {
         return Text(
           "Update Available",
-          style: Styles.labels,
+          style: Styles.stars,
         );
       }),
       content: Text(
         "Please update the app to continue",
-        style: Styles.texts,
+        style: Styles.labels,
       ),
       actions: [
-        // cancelButton,
+        //   cancelButton,
         continueButton,
       ],
     );
     showDialog(
-      barrierDismissible: isLater ?? false,
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return WillPopScope(
+            onWillPop: () => _onWillPop(),
+            child: alert);
       },
     );
+  }
+  static Future<bool> _onWillPop() async {
+    return false;
   }
 }

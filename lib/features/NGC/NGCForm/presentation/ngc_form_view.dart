@@ -323,7 +323,7 @@ class _NGCFormViewState extends State<NGCFormView> {
     return DropdownWidget<GetConstantModel>(
       label: AppString.meterConnection,
       hint: AppString.meterConnection,
-      dropdownValue: dataState.typeOfNrValue!.value!.isEmpty
+      dropdownValue: dataState.typeOfNrValue.value!.isEmpty
           ? null
           : dataState.typeOfNrValue,
       items: dataState.listOfTypeOfNr,
@@ -364,7 +364,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               star: AppString.star,
               label: AppString.delayStatus,
               hint: AppString.delayStatus,
-              dropdownValue: dataState.delayReasonValue?.name == null
+              dropdownValue: dataState.delayReasonValue.name == null
                   ? null
                   : dataState.delayReasonValue,
               items: dataState.listOfDelayReason,
@@ -556,7 +556,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               star: AppString.star,
               label: AppString.meterType,
               hint: AppString.meterType,
-              dropdownValue: dataState.meterTypeValue?.name == null
+              dropdownValue: dataState.meterTypeValue.name == null
                   ? null
                   : dataState.meterTypeValue,
               items: dataState.listOfMeterType,
@@ -726,7 +726,7 @@ class _NGCFormViewState extends State<NGCFormView> {
             star: AppString.star,
             label: AppString.regulatorType,
             hint: AppString.regulatorType,
-            dropdownValue: dataState.regulatorTypeValue?.name == null
+            dropdownValue: dataState.regulatorTypeValue.name == null
                 ? null
                 : dataState.regulatorTypeValue,
             items: dataState.listOfRegulatorType,
@@ -748,15 +748,15 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _regulatorController({required NGCFormDataState dataState}) {
     return dataState.isRegularReplace == true
         ? dataState.isRegulator == false
-            ? dataState.regulatorTypeValue?.name != null
+            ? dataState.regulatorTypeValue.name != null
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(
                       star: AppString.star,
-                      label: dataState.regulatorTypeValue?.name != "PRV"
+                      label: dataState.regulatorTypeValue.name != "PRV"
                           ? AppString.meterRegulator
                           : AppString.regulator,
-                      hintText: dataState.regulatorTypeValue?.name != "PRV"
+                      hintText: dataState.regulatorTypeValue.name != "PRV"
                           ? AppString.meterRegulator
                           : AppString.regulator,
                       suggestions: dataState.listOfRegulatorSerial.length == 0
@@ -804,9 +804,10 @@ class _NGCFormViewState extends State<NGCFormView> {
           );
   }
 
+
   Widget _srNumberController({required NGCFormDataState dataState}) {
     return dataState.isRegulator == false
-        ? dataState.regulatorTypeValue?.name == "SR"
+        ? dataState.regulatorTypeValue.name == "SR"
             ? dataState.isRegularReplace == true
                 ? CommonStyle.col(
                     context: context,
@@ -855,6 +856,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         : DottedLoaderWidget();
   }
 
+
   Widget _changeRegulatorReasonDropdown({required NGCFormDataState dataState}) {
     return dataState.isRegularReplace == true
         ? CommonStyle.col(
@@ -863,7 +865,7 @@ class _NGCFormViewState extends State<NGCFormView> {
               star: AppString.star,
               label: AppString.regularType,
               hint: AppString.regularType,
-              dropdownValue: dataState.regulatorTypeReasonValue?.name == null
+              dropdownValue: dataState.regulatorTypeReasonValue.name == null
                   ? null
                   : dataState.regulatorTypeReasonValue,
               items: dataState.listOfRegulatorTypeReason,
@@ -895,7 +897,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _locationOfMR({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
+    return dataState.regulatorTypeValue.name == "SR"
         ? CommonStyle.col(
             context: context,
             child: RowWidget(
@@ -919,7 +921,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _locationOfSR({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
+    return dataState.regulatorTypeValue.name == "SR"
         ? CommonStyle.col(
             context: context,
             child: RowWidget(
@@ -943,7 +945,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _photoWidget({required NGCFormDataState dataState}) {
-    return dataState.regulatorTypeValue?.name == "SR"
+    return dataState.regulatorTypeValue.name == "SR"
         ? CommonStyle.col(
             context: context,
             child: RowWidget(

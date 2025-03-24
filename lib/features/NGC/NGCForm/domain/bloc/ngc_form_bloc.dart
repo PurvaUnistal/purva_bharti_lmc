@@ -51,21 +51,26 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     on<CaptureCameraNGCReportEvent>(_captureCameraNGCReport);
     on<NGCSubmitEvent>(_submit);
   }
+
   bool isRegulator = false;
   File mrPhoto = File("");
   File srPhoto = File("");
   File pneumaticPhoto = File("");
   File rfcPhoto = File("");
   File _meterPhoto = File("");
+
   File get meterPhoto => _meterPhoto;
 
   File _ngcReportPhoto = File("");
+
   File get ngcReportPhoto => _ngcReportPhoto;
 
   bool _isPageLoader = false;
+
   bool get isPageLoader => _isPageLoader;
 
   bool _isBtnLoader = false;
+
   bool get isBtnLoader => _isBtnLoader;
 
   bool isMeterReplacement = false;
@@ -98,8 +103,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController meterIniReading3Controller = TextEditingController();
   TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
-  TextEditingController meterConnectionMeterController = TextEditingController();
-  TextEditingController regulatorSerialSearchController = TextEditingController();
+  TextEditingController meterConnectionMeterController =
+      TextEditingController();
+  TextEditingController regulatorSerialSearchController =
+      TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController srNumberSearchController = TextEditingController();
   TextEditingController srSerialNumberController = TextEditingController();
@@ -112,7 +119,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController nameContractorController = TextEditingController();
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController reasonMeterChangeController = TextEditingController();
-  TextEditingController reasonRegulatorChangeController = TextEditingController();
+  TextEditingController reasonRegulatorChangeController =
+      TextEditingController();
   TextEditingController noOfBurnersController = TextEditingController();
   TextEditingController meterSerialController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
@@ -214,66 +222,106 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     latOfMRController.text = "0";
     longOfMRController.text = "0";
     role = await SharedPref.getString(key: PrefsValue.userRole);
-    meterConnectionMeterController.text = await SharedPref.getString(key: PrefsValue.typeOfNr.isEmpty ? "" : PrefsValue.typeOfNr);
-    regulatorTypeController.text = await SharedPref.getString(key: PrefsValue.regulatorType.isEmpty ? "" : PrefsValue.regulatorType);
-    regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId.isEmpty ? "" : PrefsValue.regulatorTypeId);
+    meterConnectionMeterController.text = await SharedPref.getString(
+        key: PrefsValue.typeOfNr.isEmpty ? "" : PrefsValue.typeOfNr);
+    regulatorTypeController.text = await SharedPref.getString(
+        key: PrefsValue.regulatorType.isEmpty ? "" : PrefsValue.regulatorType);
+    regulatorTypeValue.id = await SharedPref.getString(
+        key: PrefsValue.regulatorTypeId.isEmpty
+            ? ""
+            : PrefsValue.regulatorTypeId);
     srRegulatorId = await SharedPref.getString(key: PrefsValue.srRegulatorId);
-    srSerialNumberController.text = await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
+    srSerialNumberController.text =
+        await SharedPref.getString(key: PrefsValue.srRegulatorSerial);
     regulatorId = await SharedPref.getString(key: PrefsValue.mrRegulatorId);
-    regulatorSerialController.text = await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
+    regulatorSerialController.text =
+        await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
     lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
     baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
-    String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
+    String pathKye =
+        await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
     networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
-    networkPneumaticPhoto = await SharedPref.getString(key: PrefsValue.pneumaticPhoto);
+    networkPneumaticPhoto =
+        await SharedPref.getString(key: PrefsValue.pneumaticPhoto);
     networkRfcPhoto = await SharedPref.getString(key: PrefsValue.rfcPhoto);
     regulatorCheck = await SharedPref.getString(key: PrefsValue.regulatorCheck);
-    _meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
-    rfcPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
-    pneumaticPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
+    _meterPhoto =
+        File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());
+    rfcPhoto =
+        File(baseUrl + pathKye + lmcPath + "/" + networkRfcPhoto.toString());
+    pneumaticPhoto = File(
+        baseUrl + pathKye + lmcPath + "/" + networkPneumaticPhoto.toString());
     dmaUserId = await SharedPref.getString(key: PrefsValue.dmaUserId) ?? "";
     isInstall = await SharedPref.getString(key: PrefsValue.isInstall);
-    lmcInstallationId = await SharedPref.getString(key: PrefsValue.lmcInstallationId);
-    nameContractorController.text = await SharedPref.getString(key: PrefsValue.userName) ?? "";
-    bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber) ?? "0";
-    meterInitialReadingController.text = await SharedPref.getString(key: PrefsValue.meterReading) ?? "0";
-    if(meterInitialReadingController.text.length == 5){
-      List<String> meterNumberStringArrayValues = (meterInitialReadingController.text ?? "0.000").split("");
+    lmcInstallationId =
+        await SharedPref.getString(key: PrefsValue.lmcInstallationId);
+    nameContractorController.text =
+        await SharedPref.getString(key: PrefsValue.userName) ?? "";
+    bpNumberController.text =
+        await SharedPref.getString(key: PrefsValue.bpNumber) ?? "0";
+    meterInitialReadingController.text =
+        await SharedPref.getString(key: PrefsValue.meterReading) ?? "0";
+    if (meterInitialReadingController.text.length == 5) {
+      List<String> meterNumberStringArrayValues =
+          (meterInitialReadingController.text ?? "0.000").split("");
       int length = meterNumberStringArrayValues.length;
-      meterIniReading1Controller.text = meterNumberStringArrayValues[length - 3];
-      meterIniReading2Controller.text = meterNumberStringArrayValues[length - 2];
-      meterIniReading3Controller.text = meterNumberStringArrayValues[length - 1];
-    } else if(meterInitialReadingController.text == "0"){
+      meterIniReading1Controller.text =
+          meterNumberStringArrayValues[length - 3];
+      meterIniReading2Controller.text =
+          meterNumberStringArrayValues[length - 2];
+      meterIniReading3Controller.text =
+          meterNumberStringArrayValues[length - 1];
+    } else if (meterInitialReadingController.text == "0") {
       meterIniReading1Controller.text = "0";
       meterIniReading2Controller.text = "0";
       meterIniReading3Controller.text = "0";
-    } else{
-      double meterIniReadingAdd = double.parse(meterInitialReadingController.text);
+    } else {
+      double meterIniReadingAdd =
+          double.parse(meterInitialReadingController.text);
       String newMeterInitialReading = (meterIniReadingAdd * 1000).toString();
-      List<String> meterNumberStringArrayValues = (newMeterInitialReading.trim().split("")).toList();
+      List<String> meterNumberStringArrayValues =
+          (newMeterInitialReading.trim().split("")).toList();
       meterIniReading1Controller.text = meterNumberStringArrayValues[0];
       meterIniReading2Controller.text = meterNumberStringArrayValues[1];
       meterIniReading3Controller.text = meterNumberStringArrayValues[2];
     }
-    materialId = await SharedPref.getString(key: PrefsValue.meterNumberId) ?? "0";
-    meterSerialController.text = await SharedPref.getString(key: PrefsValue.meterNumberSerial) ?? "0";
-    mobileNumberController.text = await SharedPref.getString(key: PrefsValue.mobileNumber) ?? "";
-    emailIdController.text = await SharedPref.getString(key: PrefsValue.email) ?? "-";
-    altMobileNumberController.text = await SharedPref.getString(key: PrefsValue.alternateMobileNo) ?? "";
-    noOfFamilyMembersController.text = await SharedPref.getString(key: PrefsValue.noOfFamilyMembers) ?? "";
-    noOfBurnersController.text = await SharedPref.getString(key: PrefsValue.ngOfBurners) == "" ? "2" : await SharedPref.getString(key: PrefsValue.ngOfBurners);
-    typeOfNrController.text = await SharedPref.getString(key: PrefsValue.typeOfNr) ?? "";
-    dateInstallationController.text = await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
-    proposedNgcDateController.text = await SharedPref.getString(key: PrefsValue.proposedNgcDate) ?? "";
-    extraPipeController.text = await SharedPref.getString(key: PrefsValue.extraPipe) ?? "";
-    extraPriceController.text = await SharedPref.getString(key: PrefsValue.extraPrice) ?? "";
-    rfcDateController.text = await SharedPref.getString(key: PrefsValue.rfcDate) ?? "";
-    ngConversionDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
-    await fetchTypeOfNrApi(context: event.context);
-    await fetchNgcReasonApi(context: event.context);
-    await fetchMeterReplaceTypeApi(context: event.context);
-    await fetchRegulatorTypeApi(context: event.context);
-    await fetchMetersApi(context: event.context, meterSerial: "");
+    materialId =
+        await SharedPref.getString(key: PrefsValue.meterNumberId) ?? "0";
+    meterSerialController.text =
+        await SharedPref.getString(key: PrefsValue.meterNumberSerial) ?? "0";
+    mobileNumberController.text =
+        await SharedPref.getString(key: PrefsValue.mobileNumber) ?? "";
+    emailIdController.text =
+        await SharedPref.getString(key: PrefsValue.email) ?? "-";
+    altMobileNumberController.text =
+        await SharedPref.getString(key: PrefsValue.alternateMobileNo) ?? "";
+    noOfFamilyMembersController.text =
+        await SharedPref.getString(key: PrefsValue.noOfFamilyMembers) ?? "";
+    noOfBurnersController.text =
+        await SharedPref.getString(key: PrefsValue.ngOfBurners) == ""
+            ? "2"
+            : await SharedPref.getString(key: PrefsValue.ngOfBurners);
+    typeOfNrController.text =
+        await SharedPref.getString(key: PrefsValue.typeOfNr) ?? "";
+    dateInstallationController.text =
+        await SharedPref.getString(key: PrefsValue.lmcInstallationDate) ?? "";
+    proposedNgcDateController.text =
+        await SharedPref.getString(key: PrefsValue.proposedNgcDate) ?? "";
+    extraPipeController.text =
+        await SharedPref.getString(key: PrefsValue.extraPipe) ?? "";
+    extraPriceController.text =
+        await SharedPref.getString(key: PrefsValue.extraPrice) ?? "";
+    rfcDateController.text =
+        await SharedPref.getString(key: PrefsValue.rfcDate) ?? "";
+    ngConversionDateController.text =
+        DateFormat(AppString.dateFormat).format(DateTime.now());
+    Future.wait(<Future>[
+      fetchTypeOfNrApi(context: event.context),
+      fetchNgcReasonApi(context: event.context),
+      fetchMeterReplaceTypeApi(context: event.context),
+      fetchRegulatorTypeApi(context: event.context),
+      fetchMetersApi(context: event.context, meterSerial: ""),
+    ]);
     await checkDelayReason();
     /* if (regulatorTypeValue.id != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: regulatorTypeValue.id.toString());
@@ -282,8 +330,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   checkDelayReason() {
-    DateTime proposedDate = DateFormat(AppString.dateFormat).parse(proposedNgcDateController.text);
-    DateTime installationDate = DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
+    DateTime proposedDate =
+        DateFormat(AppString.dateFormat).parse(proposedNgcDateController.text);
+    DateTime installationDate =
+        DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
     if (installationDate.compareTo(proposedDate) <= 0) {
       isDelayReason = false;
     } else {
@@ -292,8 +342,13 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   _selectNGConversionDate(SelectNGConversionDateEvent event, emit) async {
-    var assignDate = DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
-    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime.now());
+    var assignDate =
+        DateFormat(AppString.dateFormat).parse(dateInstallationController.text);
+    DateTime? dateTime = await showDatePicker(
+        context: event.context,
+        initialDate: DateTime.now(),
+        firstDate: assignDate,
+        lastDate: DateTime.now());
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       ngConversionDateController.text = formattedDate.toString();
@@ -306,7 +361,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     var meterIniReading1 = meterIniReading1Controller.text;
     var meterIniReading2 = meterIniReading2Controller.text;
     var meterIniReading3 = meterIniReading3Controller.text;
-    double meterIniReadingAdd = double.parse(meterIniReading1 + meterIniReading2 + meterIniReading3);
+    double meterIniReadingAdd =
+        double.parse(meterIniReading1 + meterIniReading2 + meterIniReading3);
     meterInitialReadingController.text = (meterIniReadingAdd / 1000).toString();
     log("meterInitialReadingController-->${meterInitialReadingController.text}");
     _eventCompleted(emit);
@@ -336,17 +392,21 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _selectMeterReplace(SelectMeterReplaceEvent event, emit) {
     isMeterReplace = event.meterReplace;
-    if (event.meterReplace == true) {
-      meterReplace = "1";
-      print("meterReplace-->${meterReplace}");
-    } else {
-      meterReplace = "0";
-      print("meterReplace-->${meterReplace}");
-    }
+    meterReplace = event.meterReplace ? "1" : "0";
+    print("meterReplace --> $meterReplace");
     _eventCompleted(emit);
   }
-  _selectRegularReplace(SelectRegularReplaceEvent event, emit) {
+
+  _selectRegularReplace(SelectRegularReplaceEvent event, emit) async {
+    regulatorTypeValue = LmcReasonModel();
     isRegularReplace = event.regularReplace;
+    if (!isRegularReplace) {
+      regulatorTypeController.text = await SharedPref.getString(key: PrefsValue.regulatorType);
+      regulatorTypeValue.id = await SharedPref.getString(key: PrefsValue.regulatorTypeId);
+    }
+    print("isRegularReplace --> $isRegularReplace");
+    print("regulatorTypeValue.name --> ${regulatorTypeValue.name}");
+    print("regulatorTypeValue.id --> ${regulatorTypeValue.id}");
     _eventCompleted(emit);
   }
 
@@ -357,45 +417,64 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     if (event.regulatorTypeValue.name != null) {
       regulatorSerialSearchController.text = "";
       srNumberSearchController.text = "";
-      await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
+      await fetchRegulatorsApi(
+          context: event.context,
+          regulatorSerial: "",
+          regulatorType: event.regulatorTypeValue.id.toString());
     }
     isRegulator = false;
     _eventCompleted(emit);
   }
 
-  fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+  fetchRegulatorsApi(
+      {required BuildContext context,
+      required String regulatorSerial,
+      required String regulatorType}) async {
     if (role == "ngc") {
-      var res = await NGCFormHelper.getRegulatorsNGCApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+      var res = await NGCFormHelper.getRegulatorsNGCApi(
+          context: context,
+          regulatorSerial: regulatorSerial,
+          regulatorType: regulatorType);
       if (res != null) {
         listOfRegulator = res;
-        listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+        listOfRegulatorSerial =
+            listOfRegulator.map((e) => e.serialNumber!).toList();
         listOfSRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
         return res;
       }
     } else if (role == "lmc") {
-      var res = await FormInstallationHelper.getRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+      var res = await FormInstallationHelper.getRegulatorsApi(
+          context: context,
+          regulatorSerial: regulatorSerial,
+          regulatorType: regulatorType);
       if (res != null) {
         listOfRegulator = res;
-        listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+        listOfRegulatorSerial =
+            listOfRegulator.map((e) => e.serialNumber!).toList();
         listOfSRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
         return res;
       }
     }
   }
 
-  fetchMetersApi({required BuildContext context, required String meterSerial}) async {
+  fetchMetersApi(
+      {required BuildContext context, required String meterSerial}) async {
     if (role == "ngc") {
-      var res = await NGCFormHelper.getMetersNGCApi(context: context, meterSerial: meterSerial);
+      var res = await NGCFormHelper.getMetersNGCApi(
+          context: context, meterSerial: meterSerial);
       if (res != null) {
         listOfMeterNumber = res;
-        listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
+        listOfMeterNumberSerial =
+            listOfMeterNumber.map((e) => e.serialNumber!).toList();
         return res;
       }
     } else if (role == "lmc") {
-      var res = await FormInstallationHelper.getMetersApi(context: context, meterSerial: meterSerial);
+      var res = await FormInstallationHelper.getMetersApi(
+          context: context, meterSerial: meterSerial);
       if (res != null) {
         listOfMeterNumber = res;
-        listOfMeterNumberSerial = listOfMeterNumber.map((e) => e.serialNumber!).toList();
+        listOfMeterNumberSerial =
+            listOfMeterNumber.map((e) => e.serialNumber!).toList();
         return res;
       }
     }
@@ -405,9 +484,18 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     materialId = "";
     meterConnectionMeterController.text = "";
     meterNumberSerialController.text = event.meterReadingValue;
-    materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
-    meterConnectionMeterController.text = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.meterConnection ?? "";
-    if (event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
+    materialId = listOfMeterNumber
+            .firstWhereOrNull(
+                (element) => element.serialNumber == event.meterReadingValue)
+            ?.id ??
+        "";
+    meterConnectionMeterController.text = listOfMeterNumber
+            .firstWhereOrNull(
+                (element) => element.serialNumber == event.meterReadingValue)
+            ?.meterConnection ??
+        "";
+    if (event.meterReadingValue.isNotEmpty &&
+        !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
       isCheckMeterMismatch = true;
     } else {
       isCheckMeterMismatch = false;
@@ -417,7 +505,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
     regulatorSerialSearchController.text = event.regulatorsValue;
-    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
+    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ??"";
     if (event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
       isCheckRegulatorMismatch = true;
     } else {
@@ -429,7 +517,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   _selectSRegulators(SelectSRegulatorsEvent event, emit) async {
     srNumberSearchController.text = event.sRegulators;
     srRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
-    if (event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
+    if (event.sRegulators.isNotEmpty &&
+        !listOfRegulatorSerial.contains(event.sRegulators)) {
       isCheckSR = true;
     } else {
       isCheckSR = false;
@@ -447,7 +536,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
-  _selectRegulatorTypeReasonValue(SelectRegulatorTypeReasonValueEvent event, emit) {
+  _selectRegulatorTypeReasonValue(
+      SelectRegulatorTypeReasonValueEvent event, emit) {
     regulatorTypeReasonValue = event.regulatorTypeReasonValue;
     _eventCompleted(emit);
   }
@@ -523,8 +613,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     _eventCompleted(emit);
   }
 
-
-
   _captureGalleryNGCReport(CaptureGalleryNGCReportEvent event, emit) async {
     var photoPath = await NGCFormHelper.galleryCapture();
     log("photo-->$photoPath");
@@ -560,8 +648,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           TextEditingController(text: getLocation?.longitude.toString());
       return getLocation;
     } else {
-      Utils.errorSnackBar(
-          msg:  "Location permission denied", context: context);
+      Utils.errorSnackBar(msg: "Location permission denied", context: context);
     }
   }
 
@@ -582,8 +669,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           TextEditingController(text: getLocation?.longitude.toString());
       return getLocation;
     } else {
-      Utils.errorSnackBar(
-          msg:  "Location permission denied", context: context);
+      Utils.errorSnackBar(msg: "Location permission denied", context: context);
     }
   }
 
@@ -645,11 +731,17 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         isDelayReason: isDelayReason,
         delayReason: delayReasonValue,
         isCheckMeterMismatch: isCheckMeterMismatch,
-        meterNumber: isMeterReplace == true ? meterNumberSerialController.text.trim() : meterSerialController.text.trim().toString(),
-        changeMeterType: meterReplace == "1" ? meterReplaceTypeValue.id.toString() : "",
-        meterInitialReading: meterInitialReadingController.text.trim().toString(),
+        meterNumber: isMeterReplace == true
+            ? meterNumberSerialController.text.trim()
+            : meterSerialController.text.trim().toString(),
+        changeMeterType:
+            meterReplace == "1" ? meterReplaceTypeValue.id.toString() : "",
+        meterInitialReading:
+            meterInitialReadingController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
-        regulatorType: isRegularReplace == false ? regulatorTypeController.text.trim().toString() : regulatorTypeValue.id.toString(),
+        regulatorType: isRegularReplace == false
+            ? regulatorTypeController.text.trim().toString()
+            : regulatorTypeValue.id.toString(),
         regulatorId: regulatorSerialSearchController.text.trim().toString(),
         mrPhoto: mrPhoto.path,
         srPhoto: srPhoto.path,
@@ -657,8 +749,12 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         longMR: longOfMRController.text.trim().toString(),
         latSR: latOfSRController.text.trim().toString(),
         longSR: longOfSRController.text.trim().toString(),
-        regulatorNumber: isRegularReplace == false ? regulatorSerialController.text.trim().toString() :regulatorSerialSearchController.text.trim().toString(),
-        srNumber: isRegularReplace == false ? srSerialNumberController.text.trim().toString():srNumberSearchController.text.trim().toString(),
+        regulatorNumber: isRegularReplace == false
+            ? regulatorSerialController.text.trim().toString()
+            : regulatorSerialSearchController.text.trim().toString(),
+        srNumber: isRegularReplace == false
+            ? srSerialNumberController.text.trim().toString()
+            : srNumberSearchController.text.trim().toString(),
         isCheckSR: isCheckSR,
         bpNumber: bpNumberController.text.trim().toString(),
         ngChargeDate: ngConversionDateController.text.trim().toString(),
@@ -667,7 +763,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         noOfBurners: noOfBurnersController.text.trim().toString(),
         noOfFamily: noOfFamilyMembersController.text.trim().toString(),
         phoneNo: mobileNumberController.text.trim().toString(),
-        changeRegulatorType: isRegularReplace  == false ? "" : regulatorTypeReasonValue.id.toString(),
+        changeRegulatorType: isRegularReplace == false
+            ? ""
+            : regulatorTypeReasonValue.id.toString(),
       );
       if (await validationCheck == true) {
         _isBtnLoader = true;
@@ -690,7 +788,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           meterNumberId: isMeterReplace == true ? materialId : meterSerialController.text.trim().toString(),*/
           nameOfContractor: nameContractorController.text.trim().toString(),
           nOfBurners: noOfBurnersController.text.trim().toString(),
-          delayReasonValue: delayReasonValue.name == null ? "" : delayReasonValue.name.toString(),
+          delayReasonValue: delayReasonValue.name == null
+              ? ""
+              : delayReasonValue.name.toString(),
           reasonOfDelay: delayReasonController.text.trim().toString(),
           workCompletedDate: dateInstallationController.text.trim().toString(),
           meterChangeReason: reasonMeterChangeController.text.trim().toString(),
@@ -797,9 +897,9 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       baseUrl: baseUrl,
       lmcPath: lmcPath,
       listOfSRSerial: listOfSRSerial,
-      regulatorCheck : regulatorCheck,
-      rfcPhoto : rfcPhoto,
-      pneumaticPhoto : pneumaticPhoto,
+      regulatorCheck: regulatorCheck,
+      rfcPhoto: rfcPhoto,
+      pneumaticPhoto: pneumaticPhoto,
       extraPipeController: extraPipeController,
       extraPriceController: extraPriceController,
       rfcDateController: rfcDateController,

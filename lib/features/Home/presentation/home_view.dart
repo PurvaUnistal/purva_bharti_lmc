@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
@@ -36,34 +35,44 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
-    callMethodeChannel();
     BlocProvider.of<HomeBloc>(context).add(HomeLoadEvent(context: context));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callMethodeChannel();
+    });
     super.initState();
   }
 
   static const MethodChannel platform = MethodChannel('pbgpl/lmc');
 
-  callMethodeChannel() async {
+  callMethodeChannel()  async {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      print("packageInfo-->$packageInfo");
-      String applicationId = packageInfo.packageName.toString();
+      String applicationId = packageInfo.packageName;
       String androidPlayStoreUrl =
-          "https://play.google.com/store/apps/details?id=${applicationId}&hl=en&gl=US";
+          "https://play.google.com/store/apps/details?id=$applicationId&hl=en&gl=US";
+      final dynamic result = await platform.invokeMethod('getAppUpdate');
       if (Platform.isAndroid) {
-        final dynamic result = await platform.invokeMethod('getAppUpdate');
         if (kDebugMode) {
-          print("Upadet Mesagae ============== $result");
+          print("Upgrade Message ============== $result");
         }
         if (result.toString() == "success") {
-          AppUpdateMessage.showAlertDialog(
-              context: context, url: androidPlayStoreUrl);
+          try {
+            AppUpdateMessage.showAlertDialog(
+                context: context, url: androidPlayStoreUrl, isLater: false);
+          } catch (e) {
+            AppUpdateMessage.showAlertDialog(
+                context: context, url: androidPlayStoreUrl);
+          }
         }
       }
-    } on PlatformException catch (_) {}
+    } on PlatformException catch (e) {
+      return false;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
+    print("buildName-->${AppConfig.instanceInit()?.buildName}");
     return Scaffold(
       backgroundColor: Colors.green.shade50,
       body: SafeArea(

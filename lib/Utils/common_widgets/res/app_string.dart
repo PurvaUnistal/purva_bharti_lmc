@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
+import 'app_config.dart';
+
 class AppString {
-  static String version = "Version : LMC-1-19/03/2025";
+  static String version = "Version : LMC-${AppConfig.instanceInit()?.buildName}-19/03/2025";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";

@@ -5,6 +5,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
@@ -43,6 +44,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     String email = await SharedPref.getString(key: PrefsValue.emailVal);
     String password = await SharedPref.getString(key: PrefsValue.passwordVal);
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    AppConfig.instanceInit()?.setBuildName(name: packageInfo.buildNumber);
     String newVersion = packageInfo.buildNumber;
     String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
     print("newVersion--${newVersion}");
