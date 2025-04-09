@@ -8,7 +8,7 @@ class AppConfig {
   String _buildName = "";
   String get buildName => _buildName;
 
-  setBuildName({required String name}) {
-    _buildName = name;
+  setBuildName({required String buildName}) {
+    _buildName = buildName;
   }
 }

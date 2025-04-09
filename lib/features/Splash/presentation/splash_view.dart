@@ -44,7 +44,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     String email = await SharedPref.getString(key: PrefsValue.emailVal);
     String password = await SharedPref.getString(key: PrefsValue.passwordVal);
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    AppConfig.instanceInit()?.setBuildName(name: packageInfo.buildNumber);
+    AppConfig.instanceInit()?.setBuildName(buildName: packageInfo.buildNumber);
     String newVersion = packageInfo.buildNumber;
     String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
     print("newVersion--${newVersion}");

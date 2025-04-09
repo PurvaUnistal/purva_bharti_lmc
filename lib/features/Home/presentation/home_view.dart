@@ -8,6 +8,7 @@ import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
+import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
@@ -73,40 +74,53 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     print("buildName-->${AppConfig.instanceInit()?.buildName}");
-    return Scaffold(
-      backgroundColor: Colors.green.shade50,
-      body: SafeArea(
-        child: BlocBuilder<HomeBloc, HomeState>(
+    return WillPopScope(
+      onWillPop: () =>_onWillPop(),
+      child: Scaffold(
+        backgroundColor: Colors.green.shade50,
+        body: SafeArea(
+          child: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              if (state is FetchHomeDataState) {
+                return BackgroundWidget(
+                  child: _buildLayout(dataState: state),
+                );
+                return state.pageWidgets[state.currentIndex];
+              } else {
+                return const Center(child: SpinLoader());
+              }
+            },
+          ),
+        ),
+        /* bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state is FetchHomeDataState) {
-              return BackgroundWidget(
-                child: _buildLayout(dataState: state),
-              );
-              return state.pageWidgets[state.currentIndex];
-            } else {
-              return const Center(child: SpinLoader());
+            if(state is FetchHomeDataState){
+              return  Container(
+                  child: BottomNavigationBar(
+                    currentIndex: state.currentIndex,
+                    onTap: (index) {
+                      BlocProvider.of<HomeBloc>(context).add(HomeSetPageIndex(pageIndex: index));
+                    },
+                    items: state.bottomNavyBarItemList,
+                  ));
+            } else{
+              return const SizedBox.shrink();
             }
           },
-        ),
+        ),*/
       ),
-      /* bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if(state is FetchHomeDataState){
-            return  Container(
-                child: BottomNavigationBar(
-                  currentIndex: state.currentIndex,
-                  onTap: (index) {
-                    BlocProvider.of<HomeBloc>(context).add(HomeSetPageIndex(pageIndex: index));
-                  },
-                  items: state.bottomNavyBarItemList,
-                ));
-          } else{
-            return const SizedBox.shrink();
-          }
-        },
-      ),*/
     );
   }
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+        context: context,
+        builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+            message: "Do you want to exit an App?",
+            okButtonText: "Exit",
+            onPressed: () => Navigator.of(context).pop(true)))) ??
+        false;
+  }
+
 
   _buildLayout({required FetchHomeDataState dataState}) {
     return Scaffold(
