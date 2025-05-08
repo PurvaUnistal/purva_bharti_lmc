@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
+import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
@@ -16,16 +19,14 @@ import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_bloc.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_bloc.dart';
 
-void main() async {
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
+class Root extends StatefulWidget {
+  final Client client;
+  const Root({required this.client});
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Root> createState() => _RootState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _RootState extends State<Root> {
 
   void initState() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -35,10 +36,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-            statusBarColor: AppColor.primer
-        ));
+    Singleton.instanceInit()?.context = context;
+    AppConfig.instanceInit()!.setClient(client: widget.client);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColor.primer));
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => LoginBloc()),

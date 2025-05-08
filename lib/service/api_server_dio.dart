@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/service/Apis.dart';
 import 'package:mime/mime.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
@@ -15,8 +16,8 @@ class ApiHelper {
       if (!await ConnectivityHelper.allConnectivityCheck(context: context)) {
         return null;
       }
-      final url = Uri.parse("$urlEndPoint");
-      final response = await Dio().get(url.toString());
+      String url = Apis.baseUrl + urlEndPoint;
+      final response = await Dio().get(Uri.parse(url).toString());
       log("URL --> $url");
       log("Response Data --> ${response.data}");
       if (response.statusCode == 200) {
@@ -48,13 +49,14 @@ class ApiHelper {
       if (!await ConnectivityHelper.allConnectivityCheck(context: context)) {
         return null;
       }
-      final url = Uri.parse("$urlEndPoint");
+      String url = Apis.baseUrl + urlEndPoint;
+      log("URL --> $url");
       var options = Options(
         headers: headers ?? {},
         contentType:
             contentType ?? (formData != null ? "multipart/form-data" : null),
       );
-      var response = await Dio().post(url.toString(),
+      var response = await Dio().post(Uri.parse(url).toString(),
           options: options, data: param ?? FormData.fromMap(formData));
       log("URL --> $url");
       log("Response Data --> ${response.data}");
@@ -109,8 +111,8 @@ class ApiHelper {
         }
       }
 
-      final url = Uri.parse("$urlEndPoint");
-      final response = await Dio().post(url.toString(), data: formData);
+      String url = Apis.baseUrl + urlEndPoint;
+      final response = await Dio().post(Uri.parse(url).toString(), data: formData);
 
       debugPrint("URL --> $url");
       debugPrint("Response Data --> ${response.data}");

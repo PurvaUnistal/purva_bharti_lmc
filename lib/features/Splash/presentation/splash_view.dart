@@ -6,6 +6,7 @@ import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
@@ -79,7 +80,11 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              AssetPath.appLogo,
+              AppConfig.instanceInit()!.client == Client.purvaBharti
+                  ? AppIcon.pbgplLogo
+                  :AppConfig.instanceInit()!.client == Client.mahaNagar
+                  ? AppIcon.mglLogo
+                  : AppIcon.pbgplLogo,
              height: MediaQuery.of(context).size.height * 0.3,
               width: MediaQuery.of(context).size.width * 0.6,
             ),

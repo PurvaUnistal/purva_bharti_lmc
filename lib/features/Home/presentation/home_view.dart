@@ -160,7 +160,7 @@ class _HomeViewState extends State<HomeView> {
           Stack(
             children: [
               Image.asset(
-                AssetPath.lmcBanner, width: double.infinity,),
+                AppIcon.lmcBanner, width: double.infinity,),
               Positioned(
                   child: Text(
                     dataState.baseUrl == Apis.basePath ? "UAT APP" : "",

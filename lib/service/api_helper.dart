@@ -9,6 +9,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/common_session_dialog_box.dart';
 import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
+import 'package:lmc/service/Apis.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,8 @@ class ApiHelper {
       if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      final response = await get(Uri.parse(urlEndPoint));
+      String url = Apis.baseUrl + urlEndPoint;
+      final response = await get(Uri.parse(url));
       log("URL-->${urlEndPoint.toString()}");
       log(urlEndPoint + "==> " + response.body);
       if (response.statusCode == 200) {
@@ -51,7 +53,8 @@ class ApiHelper {
       if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      var res = await post(Uri.parse(urlEndPoint), body: body,headers: headers);
+      String url = Apis.baseUrl + urlEndPoint;
+      var res = await post(Uri.parse(url), body: body,headers: headers);
       print(res.body);
       //  if(urlEndPoint)
       if (res.statusCode == 200) {
@@ -83,7 +86,8 @@ class ApiHelper {
         return null;
       }
       Map<String, String> headers = {"Authorization": token};
-      var request = MultipartRequest("POST", Uri.parse(urlEndPoint));
+      String url = Apis.baseUrl + urlEndPoint;
+      var request = MultipartRequest("POST", Uri.parse(url));
 
       for(int i=0; i< imageRequestObject.length ; i++) {
         var element = imageRequestObject[i];

@@ -1,4 +1,4 @@
-package com.app.pbg.lmc
+package com
 
 
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
