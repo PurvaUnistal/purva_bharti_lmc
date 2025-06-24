@@ -230,6 +230,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                               await SharedPref.setString(key: PrefsValue.pneumaticPhoto, value: user.pneumaticImage!);
                               await SharedPref.setString(key: PrefsValue.extraPipe, value: user.extraPipe!);
                               await SharedPref.setString(key: PrefsValue.extraPrice, value: user.extraPrice!);
+                              await SharedPref.setString(key: PrefsValue.pinCode, value: user.propertyCategoryId!);
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (context) => NGCFormView()));
                             },

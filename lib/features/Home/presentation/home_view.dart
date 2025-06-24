@@ -15,6 +15,7 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
 import 'package:lmc/features/Home/domain/bloc/home_event.dart';
@@ -160,7 +161,7 @@ class _HomeViewState extends State<HomeView> {
           Stack(
             children: [
               Image.asset(
-                AppIcon.lmcBanner, width: double.infinity,),
+                AppConfig.instanceInit()!.client == Client.purvaBharti ? AppIcon.lmcBanner :AppIcon.mglBanner, width: double.infinity,),
               Positioned(
                   child: Text(
                     dataState.baseUrl == Apis.basePath ? "UAT APP" : "",

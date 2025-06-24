@@ -19,11 +19,11 @@ class EnvironmentConfig extends InheritedWidget {
   String get generalUrlBaseFlavour {
     print("flavor-->${flavors}");
     switch (flavors) {
-      case EnvironmentFlavors.pbgplLMC:
-        return "https://pbgplc.smartgasnet.com/api/";
-     //   return "https://pbgpluat.smartgasnet.com/api/";
-      case EnvironmentFlavors.mglLMC:
-        return "https://mgluat.smartgasnet.com/api/";
+      case EnvironmentFlavors.prodPBGPL:
+      //  return "https://pbgplc.smartgasnet.com/api/";
+        return "https://pbgpluat.smartgasnet.com/api/";
+      case EnvironmentFlavors.prodMGL:
+        return "https://mgl.smartgasnet.com/api/";
     }
   }
 }

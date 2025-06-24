@@ -207,6 +207,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                         await SharedPref.setString(key: PrefsValue.town, value: user.town ?? "");
                                         await SharedPref.setString(key: PrefsValue.district, value: user.district ?? "");
                                         await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode ?? "");
+                                        await SharedPref.setString(key: PrefsValue.propertyCategoryId, value: user.propertyCategoryId!);
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                                       },
                                       cells: <DataCell>[

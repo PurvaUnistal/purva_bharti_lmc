@@ -28,7 +28,7 @@ def keystoreProperties = new Properties()
 android {
     namespace "com"
     compileSdkVersion 34
-
+    ndkVersion = "25.2.9519653"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -53,7 +53,7 @@ android {
 
     flavorDimensions "app"
     productFlavors {
-        pbgplLMC {
+        prodPBGPL {
             dimension "app"
             applicationIdSuffix ".app.pbg.lmc"
             resValue "string", "app_name", "PBGPL LMC"
@@ -66,7 +66,7 @@ android {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
         }
-        mglLMC {
+        prodMGL {
             dimension "app"
             applicationIdSuffix ".unistal.mgl.lmc"
             resValue "string", "app_name", "MGL LMC"

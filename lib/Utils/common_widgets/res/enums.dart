@@ -1,4 +1,4 @@
-enum EnvironmentFlavors { pbgplLMC, mglLMC }
+enum EnvironmentFlavors { prodPBGPL, prodMGL }
 
 enum RoleType {engineer, admin}
 

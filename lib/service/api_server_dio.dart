@@ -17,6 +17,7 @@ class ApiHelper {
         return null;
       }
       String url = Apis.baseUrl + urlEndPoint;
+      log("URL --> $url");
       final response = await Dio().get(Uri.parse(url).toString());
       log("URL --> $url");
       log("Response Data --> ${response.data}");

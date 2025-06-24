@@ -505,7 +505,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       {required FormRFCInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true
         ? stateData.isRegulator == false
-            ? stateData.regulatorTypeValue?.name == "SR"
+            ? stateData.regulatorTypeValue.name == "SR"
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(

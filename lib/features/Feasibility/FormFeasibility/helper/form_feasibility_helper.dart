@@ -45,9 +45,12 @@ class FormFeasibilityHelper {
     required BuildContext context,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String propertyCategoryId = await SharedPref.getString(
+        key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
         "schema": schema,
+        "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
@@ -63,9 +66,12 @@ class FormFeasibilityHelper {
     required BuildContext context,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String propertyCategoryId = await SharedPref.getString(
+        key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
         "schema": schema,
+        "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);

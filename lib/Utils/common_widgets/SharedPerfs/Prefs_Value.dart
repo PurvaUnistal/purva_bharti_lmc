@@ -40,6 +40,7 @@ class PrefsValue {
   static String town = "town";
   static String district = "district";
   static String pinCode = "pinCode";
+  static String propertyCategoryId = "propertyCategoryId";
   static String lmcId = "lmcId";
   static String assignId = "assignId";
   static String dma = "dma";

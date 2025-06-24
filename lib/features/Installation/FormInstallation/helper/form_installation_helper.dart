@@ -17,13 +17,15 @@ import 'package:lmc/service/api_server_dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
-  static Future<List<GetConstantModel>?> getTypeOfNrApi({required BuildContext context}) async {
+  static Future<List<GetConstantModel>?> getTypeOfNrApi(
+      {required BuildContext context}) async {
     try {
       Map<String, String> para = {
         "key": "typeOfNr",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.getConstant + json, context: context);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -32,10 +34,13 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
+  static Future<List<LmcReasonModel>?> lmcReasonApi(
+      {required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
-      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.lmcReason, context: context);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(
+          res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("lmcReasonApi-->${e.toString()}");
@@ -43,10 +48,13 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
+  static Future<List<LmcReasonModel>?> regulatorTypeApi(
+      {required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
-      List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.regulatorType, context: context);
+      List<LmcReasonModel> response = List<LmcReasonModel>.from(
+          res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
       log("regulatorTypeApi-->${e.toString()}");
@@ -54,13 +62,15 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<GetConstantModel>?> getReadyForNgcApi({required BuildContext context}) async {
+  static Future<List<GetConstantModel>?> getReadyForNgcApi(
+      {required BuildContext context}) async {
     try {
       Map<String, String> para = {
         "key": "isCustomerReadyForNgc",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.getConstant + json, context: context);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -69,7 +79,8 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getMetersApi({required BuildContext context, required String meterSerial}) async {
+  static Future<List<ListOfMeterNo>?> getMetersApi(
+      {required BuildContext context, required String meterSerial}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
@@ -79,7 +90,8 @@ class FormInstallationHelper {
         "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getMeters + json, context: context);
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.getMeters + json, context: context);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -88,7 +100,8 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+  static Future<List<ListOfMeterNo>?> getRegulatorsApi(
+      {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
@@ -99,7 +112,8 @@ class FormInstallationHelper {
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getRegulators + json, context: context);
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.getRegulators + json, context: context);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -108,14 +122,21 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context, required String pipeQty}) async {
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi(
+      {required BuildContext context, required String pipeQty}) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
+    String propertyCategoryId = await SharedPref.getString(
+        key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
         "schema": schema,
         "pipeQty": pipeQty,
+        "property_category_id": propertyCategoryId,
+
       };
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails, context: context, formData: para);
+      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails,
+          context: context,
+          formData: para);
       return ExtraPipePriceData.fromJson(res['data']);
     } catch (e) {
       log("getExtraPipeDetails-->${e.toString()}");
@@ -149,80 +170,107 @@ class FormInstallationHelper {
     required String housePhoto,
   }) async {
     try {
-
       List<String> meterPipeValues = [];
-      for(MaterialItem m in pipeLength) {
-        if(m.unit == "Meter"){
-          meterPipeValues.add(m.controller.text.isEmpty ? "0" : m.controller.text);
+      for (MaterialItem m in pipeLength) {
+        if (m.unit == "Meter") {
+          meterPipeValues.add(
+              m.controller.text.isEmpty ? "0" : m.controller.text);
         }
       }
       if (dateInstallation.isEmpty) {
-        Utils.errorSnackBar(msg: "The Date Installation field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Date Installation field is required.", context: context);
         return false;
       } else if (isDelayReason == true && delayReason.id == null) {
-        Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Reason For Delay field is required.", context: context);
         return false;
       } else if (meterNumber.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Meter Number field is required.", context: context);
         return false;
       } else if (isCheckMeterMismatch == true) {
-        Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Meter Number is mismatch. Please check your Meter Number.",
+            context: context);
         return false;
-      } else if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
+      } else
+      if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.",
+            context: context);
         return false;
       } else if (isInstallRegulator == true) {
         if (regulatorType.name == null) {
-          Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
+          Utils.errorSnackBar(
+              msg: "The Regulator Type field is required.", context: context);
           return false;
         } else if (regulatorType.name == "SR") {
           if (srNumber.isEmpty) {
-            Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
+            Utils.errorSnackBar(
+                msg: "The SR Number field is required.", context: context);
             return false;
           } else if (isCheckSR == true) {
-            Utils.errorSnackBar(msg: "The SR Number is mismatch. Please check your SR Number.", context: context);
+            Utils.errorSnackBar(
+                msg: "The SR Number is mismatch. Please check your SR Number.",
+                context: context);
             return false;
           } else if (regulatorNumber.isEmpty) {
-            Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
+            Utils.errorSnackBar(msg: "The Meter Regulator field is required.",
+                context: context);
             return false;
           } else if (isCheckRegulatorMismatch == true) {
-            Utils.errorSnackBar(msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.", context: context);
+            Utils.errorSnackBar(
+                msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.",
+                context: context);
             return false;
           }
         } else if (regulatorType.name == "PRV") {
           if (regulatorNumber.isEmpty) {
-            Utils.errorSnackBar(msg: "The Regulator field is required.", context: context);
+            Utils.errorSnackBar(
+                msg: "The Regulator field is required.", context: context);
             return false;
           } else if (isCheckRegulatorMismatch == true) {
-            Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+            Utils.errorSnackBar(
+                msg: "The Regulator Number is mismatch. Please check your Regulator Number.",
+                context: context);
             return false;
           }
         }
         if (ngConversionDate.isEmpty) {
-          Utils.errorSnackBar(msg: "The Proposed NG Conversion Date field is required.", context: context);
+          Utils.errorSnackBar(
+              msg: "The Proposed NG Conversion Date field is required.",
+              context: context);
           return false;
         } else if (rfcDateController.isEmpty) {
-          Utils.errorSnackBar(msg: "The RFC Date field is required.", context: context);
+          Utils.errorSnackBar(
+              msg: "The RFC Date field is required.", context: context);
           return false;
         }
       }
       if (fittingDetails.isEmpty) {
-        Utils.errorSnackBar(msg: "The Fitting Details field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Fitting Details field is required.", context: context);
         return false;
       }
-      else if (double.parse(meterPipeValues.reduce((value, element) => (double.parse(value) + double.parse(element)).toString())) <= 0) {
-        Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
+      else if (double.parse(meterPipeValues.reduce((value, element) =>
+          (double.parse(value) + double.parse(element)).toString())) <= 0) {
+        Utils.errorSnackBar(
+            msg: "Please enter at least one pipe detail.", context: context);
         return false;
       }
       if (meterPhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The Meter Photo field is required.", context: context);
         return false;
-      }else if (houseLat.isEmpty ||houseLong.isEmpty) {
-        Utils.errorSnackBar(msg: "The House Latitude and Longitude Point is required.", context: context);
+      } else if (houseLat.isEmpty || houseLong.isEmpty) {
+        Utils.errorSnackBar(
+            msg: "The House Latitude and Longitude Point is required.",
+            context: context);
         return false;
       }
       else if (housePhoto.isEmpty) {
-        Utils.errorSnackBar(msg: "The House Photo field is required.", context: context);
+        Utils.errorSnackBar(
+            msg: "The House Photo field is required.", context: context);
         return false;
       }
       return true;
@@ -263,9 +311,11 @@ class FormInstallationHelper {
     required String housePhoto,
   }) async {
     String schema = await SharedPref.getString(key: PrefsValue.schema);
-    String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
+    String lmcInstallId = await SharedPref.getString(
+        key: PrefsValue.lmcInstallId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
-    String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
+    String lmcFeasId = await SharedPref.getString(
+        key: PrefsValue.meterLMCFeasId);
     String userId = await SharedPref.getString(key: PrefsValue.userId);
     try {
       Map<String, String> para = {
@@ -288,26 +338,33 @@ class FormInstallationHelper {
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
-        "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
+        "delay_reason": delayReason.name == null ? "" : delayReason.name
+            .toString(),
         "type_of_nr": typeOfNR.isEmpty ? "" : typeOfNR.toString(),
         "ngc": ngc.key == null ? "" : ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate,
         "regulator_check": regulatorCheck.isEmpty ? "0" : regulatorCheck,
-        "regulator_type_id": regulatorTypeId == "" ? "" : regulatorTypeId.toString(),
+        "regulator_type_id": regulatorTypeId == "" ? "" : regulatorTypeId
+            .toString(),
         "rfc_date": rfcDate.isEmpty ? "" : rfcDate,
         "meter_testing": meterTesting.isEmpty ? "0" : meterTesting,
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcInstallation,
+      var res = await ApiHelper.postDataWithFile(
+          urlEndPoint: Apis.saveLmcInstallation,
           body: para, context: context,
           imageRequestObject: [
-        ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-        //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
-        ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-        ImageRequestObject("pneumatic_image", pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-        ImageRequestObject("house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
-      ]);
+            ImageRequestObject(
+                "meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+            //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
+            ImageRequestObject("rfc_form",
+                isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
+            ImageRequestObject("pneumatic_image",
+                pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
+            ImageRequestObject(
+                "house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
+          ]);
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
