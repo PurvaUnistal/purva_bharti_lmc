@@ -10,7 +10,6 @@ class PrefsValue {
   static String gaId = "gaId";
   static String cookies = "cookies";
   static String pwdChanged = "pwdChanged";
-  static String baseUrl = "baseUrl";
   static String feasibilityName = "FeasibilityName";
   static String installationName = "InstallationName";
   static String pendingNgc = "pendingNgc";

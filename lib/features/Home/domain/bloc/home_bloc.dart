@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
+import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
 import 'package:lmc/features/Home/domain/bloc/home_event.dart';
 import 'package:lmc/features/Home/domain/bloc/home_state.dart';
@@ -28,13 +30,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   int currentIndex = 0;
   List<Widget> pageWidgets  = [];
   List<BottomNavigationBarItem> bottomNavyBarItemList = [];
-
+  static BuildContext? context = Singleton.instanceInit()?.context;
   _pageLoad(HomeLoadEvent event, emit) async {
     isLoader =  false;
     scheme = await SharedPref.getString(key: PrefsValue.schema);
     role = await SharedPref.getString(key: PrefsValue.userRole);
     userName = await SharedPref.getString(key: PrefsValue.userName);
-    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+    baseUrl = await EnvironmentConfig.of(context!)!.imageBaseURL;
     feasibilityName = await SharedPref.getString(key: PrefsValue.feasibilityName);
     installationName = await SharedPref.getString(key: PrefsValue.installationName);
     pendingNgc = await SharedPref.getString(key: PrefsValue.pendingNgc);

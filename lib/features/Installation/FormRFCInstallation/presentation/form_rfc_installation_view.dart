@@ -18,7 +18,6 @@ import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
-import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/image_widget.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/meter_no_widget.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_bloc.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_event.dart';

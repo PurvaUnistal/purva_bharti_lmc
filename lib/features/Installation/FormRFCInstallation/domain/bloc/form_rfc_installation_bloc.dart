@@ -9,6 +9,8 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
+import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
@@ -134,7 +136,7 @@ class FormRFCInstallationBloc
   File meterPhoto = File("");
   File pneumaticTestReportPhoto = File("");
   File installationPhoto = File("");
-
+  static BuildContext? context = Singleton.instanceInit()?.context;
   _pageLoad(FormRFCInstallationPageLoadEvent event, emit) async {
     emit(FormInstallationPageLoadState());
     isLoader = false;
@@ -195,7 +197,7 @@ class FormRFCInstallationBloc
     meterInitialReadingController.text = "";
     ngConversionDateController.text = "";
     rfcDateController.text = "";
-    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
+    baseUrl =  EnvironmentConfig.of(context!)!.imageBaseURL;
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
@@ -374,10 +376,11 @@ class FormRFCInstallationBloc
         String networkHouseImage = rfcInstallationLmc.houseImage!;
         String networkPneumaticPhoto = rfcInstallationLmc.pneumaticImage!;
         String networkRfcPhoto = rfcInstallationLmc.rfcForm!;
-        baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
-        String pathKye = await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
+        baseUrl = EnvironmentConfig.of(context)!.imageBaseURL;
+        String pathKye =  "public/uploads/";
         if(networkHouseImage != ''){
           housePhoto = File(baseUrl + pathKye + lmcPath + "/" + networkHouseImage.toString());
+          print("--------------------------->$housePhoto");
         }
         if(networkMeterPhoto != ''){
           meterPhoto = File(baseUrl + pathKye + lmcPath + "/" + networkMeterPhoto.toString());

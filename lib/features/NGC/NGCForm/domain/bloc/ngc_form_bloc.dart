@@ -10,6 +10,8 @@ import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
+import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
@@ -164,7 +166,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   List<LmcReasonModel> listOfNgcDelayStatus = [];
   List<LmcReasonModel> listOfMeterReplaceType = [];
   List<LmcReasonModel> listOfRegulatorTypeReason = [];
-
+  static BuildContext? context = Singleton.instanceInit()?.context;
   _pageLoad(NGCFormLoadEvent event, emit) async {
     emit(NGCFormPageLoadState());
     _isPageLoader = false;
@@ -237,9 +239,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     regulatorSerialController.text =
         await SharedPref.getString(key: PrefsValue.mrRegulatorSerial);
     lmcPath = await SharedPref.getString(key: PrefsValue.lmcPath);
-    baseUrl = await SharedPref.getString(key: PrefsValue.baseUrl);
-    String pathKye =
-        await baseUrl == Apis.basePath ? "uploads/" : "public/uploads/";
+    baseUrl = EnvironmentConfig.of(context!)!.imageBaseURL;
+    String pathKye = "public/uploads/";
     networkMeterPhoto = await SharedPref.getString(key: PrefsValue.meterPhoto);
     networkPneumaticPhoto =
         await SharedPref.getString(key: PrefsValue.pneumaticPhoto);
@@ -317,12 +318,12 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         DateFormat(AppString.dateFormat).format(DateTime.now());
     Future.wait(<Future>[
       fetchTypeOfNrApi(context: event.context),
-      fetchNgcReasonApi(context: event.context),
       fetchMeterReplaceTypeApi(context: event.context),
       fetchRegulatorTypeApi(context: event.context),
       fetchMetersApi(context: event.context, meterSerial: ""),
     ]);
     await checkDelayReason();
+    await  fetchNgcReasonApi(context: event.context);
     /* if (regulatorTypeValue.id != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: regulatorTypeValue.id.toString());
     }*/

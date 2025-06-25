@@ -21,9 +21,19 @@ class EnvironmentConfig extends InheritedWidget {
     switch (flavors) {
       case EnvironmentFlavors.prodPBGPL:
       //  return "https://pbgplc.smartgasnet.com/api/";
-        return "https://pbgpluat.smartgasnet.com/api/";
+        return "https://pbgpl.smartgasnet.com/api/";
       case EnvironmentFlavors.prodMGL:
         return "https://mgl.smartgasnet.com/api/";
+    }
+  }
+
+  String get imageBaseURL {
+    print("flavor-->${flavors}");
+    switch (flavors) {
+      case EnvironmentFlavors.prodPBGPL:
+        return "https://pbgpl.smartgasnet.com/";
+      case EnvironmentFlavors.prodMGL:
+        return "https://mgl.smartgasnet.com/";
     }
   }
 }
