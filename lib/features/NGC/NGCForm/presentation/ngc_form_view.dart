@@ -721,6 +721,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   Widget _regulatorTypeDropdown({required NGCFormDataState dataState}) {
+    print("dataState.regulatorTypeController===?${dataState.regulatorTypeController}");
     return dataState.isRegularReplace == true
         ? DropdownWidget<LmcReasonModel>(
             star: AppString.star,
