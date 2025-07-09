@@ -168,8 +168,8 @@ class NGCFormHelper{
     required String regulatorType,
     required String regulatorNumber,
     required bool isCheckRegulatorMismatch,
-    required String srNumber,
-    required bool isCheckSR,
+    required String mrNumber,
+    required bool isCheckMR,
     required String regulatorId,
     required String latSR,
     required String longSR,
@@ -189,89 +189,126 @@ class NGCFormHelper{
     required String changeRegulatorType,
   }) async {
     try {
-      if(isDelayReason == true && delayReason.id == null){
+      if (isDelayReason && delayReason.id == null) {
         Utils.errorSnackBar(msg: "The Reason For Delay field is required.", context: context);
         return false;
-      }else if (meterNumber.isEmpty) {
+      }
+
+      if (meterNumber.isEmpty) {
         Utils.errorSnackBar(msg: "The Meter Number field is required.", context: context);
         return false;
-      } else if (isCheckMeterMismatch == true) {
+      }
+
+      if (isCheckMeterMismatch) {
         Utils.errorSnackBar(msg: "The Meter Number is mismatch. Please check your Meter Number.", context: context);
         return false;
-      }else if (changeMeterType == "null") {
-        Utils.errorSnackBar(msg : "The Change Meter Reason is required.",context: context);
-        return false;
-      } else if (meterInitialReading.isEmpty) {
-        Utils.errorSnackBar(msg : "The Meter Initial Reading field is required.", context:context);
+      }
+
+      if (changeMeterType == "null") {
+        Utils.errorSnackBar(msg: "The Change Meter Reason is required.", context: context);
         return false;
       }
-      if(regulatorType == ""){
+
+      if (meterInitialReading.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.", context: context);
+        return false;
+      }
+
+      if (regulatorType.isEmpty || regulatorType == "null") {
         Utils.errorSnackBar(msg: "The Regulator Type field is required.", context: context);
         return false;
-      } else if(regulatorType == "1"){
-        if (srNumber.isEmpty) {
-          Utils.errorSnackBar(msg: "The SR Number field is required.", context: context);
-          return false;
-        } else if (isCheckSR == true) {
-          Utils.errorSnackBar(msg: "The SR Number is mismatch. Please check your SR Number.", context: context);
-          return false;
-        }else if(regulatorNumber.isEmpty){
-          Utils.errorSnackBar(msg: "The Meter Regulator field is required.", context: context);
-          return false;
-        } else if (isCheckRegulatorMismatch == true) {
-          Utils.errorSnackBar(msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.", context: context);
-          return false;
-        }  else if (changeRegulatorType == "null") {
-          Utils.errorSnackBar(msg : "The Change Regulator Type Reason is required.",context: context);
-          return false;
-        }else if(latSR.isEmpty && longSR.isEmpty) {
-          Utils.errorSnackBar(msg: "The latSR longSR field is required.", context: context);
-          return false;
-        } else if(srPhoto.isEmpty){
-          Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
-          return false;
-        } else if (mrPhoto.isEmpty) {
-          Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
-          return false;
-        } else if(latMR.isEmpty && longMR.isEmpty) {
-          Utils.errorSnackBar(msg: "The latMR longMR field is required.", context: context);
-          return false;
-        }
-      } else if(regulatorType == "2"){
-        if(regulatorNumber.isEmpty){
-          Utils.errorSnackBar(msg : "The Regulator field is required.",context: context);
-          return false;
-        }else if (isCheckRegulatorMismatch == true) {
-          Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
-          return false;
-        } else if (changeRegulatorType == "null") {
-          Utils.errorSnackBar(msg : "The Change Regulator Reason is required.",context: context);
-          return false;
-        }
-      } else if (bpNumber.isEmpty) {
-        Utils.errorSnackBar(msg : "The bp Number field is required.", context:context);
-        return false;
-      } else if (noOfBurners.isEmpty) {
-        Utils.errorSnackBar(msg : "The No. Of Burners field is required.",context: context);
-        return false;
-      } else if (noOfFamily.isEmpty) {
-        Utils.errorSnackBar(msg : "The No. Of Family field is required.",context: context);
-        return false;
-      } else if (phoneNo.isEmpty) {
-        Utils.errorSnackBar(msg : "The Phone No. field is required.", context:context);
-        return false;
-      } else if (meterImg.path.isEmpty) {
-        Utils.errorSnackBar(msg : "The Meter Photo field is required.",context: context);
+      }
+
+      switch (regulatorType) {
+        case "1":
+          if (regulatorNumber.isEmpty) {
+            Utils.errorSnackBar(msg: "The SR Regulator Number field is required.", context: context);
+            return false;
+          }
+          if (isCheckRegulatorMismatch) {
+            Utils.errorSnackBar(msg: "The SR Regulator Number is mismatch. Please check your SR Number.", context: context);
+            return false;
+          }
+          if (mrNumber.isEmpty) {
+            Utils.errorSnackBar(msg: "The Meter Regulator Number field is required.", context: context);
+            return false;
+          }
+          if (isCheckMR) {
+            Utils.errorSnackBar(msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.", context: context);
+            return false;
+          }
+          if (changeRegulatorType == "null") {
+            Utils.errorSnackBar(msg: "The Change Regulator Type Reason is required.", context: context);
+            return false;
+          }
+          if (mrPhoto.isEmpty) {
+            Utils.errorSnackBar(msg: "The MR Photo field is required.", context: context);
+            return false;
+          }
+          if (srPhoto.isEmpty) {
+            Utils.errorSnackBar(msg: "The SR Photo field is required.", context: context);
+            return false;
+          }
+          if (latMR.isEmpty || longMR.isEmpty) {
+            Utils.errorSnackBar(msg: "The latMR/longMR field is required.", context: context);
+            return false;
+          }
+          if (latSR.isEmpty || longSR.isEmpty) {
+            Utils.errorSnackBar(msg: "The latSR/longSR field is required.", context: context);
+            return false;
+          }
+          break;
+
+        case "2":
+          if (regulatorNumber.isEmpty) {
+            Utils.errorSnackBar(msg: "The Regulator field is required.", context: context);
+            return false;
+          }
+          if (isCheckRegulatorMismatch) {
+            Utils.errorSnackBar(msg: "The Regulator Number is mismatch. Please check your Regulator Number.", context: context);
+            return false;
+          }
+          if (changeRegulatorType == "null") {
+            Utils.errorSnackBar(msg: "The Change Regulator Reason is required.", context: context);
+            return false;
+          }
+          break;
+      }
+
+      if (bpNumber.isEmpty) {
+        Utils.errorSnackBar(msg: "The BP Number field is required.", context: context);
         return false;
       }
+
+      if (noOfBurners.isEmpty) {
+        Utils.errorSnackBar(msg: "The No. Of Burners field is required.", context: context);
+        return false;
+      }
+
+     /* if (noOfFamily.isEmpty) {
+        Utils.errorSnackBar(msg: "The No. Of Family field is required.", context: context);
+        return false;
+      }*/
+
+      if (phoneNo.isEmpty) {
+        Utils.errorSnackBar(msg: "The Phone No. field is required.", context: context);
+        return false;
+      }
+
+      if (meterImg.path.isEmpty) {
+        Utils.errorSnackBar(msg: "The Meter Photo field is required.", context: context);
+        return false;
+      }
+
       return true;
     } catch (e) {
-      log("catchValidationSubmit--->${e.toString()}");
+      log("catchValidationSubmit ---> ${e.toString()}");
       return true;
     }
-  }
+    }
 
-  static Future<SubmitNgcReportModel?> setNGCReportData({
+
+    static Future<SubmitNgcReportModel?> setNGCReportData({
     required BuildContext context,
     required String nameOfContractor,
     required String meterReading,
@@ -290,8 +327,8 @@ class NGCFormHelper{
     required String isInstall,
     required String comment,
     required String meterNumberId,
-    required String srNumber,
-    required String srRegulatorId,
+    required String tfNumber,
+    required String regulatorId,
     required LmcReasonModel regulatorTypeId,
     required String meterChangeReason,
     required String replaceMeter,
@@ -329,15 +366,14 @@ class NGCFormHelper{
       "lmc_installation_id": lmcInstallationId.isEmpty ? "" : lmcInstallationId,
       "is_install": isInstall.isEmpty ? "" : isInstall,
       "comment": comment.isEmpty ? "" : comment,
-      "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
+
       "meter_change_reason": meterChangeReason.isEmpty ? "": meterChangeReason,
       "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
       "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
-      "tf_number": srNumber.isEmpty ? "" : srNumber,
-      /* "regulators_number": srRegulatorId ?? "",
-      "mr_regulator_id": mrRegulatorId,*/
-      "regulators_number": mrRegulatorId,
-      "mr_regulator_id": srRegulatorId,
+      "tf_number": tfNumber.isEmpty ? "" : tfNumber,
+      "regulator_type_id": regulatorTypeId.id == null ? "":regulatorTypeId.id.toString(),
+      "regulators_number": regulatorId,
+      "mr_regulator_id": mrRegulatorId,
       "latitude_mr": latitudeMR.isEmpty ? "0" : latitudeMR,
       "longitude_mr": longitudeMR.isEmpty ? "0" :longitudeMR,
       "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,

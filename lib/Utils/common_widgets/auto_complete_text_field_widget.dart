@@ -16,7 +16,8 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
   final Function(String)? onSelected;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
-  TextEditingController? controller;
+  final TextEditingController? controller;
+  final GlobalKey<FormFieldState>? fieldKey;
 
   AutoCompleteTextFieldWidget({
     super.key,
@@ -32,6 +33,7 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.controller,
+    this.fieldKey,
   });
 
   @override
@@ -79,6 +81,7 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
       fieldViewBuilder:
           (context, controller, focusNode, onEditingComplete) {
         return TextFormField(
+          key: fieldKey,
           cursorColor: AppColor.primer,
           controller: controller,
           focusNode: focusNode,

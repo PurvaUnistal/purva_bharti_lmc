@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 
 import 'enums.dart';
 
@@ -6,6 +7,7 @@ class AppConfig {
   static AppConfig? instance;
   RoleType? roleType;
   Client? client;
+  InstallationByNgcData ngcData = InstallationByNgcData();
 
   static AppConfig? instanceInit() {
     instance ??= AppConfig();
@@ -21,6 +23,10 @@ class AppConfig {
 
   setClient({required Client client}){
     this.client =  client;
+  }
+
+  setNGCData({required InstallationByNgcData newNGCData}){
+    this.ngcData =  newNGCData;
   }
 
   static DeviceType getDeviceType({BuildContext? context}) {

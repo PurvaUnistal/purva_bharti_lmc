@@ -48,7 +48,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
  final List<LmcReasonModel> listOfRegulatorType;
  final List<String> listOfMeterNumberSerial;
  final List<String> listOfRegulatorSerial;
- final List<String> listOfSRSerial;
+ final List<String> listOfMRSerial;
  final  List<ListOfMeterNo> listOfRegulator;
  final List<String> listOfQtyLMC;
  final List<FreeMaterialData> listOfAllMaterial;
@@ -60,7 +60,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
 
  final TextEditingController latOfHouseController;
  final TextEditingController longOfHouseController;
- final  TextEditingController srNumberController;
+ final  TextEditingController mrNumberController;
  final TextEditingController ngConversionDateController;
  final  TextEditingController extraPipeController;
  final TextEditingController extraPriceController;
@@ -106,7 +106,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     required this.listOfMeterNumber,
     required this.listOfRegulatorType,
     required this.listOfRegulatorSerial,
-    required this.listOfSRSerial,
+    required this.listOfMRSerial,
     required this.listOfRegulator,
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
@@ -128,7 +128,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     required this.meterInitialReadingController,
     required this.latOfHouseController,
     required this.longOfHouseController,
-    required this.srNumberController,
+    required this.mrNumberController,
     required this.ngConversionDateController,
     required this.extraPipeController,
     required this.extraPriceController,
@@ -181,7 +181,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     pneumaticTestReportPhoto,
     installationPhoto,
     listOfRegulatorSerial,
-    listOfSRSerial,
+    listOfMRSerial,
     listOfRegulator,
     listOfAllMaterial,
     listOfAllRFC,
@@ -189,7 +189,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     latOfHouseController,
     longOfHouseController,
     ngConversionDateController,
-    srNumberController,
+    mrNumberController,
     extraPipeController,
     extraPriceController,
     meterNumberSerialController,

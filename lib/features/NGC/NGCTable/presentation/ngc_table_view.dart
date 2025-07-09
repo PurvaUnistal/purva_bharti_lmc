@@ -10,6 +10,7 @@ import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
@@ -186,6 +187,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                     rows: dataState.listOfFilterInstallationByNgc.mapIndexed((index, user) =>
                         DataRow(
                             onSelectChanged: (newValue) async {
+                              await AppConfig.instanceInit()?.setNGCData(newNGCData: user);
                               await SharedPref.setString(
                                   key: PrefsValue.dmaUserId, value: user.dmaUserId ?? "");
                               await SharedPref.setString(

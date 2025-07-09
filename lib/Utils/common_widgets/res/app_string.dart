@@ -4,7 +4,7 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'app_config.dart';
 
 class AppString {
-  static String version = "Version : ${AppConfig.instanceInit()?.buildName} - LMC-25/06/2025";
+  static String version = "Version : ${AppConfig.instanceInit()?.buildName} - LMC-05/07/2025";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -71,7 +71,8 @@ class AppString {
   static String meterNumber = "Meter Number";
   static String meterNoErrorMsg = "Meter not Issued or Meter Number Incorrect\nor Meter already Installed";
   static String regulatorNoErrorMsg = "regulator Incorrect or Not allocated";
-  static String srNoErrorMsg = "SR Incorrect or Not allocated ";
+  static String srNoErrorMsg = "SR Incorrect or Not allocated";
+  static String mrNoErrorMsg = "MR Incorrect or Not allocated";
   static String regulator = "Regulators";
   static String meterRegulator = "Meter Regulator";
   static String meterInitNumber = "Meter Initial Reading";

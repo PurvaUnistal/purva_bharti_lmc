@@ -696,7 +696,7 @@ class InstallationByNgcData {
     regulators = json['regulators'] ?? "";
    regulatorType = json['regulator_type'] ?? "";
     regulatorSerial = json['regulator_serial'] ?? "";
-    mrRegulatorId = json['mr_regulator_id'] ?? "";
+    mrRegulatorId = json['lmc_mr_regulator_id'] ?? "";
     dmafamily = json['dmafamily'] ?? "";
     trNumber = json['tr_number'] ?? "";
     rfcDate = json['rfc_date'] ?? "";
@@ -1027,7 +1027,7 @@ class InstallationByNgcData {
     data['regulators'] = this.regulators;
     data['regulator_type'] = this.regulatorType;
     data['regulator_serial'] = this.regulatorSerial;
-    data['mr_regulator_id'] = this.mrRegulatorId;
+    data['lmc_mr_regulator_id'] = this.mrRegulatorId;
     data['dmafamily'] = this.dmafamily;
     data['tr_number'] = this.trNumber;
     data['rfc_date'] = this.rfcDate;

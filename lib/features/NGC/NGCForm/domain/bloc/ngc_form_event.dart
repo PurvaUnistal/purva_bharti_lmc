@@ -85,13 +85,13 @@ class SelectRegulatorsValueEvent extends NGCFormEvent {
   List<Object> get props => [regulatorsValue, context];
 }
 
-class SelectSRegulatorsEvent extends NGCFormEvent {
-  final String sRegulators;
+class SelectMRegulatorsEvent extends NGCFormEvent {
+  final String mRegulators;
   final BuildContext context;
-  SelectSRegulatorsEvent({required this.sRegulators, required this.context});
+  SelectMRegulatorsEvent({required this.mRegulators, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [sRegulators, context];
+  List<Object> get props => [mRegulators, context];
 }
 
 class SelectDelayReasonValueEvent extends NGCFormEvent {
@@ -166,13 +166,7 @@ class CaptureCameraNGCReportEvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
-class CaptureGalleryMREvent extends NGCFormEvent {
-  final BuildContext context;
-  CaptureGalleryMREvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
+
 
 class CaptureCameraMREvent extends NGCFormEvent {
   final BuildContext context;
@@ -182,13 +176,7 @@ class CaptureCameraMREvent extends NGCFormEvent {
   List<Object> get props => [context];
 }
 
-class CaptureGallerySREvent extends NGCFormEvent {
-  final BuildContext context;
-  CaptureGallerySREvent({required this.context});
-  @override
-  // TODO: implement props
-  List<Object> get props => [context];
-}
+
 
 class CaptureCameraSREvent extends NGCFormEvent {
   final BuildContext context;

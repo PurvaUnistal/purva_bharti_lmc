@@ -44,6 +44,9 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   final formKey = GlobalKey<FormState>();
+  final meterFieldKey = GlobalKey<FormFieldState>();
+  final regulatorFieldKey = GlobalKey<FormFieldState>();
+  final mRegulatorFieldKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         builder: (context, state) {
           if (state is FormInstallationDataState) {
             return Form(
-                key: formKey,
                 onWillPop: _onWillPop,
                 child: _itemBuilder(dataState: state));
           } else {
@@ -122,8 +124,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _initialMeterReading(stateData: dataState),
           _installRegulatorCheck(stateData: dataState),
           _regulatorTypeDropdown(stateData: dataState),
-          _srNumberController(stateData: dataState),
           _regulatorController(stateData: dataState),
+          _mrNumberController(stateData: dataState),
           _ngConversionDateController(stateData: dataState),
           _rfcDateControllerController(stateData: dataState),
           CommonStyle.vertical(context: context),
@@ -249,6 +251,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         Flexible(
           flex: 8,
           child: AutoCompleteTextFieldWidget(
+            fieldKey: meterFieldKey,
             star: AppString.star,
             hintText: AppString.meterNumber,
             label: AppString.meterNumber,
@@ -266,13 +269,13 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               return null;
             },
             onSelected: (val) {
-              formKey.currentState?.validate();
+              meterFieldKey.currentState?.validate();
               BlocProvider.of<FormInstallationBloc>(context).add(
                   SelectMeterNumberValueEvent(
                       context: context, meterReadingValue: val));
             },
             onChanged: (val) {
-              formKey.currentState?.validate();
+              meterFieldKey.currentState?.validate();
               BlocProvider.of<FormInstallationBloc>(context).add(
                   SelectMeterNumberValueEvent(
                       context: context, meterReadingValue: val));
@@ -446,7 +449,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               star: AppString.star,
               label: AppString.regulatorType,
               hint: AppString.regulatorType,
-              dropdownValue: stateData.regulatorTypeValue?.name == null
+              dropdownValue: stateData.regulatorTypeValue.name == null
                   ? null
                   : stateData.regulatorTypeValue,
               items: stateData.listOfRegulatorType,
@@ -463,19 +466,20 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   Widget _regulatorController({required FormInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true
         ? stateData.isRegulator == false
-            ? stateData.regulatorTypeValue?.name != null
+            ? stateData.regulatorTypeValue.name != null
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(
+                      fieldKey: regulatorFieldKey,
                       star: AppString.star,
-                      enabled: stateData.regulatorTypeValue?.name == null
+                      enabled: stateData.regulatorTypeValue.name == null
                           ? false
                           : true,
-                      label: stateData.regulatorTypeValue?.name != "PRV"
-                          ? AppString.meterRegulator
+                      label: stateData.regulatorTypeValue.name != "PRV"
+                          ? AppString.srNumber
                           : AppString.regulator,
-                      hintText: stateData.regulatorTypeValue?.name != "PRV"
-                          ? AppString.meterRegulator
+                      hintText: stateData.regulatorTypeValue.name != "PRV"
+                          ? AppString.srNumber
                           : AppString.regulator,
                       suggestions: stateData.listOfRegulatorSerial.length == 0
                           ? ["No Data Found"]
@@ -483,7 +487,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       keyboardType: TextInputType.text,
                       controller: stateData.regulatorSerialController,
                       onSelected: (val) {
-                        formKey.currentState?.validate();
+                        regulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
                             SelectRegulatorsValueEvent(
                                 context: context, regulatorsValue: val));
@@ -492,12 +496,14 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         if (value != null &&
                             value.isNotEmpty &&
                             !stateData.listOfRegulatorSerial.contains(value)) {
-                          return AppString.regulatorNoErrorMsg;
+                          return stateData.regulatorTypeValue.name != "PRV"
+                              ? AppString.srNoErrorMsg
+                              : AppString.regulatorNoErrorMsg;
                         }
                         return null;
                       },
                       onChanged: (val) async {
-                        await formKey.currentState?.validate();
+                        await regulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
                             SelectRegulatorsValueEvent(
                                 context: context, regulatorsValue: val));
@@ -509,38 +515,39 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         : Container();
   }
 
-  Widget _srNumberController({required FormInstallationDataState stateData}) {
+  Widget _mrNumberController({required FormInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true
         ? stateData.isRegulator == false
-            ? stateData.regulatorTypeValue?.name == "SR"
+            ? stateData.regulatorTypeValue.name == "SR"
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(
+                      fieldKey: mRegulatorFieldKey,
                       star: AppString.star,
-                      label: AppString.srNumber,
-                      hintText: AppString.srNumber,
-                      suggestions: stateData.listOfSRSerial.length == 0
+                      label: AppString.meterRegulator,
+                      hintText: AppString.meterRegulator,
+                      suggestions: stateData.listOfMRSerial.length == 0
                           ? ["No Data Found"]
-                          : stateData.listOfSRSerial,
+                          : stateData.listOfMRSerial,
                       keyboardType: TextInputType.text,
-                      controller: stateData.srNumberController,
+                      controller: stateData.mrNumberController,
                       onSelected: (val) {
-                        formKey.currentState?.validate();
+                        mRegulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
-                            SelectSREvent(context: context, sRegulators: val));
+                            SelectMREvent(context: context, mRegulators: val));
                       },
                       validator: (value) {
                         if (value != null &&
                             value.isNotEmpty &&
-                            !stateData.listOfSRSerial.contains(value)) {
-                          return AppString.srNoErrorMsg;
+                            !stateData.listOfMRSerial.contains(value)) {
+                          return AppString.mrNoErrorMsg;
                         }
                         return null;
                       },
                       onChanged: (val) async {
-                        await formKey.currentState?.validate();
+                        await mRegulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
-                            SelectSREvent(context: context, sRegulators: val));
+                            SelectMREvent(context: context, mRegulators: val));
                       },
                     ),
                   )

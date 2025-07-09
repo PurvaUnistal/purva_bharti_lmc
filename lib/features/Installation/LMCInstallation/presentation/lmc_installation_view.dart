@@ -35,7 +35,6 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   ScrollController _horizontalScrollController = ScrollController();
   ScrollController _verticalScrollController = ScrollController();
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

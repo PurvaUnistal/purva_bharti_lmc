@@ -59,13 +59,13 @@ class SelectRegulatorsValueEvent extends FormRFCInstallationEvent {
   List<Object> get props => [regulatorsValue,context];
 }
 
-class SelectSREvent extends FormRFCInstallationEvent {
-  final String sRegulators;
+class SelectMREvent extends FormRFCInstallationEvent {
+  final String mRegulators;
   final BuildContext context;
-  SelectSREvent({required this.sRegulators, required this.context});
+  SelectMREvent({required this.mRegulators, required this.context});
   @override
   // TODO: implement props
-  List<Object> get props => [sRegulators,context];
+  List<Object> get props => [mRegulators,context];
 }
 
 class SelectNGCValueEvent extends FormRFCInstallationEvent {

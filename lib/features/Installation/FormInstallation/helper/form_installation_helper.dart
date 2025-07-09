@@ -144,7 +144,7 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<dynamic> validationSubmit({
+  static Future<bool> validationSubmit({
     required BuildContext context,
     required String dateInstallation,
     required String rfcDateController,
@@ -152,15 +152,15 @@ class FormInstallationHelper {
     required LmcReasonModel delayReason,
     required String meterNumber,
     required bool isCheckMeterMismatch,
-    required bool isCheckSR,
+    required bool isCheckMR,
     required String meterInit1,
     required String meterInit2,
     required String meterInit3,
     required bool isInstallRegulator,
     required LmcReasonModel regulatorType,
-    required String regulatorNumber,
     required bool isCheckRegulatorMismatch,
-    required String srNumber,
+    required String mrNumber,
+    required String regulatorNumber,
     required String ngConversionDate,
     required String fittingDetails,
     required List<MaterialItem> pipeLength,
@@ -169,110 +169,87 @@ class FormInstallationHelper {
     required String houseLong,
     required String housePhoto,
   }) async {
+    bool error(String msg) {
+      Utils.errorSnackBar(msg: msg, context: context);
+      return false;
+    }
+
     try {
-      List<String> meterPipeValues = [];
-      for (MaterialItem m in pipeLength) {
-        if (m.unit == "Meter") {
-          meterPipeValues.add(
-              m.controller.text.isEmpty ? "0" : m.controller.text);
-        }
-      }
+      // Calculate total pipe length
+      double totalPipeLength = pipeLength
+          .where((m) => m.unit == "Meter")
+          .map((m) => double.tryParse(m.controller.text) ?? 0)
+          .fold(0, (a, b) => a + b);
+
       if (dateInstallation.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The Date Installation field is required.", context: context);
-        return false;
-      } else if (isDelayReason == true && delayReason.id == null) {
-        Utils.errorSnackBar(
-            msg: "The Reason For Delay field is required.", context: context);
-        return false;
-      } else if (meterNumber.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The Meter Number field is required.", context: context);
-        return false;
-      } else if (isCheckMeterMismatch == true) {
-        Utils.errorSnackBar(
-            msg: "The Meter Number is mismatch. Please check your Meter Number.",
-            context: context);
-        return false;
-      } else
-      if (meterInit1.isEmpty || meterInit2.isEmpty || meterInit3.isEmpty) {
-        Utils.errorSnackBar(msg: "The Meter Initial Reading field is required.",
-            context: context);
-        return false;
-      } else if (isInstallRegulator == true) {
+        return error("The Date Installation field is required.");
+      }
+      if (isDelayReason && delayReason.id == null) {
+        return error("The Reason For Delay field is required.");
+      }
+      if (meterNumber.isEmpty) {
+        return error("The Meter Number field is required.");
+      }
+      if (isCheckMeterMismatch) {
+        return error("The Meter Number is mismatch. Please check your Meter Number.");
+      }
+      if ([meterInit1, meterInit2, meterInit3].any((e) => e.isEmpty)) {
+        return error("The Meter Initial Reading field is required.");
+      }
+
+      if (isInstallRegulator) {
         if (regulatorType.name == null) {
-          Utils.errorSnackBar(
-              msg: "The Regulator Type field is required.", context: context);
-          return false;
-        } else if (regulatorType.name == "SR") {
-          if (srNumber.isEmpty) {
-            Utils.errorSnackBar(
-                msg: "The SR Number field is required.", context: context);
-            return false;
-          } else if (isCheckSR == true) {
-            Utils.errorSnackBar(
-                msg: "The SR Number is mismatch. Please check your SR Number.",
-                context: context);
-            return false;
-          } else if (regulatorNumber.isEmpty) {
-            Utils.errorSnackBar(msg: "The Meter Regulator field is required.",
-                context: context);
-            return false;
-          } else if (isCheckRegulatorMismatch == true) {
-            Utils.errorSnackBar(
-                msg: "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.",
-                context: context);
-            return false;
+          return error("The Regulator Type field is required.");
+        }
+
+        if (regulatorType.name == "SR") {
+          if (regulatorNumber.isEmpty) {
+            return error("The SR Number field is required.");
+          }
+          if (isCheckRegulatorMismatch) {
+            return error("The SR Number is mismatch. Please check your SR Number.");
+          }
+          if (mrNumber.isEmpty) {
+            return error("The Meter Regulator field is required.");
+          }
+          if (isCheckMR) {
+            return error("The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.");
           }
         } else if (regulatorType.name == "PRV") {
           if (regulatorNumber.isEmpty) {
-            Utils.errorSnackBar(
-                msg: "The Regulator field is required.", context: context);
-            return false;
-          } else if (isCheckRegulatorMismatch == true) {
-            Utils.errorSnackBar(
-                msg: "The Regulator Number is mismatch. Please check your Regulator Number.",
-                context: context);
-            return false;
+            return error("The Regulator field is required.");
+          }
+          if (isCheckRegulatorMismatch) {
+            return error("The Regulator Number is mismatch. Please check your Regulator Number.");
           }
         }
+
         if (ngConversionDate.isEmpty) {
-          Utils.errorSnackBar(
-              msg: "The Proposed NG Conversion Date field is required.",
-              context: context);
-          return false;
-        } else if (rfcDateController.isEmpty) {
-          Utils.errorSnackBar(
-              msg: "The RFC Date field is required.", context: context);
-          return false;
+          return error("The Proposed NG Conversion Date field is required.");
+        }
+        if (rfcDateController.isEmpty) {
+          return error("The RFC Date field is required.");
         }
       }
+
       if (fittingDetails.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The Fitting Details field is required.", context: context);
-        return false;
+        return error("The Fitting Details field is required.");
       }
-      else if (double.parse(meterPipeValues.reduce((value, element) =>
-          (double.parse(value) + double.parse(element)).toString())) <= 0) {
-        Utils.errorSnackBar(
-            msg: "Please enter at least one pipe detail.", context: context);
-        return false;
+
+      if (totalPipeLength <= 0) {
+        return error("Please enter at least one pipe detail.");
       }
+
       if (meterPhoto.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The Meter Photo field is required.", context: context);
-        return false;
-      } else if (houseLat.isEmpty || houseLong.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The House Latitude and Longitude Point is required.",
-            context: context);
-        return false;
+        return error("The Meter Photo field is required.");
       }
-      else if (housePhoto.isEmpty) {
-        Utils.errorSnackBar(
-            msg: "The House Photo field is required.", context: context);
-        return false;
+      if (houseLat.isEmpty || houseLong.isEmpty) {
+        return error("The House Latitude and Longitude Point is required.");
       }
+      if (housePhoto.isEmpty) {
+        return error("The House Photo field is required.");
+      }
+
       return true;
     } catch (e) {
       log("catchValidationSubmit--->${e.toString()}");
@@ -280,12 +257,13 @@ class FormInstallationHelper {
     }
   }
 
+
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,
     required String meterNo,
-    required String sRegulatorsId,
+    required String regulatorsId,
+    required String tfNumber,
     required String mRegulatorsId,
-    required String srNumber,
     required String latitudeHg,
     required String longitudeHg,
     required String workCompletedDate,
@@ -328,9 +306,9 @@ class FormInstallationHelper {
         "meter_number": meterNo,
         "material_id": materialId,
         "feasibility_id": lmcFeasId,
-        "tf_number": srNumber,
-        "regulators": mRegulatorsId,
-        "mr_regulator_id": sRegulatorsId,
+        "tf_number": tfNumber,
+        "regulators": regulatorsId,
+        "mr_regulator_id": mRegulatorsId,
         "latitude_hg": latitudeHg,
         "longitude_hg": longitudeHg,
         "work_completed_date": workCompletedDate,
@@ -338,8 +316,7 @@ class FormInstallationHelper {
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
-        "delay_reason": delayReason.name == null ? "" : delayReason.name
-            .toString(),
+        "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
         "type_of_nr": typeOfNR.isEmpty ? "" : typeOfNR.toString(),
         "ngc": ngc.key == null ? "" : ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate,

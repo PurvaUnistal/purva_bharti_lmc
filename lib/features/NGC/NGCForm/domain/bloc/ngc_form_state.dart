@@ -36,6 +36,8 @@ class NGCFormDataState extends NGCFormInitialState {
   final File mrPhoto;
   final File srPhoto;
   final bool isRegulator;
+  final bool isSRLatLong;
+  final bool isMRLatLong;
   final String regulatorCheck;
   final List<GetConstantModel> listOfTypeOfNr;
   final GetConstantModel typeOfNrValue;
@@ -47,7 +49,7 @@ class NGCFormDataState extends NGCFormInitialState {
   final List<String> listOfMeterNumberId;
   final List<ListOfMeterNo> listOfRegulator;
   final List<String> listOfRegulatorSerial;
-  final List<String> listOfSRSerial;
+  final List<String> listOfMRSerial;
   final List<String> listOfRegulatorId;
   final List<LmcReasonModel> listOfRegulatorType;
   final List<LmcReasonModel> listOfMeterType;
@@ -68,8 +70,8 @@ class NGCFormDataState extends NGCFormInitialState {
   final TextEditingController latOfSRController;
   final TextEditingController longOfSRController;
   final TextEditingController nameContractorController;
-  final TextEditingController srNumberSearchController;
-  final TextEditingController srSerialNumberController;
+  final TextEditingController mrNumberSearchController;
+  final TextEditingController mrSerialNumberController;
   final TextEditingController meterNumberSerialController;
   final TextEditingController bpNumberController;
   final TextEditingController delayReasonController;
@@ -102,6 +104,8 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.isCheckMeterMismatch,
     required this.isMeterReplace,
     required this.isRegularReplace,
+    required this.isSRLatLong,
+    required this.isMRLatLong,
     required this.meterPhoto,
     required this.ngcReportPhoto,
     required this.isRegulator,
@@ -116,7 +120,7 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.listOfMeterNumberId,
     required this.listOfRegulator,
     required this.listOfRegulatorSerial,
-    required this.listOfSRSerial,
+    required this.listOfMRSerial,
     required this.listOfRegulatorId,
     required this.listOfRegulatorType,
     required this.listOfMeterType,
@@ -140,8 +144,8 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.latOfSRController,
     required this.longOfSRController,
     required this.nameContractorController,
-    required this.srNumberSearchController,
-    required this.srSerialNumberController,
+    required this.mrNumberSearchController,
+    required this.mrSerialNumberController,
     required this.meterNumberSerialController,
     required this.bpNumberController,
     required this.delayReasonController,
@@ -178,6 +182,8 @@ class NGCFormDataState extends NGCFormInitialState {
         isBtnLoader,
         isDelayReason,
         isCheckMeterMismatch,
+    isSRLatLong,
+    isMRLatLong,
         meterPhoto,
         ngcReportPhoto,
         isRegulator,
@@ -192,7 +198,7 @@ class NGCFormDataState extends NGCFormInitialState {
         listOfMeterNumberId,
         listOfRegulator,
         listOfRegulatorSerial,
-        listOfSRSerial,
+        listOfMRSerial,
         listOfRegulatorId,
         listOfRegulatorType,
         listOfMeterType,
@@ -219,8 +225,8 @@ class NGCFormDataState extends NGCFormInitialState {
         nameContractorController,
         noOfFamilyMembersController,
         meterNumberSerialController,
-        srNumberSearchController,
-        srSerialNumberController,
+        mrNumberSearchController,
+        mrSerialNumberController,
         bpNumberController,
         delayReasonController,
         noOfBurnersController,

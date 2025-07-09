@@ -32,7 +32,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<SelectTypeNRValueEvent>(_selectTypeNRValue);
     on<SelectMeterNumberValueEvent>(_selectMeterNumberValue);
     on<SelectRegulatorsValueEvent>(_selectRegulatorsValue);
-    on<SelectSREvent>(_selectSR);
+    on<SelectMREvent>(_selectMR);
     on<CaptureGalleryMeterEvent>(_captureGalleryMeter);
     on<CaptureCameraMeterEvent>(_captureCameraMeter);
     on<MeterInitReadingEvent>(_meterInitReading);
@@ -60,7 +60,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   bool isDelayReason = false;
   bool isCheckMeterMismatch = false;
   bool isCheckRegulatorMismatch = false;
-  bool isCheckSR = false;
+  bool isCheckMR = false;
   bool isExtraPipe = false;
 
   String schema = "";
@@ -83,7 +83,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<String> listOfMeterNumberId = [];
   List<ListOfMeterNo> listOfRegulator = [];
   List<String> listOfRegulatorSerial = [];
-  List<String> listOfSRSerial = [];
+  List<String> listOfMRSerial = [];
   List<String> listOfRegulatorId = [];
   List<GetConstantModel> listOfTypeOfNr = [];
   List<GetConstantModel> listOfReadyNGC = [];
@@ -97,7 +97,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   TextEditingController meterConnectionMeterController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
-  TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController trNumberController = TextEditingController();
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController proposedDateController = TextEditingController();
@@ -111,7 +110,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   TextEditingController longOfHouseController = TextEditingController();
   TextEditingController ngConversionDateController = TextEditingController();
   TextEditingController rfcDateController = TextEditingController();
-  TextEditingController srNumberController = TextEditingController();
+  TextEditingController regulatorSerialController = TextEditingController();
+  TextEditingController mrNumberController = TextEditingController();
   TextEditingController meterReadingDate = TextEditingController();
   TextEditingController extraPipeController = TextEditingController(text: "0");
   TextEditingController extraPriceController = TextEditingController(text: "0");
@@ -120,8 +120,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   FocusNode meterIniReading2FocusNode = FocusNode();
   FocusNode meterIniReading3FocusNode = FocusNode();
 
-  String regulatorId = '';
-  String sRegulatorId = '';
+
+  String regulatorsId = '';
+  String mrRegulatorsId = '';
   String materialId = '';
 
   File housePhoto = File("");
@@ -140,7 +141,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     isDelayReason = false;
     isCheckMeterMismatch = false;
     isCheckRegulatorMismatch = false;
-    isCheckSR = false;
+    isCheckMR = false;
     isExtraPipe = false;
     housePhoto = File("");
     rfcCardPhoto = File("");
@@ -156,7 +157,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     listOfMeterNumberId = [];
     listOfRegulator = [];
     listOfRegulatorSerial = [];
-    listOfSRSerial = [];
+    listOfMRSerial = [];
     listOfRegulatorId = [];
 
     listOfTypeOfNr = [];
@@ -176,7 +177,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     extraPipeController.text = "0";
     extraPriceController.text = "0";
     meterConnectionMeterController.text = "";
-    srNumberController.text = "";
+    mrNumberController.text = "";
     meterNumberSerialController.text = "";
     regulatorSerialController.text = "";
     bpNumberController.text = "";
@@ -292,9 +293,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       ngConversionDateController.text = "";
       rfcDateController.text = "";
       regulatorSerialController.text = "";
-      srNumberController.text = "";
-      regulatorId = '';
-      sRegulatorId = '';
+      mrNumberController.text = "";
+      regulatorsId = '';
+      mrRegulatorsId = '';
       rfcCardPhoto = File("");
       pneumaticTestReportPhoto = File("");
     }
@@ -306,7 +307,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
     regulatorTypeValue = event.regulatorTypeValue;
     regulatorSerialController.clear();
-    srNumberController.clear();
+    mrNumberController.clear();
     if (event.regulatorTypeValue.name != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
     }
@@ -440,7 +441,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
-      listOfSRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+      listOfMRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
       return res;
     }
   }
@@ -462,7 +463,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
     regulatorSerialController.text = event.regulatorsValue;
-    regulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
+    regulatorsId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.regulatorsValue)?.id ?? "";
     if (event.regulatorsValue.isNotEmpty && !listOfRegulatorSerial.contains(event.regulatorsValue)) {
       isCheckRegulatorMismatch = true;
     } else {
@@ -471,13 +472,13 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
-  _selectSR(SelectSREvent event, emit) async {
-    srNumberController.text = event.sRegulators;
-    sRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.sRegulators)?.id ?? "";
-    if (event.sRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.sRegulators)) {
-      isCheckSR = true;
+  _selectMR(SelectMREvent event, emit) async {
+    mrNumberController.text = event.mRegulators;
+    mrRegulatorsId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
+    if (event.mRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.mRegulators)) {
+      isCheckMR = true;
     } else {
-      isCheckSR = false;
+      isCheckMR = false;
     }
     _eventCompleted(emit);
   }
@@ -642,9 +643,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         meterInit3: meterIniReading3Controller.text.trim().toString(),
         regulatorType: regulatorTypeValue,
         isInstallRegulator: isInstallRegulator,
-        srNumber: srNumberController.text.trim().toString(),
-        isCheckSR: isCheckSR,
-        regulatorNumber: regulatorSerialController.text.trim().toString(),
+        regulatorNumber:regulatorSerialController.text.trim().toString(),
+        isCheckMR: isCheckMR,
+        mrNumber: mrNumberController.text.trim().toString(),
         isCheckRegulatorMismatch: isCheckRegulatorMismatch,
         rfcDateController: rfcDateController.text.trim().toString(),
         ngConversionDate: ngConversionDateController.text.trim().toString(),
@@ -668,13 +669,13 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           meterNo: materialId,
           latitudeHg: latOfHouseController.text.trim().toString(),
           longitudeHg: longOfHouseController.text.trim().toString(),
-          srNumber: srNumberController.text.trim().toString(),
+          tfNumber: bpNumberController.text.toString(),
           regulatorCheck: installRegulator,
           materialIdLmc: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
           proposedNgcDate: ngConversionDateController.text.trim().toString(),
           qtyLmc: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-          mRegulatorsId: regulatorId.toString(),
-          sRegulatorsId: sRegulatorId.toString(),
+          mRegulatorsId: mrRegulatorsId.toString(),
+          regulatorsId: regulatorsId.toString(),
           regulatorTypeId: regulatorTypeValue.id == null ? "" : regulatorTypeValue.id.toString(),
           delayReason: delayReasonValue,
           meterReading: meterInitialReadingController.text.trim().toString(),
@@ -758,12 +759,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       latOfHouseController: latOfHouseController,
       longOfHouseController: longOfHouseController,
       ngConversionDateController: ngConversionDateController,
-      srNumberController: srNumberController,
+      mrNumberController: mrNumberController,
       extraPipeController: extraPipeController,
       extraPriceController: extraPriceController,
       regulatorSerialController: regulatorSerialController,
       meterNumberSerialController: meterNumberSerialController,
-      listOfSRSerial: listOfSRSerial,
+      listOfMRSerial: listOfMRSerial,
     ));
   }
 }
