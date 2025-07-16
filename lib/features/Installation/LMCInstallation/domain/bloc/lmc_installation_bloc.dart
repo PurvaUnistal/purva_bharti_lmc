@@ -16,8 +16,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
 
-  String schema = "";
-  String userName = "";
+
   bool isLoader = false;
   bool isAreaFilter = false;
   int pageNo = 1;
@@ -40,8 +39,6 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
     bpNumberController.text = "";
     scrollController = ScrollController();
     installationDoneModel = InstallationDoneModel();
-    schema = await SharedPref.getString(key: PrefsValue.schema,);
-    userName = await SharedPref.getString(key: PrefsValue.userName,);
     await Future.wait(<Future>[
       fetchAllArea(context: event.context),
       fetchInstallation(
@@ -96,8 +93,6 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
 
   _eventCompleted(emit) {
     emit(LMCInstallationDataState(
-      userName: userName,
-      schema: schema,
       isLoader: isLoader,
       isAreaFilter: isAreaFilter,
       allAreaValue: areaValue,

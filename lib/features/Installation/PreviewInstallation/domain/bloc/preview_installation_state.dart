@@ -15,8 +15,6 @@ class PreviewInstallationPageLoadState extends PreviewInstallationState {
 //ignore: must_be_immutable
 class PreviewInstallationDataState extends PreviewInstallationState {
   final bool isLoader;
-  final String schema;
-  final String userName;
   String custRegNo;
   String trNumber;
   String bpNumber;
@@ -40,8 +38,6 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   String rfcProcessStatus;
 
   PreviewInstallationDataState({
-    required this.schema,
-    required this.userName,
     required this.isLoader,
     required this.trNumber,
     required this.bpNumber,
@@ -69,8 +65,6 @@ class PreviewInstallationDataState extends PreviewInstallationState {
   @override
   // TODO: implement props
   List<Object?> get props => [
-    schema,
-    userName,
     isLoader,
     custRegNo,
     trNumber,

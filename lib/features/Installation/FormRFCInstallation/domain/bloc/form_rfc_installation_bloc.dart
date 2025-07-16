@@ -65,8 +65,7 @@ class FormRFCInstallationBloc
   bool isCheckMR = false;
   bool isExtraPipe = false;
 
-  String schema = "";
-  String userName = "";
+
   String currentDate = "";
   String installRegulator = "0";
   String extraPipe = "0";
@@ -85,6 +84,7 @@ class FormRFCInstallationBloc
   List<String> listOfMeterNumberSerial = [];
   List<String> listOfMeterNumberId = [];
   List<ListOfMeterNo> listOfRegulator = [];
+  List<ListOfMeterNo> listOfMR = [];
   List<String> listOfRegulatorSerial = [];
   List<String> listOfMRSerial = [];
   List<String> listOfRegulatorId = [];
@@ -162,6 +162,7 @@ class FormRFCInstallationBloc
     listOfMeterNumberSerial = [];
     listOfMeterNumberId = [];
     listOfRegulator = [];
+    listOfMR = [];
     listOfRegulatorSerial = [];
     listOfMRSerial = [];
     listOfRegulatorId = [];
@@ -200,12 +201,7 @@ class FormRFCInstallationBloc
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
+
     currentDate = await DateFormat(AppString.dateFormat).format(DateTime.now());
 
     meterReadingDate.text = currentDate;
@@ -226,12 +222,22 @@ class FormRFCInstallationBloc
         context: event.context,
       ),
       fetchReadyForNgcApi(context: event.context),
-      fetchMetersApi(context: event.context, meterSerial: ""),
       fetchRegulatorTypeApi(context: event.context),
     ]);
+    await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchRFCInstallationApi(context: event.context);
     await fetchFreeMaterialApi(context: event.context);
     await checkDelayReason();
+    await fetchMRApi(
+      context: event.context,
+      regulatorSerial: "",
+      regulatorType: regulatorTypeValue.id ?? "",
+    );
+    await fetchRegulatorsApi(
+      context: event.context,
+      regulatorSerial: "",
+      regulatorType: regulatorTypeValue.id ?? "",
+    );
     _eventCompleted(emit);
   }
 
@@ -324,8 +330,23 @@ class FormRFCInstallationBloc
     regulatorTypeValue = event.regulatorTypeValue;
     regulatorSerialController.clear();
     mrNumberController.clear();
-    if (event.regulatorTypeValue.name != null) {
-      await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
+    if (event.regulatorTypeValue.name == "SR") {
+      await fetchMRApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
+      await fetchRegulatorsApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
+    } else if (event.regulatorTypeValue.name != null) {
+      await fetchRegulatorsApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
     }
     isRegulator = false;
     _eventCompleted(emit);
@@ -347,6 +368,7 @@ class FormRFCInstallationBloc
             delayReasonValue.id = listOfDelayReason[i].id;
           }
         }
+
         latOfHouseController.text = rfcInstallationLmc.latitudeHg!;
         longOfHouseController.text = rfcInstallationLmc.longitudeHg!;
         meterInitialReadingController.text = rfcInstallationLmc.meterReading ?? "";
@@ -422,7 +444,17 @@ class FormRFCInstallationBloc
         regulatorsId = rfcInstallationLmc.regulators!;
         materialId = rfcInstallationLmc.meterNumber!;
         rfcDateController.text = rfcInstallationLmc.rfcDate!;
-        ngConversionDateController.text = rfcInstallationLmc.proposedNgcDate!;
+        final dateStr = rfcInstallationLmc.proposedNgcDate;
+        print("dateStr.text${dateStr}");
+        if (dateStr != null && dateStr.trim().isNotEmpty) {
+          final parsedDate = DateTime.parse(dateStr);
+          ngConversionDateController.text =
+              DateFormat('dd-MM-yyyy').format(parsedDate);
+            print("ngConversionDateController.text${ngConversionDateController.text}");
+        } else {
+          print('⚠️ Date is null or empty');
+          ngConversionDateController.text = '';
+        }
         extraPipeController.text = rfcInstallationLmc.extraPipe!;
         extraPriceController.text = rfcInstallationLmc.extraPrice!;
         extraPipe =rfcInstallationLmc.extraPipe!;
@@ -564,7 +596,15 @@ class FormRFCInstallationBloc
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
-      listOfMRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+      return res;
+    }
+  }
+
+  fetchMRApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+    var res = await FormInstallationHelper.getMeterRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+    if (res != null) {
+      listOfMR = res;
+      listOfMRSerial = listOfMR.map((e) => e.serialNumber!).toList();
       return res;
     }
   }
@@ -605,7 +645,7 @@ class FormRFCInstallationBloc
 
   _selectMR(SelectMREvent event, emit) async {
     mrNumberController.text = event.mRegulators;
-    mrRegulatorsId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
+    mrRegulatorsId = listOfMR.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
     if (event.mRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.mRegulators)) {
       isCheckMR = true;
     } else {
@@ -842,9 +882,7 @@ class FormRFCInstallationBloc
 
   _eventCompleted(emit) {
     emit(FormRFCInstallationDataState(
-      userName: userName,
       baseUrl: baseUrl,
-      schema: schema,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,
       isInstallRegulator: isInstallRegulator,
@@ -884,7 +922,6 @@ class FormRFCInstallationBloc
       pneumaticTestReportPhoto: pneumaticTestReportPhoto,
       installationPhoto: installationPhoto,
       listOfRegulatorSerial: listOfRegulatorSerial,
-      listOfRegulator: listOfRegulator,
       listOfAllMaterial: listOfAllMaterial,
       listOfAllRFC: listOfAllRFC,
       materialList: materialList,

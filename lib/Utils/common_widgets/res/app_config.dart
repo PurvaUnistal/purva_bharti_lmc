@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 
 import 'enums.dart';
@@ -7,6 +8,7 @@ class AppConfig {
   static AppConfig? instance;
   RoleType? roleType;
   Client? client;
+  LoginModel loginData = LoginModel();
   InstallationByNgcData ngcData = InstallationByNgcData();
 
   static AppConfig? instanceInit() {
@@ -14,11 +16,15 @@ class AppConfig {
     return instance;
   }
 
-  String _buildName = "";
-  String get buildName => _buildName;
+  String _buildNumber = "";
+  String get buildNumber => _buildNumber;
 
-  setBuildName({required String buildName}) {
-    _buildName = buildName;
+  setBuildNumber({required String buildNumber}) {
+    _buildNumber = buildNumber;
+  }
+
+  setLoginData({required LoginModel newLoginData}) {
+    this.loginData = newLoginData;
   }
 
   setClient({required Client client}){

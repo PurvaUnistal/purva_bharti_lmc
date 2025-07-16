@@ -9,6 +9,7 @@ import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/app_update_message_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
@@ -74,12 +75,26 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    print("buildName-->${AppConfig.instanceInit()?.buildName}");
+    print("buildName-->${AppConfig.instanceInit()?.buildNumber}");
     return WillPopScope(
       onWillPop: () =>_onWillPop(),
       child: Scaffold(
-        backgroundColor: Colors.green.shade50,
-        body: SafeArea(
+        backgroundColor: AppColor.green50,
+        appBar: AppBarWidget(
+          title: AppString.lmcMobilityH,
+          boolLeading: false,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  showModalBottomSheet(context: context, builder: (context) => const LogoutWidget());
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: AppColor.white,
+                ))
+          ],
+        ),
+        body:  SafeArea(
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               if (state is FetchHomeDataState) {
@@ -93,22 +108,6 @@ class _HomeViewState extends State<HomeView> {
             },
           ),
         ),
-        /* bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if(state is FetchHomeDataState){
-              return  Container(
-                  child: BottomNavigationBar(
-                    currentIndex: state.currentIndex,
-                    onTap: (index) {
-                      BlocProvider.of<HomeBloc>(context).add(HomeSetPageIndex(pageIndex: index));
-                    },
-                    items: state.bottomNavyBarItemList,
-                  ));
-            } else{
-              return const SizedBox.shrink();
-            }
-          },
-        ),*/
       ),
     );
   }
@@ -124,120 +123,58 @@ class _HomeViewState extends State<HomeView> {
 
 
   _buildLayout({required FetchHomeDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.green50,
-      appBar: AppBarWidget(
-        title: AppString.lmcMobilityH,
-        boolLeading: false,
-        leadingWidget: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              dataState.userName,
-              textAlign: TextAlign.start,
-              style: Styles.rel,
-            ),
-            Text(
-              dataState.scheme,
-              textAlign: TextAlign.start,
-              style: Styles.rel,
-            )
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                showModalBottomSheet(context: context, builder: (context) => const LogoutWidget());
-              },
-              icon: Icon(
-                Icons.logout,
-                color: AppColor.white,
-              ))
-        ],
-      ),
-      body: ListView(
+    final ctx = UserContext.getUserContext();
+    return ListView(
         children: [
-          Stack(
-            children: [
-              Image.asset(
-                AppConfig.instanceInit()!.client == Client.purvaBharti ? AppIcon.lmcBanner :AppIcon.mglBanner, width: double.infinity,),
-              Positioned(
-                  child: Text(
-                    dataState.baseUrl == Apis.basePath ? "UAT APP" : "",
-                    textAlign: TextAlign.end,
-                    style: Styles.title,
-                  )
-              )
-            ],
-          ),
+          Image.asset(
+            AppConfig.instanceInit()!.client == Client.purvaBharti ? AppIcon.lmcBanner :AppIcon.mglBanner, width: double.infinity,),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
-          if(dataState.role == "lmc")...[
-            for(int i = 0; i < dataState.listOFAccessRight.toSet().toList().length; i++)...[
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC01" ? CardWidget(
-                icon: Icons.balance_outlined,
-                text: "LMC Feasibility",
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => FeasibilityView()));
-                },
-              )
-                  : Container(),
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC02" ? CardWidget(
-                icon: Icons.arrow_circle_down_outlined,
-                text: "LMC Installation",
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => LMCInstallationView()));
-                },
-              )
-                  : Container(),
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "NGC01" ?
-              CardWidget(
-                icon: Icons.sync,
-                text: "NG Conversion",
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NgcTableView()));
-                },
-              )
-                  : Container()
-            ],
-          ] else if(dataState.role == "ngc")...[
-            for(int i = 0; i < dataState.listOFAccessRight.toSet().toList().length; i++)...[
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC01" ? CardWidget(
-                icon: Icons.balance_outlined,
-                text: "LMC Feasibility",
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => FeasibilityView()));
-                },
-              )
-                  : Container(),
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "LMC02" ? CardWidget(
-                icon: Icons.arrow_circle_down_outlined,
-                text: "LMC Installation",
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => LMCInstallationView()));
-                },
-              )
-                  : Container(),
-              dataState.listOFAccessRight.toSet().toList()[i].menuCode == "NGC01" ?
-              CardWidget(
-                icon: Icons.arrow_circle_down_outlined,
-                text: "NG Conversion",
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NgcTableView()));
-                },
-              )
-                  : Container()
-            ],
+          if (ctx.user.role == "lmc" || ctx.user.role == "ngc") ...[
+            ...dataState.listOFAccessRight
+                .where((access) => ["LMC01", "LMC02", "NGC01"].contains(access.menuCode))
+                .map((access) {
+              switch (access.menuCode) {
+                case "LMC01":
+                  return CardWidget(
+                    icon: Icons.balance_outlined,
+                    text: "LMC Feasibility",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FeasibilityView()),
+                      );
+                    },
+                  );
+                case "LMC02":
+                  return CardWidget(
+                    icon: Icons.arrow_circle_down_outlined,
+                    text: "LMC Installation",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LMCInstallationView()),
+                      );
+                    },
+                  );
+                case "NGC01":
+                  return CardWidget(
+                    icon: Icons.sync,
+                    text: "NG Conversion",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NgcTableView()),
+                      );
+                    },
+                  );
+                default:
+                  return const SizedBox.shrink();
+              }
+            }).toList(),
           ]
         ],
-      ),
+
     );
   }
 }

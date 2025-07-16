@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/presentation/lmc_feasibility_view.dart';
@@ -16,9 +17,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeSetPageIndex>(_setPageIndex);
   }
   bool isLoader =  false;
-  String scheme = '';
-  String role = '';
-  String userName = '';
   String baseUrl = '';
   String installationName = '';
   String feasibilityName = '';
@@ -31,17 +29,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Widget> pageWidgets  = [];
   List<BottomNavigationBarItem> bottomNavyBarItemList = [];
   static BuildContext? context = Singleton.instanceInit()?.context;
+
+  static final ctx = UserContext.getUserContext();
+
   _pageLoad(HomeLoadEvent event, emit) async {
     isLoader =  false;
-    scheme = await SharedPref.getString(key: PrefsValue.schema);
-    role = await SharedPref.getString(key: PrefsValue.userRole);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
+
     baseUrl = await EnvironmentConfig.of(context!)!.imageBaseURL;
-    feasibilityName = await SharedPref.getString(key: PrefsValue.feasibilityName);
-    installationName = await SharedPref.getString(key: PrefsValue.installationName);
-    pendingNgc = await SharedPref.getString(key: PrefsValue.pendingNgc);
-    var json = await SharedPref.getString(key: PrefsValue.accessRight);
-    listOFAccessRight = Accessright.accessrightListFromJson(json);
+
+    listOFAccessRight =  ctx.user.accessright ?? [];
     listOFAccessRight = await listOFAccessRight.toSet().toList();
 
     listOFAccessRight.sort((a,b) => a.menuCode!.compareTo(b.menuCode!));
@@ -78,10 +74,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _eventCompleted(Emitter<HomeState> emit) {
     emit(FetchHomeDataState(
         isLoader: isLoader,
-        scheme: scheme,
         baseUrl: baseUrl,
-        userName: userName,
-        role: role,
         installationName: installationName,
         feasibilityName: feasibilityName,
         pendingNgc: pendingNgc,

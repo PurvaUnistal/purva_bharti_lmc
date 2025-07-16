@@ -31,8 +31,7 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   bool isSelected = false;
   bool isExtraPipe = false;
 
-  String schema = "";
-  String userName = "";
+
   String extraPipe = "0";
   String extraPrice = "0";
 
@@ -86,18 +85,14 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     remarksController.text = '';
     followUpDateController.text = '';
     final results = await Future.wait(<Future>[
-      SharedPref.getString(key: PrefsValue.schema),
-      SharedPref.getString(key: PrefsValue.userName),
       SharedPref.getString(key: PrefsValue.bpNumber),
       SharedPref.getString(key: PrefsValue.crNumber),
       SharedPref.getString(key: PrefsValue.assignLmcDate),
     ]);
 
-    schema = results[0] ?? "";
-    userName = results[1] ?? "";
-    bpNumberController.text = results[2] ?? "";
-    trNumberController.text = results[3] ?? "";
-    assignedDateController.text = results[4] ?? "";
+    bpNumberController.text = results[0] ?? "";
+    trNumberController.text = results[1] ?? "";
+    assignedDateController.text = results[2] ?? "";
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     await Future.wait(<Future>[
       fetchCheckFeasibilityApi(context: event.context),
@@ -288,8 +283,6 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
 
   _eventCompleted(emit) {
     emit(FormFeasibilityDataState(
-      userName: userName,
-      schema: schema,
       isLoader: isLoader,
       isBtnLoader: isBtnLoader,
       isSelected: isSelected,

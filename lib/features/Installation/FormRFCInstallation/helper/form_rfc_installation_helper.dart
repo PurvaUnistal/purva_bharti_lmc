@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -17,17 +18,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 class FormRFCInstallationHelper {
 
+  static final ctx = UserContext.getUserContext();
+
   static Future<RFCInstallationModel?> lmcRFCInstallationApi({required BuildContext context}) async {
-    String schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    String userId = await SharedPref.getString(
-      key: PrefsValue.userId,
-    );
+
     String bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
     Map<String, String> para = {
-      "schema": schema,
-      "user_id": userId,
+      "schema": ctx.user.schema ?? "",
+      "user_id": ctx.user.id ?? "",
       "page": "",
       "bp_number": bpNumber,
       "area_id": "",
@@ -187,8 +185,7 @@ class FormRFCInstallationHelper {
     required String pneumaticPhoto,
     required String housePhoto,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
+
     String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
     String installationId = await SharedPref.getString(key: PrefsValue.installationId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
@@ -197,8 +194,8 @@ class FormRFCInstallationHelper {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
         "installation_id": installationId.isEmpty ? " " : installationId,
-        "schema": schema,
-        "user_id": userId,
+        "schema": ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading.isEmpty ? "" : meterReading,
         "dma_id": meterDma,

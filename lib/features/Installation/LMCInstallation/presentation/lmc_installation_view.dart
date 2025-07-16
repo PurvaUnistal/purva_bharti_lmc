@@ -29,7 +29,9 @@ class LMCInstallationView extends StatefulWidget {
 class _LMCInstallationViewState extends State<LMCInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<LMCInstallationBloc>(context).add(LMCInstallationPageLoadEvent(context: context));
+    BlocProvider.of<LMCInstallationBloc>(
+      context,
+    ).add(LMCInstallationPageLoadEvent(context: context));
     super.initState();
   }
 
@@ -38,65 +40,49 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-      child: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
-        builder: (context, state) {
-          if (state is LMCInstallationDataState) {
-            return _itemBuilder(dataState: state);
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
+    return Scaffold(
+      backgroundColor: AppColor.white,
+      appBar: AppBarWidget(title: AppString.lmcInstallH, boolLeading: true),
+      body: BackgroundWidget(
+        child: BlocBuilder<LMCInstallationBloc, LMCInstallationState>(
+          builder: (context, state) {
+            if (state is LMCInstallationDataState) {
+              return _itemBuilder(dataState: state);
+            } else {
+              return Center(child: SpinLoader());
+            }
+          },
+        ),
       ),
     );
   }
 
   Widget _itemBuilder({required LMCInstallationDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.lmcInstallH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
             children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
+              CommonStyle.vertical(context: context),
+              _areaDropDown(dataState: dataState),
+              CommonStyle.vertical(context: context),
+              _searchTextField(dataState: dataState),
             ],
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                CommonStyle.vertical(context: context),
-                _areaDropDown(dataState: dataState),
-                CommonStyle.vertical(context: context),
-                _searchTextField(dataState: dataState),
-              ],
-            ),
-          ),
-          CommonStyle.vertical(context: context),
-          Text("Click on row to open LMC Installation Form", style: Styles.labels,),
-          Flexible(child: Padding(
+        ),
+        CommonStyle.vertical(context: context),
+        Text(
+          "Click on row to open LMC Installation Form",
+          style: Styles.labels,
+        ),
+        Flexible(
+          child: Padding(
             padding: const EdgeInsets.only(bottom: 18.0),
             child: _dataTableWidget(dataState: dataState),
-          )),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -104,10 +90,13 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
     return DropdownWidget<GetAllAreaModel>(
       label: AppString.area,
       hint: AppString.area,
-      dropdownValue: dataState.allAreaValue.gid == null ? null : dataState.allAreaValue,
+      dropdownValue:
+          dataState.allAreaValue.gid == null ? null : dataState.allAreaValue,
       items: dataState.listOfAllArea,
       onChanged: (newVal) {
-        BlocProvider.of<LMCInstallationBloc>(context).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
+        BlocProvider.of<LMCInstallationBloc>(
+          context,
+        ).add(SelectAreaValueEvent(allAreaValue: newVal!, context: context));
       },
     );
   }
@@ -119,12 +108,14 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,
-      suffixIcon: IconButtonWidget(iconData: Icons.search_rounded, onPressed: () {}),
+      suffixIcon: IconButtonWidget(
+        iconData: Icons.search_rounded,
+        onPressed: () {},
+      ),
       onChanged: (val) {
-        BlocProvider.of<LMCInstallationBloc>(context).add(SearchBpNumberEvent(
-          context: context,
-          searchBpNumber: val,
-        ));
+        BlocProvider.of<LMCInstallationBloc>(
+          context,
+        ).add(SearchBpNumberEvent(context: context, searchBpNumber: val));
       },
     );
   }
@@ -132,95 +123,198 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
   Widget _dataTableWidget({required LMCInstallationDataState dataState}) {
     return dataState.isAreaFilter == false
         ? dataState.installationDoneModel.success == 400
-        ? Center(child: Text("No records found"))
-        : Theme(
-      data: ThemeData(highlightColor: AppColor.primer1),
-      child: Scrollbar(
-        controller: _verticalScrollController,
-        thickness: 3.0,
-        scrollbarOrientation: ScrollbarOrientation.right,
-        thumbVisibility: true,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          controller: _verticalScrollController,
-          child: Theme(
-            data: ThemeData(
-              highlightColor: AppColor.primer1,
-            ),
-            child: Scrollbar(
-              controller: _horizontalScrollController,
-              thickness: 3.0,
-              scrollbarOrientation: ScrollbarOrientation.top,
-              thumbVisibility: true,
-              child: SingleChildScrollView(
-                controller: _horizontalScrollController,
-                scrollDirection: Axis.horizontal,
-                child: Theme(
-                  data: Theme.of(context).copyWith(dividerColor: AppColor.primer),
-                  child: DataTable(
-                    sortAscending: true,
-                    columnSpacing: 0,
-                    horizontalMargin: 0,
-                    showCheckboxColumn: false,
-                    dataTextStyle: Styles.texts,
-                    dataRowHeight: MediaQuery.of(context).size.height * 0.04,
-                    headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
-                    dividerThickness: 1,
-                    columns: [
-                      CommonStyle.dataColumn(label: "S.No"),
-                      CommonStyle.dataColumn(label: "Status"),
-                      CommonStyle.dataColumn(label: "Mobile Number"),
-                      CommonStyle.dataColumn(label: "BP Number"),
-                      CommonStyle.dataColumn(label: "Area"),
-                      CommonStyle.dataColumn(label: "Name"),
-                    ],
-                    rows: dataState.listOfFilterInstallationRow
-                        .mapIndexed((index, user) => DataRow(
-                        onSelectChanged: (newValue) async {
-                          await SharedPref.setString(key: PrefsValue.lmcInstallId, value: user.lmcInstallId!);
-                          await SharedPref.setString(key: PrefsValue.rfcProcessStatus, value: user.rfcProcessStatus!);
-                          await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn!);
-                          await SharedPref.setString(key: PrefsValue.meterLMCFeasId, value: user.lmcFeasId!);
-                          await SharedPref.setString(key: PrefsValue.proposedDate, value: user.proposedDate == "" ? "00-00-0000" : user.proposedDate!);
-                          await SharedPref.setString(key: PrefsValue.bpNumber, value: user.bpNumber!);
-                          await SharedPref.setString(key: PrefsValue.meterDma, value: user.dma!);
-                          await SharedPref.setString(key: PrefsValue.feasibilityVisitDate, value:user.feasibilityVisitDate!);
-                          await SharedPref.setString(key: PrefsValue.crNumber, value: user.crn!);
-                          await SharedPref.setString(key: PrefsValue.chargeArea, value: user.chargeAreaName!);
-                          await SharedPref.setString(key: PrefsValue.areaName, value: user.areaName!);
-                          await SharedPref.setString(key: PrefsValue.firstName, value: user.firstName!);
-                          await SharedPref.setString(key: PrefsValue.lastName, value: user.lastName!);
-                          await SharedPref.setString(key: PrefsValue.mobileNumber, value: user.mobileNumber!);
-                          await SharedPref.setString(key: PrefsValue.buildingNumber, value: user.buildingNumber ?? "");
-                          await SharedPref.setString(key: PrefsValue.houseNumber, value: user.houseNumber ?? "");
-                          await SharedPref.setString(key: PrefsValue.locality, value: user.locality ?? "");
-                          await SharedPref.setString(key: PrefsValue.town, value: user.town!);
-                          await SharedPref.setString(key: PrefsValue.district, value: user.district!);
-                          await SharedPref.setString(key: PrefsValue.pinCode, value: user.pinCode!);
-                          await SharedPref.setString(key: PrefsValue.propertyCategoryId, value: user.propertyCategoryId!);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewInstallationView()));
-                        },
-                        cells: <DataCell>[
-                          CommonStyle.dataCell(label: (dataState.listOfFilterInstallationRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
-                          if(user.rfcProcessStatus == "" && user.lmcInstallId == "")...[
-                            CommonStyle.dataCellG(label: "Installation"),
-                          ]else if(user.rfcProcessStatus == "")...[
-                            CommonStyle.dataCellR(label: "RFC Pending"),
-                          ],
-                          CommonStyle.dataCell(label: user.mobileNumber.toString()),
-                          CommonStyle.dataCell(label: user.bpNumber.toString()),
-                          CommonStyle.dataCell(label: user.areaName.toString()),
-                          CommonStyle.dataCell(label: user.firstName.toString()),
-                        ]))
-                        .toList(),
+            ? Center(child: Text("No records found"))
+            : Theme(
+              data: ThemeData(highlightColor: AppColor.primer1),
+              child: Scrollbar(
+                controller: _verticalScrollController,
+                thickness: 3.0,
+                scrollbarOrientation: ScrollbarOrientation.right,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  controller: _verticalScrollController,
+                  child: Theme(
+                    data: ThemeData(highlightColor: AppColor.primer1),
+                    child: Scrollbar(
+                      controller: _horizontalScrollController,
+                      thickness: 3.0,
+                      scrollbarOrientation: ScrollbarOrientation.top,
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: _horizontalScrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Theme(
+                          data: Theme.of(
+                            context,
+                          ).copyWith(dividerColor: AppColor.primer),
+                          child: DataTable(
+                            sortAscending: true,
+                            columnSpacing: 0,
+                            horizontalMargin: 0,
+                            showCheckboxColumn: false,
+                            dataTextStyle: Styles.texts,
+                            dataRowHeight:
+                                MediaQuery.of(context).size.height * 0.04,
+                            headingRowColor: MaterialStateColor.resolveWith(
+                              (states) => AppColor.primer,
+                            ),
+                            dividerThickness: 1,
+                            columns: [
+                              CommonStyle.dataColumn(label: "S.No"),
+                              CommonStyle.dataColumn(label: "Status"),
+                              CommonStyle.dataColumn(label: "Mobile Number"),
+                              CommonStyle.dataColumn(label: "BP Number"),
+                              CommonStyle.dataColumn(label: "Area"),
+                              CommonStyle.dataColumn(label: "Name"),
+                            ],
+                            rows:
+                                dataState.listOfFilterInstallationRow
+                                    .mapIndexed(
+                                      (index, user) => DataRow(
+                                        onSelectChanged: (newValue) async {
+                                          await SharedPref.setString(
+                                            key: PrefsValue.lmcInstallId,
+                                            value: user.lmcInstallId!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.rfcProcessStatus,
+                                            value: user.rfcProcessStatus!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.crNumber,
+                                            value: user.crn!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.meterLMCFeasId,
+                                            value: user.lmcFeasId!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.proposedDate,
+                                            value:
+                                                user.proposedDate == ""
+                                                    ? "00-00-0000"
+                                                    : user.proposedDate!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.bpNumber,
+                                            value: user.bpNumber!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.meterDma,
+                                            value: user.dma!,
+                                          );
+                                          await SharedPref.setString(
+                                            key:
+                                                PrefsValue.feasibilityVisitDate,
+                                            value: user.feasibilityVisitDate!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.crNumber,
+                                            value: user.crn!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.chargeArea,
+                                            value: user.chargeAreaName!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.areaName,
+                                            value: user.areaName!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.firstName,
+                                            value: user.firstName!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.lastName,
+                                            value: user.lastName!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.mobileNumber,
+                                            value: user.mobileNumber!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.buildingNumber,
+                                            value: user.buildingNumber ?? "",
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.houseNumber,
+                                            value: user.houseNumber ?? "",
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.locality,
+                                            value: user.locality ?? "",
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.town,
+                                            value: user.town!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.district,
+                                            value: user.district!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.pinCode,
+                                            value: user.pinCode!,
+                                          );
+                                          await SharedPref.setString(
+                                            key: PrefsValue.propertyCategoryId,
+                                            value: user.propertyCategoryId!,
+                                          );
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) =>
+                                                      PreviewInstallationView(),
+                                            ),
+                                          );
+                                        },
+                                        cells: <DataCell>[
+                                          CommonStyle.dataCell(
+                                            label:
+                                                (dataState.listOfFilterInstallationRow
+                                                            .indexOf(user) +
+                                                        1 +
+                                                        (dataState.pageNo - 1) *
+                                                            10)
+                                                    .toString(),
+                                          ),
+                                          if (user.rfcProcessStatus == "" &&
+                                              user.lmcInstallId == "") ...[
+                                            CommonStyle.dataCellG(
+                                              label: "Installation",
+                                            ),
+                                          ] else if (user.rfcProcessStatus ==
+                                              "") ...[
+                                            CommonStyle.dataCellR(
+                                              label: "RFC Pending",
+                                            ),
+                                          ],
+                                          CommonStyle.dataCell(
+                                            label: user.mobileNumber.toString(),
+                                          ),
+                                          CommonStyle.dataCell(
+                                            label: user.bpNumber.toString(),
+                                          ),
+                                          CommonStyle.dataCell(
+                                            label: user.areaName.toString(),
+                                          ),
+                                          CommonStyle.dataCell(
+                                            label: user.firstName.toString(),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    ): Center(child: SpinLoader());
+            )
+        : Center(child: SpinLoader());
   }
-  
 }

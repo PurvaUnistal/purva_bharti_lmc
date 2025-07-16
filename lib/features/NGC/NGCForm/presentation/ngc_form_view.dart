@@ -53,26 +53,35 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
+      child:  Scaffold(
+        backgroundColor: AppColor.white,
+        appBar: AppBarWidget(
+        title: AppString.ngConH,
+        boolLeading: true,
+    ),
+    body: SafeArea(
       child: BackgroundWidget(
-        child: BlocBuilder<NGCFormBloc, NGCFormState>(
-          builder: (context, state) {
-            if (state is NGCFormPageLoadState) {
-              return Center(
-                child: SpinLoader(),
-              );
-            } else if (state is NGCFormDataState) {
-              return Form(
-                child: _buildLayout(
-                  dataState: state,
-                ),
-              );
-            } else {
-              return const Center(
-                child: Text("No data"),
-              );
-            }
-          },
+          child: BlocBuilder<NGCFormBloc, NGCFormState>(
+            builder: (context, state) {
+              if (state is NGCFormPageLoadState) {
+                return Center(
+                  child: SpinLoader(),
+                );
+              } else if (state is NGCFormDataState) {
+                return Form(
+                  child: _buildLayout(
+                    dataState: state,
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text("No data"),
+                );
+              }
+            },
+          ),
         ),
+    ),
       ),
     );
   }
@@ -88,31 +97,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   _buildLayout({required NGCFormDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.ngConH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
-          ),
-        ],
-      ),
-      body: ListView(
+    return ListView(
         padding: EdgeInsets.all(8),
         children: [
           Text(
@@ -202,7 +187,6 @@ class _NGCFormViewState extends State<NGCFormView> {
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
         ],
-      ),
     );
   }
 
@@ -531,9 +515,9 @@ class _NGCFormViewState extends State<NGCFormView> {
             },
             onChanged: (val) async {
               await meterFieldKey.currentState?.validate();
-              BlocProvider.of<NGCFormBloc>(context).add(
-                  SelectMeterNumberValueEvent(
-                      context: context, meterReadingValue: val));
+              // BlocProvider.of<NGCFormBloc>(context).add(
+              //     SelectMeterNumberValueEvent(
+              //         context: context, meterReadingValue: val));
             },
           )
         : TextFieldWidget(
@@ -809,9 +793,9 @@ class _NGCFormViewState extends State<NGCFormView> {
         },
         onChanged: (val) async {
           await regulatorFieldKey.currentState?.validate();
-          BlocProvider.of<NGCFormBloc>(context).add(
-            SelectRegulatorsValueEvent(context: context, regulatorsValue: val),
-          );
+          // BlocProvider.of<NGCFormBloc>(context).add(
+          //   SelectRegulatorsValueEvent(context: context, regulatorsValue: val),
+          // );
         },
       ),
     );
@@ -877,9 +861,9 @@ class _NGCFormViewState extends State<NGCFormView> {
           },
           onChanged: (val) async {
             await mRegulatorFieldKey.currentState?.validate();
-            BlocProvider.of<NGCFormBloc>(context).add(
-              SelectMRegulatorsEvent(context: context, mRegulators: val),
-            );
+            // BlocProvider.of<NGCFormBloc>(context).add(
+            //   SelectMRegulatorsEvent(context: context, mRegulators: val),
+            // );
           },
         ),
       );

@@ -25,8 +25,6 @@ class NGCFormDataState extends NGCFormInitialState {
   final bool isMeterReplace;
   final bool isRegularReplace;
   final bool isDelayReason;
-  final String userName;
-  final String schema;
   final String lmcPath;
   final String baseUrl;
   final File meterPhoto;
@@ -47,7 +45,6 @@ class NGCFormDataState extends NGCFormInitialState {
   final List<ListOfMeterNo> listOfMeterNumber;
   final List<String> listOfMeterNumberSerial;
   final List<String> listOfMeterNumberId;
-  final List<ListOfMeterNo> listOfRegulator;
   final List<String> listOfRegulatorSerial;
   final List<String> listOfMRSerial;
   final List<String> listOfRegulatorId;
@@ -109,8 +106,6 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.meterPhoto,
     required this.ngcReportPhoto,
     required this.isRegulator,
-    required this.userName,
-    required this.schema,
     required this.lmcPath,
     required this.baseUrl,
     required this.listOfTypeOfNr,
@@ -118,7 +113,6 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.listOfMeterNumber,
     required this.listOfMeterNumberSerial,
     required this.listOfMeterNumberId,
-    required this.listOfRegulator,
     required this.listOfRegulatorSerial,
     required this.listOfMRSerial,
     required this.listOfRegulatorId,
@@ -187,16 +181,13 @@ class NGCFormDataState extends NGCFormInitialState {
         meterPhoto,
         ngcReportPhoto,
         isRegulator,
-        schema,
         lmcPath,
         baseUrl,
-        userName,
         listOfTypeOfNr,
         typeOfNrValue,
         listOfMeterNumber,
         listOfMeterNumberSerial,
         listOfMeterNumberId,
-        listOfRegulator,
         listOfRegulatorSerial,
         listOfMRSerial,
         listOfRegulatorId,

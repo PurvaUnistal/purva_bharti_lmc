@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -17,6 +18,10 @@ import 'package:lmc/service/api_server_dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
+
+  static final ctx = UserContext.getUserContext();
+
+
   static Future<List<GetConstantModel>?> getTypeOfNrApi(
       {required BuildContext context}) async {
     try {
@@ -81,13 +86,12 @@ class FormInstallationHelper {
 
   static Future<List<ListOfMeterNo>?> getMetersApi(
       {required BuildContext context, required String meterSerial}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema": schema,
+        "schema":ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
+        "role": ctx.user.role ?? "",
         "meterSerial": meterSerial,
-        "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(
@@ -102,13 +106,12 @@ class FormInstallationHelper {
 
   static Future<List<ListOfMeterNo>?> getRegulatorsApi(
       {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
     try {
       Map<String, String> para = {
-        "schema": schema,
+        "schema":ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
+        "role": ctx.user.role ?? "",
         "regulatorSerial": regulatorSerial,
-        "user_id": userId,
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
@@ -122,14 +125,34 @@ class FormInstallationHelper {
     return null;
   }
 
+  static Future<List<ListOfMeterNo>?> getMeterRegulatorsApi(
+      {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+    try {
+      Map<String, String> para = {
+        "schema":ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
+        "role": ctx.user.role ?? "",
+        "regulatorSerial": regulatorSerial,
+        "regulatorType": "",
+      };
+      String json = Uri(queryParameters: para).query;
+      var res = await ApiHelper.getData(
+          urlEndPoint: Apis.getMrRegulators + json, context: context);
+      MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
+      return meterNoModel.data;
+    } catch (e) {
+      log("getRegulators-->${e.toString()}");
+    }
+    return null;
+  }
+
   static Future<ExtraPipePriceData?> getExtraPipeDetailsApi(
       {required BuildContext context, required String pipeQty}) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
     String propertyCategoryId = await SharedPref.getString(
         key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
-        "schema": schema,
+        "schema": ctx.user.schema ?? "",
         "pipeQty": pipeQty,
         "property_category_id": propertyCategoryId,
 
@@ -288,18 +311,18 @@ class FormInstallationHelper {
     required String pneumaticPhoto,
     required String housePhoto,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
     String lmcInstallId = await SharedPref.getString(
         key: PrefsValue.lmcInstallId);
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(
         key: PrefsValue.meterLMCFeasId);
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
+
     try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
-        "schema": schema,
-        "user_id": userId,
+        "schema": ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading.isEmpty ? "" : meterReading,
         "dma_id": meterDma,

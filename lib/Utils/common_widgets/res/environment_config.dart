@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'enums.dart';
 
 class EnvironmentConfig extends InheritedWidget {
@@ -34,6 +35,15 @@ class EnvironmentConfig extends InheritedWidget {
         return "https://pbgpluat.smartgasnet.com/";
       case EnvironmentFlavors.prodMGL:
         return "https://mgl.smartgasnet.com/";
+    }
+  }
+
+  Color get primaryTheme {
+    switch (flavors) {
+      case EnvironmentFlavors.prodPBGPL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodMGL:
+        return Colors.green.shade800;
     }
   }
 }

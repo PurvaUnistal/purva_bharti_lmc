@@ -21,8 +21,6 @@ class LMCFeasibilityDataState extends LMCFeasibilityInitialState {
   final bool isAreaFilter;
   final GetAllAreaModel allAreaValue;
   final int pageNo;
-  final String schema;
-  final String userName;
   final List<GetAllAreaModel> listOfAllArea;
   final List<FeasibilityData> listOfFilterFeasibilityRow;
   final FeasibilityModel feasibilityModel;
@@ -30,8 +28,6 @@ class LMCFeasibilityDataState extends LMCFeasibilityInitialState {
   final ScrollController scrollController;
 
   LMCFeasibilityDataState({
-    required this.schema,
-    required this.userName,
     required this.isLoader,
     required this.isAreaFilter,
     required this.pageNo,
@@ -46,8 +42,6 @@ class LMCFeasibilityDataState extends LMCFeasibilityInitialState {
   @override
   // TODO: implement props
   List<Object> get props => [
-        schema,
-        userName,
         isAreaFilter,
         allAreaValue,
         pageNo,

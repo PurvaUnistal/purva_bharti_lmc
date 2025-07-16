@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,39 +17,31 @@ import 'package:package_info_plus/package_info_plus.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitState()) {
     on<LoginPageLoadingEvent>(_pageLoad);
-    on<LoginSetEmailIdEvent>(_setEmailId);
-    on<LoginSetPasswordEvent>(_setPassword);
     on<LoginHideShowPasswordEvent>(_setHideShowPassword);
     on<LoginSubmitDataEvent>(_setSubmitLoginData);
   }
 
-  String emailId = "";
-  String password = "";
-  String deviceId = "";
-
   bool _isPageLoader = false;
+
   bool get isPageLoader => _isPageLoader;
 
   bool _isPassword = false;
+
   bool get isPassword => _isPassword;
 
   LoginModel _loginModel = LoginModel();
+
   LoginModel get loginModel => _loginModel;
 
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   _pageLoad(LoginPageLoadingEvent event, emit) async {
-    emailId = "";
-    password = "";
+    emailController.text = "";
+    passwordController.text = "";
     _isPassword = true;
     _isPageLoader = false;
     _eventCompleted(emit);
-  }
-
-  _setEmailId(LoginSetEmailIdEvent event, emit) {
-    emailId = event.emailId.toString().replaceAll(" ", "");
-  }
-
-  _setPassword(LoginSetPasswordEvent event, emit) {
-    password = event.password.toString().replaceAll(" ", "");
   }
 
   _setHideShowPassword(LoginHideShowPasswordEvent event, emit) {
@@ -57,59 +50,61 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   _setSubmitLoginData(LoginSubmitDataEvent event, emit) async {
-    if(await ConnectivityHelper.allConnectivityCheck(context: event.context) == false){
+    if (await ConnectivityHelper.allConnectivityCheck(context: event.context) ==
+        false) {
       return;
     }
     var validationCheck = await LoginHelper.textFieldValidation(
-        email: emailId, password: password, context: event.context);
+      email: emailController.text.trim().toString(),
+      password: passwordController.text.trim().toString(),
+      context: event.context,
+    );
     if (validationCheck == true) {
       try {
         _isPageLoader = true;
         _eventCompleted(emit);
-        var res = await LoginHelper.loginData(emailId: emailId, password: password, context: event.context);
-        if (res != null && res.user!.role == "ngc" || res!.user!.role == "lmc") {
+        var res = await LoginHelper.loginData(
+          emailId: emailController.text.trim().toString(),
+          password: passwordController.text.trim().toString(),
+          context: event.context,
+        );
+        if (res != null && res.user!.role == "ngc" ||
+            res!.user!.role == "lmc") {
           _isPageLoader = false;
           _eventCompleted(emit);
           if (res.user != null) {
             _loginModel = res;
-            if(res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc') ){
-              await Utils.successSnackBar(msg: res.messages!, context: event.context);
-              await SharedPref.setString(key: PrefsValue.passwordVal,value: password);
-              await SharedPref.setString(key: PrefsValue.emailVal,value: emailId);
-              await SharedPref.setString(key: PrefsValue.userId,value: res.user!.id!);
-              await SharedPref.setString(key: PrefsValue.token,value: res.token!);
-              await SharedPref.setString(key: PrefsValue.schema,value: res.user!.schema!);
-              await SharedPref.setString(key: PrefsValue.userName,value: res.user!.name!);
-              await SharedPref.setString(key: PrefsValue.userRole,value: res.user!.role!);
-              await SharedPref.setString(key: PrefsValue.pwdChanged,value: res.user!.pwdChanged!);
+            if (res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc')) {
+              await Utils.successSnackBar(msg: res.messages!, context: event.context,);
+              await SharedPref.setString(key: PrefsValue.passwordVal, value: emailController.text,);
+              await SharedPref.setString(key: PrefsValue.emailVal, value: passwordController.text,);
+              String userJson = jsonEncode(res.toJson());
+              await SharedPref.setString(key: PrefsValue.userInfo, value: userJson,);
+              await AppConfig.instanceInit()?.setLoginData(newLoginData: loginModel,);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
-              String appVersion = packageInfo.buildNumber;
-              await SharedPref.setString(key: PrefsValue.appVersion,value: appVersion);
-              if(res.user!.role == "lmc"){
-                  await SharedPref.setString(key: PrefsValue.installationName,value: res.user!.accessright![0].menuCode!);
-                  await SharedPref.setString(key: PrefsValue.feasibilityName,value: res.user!.accessright![1].menuCode!);
-                  await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![2].menuCode!);
-                  List<Accessright> accessrightList = await res.user!.accessright!.toSet().toList();
-                  await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
-
-                  Navigator.pushReplacementNamed(event.context, RoutesName.home,);
-              } else if(res.user!.role == "ngc"){
-                await SharedPref.setString(key: PrefsValue.pendingNgc,value: res.user!.accessright![0].menuCode!);
-                List<Accessright> accessrightList = await res.user!.accessright!.toSet().toList();
-                await SharedPref.setString(key: PrefsValue.accessRight,value: Accessright.jsonFromAccessrightList(accessrightList));
-
-                Navigator.pushReplacementNamed(event.context, RoutesName.home,);
+              await SharedPref.setString(
+                key: PrefsValue.buildNumber,
+                value: packageInfo.buildNumber,
+              );
+              if (res.user!.role == "lmc" || res.user!.role == "ngc") {
+                Navigator.pushReplacementNamed(event.context, RoutesName.home);
               }
-            }else{
+            } else {
               _isPageLoader = false;
               _eventCompleted(emit);
-              return Utils.errorSnackBar(msg:"Invalid user accessed", context: event.context);
+              return Utils.errorSnackBar(
+                msg: "Invalid user accessed",
+                context: event.context,
+              );
             }
           }
         } else {
           _isPageLoader = false;
           _eventCompleted(emit);
-          return Utils.errorSnackBar(msg:"Invalid user accessed", context: event.context);
+          return Utils.errorSnackBar(
+            msg: "Invalid user accessed",
+            context: event.context,
+          );
         }
       } catch (e) {
         _isPageLoader = false;
@@ -122,8 +117,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   _eventCompleted(Emitter<LoginState> emit) {
     emit(LoginFetchDataState(
-      isPageLoader: isPageLoader,
-      isPassword: isPassword,
-    ));
+        isPageLoader: isPageLoader,
+        isPassword: isPassword,
+        emailController: emailController,
+        passwordController: passwordController,
+      ),
+    );
   }
 }

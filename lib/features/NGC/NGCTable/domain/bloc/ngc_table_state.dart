@@ -19,8 +19,6 @@ class FetchNgcTableDataState extends NgcTableInitialState {
   final bool isLoader;
   final bool isAreaFilter;
   final int pageNo;
-  final String schema;
-  final String userName;
   final GetAllAreaModel allAreaValue;
   final List<GetAllAreaModel> listOfAllArea;
   final List<InstallationByNgcData> listOfFilterInstallationByNgc;
@@ -30,8 +28,6 @@ class FetchNgcTableDataState extends NgcTableInitialState {
   FetchNgcTableDataState({
     required this.isLoader,
     required this.isAreaFilter,
-    required this.schema,
-    required this.userName,
     required this.pageNo,
     required this.allAreaValue,
     required this.listOfAllArea,
@@ -45,8 +41,6 @@ class FetchNgcTableDataState extends NgcTableInitialState {
   List<Object> get props => [
         isLoader,
         isAreaFilter,
-        schema,
-        userName,
         pageNo,
         allAreaValue,
         listOfAllArea,

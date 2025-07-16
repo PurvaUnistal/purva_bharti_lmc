@@ -9,21 +9,6 @@ class LoginPageLoadingEvent extends LoginEvent {
   List<Object> get props => [];
 }
 
-class LoginSetEmailIdEvent extends LoginEvent {
-  final String emailId;
-  LoginSetEmailIdEvent({required this.emailId});
-  @override
-  // TODO: implement props
-  List<Object> get props => [emailId];
-}
-
-class LoginSetPasswordEvent extends LoginEvent {
-  final String password;
-  LoginSetPasswordEvent({required this.password});
-  @override
-  // TODO: implement props
-  List<Object> get props => [password];
-}
 
 class LoginHideShowPasswordEvent extends LoginEvent {
   final bool isHideShow;

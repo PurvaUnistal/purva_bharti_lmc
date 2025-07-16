@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
@@ -7,6 +8,7 @@ import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/enums.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashView extends StatefulWidget {
@@ -20,6 +22,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
+    _getData();
     toLogin();
     super.initState();
   }
@@ -41,15 +44,33 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     curve: Curves.fastOutSlowIn,
   );
 
+
+
+  Future<LoginModel?> _getData() async {
+    try {
+      String? userJson = await SharedPref.getString(key: PrefsValue.userInfo ?? "");
+      if (userJson != '') {
+        Map<String, dynamic> userMap = jsonDecode(userJson!);
+        LoginModel loginModel = LoginModel.fromJson(userMap);
+        final appConfig = AppConfig.instanceInit();
+        if (appConfig != null) {
+          await appConfig.setLoginData(newLoginData: loginModel);
+        }
+        return loginModel;
+      }
+    } catch (e) {
+      debugPrint("Error in _getData: $e");
+    }
+    return null;
+  }
+
   Future<void> toLogin() async {
-    String email = await SharedPref.getString(key: PrefsValue.emailVal);
-    String password = await SharedPref.getString(key: PrefsValue.passwordVal);
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    AppConfig.instanceInit()?.setBuildName(buildName: packageInfo.buildNumber);
-    String newVersion = packageInfo.buildNumber;
-    String oldVersion = await SharedPref.getString(key: PrefsValue.appVersion);
-    print("newVersion--${newVersion}");
-    print("oldVersion--${oldVersion}");
+    final email = await SharedPref.getString(key: PrefsValue.emailVal);
+    final password = await SharedPref.getString(key: PrefsValue.passwordVal);
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final newVersion  = await packageInfo.buildNumber;
+    AppConfig.instanceInit()?.setBuildNumber(buildNumber: packageInfo.buildNumber);
+    final oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
     Timer(
       const Duration(seconds: 3),
           () async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -11,6 +12,8 @@ import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
 
 class FormFeasibilityHelper {
+
+  static final ctx = UserContext.getUserContext();
   static Future<List<GetConstantModel>?> getCheckFeasibilityApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
@@ -44,12 +47,12 @@ class FormFeasibilityHelper {
   static Future<List<FreeMaterialData>?> getAllFreePipeMaterial({
     required BuildContext context,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
     String propertyCategoryId = await SharedPref.getString(
         key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
-        "schema": schema,
+        "schema": ctx.user.schema ?? "",
         "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
@@ -65,12 +68,11 @@ class FormFeasibilityHelper {
   static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({
     required BuildContext context,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
     String propertyCategoryId = await SharedPref.getString(
         key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
-        "schema": schema,
+        "schema": ctx.user.schema ?? "",
         "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
@@ -182,18 +184,18 @@ class FormFeasibilityHelper {
     required String extraPipe,
     required String extraPrice,
   }) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
     String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
     String dma = await SharedPref.getString(key: PrefsValue.dma);
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
+
     try {
       Map<String, String> para = {
         "lmcId": lmcId,
         "dmaId": dma,
-        "user_id": userId,
+        "user_id": ctx.user.id ?? "",
         "proposed_date": proposedDate,
         "feasibility_visit_date": feasibilityDate,
-        "schema": schema,
+        "schema": ctx.user.schema ?? "",
         "is_feasible": isFeasible.key,
         "comment": comment,
         "follow_up_date": followUpDate,

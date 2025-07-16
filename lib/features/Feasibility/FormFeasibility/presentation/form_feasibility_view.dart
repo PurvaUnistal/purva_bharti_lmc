@@ -41,7 +41,13 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: BackgroundWidget(
+      child: Scaffold(
+        backgroundColor: AppColor.white,
+        appBar: AppBarWidget(
+        title: AppString.lmcFeaH,
+        boolLeading: true,
+    ),
+    body: BackgroundWidget(
         child: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
           builder: (context, state) {
             if (state is FormFeasibilityDataState) {
@@ -51,6 +57,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
             }
           },
         ),
+      ),
       ),
     );
   }
@@ -66,31 +73,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
 
   _itemBuilder({required FormFeasibilityDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.lmcFeaH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
-          ),
-        ],
-      ),
-      body: ListView(
+    return ListView(
         padding: EdgeInsets.all(8),
         children: [
           Text(
@@ -129,7 +112,6 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
         ],
-      ),
     );
   }
 

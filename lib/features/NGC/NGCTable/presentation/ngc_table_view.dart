@@ -36,48 +36,32 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-      child: BlocBuilder<NgcTableBloc, NgcTableState>(
-        builder: (context, state) {
-          if (state is FetchNgcTableDataState) {
-            return  _buildLayout(dataState: state,);
-          } else {
-            return const Center(
-              child: SpinLoader(),
-            );
-          }
-        },
-      ),
-      //  body: _bodyNoBloc(),
+    return Scaffold(
+        backgroundColor: AppColor.white,
+        appBar: AppBarWidget(
+        title: AppString.ngConH,
+        boolLeading: true,
+    ),
+    body: SafeArea(
+      child: BackgroundWidget(
+        child: BlocBuilder<NgcTableBloc, NgcTableState>(
+          builder: (context, state) {
+            if (state is FetchNgcTableDataState) {
+              return  _buildLayout(dataState: state,);
+            } else {
+              return const Center(
+                child: SpinLoader(),
+              );
+            }
+          },
+        ),
+        ),
+    ),
     );
   }
 
   _buildLayout({required FetchNgcTableDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.ngConH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
-          ),
-        ],
-      ),
-      body: Column(
+    return Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8),
@@ -97,7 +81,7 @@ class _NgcTableViewState extends State<NgcTableView> {
             child: _dataTableWidget(dataState: dataState),
           )),
         ],
-      ),
+
     );
   }
 

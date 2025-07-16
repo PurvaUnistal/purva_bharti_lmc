@@ -36,24 +36,24 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.green50,
+      backgroundColor: AppColor.white,
       appBar: AppBarWidget(
         title: AppString.lmcMobilityH,
         boolLeading: false,
       ),
       body: SafeArea(
-        child: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            if (state is LoginFetchDataState) {
-              return BackgroundWidget(
-                child: Center(
+        child: BackgroundWidget(
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              if (state is LoginFetchDataState) {
+                return Center(
                   child: _buildLayout(dataState: state),
-                ),
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ),
     );
@@ -129,9 +129,7 @@ class _LoginViewState extends State<LoginView> {
       autofillHints: [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
       prefixIcon: IconButtonWidget(iconData: Icons.email, onPressed: () {}),
-      onChanged: (val) {
-        BlocProvider.of<LoginBloc>(context).add(LoginSetEmailIdEvent(emailId: val.toString().replaceAll(" ", "")));
-      },
+     controller: dataState.emailController,
     );
   }
 
@@ -142,15 +140,14 @@ class _LoginViewState extends State<LoginView> {
       autofillHints: const [AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
       prefixIcon: IconButtonWidget(iconData: Icons.password, onPressed: () {}),
+      controller: dataState.passwordController,
       suffixIcon: IconButtonWidget(
           iconData: dataState.isPassword ? Icons.visibility_off : Icons.visibility,
           onPressed: () {
             BlocProvider.of<LoginBloc>(context).add(LoginHideShowPasswordEvent(isHideShow: dataState.isPassword == true ? false : true));
           }),
       obscureText: dataState.isPassword,
-      onChanged: (val) {
-        BlocProvider.of<LoginBloc>(context).add(LoginSetPasswordEvent(password: val.toString().replaceAll(" ", "")));
-      },
+
     );
   }
 

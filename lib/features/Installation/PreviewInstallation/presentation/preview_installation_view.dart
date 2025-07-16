@@ -17,9 +17,7 @@ import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/previe
 import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_state.dart';
 
 class PreviewInstallationView extends StatefulWidget {
-  const PreviewInstallationView({
-    super.key,
-  });
+  const PreviewInstallationView({super.key});
 
   @override
   State<PreviewInstallationView> createState() =>
@@ -29,121 +27,118 @@ class PreviewInstallationView extends StatefulWidget {
 class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   @override
   void initState() {
-    BlocProvider.of<PreviewInstallationBloc>(context)
-        .add(PreviewInstallationPageLoadEvent(context: context));
+    BlocProvider.of<PreviewInstallationBloc>(
+      context,
+    ).add(PreviewInstallationPageLoadEvent(context: context));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-      child: BlocBuilder<PreviewInstallationBloc, PreviewInstallationState>(
-        builder: (context, state) {
-          if (state is PreviewInstallationDataState) {
-            return _itemBuilder(dataState: state, context: context);
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
+    return Scaffold(
+      backgroundColor: AppColor.white,
+      appBar: AppBarWidget(title: AppString.lmcInstallH, boolLeading: true),
+      body: SafeArea(
+        child: BackgroundWidget(
+          child: BlocBuilder<PreviewInstallationBloc, PreviewInstallationState>(
+            builder: (context, state) {
+              if (state is PreviewInstallationDataState) {
+                return _itemBuilder(dataState: state, context: context);
+              } else {
+                return Center(child: SpinLoader());
+              }
+            },
+          ),
+        ),
       ),
     );
   }
 
-  _itemBuilder(
-      {required PreviewInstallationDataState dataState,
-      required BuildContext context}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.lmcInstallH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
+  _itemBuilder({
+    required PreviewInstallationDataState dataState,
+    required BuildContext context,
+  }) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 1.5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
-            elevation: 1.5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: Text(
-                      AppString.consumerDetailH,
-                      style: Styles.appTitle,
-                      textAlign: TextAlign.center,
-                    ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(
+                    AppString.consumerDetailH,
+                    style: Styles.appTitle,
+                    textAlign: TextAlign.center,
                   ),
-                  decoration: BoxDecoration(
-                      color: AppColor.primer,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      )),
                 ),
-                _rowItem(
-                    textName: AppString.crNumber,
-                    textValue: dataState.custRegNo),
-                _rowItem(
-                    textName: AppString.bpNumber,
-                    textValue: dataState.bpNumber),
-                _rowItem(
-                    textName: AppString.lmcFeaDate,
-                    textValue: dataState.feasibilityVisitDate),
-                _rowItem(
-                    textName: AppString.chargeArea,
-                    textValue: dataState.chargeArea),
-                _rowItem(
-                    textName: AppString.area, textValue: dataState.areaName),
-                _rowItem(
-                    textName: AppString.firstName,
-                    textValue: dataState.firstName),
-                _rowItem(
-                    textName: AppString.lastName,
-                    textValue: dataState.lastName),
-                _rowItem(
-                    textName: AppString.mobileNumber,
-                    textValue: dataState.mobileNumber),
-                _rowItem(
-                    textName: AppString.buildingNumber,
-                    textValue: dataState.buildingNumber),
-                _rowItem(
-                    textName: AppString.houseNumber,
-                    textValue: dataState.houseNumber),
-                _rowItem(
-                    textName: AppString.street, textValue: dataState.locality),
-                _rowItem(textName: AppString.town, textValue: dataState.town),
-                _rowItem(
-                    textName: AppString.pinCode, textValue: dataState.pinCode),
-                CommonStyle.vertical(context: context),
-                CommonStyle.vertical(context: context),
-                _button(dataState: dataState),
-                CommonStyle.vertical(context: context),
-                CommonStyle.vertical(context: context),
-              ],
-            ),
+                decoration: BoxDecoration(
+                  color: AppColor.primer,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+              ),
+              _rowItem(
+                textName: AppString.crNumber,
+                textValue: dataState.custRegNo,
+              ),
+              _rowItem(
+                textName: AppString.bpNumber,
+                textValue: dataState.bpNumber,
+              ),
+              _rowItem(
+                textName: AppString.lmcFeaDate,
+                textValue: dataState.feasibilityVisitDate,
+              ),
+              _rowItem(
+                textName: AppString.chargeArea,
+                textValue: dataState.chargeArea,
+              ),
+              _rowItem(textName: AppString.area, textValue: dataState.areaName),
+              _rowItem(
+                textName: AppString.firstName,
+                textValue: dataState.firstName,
+              ),
+              _rowItem(
+                textName: AppString.lastName,
+                textValue: dataState.lastName,
+              ),
+              _rowItem(
+                textName: AppString.mobileNumber,
+                textValue: dataState.mobileNumber,
+              ),
+              _rowItem(
+                textName: AppString.buildingNumber,
+                textValue: dataState.buildingNumber,
+              ),
+              _rowItem(
+                textName: AppString.houseNumber,
+                textValue: dataState.houseNumber,
+              ),
+              _rowItem(
+                textName: AppString.street,
+                textValue: dataState.locality,
+              ),
+              _rowItem(textName: AppString.town, textValue: dataState.town),
+              _rowItem(
+                textName: AppString.pinCode,
+                textValue: dataState.pinCode,
+              ),
+              CommonStyle.vertical(context: context),
+              CommonStyle.vertical(context: context),
+              _button(dataState: dataState),
+              CommonStyle.vertical(context: context),
+              CommonStyle.vertical(context: context),
+            ],
           ),
         ),
       ),
@@ -154,12 +149,12 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
       child: RowWidget(
-        widget1: Text(
-          "${textName} :",
-          style: Styles.labels,
+        widget1: Text("${textName} :", style: Styles.labels),
+        widget2: Text(
+          textValue,
+          style: Styles.texts,
+          textAlign: TextAlign.right,
         ),
-        widget2:
-            Text(textValue, style: Styles.texts, textAlign: TextAlign.right),
       ),
     );
   }
@@ -167,21 +162,24 @@ class _PreviewInstallationViewState extends State<PreviewInstallationView> {
   Widget _button({required PreviewInstallationDataState dataState}) {
     return dataState.isLoader == false
         ? ButtonWidget(
-            text: AppString.installation,
-            onPressed: () {
-              if (dataState.rfcProcessStatus == '' &&
-                  dataState.lmcInstallId == "") {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FormInstallationView()));
-              } else if (dataState.rfcProcessStatus == '') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FormRFCInstallationView()));
-              }
-            })
+          text: AppString.installation,
+          onPressed: () {
+            if (dataState.rfcProcessStatus == '' &&
+                dataState.lmcInstallId == "") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FormInstallationView()),
+              );
+            } else if (dataState.rfcProcessStatus == '') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormRFCInstallationView(),
+                ),
+              );
+            }
+          },
+        )
         : DottedLoaderWidget();
   }
 }

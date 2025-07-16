@@ -16,8 +16,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     on<SearchBpNumberEvent>(_searchBpNumber);
   }
 
-  String schema = "";
-  String userName = "";
   bool isLoader = false;
   bool isAreaFilter = false;
   int pageNo = 1;
@@ -40,12 +38,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
     bpNumberController.text = "";
     scrollController = ScrollController();
     feasibilityModel = FeasibilityModel();
-    final results = await Future.wait(<Future>[
-      SharedPref.getString(key: PrefsValue.schema),
-      SharedPref.getString(key: PrefsValue.userName),
-    ]);
-    schema = results[0] ?? "";
-    userName = results[1] ?? "";
     await Future.wait(<Future>[
       fetchAllArea(context: event.context),
       fetchFeasibility(
@@ -109,8 +101,6 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   _eventCompleted(Emitter<LMCFeasibilityState> emit) {
     emit(LMCFeasibilityDataState(
         isLoader: isLoader,
-        schema: schema,
-        userName: userName,
         isAreaFilter: isAreaFilter,
         allAreaValue: areaValue,
         pageNo: pageNo,

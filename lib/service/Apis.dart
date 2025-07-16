@@ -26,6 +26,7 @@ class Apis {
   static get ngcReason => "ngcreason";
   static get regulatorType => "regulatortype";
   static get getMeters => "getMeters?";
+  static get getMrRegulators => "getMrRegulators?";
   static get getRegulators => "getRegulators?";
   static get getNgcMeters => "getNgcMeters?";
   static get getNgcRegulators => "getNgcRegulators?";

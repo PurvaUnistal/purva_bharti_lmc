@@ -1,24 +1,19 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
-// import 'package:lmc/service/api_helper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NgcTableHelper {
 
-
+  static final ctx = UserContext.getUserContext();
   static Future<List<GetAllAreaModel>?> getAllAreaApi({required BuildContext context}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? schema = prefs.getString(PrefsValue.schema);
+
     try {
       var res = await ApiHelper.getData(
-          urlEndPoint: Apis.areaList + schema!, context: context);
+          urlEndPoint: Apis.areaList + ctx.user.schema!, context: context);
       if(res != null){
         return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
       }
@@ -29,11 +24,10 @@ class NgcTableHelper {
   }
 
   static Future<LMCInstallationByNgcModel?> getLmcInstallationByNgcApi({required BuildContext context, required String areaId, required String bpNumber}) async {
-    String schema = await SharedPref.getString(key: PrefsValue.schema,);
-    String userId = await SharedPref.getString(key: PrefsValue.userId,);
+
     Map<String, String> para = {
-      "schema": schema,
-      "user_id": userId,
+      "schema": ctx.user.schema ?? "",
+      "user_id": ctx.user.id ?? "",
       "page": "",
       "bp_number": bpNumber,
       "area_id": areaId,

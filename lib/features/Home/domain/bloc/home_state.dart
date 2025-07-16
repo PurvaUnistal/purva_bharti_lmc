@@ -14,12 +14,8 @@ class HomePageLoadState extends HomeState {
   List<Object> get props => [];
 }
 
-
 class FetchHomeDataState extends HomeState {
   final bool isLoader;
-  final String scheme;
-  final String userName;
-  final String role;
   final String baseUrl;
   final String installationName;
   final String pendingNgc;
@@ -27,14 +23,12 @@ class FetchHomeDataState extends HomeState {
   final int pageIndex;
   final int currentIndex;
   final List<Widget> pageWidgets;
-  List<Accessright> listOFAccessRight;
+  final List<Accessright> listOFAccessRight;
   final List<BottomNavigationBarItem> bottomNavyBarItemList;
+
   FetchHomeDataState({
     required this.isLoader,
-    required this.scheme,
     required this.baseUrl,
-    required this.userName,
-    required this.role,
     required this.pageIndex,
     required this.pageWidgets,
     required this.listOFAccessRight,
@@ -42,20 +36,20 @@ class FetchHomeDataState extends HomeState {
     required this.feasibilityName,
     required this.pendingNgc,
     required this.currentIndex,
-    required this.bottomNavyBarItemList});
+    required this.bottomNavyBarItemList,
+  });
+
   @override
   List<Object> get props => [
     isLoader,
-    scheme,
-    userName,
-    role,
     baseUrl,
     pageIndex,
-   installationName,
-  feasibilityName,
+    installationName,
+    feasibilityName,
     pendingNgc,
     currentIndex,
     bottomNavyBarItemList,
     listOFAccessRight,
-    pageWidgets];
+    pageWidgets,
+  ];
 }

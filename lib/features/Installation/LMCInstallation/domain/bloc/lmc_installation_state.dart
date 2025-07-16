@@ -17,8 +17,6 @@ class LMCInstallationPageLoadState extends LMCInstallationInitialState {
 
 
 class LMCInstallationDataState extends LMCInstallationInitialState {
-  final String schema;
-  final String userName;
   final bool isLoader;
   final bool isAreaFilter;
   final GetAllAreaModel allAreaValue;
@@ -30,8 +28,6 @@ class LMCInstallationDataState extends LMCInstallationInitialState {
   final TextEditingController bpNumberController;
 
   LMCInstallationDataState({
-    required this.schema,
-    required this.userName,
     required this.isLoader,
     required this.isAreaFilter,
     required this.allAreaValue,
@@ -46,8 +42,6 @@ class LMCInstallationDataState extends LMCInstallationInitialState {
   @override
   // TODO: implement props
   List<Object> get props => [
-        schema,
-        userName,
         isLoader,
         isAreaFilter,
         allAreaValue,

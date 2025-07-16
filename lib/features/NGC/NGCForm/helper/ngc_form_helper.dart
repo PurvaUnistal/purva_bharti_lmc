@@ -1,21 +1,19 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/model/SubmitNgcReportModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
-// import 'package:lmc/service/api_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 
 class NGCFormHelper{
+  static final ctx = UserContext.getUserContext();
 
   static Future<Position > getCurrentLocation() async {
     await Geolocator.requestPermission();
@@ -113,13 +111,13 @@ class NGCFormHelper{
   }
 
   static Future<List<ListOfMeterNo>?> getMetersNGCApi({required BuildContext context, required String meterSerial}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
     try {
       Map<String, String> para = {
-        "schema":schema,
+        "schema":ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
+        "role": ctx.user.role ?? "",
         "meterSerial":meterSerial,
-        "user_id": userId,
       };
       String json = Uri(queryParameters: para).query;
       var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcMeters + json, context: context);
@@ -137,13 +135,13 @@ class NGCFormHelper{
     required BuildContext context,
     required String regulatorSerial,
     required String regulatorType}) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
       try {
     Map<String, String> para = {
-      "schema":schema,
+      "schema":ctx.user.schema ?? "",
+      "user_id": ctx.user.id ?? "",
+      "role": ctx.user.role ?? "",
       "regulatorSerial":regulatorSerial,
-      "user_id": userId,
       "regulatorType": regulatorType,
     };
     String json = Uri(queryParameters: para).query;
@@ -344,11 +342,10 @@ class NGCFormHelper{
     required String meterPhoto,
     required String ngcReportPhoto,
   }) async {
-    String userId = await SharedPref.getString(key: PrefsValue.userId);
-    String schema = await SharedPref.getString(key: PrefsValue.schema);
+
     Map<String, String> body = {
-      "schema": schema,
-      "user_id": userId,
+      "schema": ctx.user.schema ?? "",
+      "user_id": ctx.user.id ?? "",
       "name_of_contractor": nameOfContractor.isEmpty ? "" : nameOfContractor,
       "meter_reading": meterReading.isEmpty ? "" :meterReading,
       "jmr_no": jmrNo.isEmpty ? "" :jmrNo,

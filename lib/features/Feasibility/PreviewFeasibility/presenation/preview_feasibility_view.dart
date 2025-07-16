@@ -33,45 +33,30 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-     child:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
-        builder: (context, state) {
-          if (state is PreviewFeasibilityDataState) {
-            return _itemBuilder(dataState: state, context: context);
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
-      ),
+    return Scaffold(
+        backgroundColor: AppColor.white,
+        appBar: AppBarWidget(
+        title: AppString.lmcFeaH,
+        boolLeading: true,
+    ),
+    body: SafeArea(
+      child: BackgroundWidget(
+       child:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
+          builder: (context, state) {
+            if (state is PreviewFeasibilityDataState) {
+              return _itemBuilder(dataState: state, context: context);
+            } else {
+              return Center(child: SpinLoader());
+            }
+          },
+        ),
+        ),
+    ),
     );
   }
 
   _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.lmcFeaH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
+    return  SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Card(
@@ -112,8 +97,8 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
             ),
           ),
         ),
-      ),
-    );
+      );
+
   }
 
   Widget _rowItem({required String textName, required String textValue}) {

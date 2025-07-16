@@ -18,8 +18,6 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   int pageNo = 1;
   bool isLoader = false;
   bool isAreaFilter = false;
-  String schema = "";
-  String userName = "";
   GetAllAreaModel areaValue = GetAllAreaModel();
   List<GetAllAreaModel> listOfAllArea = [];
   List<InstallationByNgcData> listOfInstallationByNgc = [];
@@ -37,12 +35,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
     listOfInstallationByNgc = [];
     bpNumberController.text = "";
     lmcInstallationByNgcModel = LMCInstallationByNgcModel();
-    final results = await Future.wait(<Future>[
-      SharedPref.getString(key: PrefsValue.schema),
-      SharedPref.getString(key: PrefsValue.userName),
-    ]);
-    schema = results[0] ?? "";
-    userName = results[1] ?? "";
+
 
     await Future.wait(<Future>[
       fetchAllArea(context: event.context),
@@ -95,8 +88,6 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
 
   _eventCompleted(Emitter<NgcTableState> emit) {
     emit(FetchNgcTableDataState(
-      schema: schema,
-      userName: userName,
       isLoader: isLoader,
       isAreaFilter: isAreaFilter,
       pageNo: pageNo,

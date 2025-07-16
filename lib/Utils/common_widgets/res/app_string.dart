@@ -4,7 +4,7 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'app_config.dart';
 
 class AppString {
-  static String version = "Version : ${AppConfig.instanceInit()?.buildName} - LMC-05/07/2025";
+  static String version = "Version : ${AppConfig.instanceInit()?.buildNumber} - LMC-16/07/2025";
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";

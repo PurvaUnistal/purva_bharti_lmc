@@ -10,8 +10,6 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
   }
 
   bool isLoader = false;
-  String schema = '';
-  String userName = '';
   String custRegNo = '';
   String trNumber = '';
   String bpNumber = '';
@@ -41,8 +39,6 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
       SharedPref.getString(key: PrefsValue.crNumber),
       SharedPref.getString(key: PrefsValue.feasibilityVisitDate),
       SharedPref.getString(key: PrefsValue.bpNumber),
-      SharedPref.getString(key: PrefsValue.userName),
-      SharedPref.getString(key: PrefsValue.schema),
       SharedPref.getString(key: PrefsValue.chargeArea),
       SharedPref.getString(key: PrefsValue.areaName),
       SharedPref.getString(key: PrefsValue.firstName),
@@ -65,31 +61,27 @@ class PreviewInstallationBloc extends Bloc<PreviewInstallationEvent, PreviewInst
     trNumber = results[0] ?? "";
     feasibilityVisitDate = results[1] ?? "";
     bpNumber = results[2] ?? "";
-    userName = results[3] ?? "";
-    schema = results[4] ?? "";
-    chargeArea = results[5] ?? "";
-    areaName = results[6] ?? "";
-    firstName = results[7] ?? "";
-    lastName = results[8] ?? "";
-    mobileNumber = results[9] ?? "";
-    proCateName = results[10] ?? "";
-    propClass = results[11] ?? "";
-    buildingNumber = results[12] ?? "";
-    houseNumber = results[13] ?? "";
-    locality = results[14] ?? "";
-    town = results[15] ?? "";
-    street = results[16] ?? "";
-    district = results[17] ?? "";
-    pinCode = results[18] ?? "";
-    lmcInstallId = results[19] ?? "";
-    rfcProcessStatus = results[20] ?? "";
+    chargeArea = results[3] ?? "";
+    areaName = results[4] ?? "";
+    firstName = results[5] ?? "";
+    lastName = results[6] ?? "";
+    mobileNumber = results[7] ?? "";
+    proCateName = results[8] ?? "";
+    propClass = results[9] ?? "";
+    buildingNumber = results[10] ?? "";
+    houseNumber = results[11] ?? "";
+    locality = results[12] ?? "";
+    town = results[13] ?? "";
+    street = results[14] ?? "";
+    district = results[15] ?? "";
+    pinCode = results[16] ?? "";
+    lmcInstallId = results[17] ?? "";
+    rfcProcessStatus = results[18] ?? "";
     _eventCompleted(emit);
   }
 
   _eventCompleted(Emitter<PreviewInstallationState> emit) {
     emit(PreviewInstallationDataState(
-      schema: schema,
-      userName: userName,
       isLoader: isLoader,
       custRegNo: custRegNo,
       trNumber: trNumber,

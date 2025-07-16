@@ -50,18 +50,27 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-      child: BlocBuilder<FormInstallationBloc, FormInstallationState>(
-        builder: (context, state) {
-          if (state is FormInstallationDataState) {
-            return Form(
-                onWillPop: _onWillPop,
-                child: _itemBuilder(dataState: state));
-          } else {
-            return Center(child: SpinLoader());
-          }
-        },
-      ),
+    return Scaffold(
+        backgroundColor: AppColor.white,
+        appBar: AppBarWidget(
+        title: AppString.lmcInstallH,
+        boolLeading: true,
+    ),
+    body: SafeArea(
+      child: BackgroundWidget(
+        child: BlocBuilder<FormInstallationBloc, FormInstallationState>(
+          builder: (context, state) {
+            if (state is FormInstallationDataState) {
+              return Form(
+                  onWillPop: _onWillPop,
+                  child: _itemBuilder(dataState: state));
+            } else {
+              return Center(child: SpinLoader());
+            }
+          },
+        ),
+        ),
+    ),
     );
   }
 
@@ -76,31 +85,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   _itemBuilder({required FormInstallationDataState dataState}) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBarWidget(
-        title: AppString.lmcInstallH,
-        boolLeading: true,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dataState.userName,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              ),
-              Text(
-                dataState.schema,
-                textAlign: TextAlign.start,
-                style: Styles.rel,
-              )
-            ],
-          ),
-        ],
-      ),
-      body: ListView(
+    return  ListView(
         padding: EdgeInsets.all(8),
         children: [
           Text(
@@ -141,7 +126,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
         ],
-      ),
     );
   }
 
@@ -189,7 +173,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       star: AppString.star,
       hintText: AppString.installationDate,
       label: AppString.installationDate,
-      textInputAction: TextInputAction.next,
+      textInputAction: TextInputAction.done,
       enabled: true,
       controller: stateData.installationDateController,
       suffixIcon: IconButtonWidget(
@@ -214,7 +198,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               star: AppString.star,
               label: AppString.reasonDelay,
               hint: AppString.reasonDelay,
-              dropdownValue: stateData.delayReasonValue?.name == null
+              dropdownValue: stateData.delayReasonValue.name == null
                   ? null
                   : stateData.delayReasonValue,
               items: stateData.listOfDelayReason,
@@ -227,21 +211,6 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         : Container();
   }
 
-  Widget _meterConnectionDropdown(
-      {required FormInstallationDataState stateData}) {
-    return DropdownWidget<GetConstantModel>(
-      label: AppString.meterConnection,
-      hint: AppString.meterConnection,
-      dropdownValue: stateData.typeOfNrValue?.value == null
-          ? null
-          : stateData.typeOfNrValue,
-      items: stateData.listOfTypeOfNr,
-      onChanged: (val) {
-        BlocProvider.of<FormInstallationBloc>(context)
-            .add(SelectTypeNRValueEvent(typeOfNRValue: val));
-      },
-    );
-  }
 
   Widget _meterNumberController(
       {required FormInstallationDataState stateData}) {
@@ -504,9 +473,9 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       },
                       onChanged: (val) async {
                         await regulatorFieldKey.currentState?.validate();
-                        BlocProvider.of<FormInstallationBloc>(context).add(
-                            SelectRegulatorsValueEvent(
-                                context: context, regulatorsValue: val));
+                        // BlocProvider.of<FormInstallationBloc>(context).add(
+                        //     SelectRegulatorsValueEvent(
+                        //         context: context, regulatorsValue: val));
                       },
                     ),
                   )
@@ -546,8 +515,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       },
                       onChanged: (val) async {
                         await mRegulatorFieldKey.currentState?.validate();
-                        BlocProvider.of<FormInstallationBloc>(context).add(
-                            SelectMREvent(context: context, mRegulators: val));
+                        // BlocProvider.of<FormInstallationBloc>(context).add(
+                        //     SelectMREvent(context: context, mRegulators: val));
                       },
                     ),
                   )
@@ -565,7 +534,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               star: AppString.star,
               hintText: AppString.rfcDate,
               label: AppString.rfcDate,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               enabled: true,
               controller: stateData.rfcDateController,
               suffixIcon: IconButtonWidget(
@@ -685,6 +654,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
+                              textInputAction : TextInputAction.done,
                               onChanged: (val) {
                                 BlocProvider.of<FormInstallationBloc>(context)
                                     .add(SelectQTYLMCEvent(
@@ -700,6 +670,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
+                              textInputAction : TextInputAction.done,
                             ),
                           )
                   ],

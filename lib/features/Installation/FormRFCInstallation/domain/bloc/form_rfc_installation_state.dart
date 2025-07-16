@@ -21,8 +21,6 @@ class FormInstallationPageLoadState extends FormRFCInstallationInitialState {
 }
 
 class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
- final String schema;
- final String userName;
  final String baseUrl;
  final bool isLoader;
  final bool isExtraPipe;
@@ -49,7 +47,6 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
  final List<String> listOfMeterNumberSerial;
  final List<String> listOfRegulatorSerial;
  final List<String> listOfMRSerial;
- final  List<ListOfMeterNo> listOfRegulator;
  final List<String> listOfQtyLMC;
  final List<FreeMaterialData> listOfAllMaterial;
  final List<GetConstantModel> listOfAllRFC;
@@ -79,8 +76,6 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
  final TextEditingController regulatorSerialController;
 
   FormRFCInstallationDataState({
-    required this.userName,
-    required this.schema,
     required this.baseUrl,
     required this.isInstallRegulator,
     required this.isLoader,
@@ -107,7 +102,6 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     required this.listOfRegulatorType,
     required this.listOfRegulatorSerial,
     required this.listOfMRSerial,
-    required this.listOfRegulator,
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
     required this.materialList,
@@ -139,9 +133,8 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
   @override
   // TODO: implement props
   List<Object> get props => [
-    schema,
+
     baseUrl,
-    userName,
     isLoader,
     isExtraPipe,
     isInstallRegulator,
@@ -182,7 +175,6 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
     installationPhoto,
     listOfRegulatorSerial,
     listOfMRSerial,
-    listOfRegulator,
     listOfAllMaterial,
     listOfAllRFC,
     materialList,

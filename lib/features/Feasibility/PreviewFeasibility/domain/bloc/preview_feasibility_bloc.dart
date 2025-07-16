@@ -16,8 +16,6 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
   FeasibilityData feasibilityRowsModel = FeasibilityData();
   String crNumber = '';
   String bpNumber = '';
-  String schema = '';
-  String userName = '';
   String chargeArea = '';
   String areaName = '';
   String firstName = '';
@@ -40,8 +38,7 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
     isLoader = false;
     feasibilityRowsModel = FeasibilityData();
     final results = await Future.wait(<Future>[
-      SharedPref.getString(key: PrefsValue.userName),
-      SharedPref.getString(key: PrefsValue.schema),
+
       SharedPref.getString(key: PrefsValue.crNumber),
       SharedPref.getString(key: PrefsValue.bpNumber),
       SharedPref.getString(key: PrefsValue.chargeArea),
@@ -62,33 +59,30 @@ class PreviewFeasibilityBloc extends Bloc<PreviewFeasibilityEvent, PreviewFeasib
       SharedPref.getString(key: PrefsValue.pinCode),
     ]);
 
-    userName = results[0] ?? "";
-    schema = results[1] ?? "";
-    crNumber = results[2] ?? "";
-    bpNumber = results[3] ?? "";
-    chargeArea = results[4] ?? "";
-    areaName = results[5] ?? "";
-    firstName = results[6] ?? "";
-    lastName = results[7] ?? "";
-    mobileNumber = results[8] ?? "";
-    guardianName = results[9] ?? "";
-    proCateName = results[10] ?? "";
-    propClass = results[11] ?? "";
-    buildingNumber = results[12] ?? "";
-    houseNumber = results[13] ?? "";
-    locality = results[14] ?? "";
-    colony = results[15] ?? "";
-    town = results[16] ?? "";
-    street = results[17] ?? "";
-    district = results[18] ?? "";
-    pinCode = results[19] ?? "";
+
+    crNumber = results[0] ?? "";
+    bpNumber = results[1] ?? "";
+    chargeArea = results[2] ?? "";
+    areaName = results[3] ?? "";
+    firstName = results[4] ?? "";
+    lastName = results[5] ?? "";
+    mobileNumber = results[6] ?? "";
+    guardianName = results[7] ?? "";
+    proCateName = results[8] ?? "";
+    propClass = results[9] ?? "";
+    buildingNumber = results[10] ?? "";
+    houseNumber = results[11] ?? "";
+    locality = results[12] ?? "";
+    colony = results[13] ?? "";
+    town = results[14] ?? "";
+    street = results[15] ?? "";
+    district = results[16] ?? "";
+    pinCode = results[17] ?? "";
     _eventCompleted(emit);
   }
 
   _eventCompleted(Emitter<PreviewFeasibilityState> emit) {
     emit(PreviewFeasibilityDataState(
-      schema: schema,
-      userName: userName,
       isLoader: isLoader,
       
       crNumber: crNumber,

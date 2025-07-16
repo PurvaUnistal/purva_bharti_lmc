@@ -1,14 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
@@ -83,9 +81,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   bool isSRLatLong = false;
   bool isMRLatLong = false;
 
-  String schema = "";
-  String role = "";
-  String userName = "";
+
   String dmaUserId = "";
   String isInstall = "";
   String lmcInstallationId = "";
@@ -156,6 +152,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   List<LmcReasonModel> listOfRegulatorType = [];
 
   List<ListOfMeterNo> listOfRegulator = [];
+  List<ListOfMeterNo> listOfMR = [];
   List<String> listOfRegulatorSerial = [];
   List<String> listOfRegulatorId = [];
 
@@ -169,6 +166,10 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   List<LmcReasonModel> listOfMeterReplaceType = [];
   List<LmcReasonModel> listOfRegulatorTypeReason = [];
   static BuildContext? context = Singleton.instanceInit()?.context;
+
+
+  static var ctx = UserContext.getUserContext();
+
   _pageLoad(NGCFormLoadEvent event, emit) async {
     emit(NGCFormPageLoadState());
     _isPageLoader = false;
@@ -197,6 +198,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     listOfMeterNumberId = [];
     listOfRegulatorType = [];
     listOfRegulator = [];
+    listOfMR = [];
     listOfRegulatorSerial = [];
     listOfMRSerial = [];
     listOfRegulatorId = [];
@@ -221,19 +223,17 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(key: PrefsValue.schema);
-    userName = await SharedPref.getString(key: PrefsValue.userName);
+
     latOfSRController.text = "0";
     longOfSRController.text = "0";
     latOfMRController.text = "0";
     longOfMRController.text = "0";
+    ctx = UserContext.getUserContext();
     ngcData = await AppConfig.instanceInit()!.ngcData;
-    role = await SharedPref.getString(key: PrefsValue.userRole);
     meterConnectionMeterController.text = await ngcData.typeOfNr ?? "";
 
     regulatorTypeController.text = await ngcData.regulatorType ?? "";
     regulatorTypeValue.id =  await ngcData.regulatorTypeId ?? "";
-    //regulatorTypeValue.id = await ngcData.regulatorId ?? "";
     mrRegulatorId = await ngcData.mrRegulatorId ?? "";
     mrSerialNumberController.text = await ngcData.mrRegulatorSerial ?? "";
     
@@ -327,6 +327,16 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     /* if (regulatorTypeValue.id != null) {
       await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: regulatorTypeValue.id.toString());
     }*/
+    await fetchMRApi(
+      context: event.context,
+      regulatorSerial: "",
+      regulatorType: regulatorTypeValue.id ?? "",
+    );
+    await fetchRegulatorsApi(
+      context: event.context,
+      regulatorSerial: "",
+      regulatorType: regulatorTypeValue.id ?? "",
+    );
     _eventCompleted(emit);
   }
 
@@ -432,32 +442,41 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     if (event.regulatorTypeValue.name != null) {
       regulatorSerialSearchController.text = "";
       mrNumberSearchController.text = "";
-      await fetchRegulatorsApi(
+      if (event.regulatorTypeValue.name == "SR") {
+        await fetchMRApi(
           context: event.context,
           regulatorSerial: "",
-          regulatorType: event.regulatorTypeValue.id.toString());
+          regulatorType: event.regulatorTypeValue.id.toString(),
+        );
+        await fetchRegulatorsApi(
+          context: event.context,
+          regulatorSerial: "",
+          regulatorType: event.regulatorTypeValue.id.toString(),
+        );
+      } else if (event.regulatorTypeValue.name != null) {
+        await fetchRegulatorsApi(
+          context: event.context,
+          regulatorSerial: "",
+          regulatorType: event.regulatorTypeValue.id.toString(),
+        );
+      }
     }
     isRegulator = false;
     _eventCompleted(emit);
   }
 
-  fetchRegulatorsApi(
-      {required BuildContext context,
-      required String regulatorSerial,
-      required String regulatorType}) async {
-    if (role == "ngc") {
+  fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+    if (ctx.user.role == "ngc") {
       var res = await NGCFormHelper.getRegulatorsNGCApi(
           context: context,
           regulatorSerial: regulatorSerial,
           regulatorType: regulatorType);
       if (res != null) {
         listOfRegulator = res;
-        listOfRegulatorSerial =
-            listOfRegulator.map((e) => e.serialNumber!).toList();
-        listOfMRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+        listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
         return res;
       }
-    } else if (role == "lmc") {
+    } else if (ctx.user.role == "lmc") {
       var res = await FormInstallationHelper.getRegulatorsApi(
           context: context,
           regulatorSerial: regulatorSerial,
@@ -466,15 +485,21 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         listOfRegulator = res;
         listOfRegulatorSerial =
             listOfRegulator.map((e) => e.serialNumber!).toList();
-        listOfMRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
         return res;
       }
     }
   }
-
+  fetchMRApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+    var res = await FormInstallationHelper.getMeterRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+    if (res != null) {
+      listOfMR = res;
+      listOfMRSerial = listOfMR.map((e) => e.serialNumber!).toList();
+      return res;
+    }
+  }
   fetchMetersApi(
       {required BuildContext context, required String meterSerial}) async {
-    if (role == "ngc") {
+    if (ctx.user.role == "ngc") {
       var res = await NGCFormHelper.getMetersNGCApi(
           context: context, meterSerial: meterSerial);
       if (res != null) {
@@ -483,7 +508,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
             listOfMeterNumber.map((e) => e.serialNumber!).toList();
         return res;
       }
-    } else if (role == "lmc") {
+    } else if (ctx.user.role == "lmc") {
       var res = await FormInstallationHelper.getMetersApi(
           context: context, meterSerial: meterSerial);
       if (res != null) {
@@ -531,7 +556,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _selectMRegulators(SelectMRegulatorsEvent event, emit) async {
     mrNumberSearchController.text = event.mRegulators;
-    mrRegulatorId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
+    mrRegulatorId = listOfMR.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
     if (event.mRegulators.isNotEmpty &&
         !listOfRegulatorSerial.contains(event.mRegulators)) {
       isCheckMR = true;
@@ -830,8 +855,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
 
   _eventCompleted(emit) {
     emit(NGCFormDataState(
-      userName: userName,
-      schema: schema,
       isPageLoader: isPageLoader,
       isBtnLoader: isBtnLoader,
       meterIniReading1Controller: meterIniReading1Controller,
@@ -852,7 +875,6 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       regulatorSerialController: regulatorSerialController,
       proposedNgcDateController: proposedNgcDateController,
       listOfMeterNumberId: listOfMeterNumberId,
-      listOfRegulator: listOfRegulator,
       listOfRegulatorSerial: listOfRegulatorSerial,
       listOfRegulatorId: listOfRegulatorId,
       regulatorTypeValue: regulatorTypeValue,

@@ -15,8 +15,6 @@ class PreviewFeasibilityPageLoadState extends PreviewFeasibilityInitialState {
 
 class PreviewFeasibilityDataState extends PreviewFeasibilityInitialState {
   final bool isLoader;
-  final String schema;
-  final String userName;
   final String crNumber;
   final String bpNumber;
   final String chargeArea;
@@ -41,8 +39,6 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityInitialState {
 
   PreviewFeasibilityDataState({
     required this.isLoader,
-    required this.schema,
-    required this.userName,
     required this.crNumber,
     required this.bpNumber,
     required this.chargeArea,
@@ -69,8 +65,7 @@ class PreviewFeasibilityDataState extends PreviewFeasibilityInitialState {
   @override
   // TODO: implement props
   List<Object> get props => [
-        schema,
-        userName,
+
         isLoader,
         crNumber,
         bpNumber,

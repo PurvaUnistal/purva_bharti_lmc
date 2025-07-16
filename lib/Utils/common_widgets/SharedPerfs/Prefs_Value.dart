@@ -2,19 +2,8 @@ class PrefsValue {
   static String isUserLogIn = "IsUserLogIn";
   static String emailVal = "Email";
   static String passwordVal = "Password";
-  static String token = "token";
-  static String schema = "schema";
-  static String userRole = "User Role";
-  static String userName = "User Name";
-  static String userId = "User Id";
-  static String gaId = "gaId";
-  static String cookies = "cookies";
-  static String pwdChanged = "pwdChanged";
-  static String feasibilityName = "FeasibilityName";
-  static String installationName = "InstallationName";
-  static String pendingNgc = "pendingNgc";
-  static String accessRight = "accessRight";
-  static String appVersion = "appVersion";
+  static String userInfo = "userInfo";
+  static String buildNumber = "buildNumber";
 
   static String bpNumber = "bpNumber";
 

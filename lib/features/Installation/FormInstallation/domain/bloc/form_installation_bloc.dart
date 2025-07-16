@@ -63,8 +63,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   bool isCheckMR = false;
   bool isExtraPipe = false;
 
-  String schema = "";
-  String userName = "";
+
   String currentDate = "";
   String installRegulator = "0";
   String extraPipe = "0";
@@ -82,6 +81,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<String> listOfMeterNumberSerial = [];
   List<String> listOfMeterNumberId = [];
   List<ListOfMeterNo> listOfRegulator = [];
+  List<ListOfMeterNo> listOfMR = [];
   List<String> listOfRegulatorSerial = [];
   List<String> listOfMRSerial = [];
   List<String> listOfRegulatorId = [];
@@ -156,6 +156,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     listOfMeterNumberSerial = [];
     listOfMeterNumberId = [];
     listOfRegulator = [];
+    listOfMR = [];
     listOfRegulatorSerial = [];
     listOfMRSerial = [];
     listOfRegulatorId = [];
@@ -194,12 +195,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
-    schema = await SharedPref.getString(
-      key: PrefsValue.schema,
-    );
-    userName = await SharedPref.getString(
-      key: PrefsValue.userName,
-    );
     currentDate = await DateFormat(AppString.dateFormat).format(DateTime.now());
 
     meterReadingDate.text = currentDate;
@@ -212,7 +207,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     Future.wait(<Future>[
      fetchTypeOfNrApi(context: event.context),
      fetchReadyForNgcApi(context: event.context),
-     fetchMetersApi(context: event.context, meterSerial: ""),
      fetchDelayReasonApi(context: event.context),
      fetchRegulatorTypeApi(context: event.context),
      fetchRFCApi(
@@ -220,6 +214,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     ),
 
     ]);
+    await fetchMetersApi(context: event.context, meterSerial: "");
     await  fetchFreeMaterialApi(
       context: event.context,
     );
@@ -308,8 +303,23 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     regulatorTypeValue = event.regulatorTypeValue;
     regulatorSerialController.clear();
     mrNumberController.clear();
-    if (event.regulatorTypeValue.name != null) {
-      await fetchRegulatorsApi(context: event.context, regulatorSerial: "", regulatorType: event.regulatorTypeValue.id.toString());
+    if (event.regulatorTypeValue.name == "SR") {
+      await fetchMRApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
+      await fetchRegulatorsApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
+    } else if (event.regulatorTypeValue.name != null) {
+      await fetchRegulatorsApi(
+        context: event.context,
+        regulatorSerial: "",
+        regulatorType: event.regulatorTypeValue.id.toString(),
+      );
     }
     isRegulator = false;
     _eventCompleted(emit);
@@ -441,7 +451,15 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     if (res != null) {
       listOfRegulator = res;
       listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
-      listOfMRSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
+      return res;
+    }
+  }
+
+  fetchMRApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+    var res = await FormInstallationHelper.getMeterRegulatorsApi(context: context, regulatorSerial: regulatorSerial, regulatorType: regulatorType);
+    if (res != null) {
+      listOfMR = res;
+      listOfMRSerial = listOfMR.map((e) => e.serialNumber!).toList();
       return res;
     }
   }
@@ -474,7 +492,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _selectMR(SelectMREvent event, emit) async {
     mrNumberController.text = event.mRegulators;
-    mrRegulatorsId = listOfRegulator.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
+    mrRegulatorsId = listOfMR.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
     if (event.mRegulators.isNotEmpty && !listOfRegulatorSerial.contains(event.mRegulators)) {
       isCheckMR = true;
     } else {
@@ -711,8 +729,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _eventCompleted(emit) {
     emit(FormInstallationDataState(
-      userName: userName,
-      schema: schema,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,
       isInstallRegulator: isInstallRegulator,
@@ -752,7 +768,6 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       pneumaticTestReportPhoto: pneumaticTestReportPhoto,
       installationPhoto: installationPhoto,
       listOfRegulatorSerial: listOfRegulatorSerial,
-      listOfRegulator: listOfRegulator,
       listOfAllMaterial: listOfAllMaterial,
       listOfAllRFC: listOfAllRFC,
       materialList: materialList,

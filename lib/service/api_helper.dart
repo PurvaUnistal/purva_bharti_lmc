@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/common_session_dialog_box.dart';
 import 'package:lmc/Utils/common_widgets/connectivity_helper.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:mime/mime.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiHelper {
   static Future<dynamic> getData({var urlEndPoint, required BuildContext context}) async {
@@ -79,13 +78,12 @@ class ApiHelper {
     required  List<ImageRequestObject> imageRequestObject,
     required BuildContext context
   }) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String token = pref.getString(PrefsValue.token) ?? "";
+    final ctx = UserContext.getUserContext();
     try {
       if(await ConnectivityHelper.allConnectivityCheck(context: context) == false){
         return null;
       }
-      Map<String, String> headers = {"Authorization": token};
+      Map<String, String> headers = {"Authorization": ctx.loginModel.token ?? ""};
       String url = Apis.baseUrl + urlEndPoint;
       var request = MultipartRequest("POST", Uri.parse(url));
 
