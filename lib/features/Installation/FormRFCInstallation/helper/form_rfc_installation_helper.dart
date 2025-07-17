@@ -87,7 +87,7 @@ class FormRFCInstallationHelper {
       }
       if (meterNumber.isEmpty) {
         return error("The Meter Number field is required.");
-      } else if (isCheckMeterMismatch) {
+      } else if (isCheckMeterMismatch == true) {
         return error("The Meter Number is mismatch. Please check your Meter Number.");
       }
       if ([meterInit1, meterInit2, meterInit3].any((e) => e.isEmpty)) {
@@ -103,7 +103,7 @@ class FormRFCInstallationHelper {
           if (regulatorNumber.isEmpty) {
             return error("The SR Number field is required.");
           }
-          if (isCheckRegulatorMismatch) {
+          if (isCheckRegulatorMismatch == true) {
             return error("The SR Number is mismatch. Please check your SR Number.");
           }
           if (mrNumber.isEmpty) {

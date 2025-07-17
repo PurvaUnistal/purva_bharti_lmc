@@ -522,6 +522,7 @@ class _NGCFormViewState extends State<NGCFormView> {
           )
         : TextFieldWidget(
             star: AppString.star,
+            enabled: true,
             label: AppString.meterNumber,
             hintText: AppString.meterNumber,
             controller: dataState.meterSerialController,

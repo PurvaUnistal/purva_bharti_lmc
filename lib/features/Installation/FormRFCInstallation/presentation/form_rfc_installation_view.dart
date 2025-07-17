@@ -219,6 +219,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
 
   Widget _meterNumberController(
       {required FormRFCInstallationDataState stateData}) {
+    final oldMeterNo = stateData.meterNumberSerialController.text;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -236,6 +237,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
             controller: stateData.meterNumberSerialController,
             validator: (value) {
               if (value != null &&
+                  value != oldMeterNo &&
                   value.isNotEmpty &&
                   !stateData.listOfMeterNumberSerial.contains(value)) {
                 return AppString.meterNoErrorMsg;
@@ -250,9 +252,9 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
             },
             onChanged: (val) {
               meterFieldKey.currentState?.validate();
-              // BlocProvider.of<FormRFCInstallationBloc>(context).add(
-              //     SelectMeterNumberValueEvent(
-              //         context: context, meterReadingValue: val));
+              BlocProvider.of<FormRFCInstallationBloc>(context).add(
+                  SelectMeterNumberValueEvent(
+                      context: context, meterReadingValue: val));
             },
           ),
         ),

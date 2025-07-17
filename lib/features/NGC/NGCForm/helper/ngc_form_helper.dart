@@ -329,6 +329,9 @@ class NGCFormHelper{
     required String regulatorId,
     required LmcReasonModel regulatorTypeId,
     required String meterChangeReason,
+    required String meterChangeRemark,
+      required String regulatorChangeReason,
+      required String regulatorChangeRemark,
     required String replaceMeter,
     required LmcReasonModel changeMeterType,
     required String mrRegulatorId,
@@ -365,6 +368,9 @@ class NGCFormHelper{
       "comment": comment.isEmpty ? "" : comment,
 
       "meter_change_reason": meterChangeReason.isEmpty ? "": meterChangeReason,
+      "meter_reason": meterChangeRemark.isEmpty ? "" : meterChangeRemark,
+      "regulator_change_reason": regulatorChangeReason.isEmpty ? "" : regulatorChangeReason,
+      "regulator_remark": regulatorChangeRemark.isEmpty ? "" : regulatorChangeRemark,
       "replace_meter": replaceMeter.isEmpty ? "0" :replaceMeter,
       "change_meter_type": changeMeterType.id == null ? "0" : changeMeterType.id.toString(),
       "tf_number": tfNumber.isEmpty ? "" : tfNumber,
@@ -376,6 +382,8 @@ class NGCFormHelper{
       "latitude_tf": latitudeTf.isEmpty ? "0" : latitudeTf,
       "longitude_tf": longitudeTf.isEmpty ? "0" : longitudeTf,
       "no_of_family": noOfFamily.isEmpty ? "0" : noOfFamily,
+
+
     };
     log("jsonBody-->${body}");
     try {
