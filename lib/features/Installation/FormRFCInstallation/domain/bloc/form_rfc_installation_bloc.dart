@@ -127,7 +127,7 @@ class FormRFCInstallationBloc
   FocusNode meterIniReading2FocusNode = FocusNode();
   FocusNode meterIniReading3FocusNode = FocusNode();
 
-  String materialId = '';
+  String meterNoId = '';
   String baseUrl = '';
   String regulatorsId = '';
   String mrRegulatorsId = '';
@@ -179,6 +179,7 @@ class FormRFCInstallationBloc
     listOfQtyLMC = [];
     listOfAllRFC = [];
     listOfRFCInstallationMaterial = [];
+    meterNoId = "";
     meterSerial = "";
     meterNumber = "";
     typeOfNr = "";
@@ -483,7 +484,7 @@ class FormRFCInstallationBloc
         meterSerial = rfcInstallationLmc.meterSerial!;
         meterNumberSerialController.text = meterSerial;
         meterNumber = rfcInstallationLmc.meterNumber!;
-        materialId = meterNumber;
+        meterNoId = meterNumber;
         regulatorSerialController.text = rfcInstallationLmc.regulatorSerial!;
         mrRegulatorsId = rfcInstallationLmc.mrRegulatorId!;
         mrNumberController.text = rfcInstallationLmc.mrRegulatorSerial!;
@@ -711,35 +712,46 @@ class FormRFCInstallationBloc
   }
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
-    materialId = "";
+    meterNoId = "";
     meterConnectionMeterController.text = "";
-    meterNumberSerialController.text = event.meterReadingValue;
+    meterNumberSerialController.text = "";
 
-    if (meterSerial.isNotEmpty) {
-      materialId = meterNumber;
+    final newValue = event.meterReadingValue;
+
+    if (meterSerial.isNotEmpty&& newValue == meterSerial) {
+      // use cached/old values
+      meterNoId = meterNumber;
       meterNumberSerialController.text = meterSerial;
       meterConnectionMeterController.text = typeOfNr;
       print("Using old meterSerial: $meterSerial");
-    } else {
+    } else if(newValue.isNotEmpty) {
+      // search in list
       final matchedMeter = listOfMeterNumber.firstWhereOrNull(
-            (element) => element.serialNumber == event.meterReadingValue,
+            (element) => element.serialNumber == newValue,
       );
-      meterNumberSerialController.text = matchedMeter?.serialNumber ?? "";
-      meterConnectionMeterController.text = matchedMeter?.meterConnection ?? "";
-      materialId = matchedMeter?.id ?? "";
+      if (matchedMeter != null) {
+        meterNoId = matchedMeter.id!;
+        meterNumberSerialController.text = matchedMeter.serialNumber ?? "";
+        meterConnectionMeterController.text = matchedMeter.meterConnection ?? "";
+
+        print("meterNoId: $meterNoId");
+        print(" meterNumberSerialController.text: $meterNumberSerialController.text");
+      } else {
+        print("No matching meter found for: $newValue");
+      }
     }
 
-    // Validation: only if new value != old value
-    if (event.meterReadingValue == meterSerial) {
-      isCheckMeterMismatch = false; // same as old → no error
+    // Validation
+    if (newValue == meterSerial) {
+      isCheckMeterMismatch = false;
     } else {
-      isCheckMeterMismatch =
-          event.meterReadingValue.isNotEmpty &&
-              !listOfMeterNumberSerial.contains(event.meterReadingValue);
+      isCheckMeterMismatch = newValue.isNotEmpty &&
+          !listOfMeterNumberSerial.contains(newValue);
     }
 
     _eventCompleted(emit);
   }
+
 
 
   _selectRegulatorsValue(SelectRegulatorsValueEvent event, emit) async {
@@ -962,7 +974,7 @@ class FormRFCInstallationBloc
           workCompletedDate: installationDateController.text.trim().toString(),
           rfcDate: rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
-          meterNo: materialId,
+          meterNo: meterNoId,
           latitudeHg: latOfHouseController.text.trim().toString(),
           longitudeHg: longOfHouseController.text.trim().toString(),
           tfNumber: bpNumberController.text.toString(),
@@ -986,7 +998,7 @@ class FormRFCInstallationBloc
                   : regulatorTypeValue.id.toString(),
           delayReason: delayReasonValue,
           meterReading: meterInitialReadingController.text.trim().toString(),
-          materialId: materialId,
+          materialId: meterNoId,
           typeOfNR: meterConnectionMeterController.text.trim().toString(),
           meterTesting: meterTesting.trim().toString(),
           paintingOfGIPipe: paintingOfGIPipe.trim().toString(),

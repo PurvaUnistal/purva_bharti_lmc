@@ -123,7 +123,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   String regulatorsId = '';
   String mrRegulatorsId = '';
-  String materialId = '';
+  String meterNoId = '';
 
   File housePhoto = File("");
   File rfcCardPhoto = File("");
@@ -171,6 +171,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     listOfAllMaterialId = [];
     listOfQtyLMC = [];
     listOfAllRFC = [];
+    meterNoId = "";
     extraPipe = "0";
     extraPrice = "0";
     meterTesting = "0";
@@ -465,10 +466,10 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   }
 
   _selectMeterNumberValue(SelectMeterNumberValueEvent event, emit) async {
-    materialId = "";
+    meterNoId = "";
     meterConnectionMeterController.text = "";
     meterNumberSerialController.text = event.meterReadingValue;
-    materialId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
+    meterNoId = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.id ?? "";
     meterConnectionMeterController.text = listOfMeterNumber.firstWhereOrNull((element) => element.serialNumber == event.meterReadingValue)?.meterConnection ?? "";
 
     if (event.meterReadingValue.isNotEmpty && !listOfMeterNumberSerial.contains(event.meterReadingValue)) {
@@ -684,7 +685,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           workCompletedDate: installationDateController.text.trim().toString(),
           rfcDate: rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
-          meterNo: materialId,
+          meterNo: meterNoId.trim().toString(),
           latitudeHg: latOfHouseController.text.trim().toString(),
           longitudeHg: longOfHouseController.text.trim().toString(),
           tfNumber: bpNumberController.text.toString(),
@@ -697,7 +698,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           regulatorTypeId: regulatorTypeValue.id == null ? "" : regulatorTypeValue.id.toString(),
           delayReason: delayReasonValue,
           meterReading: meterInitialReadingController.text.trim().toString(),
-          materialId: materialId,
+          materialId:meterNoId.trim().toString(),
           typeOfNR: meterConnectionMeterController.text.trim().toString(),
           meterTesting: meterTesting.trim().toString(),
           paintingOfGIPipe: paintingOfGIPipe.trim().toString(),

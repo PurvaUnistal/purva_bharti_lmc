@@ -223,41 +223,41 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 8,
-          child: AutoCompleteTextFieldWidget(
-            fieldKey: meterFieldKey,
-            star: AppString.star,
-            hintText: AppString.meterNumber,
-            label: AppString.meterNumber,
-            suggestions: stateData.listOfMeterNumberSerial.length == 0
-                ? ["No Data Found"]
-                : stateData.listOfMeterNumberSerial,
-            keyboardType: TextInputType.text,
-            controller: stateData.meterNumberSerialController,
-            validator: (value) {
-              if (value != null &&
-                  value != oldMeterNo &&
-                  value.isNotEmpty &&
-                  !stateData.listOfMeterNumberSerial.contains(value)) {
-                return AppString.meterNoErrorMsg;
-              }
-              return null;
-            },
-            onSelected: (val) {
-              meterFieldKey.currentState?.validate();
-              BlocProvider.of<FormRFCInstallationBloc>(context).add(
-                  SelectMeterNumberValueEvent(
-                      context: context, meterReadingValue: val));
-            },
-            onChanged: (val) {
-              meterFieldKey.currentState?.validate();
-              BlocProvider.of<FormRFCInstallationBloc>(context).add(
-                  SelectMeterNumberValueEvent(
-                      context: context, meterReadingValue: val));
-            },
+          Flexible(
+            flex: 8,
+            child: AutoCompleteTextFieldWidget(
+              fieldKey: meterFieldKey,
+              star: AppString.star,
+              hintText: AppString.meterNumber,
+              label: AppString.meterNumber,
+              suggestions: stateData.listOfMeterNumberSerial.length == 0
+                  ? ["No Data Found"]
+                  : stateData.listOfMeterNumberSerial,
+              keyboardType: TextInputType.text,
+              controller: stateData.meterNumberSerialController,
+              validator: (value) {
+                if (value != null &&
+                    value != oldMeterNo &&
+                    value.isNotEmpty &&
+                    !stateData.listOfMeterNumberSerial.contains(value)) {
+                  return AppString.meterNoErrorMsg;
+                }
+                return null;
+              },
+              onSelected: (val) {
+                meterFieldKey.currentState?.validate();
+                BlocProvider.of<FormRFCInstallationBloc>(context).add(
+                    SelectMeterNumberValueEvent(
+                        context: context, meterReadingValue: val));
+              },
+              onChanged: (val) {
+                meterFieldKey.currentState?.validate();
+                BlocProvider.of<FormRFCInstallationBloc>(context).add(
+                    SelectMeterNumberValueEvent(
+                        context: context, meterReadingValue: val));
+              },
+            ),
           ),
-        ),
         CommonStyle.widthSpace(context: context),
         Flexible(
           flex: 4,
