@@ -27,7 +27,7 @@ def keystoreProperties = new Properties()
 
 android {
     namespace "com"
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion = "25.2.9519653"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
