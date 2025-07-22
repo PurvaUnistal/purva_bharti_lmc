@@ -717,15 +717,13 @@ class FormRFCInstallationBloc
     meterNumberSerialController.text = "";
 
     final newValue = event.meterReadingValue;
-
-    if (meterSerial.isNotEmpty&& newValue == meterSerial) {
-      // use cached/old values
+    meterNumberSerialController.text = newValue;
+    if (meterSerial.isNotEmpty && newValue == meterSerial) {
       meterNoId = meterNumber;
       meterNumberSerialController.text = meterSerial;
       meterConnectionMeterController.text = typeOfNr;
       print("Using old meterSerial: $meterSerial");
     } else if(newValue.isNotEmpty) {
-      // search in list
       final matchedMeter = listOfMeterNumber.firstWhereOrNull(
             (element) => element.serialNumber == newValue,
       );
@@ -741,7 +739,6 @@ class FormRFCInstallationBloc
       }
     }
 
-    // Validation
     if (newValue == meterSerial) {
       isCheckMeterMismatch = false;
     } else {
@@ -1087,6 +1084,7 @@ class FormRFCInstallationBloc
         regulatorSerialController: regulatorSerialController,
         meterNumberSerialController: meterNumberSerialController,
         listOfMRSerial: listOfMRSerial,
+        oldMeterSerial: meterSerial,
       ),
     );
   }

@@ -219,7 +219,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
 
   Widget _meterNumberController(
       {required FormRFCInstallationDataState stateData}) {
-    final oldMeterNo = stateData.meterNumberSerialController.text;
+    final oldMeterNo = stateData.oldMeterSerial;
+    print("oldMeterNo--->${oldMeterNo}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

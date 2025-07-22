@@ -22,6 +22,7 @@ class FormInstallationPageLoadState extends FormRFCInstallationInitialState {
 
 class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
  final String baseUrl;
+ final String oldMeterSerial;
  final bool isLoader;
  final bool isExtraPipe;
  final bool isInstallRegulator;
@@ -77,6 +78,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
 
   FormRFCInstallationDataState({
     required this.baseUrl,
+    required this.oldMeterSerial,
     required this.isInstallRegulator,
     required this.isLoader,
     required this.isExtraPipe,
@@ -135,6 +137,7 @@ class FormRFCInstallationDataState extends FormRFCInstallationInitialState {
   List<Object> get props => [
 
     baseUrl,
+    oldMeterSerial,
     isLoader,
     isExtraPipe,
     isInstallRegulator,
