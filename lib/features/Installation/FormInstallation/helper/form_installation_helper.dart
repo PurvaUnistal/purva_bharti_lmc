@@ -310,6 +310,10 @@ class FormInstallationHelper {
     required String isometricPhoto,
     required String pneumaticPhoto,
     required String housePhoto,
+    required String tapOff,
+    required String tapOffLength,
+    required String supplyPaint,
+    required String gaisified,
   }) async {
 
     String lmcInstallId = await SharedPref.getString(
@@ -339,6 +343,10 @@ class FormInstallationHelper {
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
+        "tap_off": tapOff,
+        "tap_off_length": tapOffLength,
+        "supply_paint": supplyPaint,
+        "gaisified": gaisified,
         "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
         "type_of_nr": typeOfNR.isEmpty ? "" : typeOfNR.toString(),
         "ngc": ngc.key == null ? "" : ngc.key.toString(),

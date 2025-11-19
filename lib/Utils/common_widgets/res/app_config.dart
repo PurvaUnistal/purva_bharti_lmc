@@ -49,4 +49,8 @@ class AppConfig {
         ? DeviceType.phone
         : DeviceType.tablet;
   }
+
+  void clear() {
+    loginData = LoginModel();
+  }
 }

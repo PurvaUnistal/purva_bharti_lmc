@@ -15,6 +15,8 @@ import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -118,6 +120,12 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _checkListRFC(stateData: dataState),
           CommonStyle.vertical(context: context),
           _locationOfHouse(stateData: dataState),
+          CommonStyle.vertical(context: context),
+          _checkCoatTap(stateData: dataState),
+          dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
+          dataState.tapOffValue == "1" ? _tapOffLengthController(stateData: dataState) : SizedBox.shrink(),
+          CommonStyle.vertical(context: context),
+          _gasifiedRadioBtn(stateData: dataState),
           CommonStyle.vertical(context: context),
           _image(stateData: dataState),
           CommonStyle.vertical(context: context),
@@ -739,6 +747,121 @@ class _FormInstallationViewState extends State<FormInstallationView> {
       },
     );
   }
+
+  Widget _checkCoatTap({required FormInstallationDataState stateData}) {
+    var w = MediaQuery.of(context).size.width * 0.5;
+    print("_checkListRFC-->${w}");
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
+        mainAxisSpacing: 0.0,
+        crossAxisSpacing: 0.0,
+        childAspectRatio: 4.0,
+      ),
+      shrinkWrap: true,
+      itemCount: stateData.coatTapList.length,
+      itemBuilder: (context, index) {
+        final option = stateData.coatTapList[index];
+        final isSelected = stateData.selectedCoatTap.contains(option);
+        return Card(
+          child: Row(
+            children: [
+              Checkbox(
+                value: isSelected,
+              onChanged: (bool? value) {
+                    BlocProvider.of<FormInstallationBloc>(context).add(
+                        ToggleOptionEvent(
+                          option: option,isSelected: isSelected));
+
+                  },
+              ),
+              Text(
+                option,
+                style: Styles.labels,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _tapOffLengthController({required FormInstallationDataState stateData}) {
+    return TextFieldWidget(
+      star: "* ",
+      hintText: "Tap Off Length",
+      label: "Tap Off Length",
+      keyboardType: TextInputType.number,
+      controller: stateData.tapOffLengthController,
+    );
+  }
+
+  Widget _gasifiedRadioBtn({required FormInstallationDataState stateData}) {
+    return Container(
+      // margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+       padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade400, width: 1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label with underline or bold text
+          const Text(
+            "Gasified",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: stateData.gasifiedList.map((option) {
+              return Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: stateData.selectedGasified == option
+                          ? EnvironmentConfig.of(context)!.primaryTheme
+                          : Colors.grey.shade300,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: RadioListTile<String>(
+                    title: Text(
+                      option,
+                      style: const TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                    value: option,
+                    groupValue: stateData.selectedGasified,
+                    onChanged: (value) {
+                      if (value != null) {
+                        context
+                            .read<FormInstallationBloc>()
+                            .add(SelectGasifiedRadioEvent(option: value));
+                      }
+                    },
+                    dense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
 
   Widget _image({required FormInstallationDataState stateData}) {
     return Row(

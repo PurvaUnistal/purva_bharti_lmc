@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -48,6 +49,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<CaptureGalleryInstallationEvent>(_captureGalleryInstallation);
     on<CaptureCameraInstallationEvent>(_captureCameraInstallation);
     on<SelectRFCCheckValueEvent>(_selectRFCCheckValue);
+    on<ToggleOptionEvent>(_selectToggleOption);
+    on<SelectGasifiedRadioEvent>(_selectGasifiedRadio);
     on<SelectQTYLMCEvent>(_selectQTYLMC);
     on<SubmitFormInstallationEvent>(_submit);
   }
@@ -70,6 +73,10 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   String extraPrice = "0";
   String meterTesting = "0";
   String paintingOfGIPipe = "0";
+
+  String tapOffValue = "";
+  String supplyOfPaintValue = "";
+  String gasifiedValue = "";
 
   ListOfMeterNo meterNoValue = ListOfMeterNo();
   GetConstantModel typeOfNrValue = GetConstantModel();
@@ -94,6 +101,11 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<String> listOfAllMaterialId = [];
   List<String> listOfQtyLMC = [];
   List<GetConstantModel> listOfAllRFC = [];
+  List<String> coatTapList = [];
+  List<String> selectedCoatTap = [];
+
+  String selectedGasified = '';
+  List<String> gasifiedList = [];
 
   TextEditingController meterConnectionMeterController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
@@ -113,6 +125,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController mrNumberController = TextEditingController();
   TextEditingController meterReadingDate = TextEditingController();
+  TextEditingController tapOffLengthController = TextEditingController();
   TextEditingController extraPipeController = TextEditingController(text: "0");
   TextEditingController extraPriceController = TextEditingController(text: "0");
 
@@ -193,6 +206,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     meterInitialReadingController.text = "";
     ngConversionDateController.text = "";
     rfcDateController.text = "";
+    tapOffLengthController.text = "";
     meterIniReading1FocusNode = FocusNode();
     meterIniReading2FocusNode = FocusNode();
     meterIniReading3FocusNode = FocusNode();
@@ -205,6 +219,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
     proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
     feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
+    coatTapList = ['Supply of Paint/Coat', 'Tap Off', ];
+     selectedGasified = '';
+     gasifiedList = ['Yes', 'No',];
     Future.wait(<Future>[
      fetchTypeOfNrApi(context: event.context),
      fetchReadyForNgcApi(context: event.context),
@@ -648,6 +665,38 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
+  _selectToggleOption(ToggleOptionEvent event, emit) {
+    tapOffValue = "";
+    supplyOfPaintValue = "";
+    final currentState = state;
+    if (currentState is! FormInstallationDataState) return;
+
+    selectedCoatTap = List<String>.from(currentState.selectedCoatTap);
+
+    if (event.isSelected) {
+      selectedCoatTap.remove(event.option);
+    } else {
+      selectedCoatTap.add(event.option);
+    }
+     tapOffValue = selectedCoatTap.contains("Tap Off") ? "1" : "0";
+     supplyOfPaintValue = selectedCoatTap.contains("Supply of Paint/Coat") ? "1" : "0";
+
+    print("Tap Off Value --> $tapOffValue");
+    print("Supply of Paint/Coat Value --> $supplyOfPaintValue");
+
+    _eventCompleted(emit);
+  }
+
+
+  _selectGasifiedRadio(SelectGasifiedRadioEvent event,emit) {
+    selectedGasified = event.option;
+
+    print("--selectedGasified--> $selectedGasified");
+     gasifiedValue = (selectedGasified == "Yes") ? "1" : "0";
+    print("gasifiedValue --> $gasifiedValue");
+    _eventCompleted(emit);
+  }
+
   _submit(SubmitFormInstallationEvent event, emit) async {
     try {
       var validationCheck = await FormInstallationHelper.validationSubmit(
@@ -707,6 +756,10 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
           housePhoto: housePhoto.path,
           pneumaticPhoto: pneumaticTestReportPhoto.path.toString(),
           isometricPhoto: rfcCardPhoto.path.toString(),
+          gaisified: gasifiedValue.toString(),
+          supplyPaint: supplyOfPaintValue.toString(),
+          tapOff: tapOffValue,
+          tapOffLength: tapOffLengthController.text.toString(),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
@@ -730,6 +783,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   _eventCompleted(emit) {
     emit(FormInstallationDataState(
+      tapOffValue: tapOffValue,
       isLoader: isLoader,
       isExtraPipe: isExtraPipe,
       isInstallRegulator: isInstallRegulator,
@@ -780,7 +834,14 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       extraPriceController: extraPriceController,
       regulatorSerialController: regulatorSerialController,
       meterNumberSerialController: meterNumberSerialController,
+      tapOffLengthController: tapOffLengthController,
       listOfMRSerial: listOfMRSerial,
+      coatTapList: coatTapList,
+      selectedCoatTap:selectedCoatTap,
+      selectedGasified: selectedGasified,
+      gasifiedList: gasifiedList,
     ));
   }
+
+
 }

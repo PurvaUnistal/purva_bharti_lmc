@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
+import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
@@ -27,6 +29,7 @@ class LogoutWidget extends StatelessWidget {
             widget1: ButtonWidget(
                 text: AppString.logout,
                 onPressed: () async {
+                  AppConfig.instanceInit()?.clear();
                   await SharedPref.clearAll();
                   Navigator.pushAndRemoveUntil(
                       context,

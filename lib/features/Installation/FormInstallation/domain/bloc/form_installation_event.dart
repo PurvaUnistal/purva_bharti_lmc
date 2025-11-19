@@ -205,6 +205,22 @@ class SelectRFCCheckValueEvent extends FormInstallationEvent {
   List<Object> get props => [isSelected,context, index];
 }
 
+class ToggleOptionEvent extends FormInstallationEvent {
+  final String option;
+  final bool isSelected;
+  ToggleOptionEvent({required this.option, required this.isSelected});
+
+  @override
+  List<Object?> get props => [option, isSelected];
+}
+
+class SelectGasifiedRadioEvent extends FormInstallationEvent {
+  final String option;
+  SelectGasifiedRadioEvent({required this.option,});
+
+  @override
+  List<Object?> get props => [option,];
+}
 
 class SubmitFormInstallationEvent extends FormInstallationEvent {
   final BuildContext context;
