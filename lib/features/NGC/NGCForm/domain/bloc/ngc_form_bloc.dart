@@ -557,8 +557,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   _selectMRegulators(SelectMRegulatorsEvent event, emit) async {
     mrNumberSearchController.text = event.mRegulators;
     mrRegulatorId = listOfMR.firstWhereOrNull((element) => element.serialNumber == event.mRegulators)?.id ?? "";
-    if (event.mRegulators.isNotEmpty &&
-        !listOfRegulatorSerial.contains(event.mRegulators)) {
+    if (event.mRegulators.isNotEmpty && !listOfMRSerial.contains(event.mRegulators)) {
       isCheckMR = true;
     } else {
       isCheckMR = false;
@@ -840,7 +839,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           _isBtnLoader = false;
           _eventCompleted(emit);
           Utils.successSnackBar(msg: res.data!, context: event.context);
-          Navigator.pushReplacementNamed(
+          return  Navigator.pushReplacementNamed(
             event.context,
             RoutesName.home,
           );

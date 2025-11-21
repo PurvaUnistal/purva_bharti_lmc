@@ -71,8 +71,8 @@ android {
             applicationIdSuffix ".unistal.mgl.lmc"
             resValue "string", "app_name", "MGL LMC"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/unistal_logo",
-                    appIconRound: "@mipmap/unistal_logo"
+                    appIcon: "@mipmap/mgl_logo",
+                    appIconRound: "@mipmap/mgl_logo"
             ]
             def keystorePropertiesFile = rootProject.file('mgl_key.properties')
             if (keystorePropertiesFile.exists()) {

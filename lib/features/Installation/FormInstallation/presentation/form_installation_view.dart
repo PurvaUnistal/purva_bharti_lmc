@@ -13,6 +13,7 @@ import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/res/enums.dart';
@@ -121,12 +122,16 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           CommonStyle.vertical(context: context),
           _locationOfHouse(stateData: dataState),
           CommonStyle.vertical(context: context),
-          _checkCoatTap(stateData: dataState),
-          dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
-          dataState.tapOffValue == "1" ? _tapOffLengthController(stateData: dataState) : SizedBox.shrink(),
-          CommonStyle.vertical(context: context),
-          _gasifiedRadioBtn(stateData: dataState),
-          CommonStyle.vertical(context: context),
+          AppConfig.instanceInit()!.client == Client.mahaNagar ? Column(
+            children: [
+              _checkCoatTap(stateData: dataState),
+              dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
+              dataState.tapOffValue == "1" ? _tapOffLengthController(stateData: dataState) : SizedBox.shrink(),
+              CommonStyle.vertical(context: context),
+              _gasifiedRadioBtn(stateData: dataState),
+              CommonStyle.vertical(context: context),
+            ],
+          ) : SizedBox.shrink(),
           _image(stateData: dataState),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),

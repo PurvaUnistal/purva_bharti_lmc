@@ -4,7 +4,7 @@ description: A new Flutter application.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+0
+version: 1.0.0+4
 environment:
   sdk: ^3.7.2
 
@@ -48,10 +48,10 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  android: "unistal_logo"
+  android: "mgl_logo"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icons/unistal_logo.png"
+  image_path: "assets/icons/mgl_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

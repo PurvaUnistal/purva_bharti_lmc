@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
+import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
@@ -779,7 +780,7 @@ class FormRFCInstallationBloc
             ?.id ??
         "";
     if (event.mRegulators.isNotEmpty &&
-        !listOfRegulatorSerial.contains(event.mRegulators)) {
+        !listOfMRSerial.contains(event.mRegulators)) {
       isCheckMR = true;
     } else {
       isCheckMR = false;
@@ -1010,10 +1011,9 @@ class FormRFCInstallationBloc
           _eventCompleted(emit);
           await Utils.successSnackBar(msg: res.data!, context: event.context);
           await FormFeasibilityHelper.clearCache();
-          Navigator.pushAndRemoveUntil(
+          return  Navigator.pushReplacementNamed(
             event.context,
-            MaterialPageRoute(builder: (BuildContext context) => HomeView()),
-            (Route<dynamic> route) => false,
+            RoutesName.home,
           );
         } else if (res != null && res.error == true) {
           await Utils.errorSnackBar(msg: res.data!, context: event.context);
