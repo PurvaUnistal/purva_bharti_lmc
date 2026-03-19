@@ -34,11 +34,11 @@ class DropdownWidget<T> extends StatelessWidget {
           fillColor: AppColor.white,
           isDense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
-          enabledBorder:CommonStyle.border,
-          disabledBorder:CommonStyle.border,
-          border: CommonStyle.border,
-          focusedBorder: CommonStyle.border,
-          errorBorder: CommonStyle.border,
+          enabledBorder:CommonStyle.border(context: context),
+          disabledBorder:CommonStyle.border(context: context),
+          border: CommonStyle.border(context: context),
+          focusedBorder: CommonStyle.border(context: context),
+          errorBorder: CommonStyle.border(context: context),
           label: Padding(
             padding: const EdgeInsets.only(left: 2.0),
             child: Row(

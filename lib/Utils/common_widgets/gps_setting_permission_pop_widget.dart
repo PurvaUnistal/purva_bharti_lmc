@@ -3,6 +3,8 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'res/environment_config.dart';
+
 class GPSSettingPermissionPopWidget extends StatelessWidget {
   const GPSSettingPermissionPopWidget({super.key});
 
@@ -59,11 +61,11 @@ class GPSSettingPermissionPopWidget extends StatelessWidget {
     return TextButton(
         style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(15)),
-            foregroundColor: MaterialStateProperty.all<Color>(AppColor.primer),
+            foregroundColor: MaterialStateProperty.all<Color>( EnvironmentConfig.of(context)!.primaryTheme,),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                    side: BorderSide(color: AppColor.primer)
+                    side: BorderSide(color:  EnvironmentConfig.of(context)!.primaryTheme,)
                 )
             )
         ),

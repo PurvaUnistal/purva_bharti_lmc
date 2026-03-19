@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
+import 'res/environment_config.dart';
+
 
 class ImagePopWidget extends StatelessWidget {
   final void Function() onTapGallery, onTapCamera;
@@ -31,13 +33,13 @@ class ImagePopWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text('Choose One',textAlign: TextAlign.center, style:Styles.text),),
               ListTile(
-                leading: Icon(Icons.photo_library,color: AppColor.primer),
+                leading: Icon(Icons.photo_library,color:EnvironmentConfig.of(context)!.primaryTheme,),
                 title: const Text('Gallery'),
                 onTap: onTapGallery,
               ),
-              Divider(color: AppColor.primer1,),
+              Divider(color:  EnvironmentConfig.of(context)!.secondaryTheme,),
               ListTile(
-                leading: Icon(Icons.photo_camera,color: AppColor.primer),
+                leading: Icon(Icons.photo_camera,color:  EnvironmentConfig.of(context)!.primaryTheme,),
                 title: const Text('Camera'),
                 onTap: onTapCamera,
               ),

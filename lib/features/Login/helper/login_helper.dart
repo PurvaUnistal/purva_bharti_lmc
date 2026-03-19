@@ -48,7 +48,8 @@ class LoginHelper {
       "password": password,
       "device": deviceId,
     };
-    try {
+    log("para-->${para}");
+  //  try {
       var res = await ApiHelper.postData(
           urlEndPoint: Apis.loginUrl,
           param: para, context: context);
@@ -62,10 +63,10 @@ class LoginHelper {
         return null;
       }
       return null;
-    } catch (e) {
-      log("catchLoginHelper-->${e.toString()}");
-      Utils.errorSnackBar(msg: e.toString(), context: context);
-      return null;
-    }
+    // } catch (e) {
+    //   log("catchLoginHelper-->${e.toString()}");
+    //   Utils.errorSnackBar(msg: e.toString(), context: context);
+    //   return null;
+    // }
   }
 }

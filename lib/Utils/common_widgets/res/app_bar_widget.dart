@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
+import 'environment_config.dart';
+
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool? boolLeading;
@@ -19,12 +21,21 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: boolLeading ?? false,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: AppColor.primer,
+        statusBarColor: EnvironmentConfig.of(context)!.primaryTheme,
       ),
       iconTheme: IconThemeData(
         color: Colors.white, //change your color here
       ),
-      backgroundColor: AppColor.primer,
+      // backgroundColor: AppColor.primer,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[ EnvironmentConfig.of(context)!.secondaryTheme,
+                EnvironmentConfig.of(context)!.primaryTheme,]),
+        ),
+      ),
       elevation: 0,
       centerTitle: true,
       leading: leadingWidget,
@@ -37,15 +48,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: actions ?? [],
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: AppColor.primer,
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
-          ),
-        ),
-      ),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(20.0),
         child: tabBar ?? Container(),

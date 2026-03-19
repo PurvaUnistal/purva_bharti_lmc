@@ -13,6 +13,7 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/NGC/NGCForm/presentation/ngc_form_view.dart';
@@ -122,11 +123,11 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   Widget _dataTableWidget({required FetchNgcTableDataState dataState}) {
     return dataState.isAreaFilter == false
-        ? dataState.lmcInstallationByNgcModel?.success == 400
+        ? dataState.lmcInstallationByNgcModel.success == 400
         ? Center(child: Text("No records found"))
         :Theme(
       data: ThemeData(
-        highlightColor: AppColor.primer1,
+        highlightColor: EnvironmentConfig.of(context)!.secondaryTheme,
       ),
       child: Scrollbar(
         controller: _verticalScrollController,
@@ -138,7 +139,7 @@ class _NgcTableViewState extends State<NgcTableView> {
           controller: _verticalScrollController,
           child: Theme(
             data: ThemeData(
-              highlightColor: AppColor.primer1,
+              highlightColor: EnvironmentConfig.of(context)!.secondaryTheme,
             ),
             child: Scrollbar(
               controller: _horizontalScrollController,
@@ -157,7 +158,7 @@ class _NgcTableViewState extends State<NgcTableView> {
                     showCheckboxColumn: false,
                     dataTextStyle: Styles.texts,
                     dataRowHeight: MediaQuery.of(context).size.height * 0.04,
-                    headingRowColor: MaterialStateColor.resolveWith((states) => AppColor.primer),
+                    headingRowColor: MaterialStateColor.resolveWith((states) => EnvironmentConfig.of(context)!.primaryTheme,),
                     dividerThickness: 1,
                     columns: [
                       CommonStyle.dataColumn(label: "S.No"),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/service/Apis.dart';
@@ -36,7 +35,7 @@ class BackgroundWidget extends StatelessWidget {
             : Container(),
         Expanded(child: child),
         Container(
-          decoration: BoxDecoration(color: AppColor.primer),
+          decoration: BoxDecoration(color:  EnvironmentConfig.of(context)!.primaryTheme,),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

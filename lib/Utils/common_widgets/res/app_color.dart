@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static Color primer = Colors.green.shade800;
-  static Color primer1 = Colors.yellow.shade800;
+  // static Color primer = Colors.green.shade800;
+  // static Color primer1 = Colors.yellow.shade800;
   static Color green50 = Colors.green.shade50;
   static Color white = Colors.white;
   static Color white70 = Colors.white.withOpacity(0.3);

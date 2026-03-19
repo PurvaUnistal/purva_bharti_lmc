@@ -9,9 +9,8 @@ import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
-import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
-import 'package:lmc/Utils/common_widgets/res/enums.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_event.dart';
@@ -74,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
                 height: h * 0.6,
                 child: Card(
                   elevation: 8,
-                  shadowColor: AppColor.primer1,
+                  shadowColor: EnvironmentConfig.of(context)!.secondaryTheme,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -111,11 +110,7 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: const EdgeInsets.all(23.0),
       child: Image.asset(
-        AppConfig.instanceInit()!.client == Client.purvaBharti
-            ? AppIcon.pbgplLogo
-            :AppConfig.instanceInit()!.client == Client.mahaNagar
-            ? AppIcon.mglLogo
-            : AppIcon.pbgplLogo,
+        AppIcon.logo(),
         width: w * 0.4,
         height: h * 0.16,
       ),

@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 
 import 'app_config.dart';
+import 'enums.dart';
+import 'environment_config.dart';
 
 class AppString {
-  static String version = "Version : ${AppConfig.instanceInit()?.buildNumber} - LMC-22/07/2025";
+  static const Map<Client, String> _releaseDates = {
+    Client.mahaNagar: "22-07-2025",
+    Client.purvaBharti: "11-06-2025",
+    Client.hpoil: "6-03-2026",
+    Client.vppl: "28-01-2026",
+    Client.vrpl: "17-02-2026",
+  };
+
+  static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
+
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";
   static String dateFormat = "dd-MM-yyyy";
@@ -122,10 +133,17 @@ class AppString {
   static String noOfFamilyMembers = "No. Of Family Members";
 
 
- static OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
-  );
+  static OutlineInputBorder border({required BuildContext context}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(
+        color: EnvironmentConfig.of(context)!.primaryTheme,
+        style: BorderStyle.solid,
+        width: 0.80,
+      ),
+    );
+  }
+
   OutlineInputBorder borderGrey = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),

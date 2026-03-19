@@ -83,7 +83,7 @@ class User {
     modules: json["modules"] ?? "",
     schema: json["schema"] ?? "",
     role: json["role"] ?? "",
-    accessright: List<Accessright>.from(json["accessright"].map((x) => Accessright.fromJson(x))),
+    accessright: json["accessright"] == null ? [] :List<Accessright>.from(json["accessright"].map((x) => Accessright.fromJson(x))),
     spreadId: json["spread_id"] ?? "",
     sectionId: json["section_id"] ?? "",
   );

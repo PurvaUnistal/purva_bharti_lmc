@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 
 //ignore: must_be_immutable
 class MeterNoWidget extends StatelessWidget {
@@ -56,7 +57,7 @@ class MeterNoWidget extends StatelessWidget {
       width: enabled == false ? MediaQuery.of(context).size.width * 0.063 : MediaQuery.of(context).size.width * 0.076,
      // height: enabled == false ? MediaQuery.of(context).size.height * 0.05 : MediaQuery.of(context).size.height * 0.07,
       child: TextFormField(
-        cursorColor: AppColor.primer,
+        cursorColor: EnvironmentConfig.of(context)!.primaryTheme,
         focusNode: focusNode,
         autofillHints: autofillHints,
         onTap: onTap,
@@ -105,10 +106,17 @@ class MeterNoWidget extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5.0),
-    borderSide: BorderSide(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
-  );
+  OutlineInputBorder border({required BuildContext context}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(
+        color: EnvironmentConfig.of(context)!.primaryTheme,
+        style: BorderStyle.solid,
+        width: 0.80,
+      ),
+    );
+  }
+
   OutlineInputBorder borderGrey = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.0),
     borderSide: BorderSide(color: AppColor.grey, style: BorderStyle.solid, width: 0.80),

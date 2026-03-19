@@ -6,6 +6,7 @@ import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/enums.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
@@ -38,7 +39,7 @@ class _RootState extends State<Root> {
 
     Singleton.instanceInit()?.context = context;
     AppConfig.instanceInit()!.setClient(client: widget.client);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColor.primer));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor:  EnvironmentConfig.of(context)!.primaryTheme,));
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (BuildContext context) => LoginBloc()),
@@ -56,12 +57,12 @@ class _RootState extends State<Root> {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: AppColor.primer,
-            hintColor: AppColor.primer,
+            primaryColor:  EnvironmentConfig.of(context)!.primaryTheme,
+            hintColor:  EnvironmentConfig.of(context)!.primaryTheme,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColor.primer,
+              seedColor: EnvironmentConfig.of(context)!.primaryTheme,
             ),
           ),
           initialRoute: RoutesName.splash,

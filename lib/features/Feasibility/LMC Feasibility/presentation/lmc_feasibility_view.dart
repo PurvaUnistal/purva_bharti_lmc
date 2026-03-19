@@ -12,6 +12,7 @@ import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_event.dart';
@@ -125,7 +126,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
         ? dataState.feasibilityModel.success == 400
             ? Center(child: Text("No records found"))
             : Theme(
-              data: ThemeData(highlightColor: AppColor.primer1),
+              data: ThemeData(highlightColor: EnvironmentConfig.of(context)!.secondaryTheme),
               child: Scrollbar(
                 controller: _verticalScrollController,
                 thickness: 3.0,
@@ -135,7 +136,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                   scrollDirection: Axis.vertical,
                   controller: _verticalScrollController,
                   child: Theme(
-                    data: ThemeData(highlightColor: AppColor.primer1),
+                    data: ThemeData(highlightColor: EnvironmentConfig.of(context)!.secondaryTheme),
                     child: Scrollbar(
                       controller: _horizontalScrollController,
                       thickness: 3.0,
@@ -147,7 +148,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                         child: Theme(
                           data: Theme.of(
                             context,
-                          ).copyWith(dividerColor: AppColor.primer),
+                          ).copyWith(dividerColor: EnvironmentConfig.of(context)!.primaryTheme),
                           child: DataTable(
                             sortAscending: true,
                             columnSpacing: 0,
@@ -157,7 +158,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                             dataRowHeight:
                                 MediaQuery.of(context).size.height * 0.04,
                             headingRowColor: MaterialStateColor.resolveWith(
-                              (states) => AppColor.primer,
+                              (states) => EnvironmentConfig.of(context)!.primaryTheme,
                             ),
                             dividerThickness: 1,
                             columns: [

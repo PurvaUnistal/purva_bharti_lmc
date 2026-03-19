@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'res/environment_config.dart';
 
 class IconButtonWidget extends StatelessWidget {
   final Function() onPressed;
@@ -10,7 +10,7 @@ class IconButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(onPressed: onPressed, icon: Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Icon(iconData, color: AppColor.primer, size: 15,),
+      child: Icon(iconData, color:  EnvironmentConfig.of(context)!.primaryTheme, size: 15,),
     ));
   }
 }

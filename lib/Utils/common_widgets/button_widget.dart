@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+
+import 'res/environment_config.dart';
 
 class ButtonWidget extends StatelessWidget {
   final Function() onPressed;
@@ -16,9 +17,9 @@ class ButtonWidget extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppColor.primer,
+            color: EnvironmentConfig.of(context)!.primaryTheme,
             borderRadius: BorderRadius.circular(25.0),
-            border: Border.all(color: AppColor.primer, style: BorderStyle.solid, width: 0.80),
+            border: Border.all(color:  EnvironmentConfig.of(context)!.primaryTheme, style: BorderStyle.solid, width: 0.80),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),

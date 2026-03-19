@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
-import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 
 
 class CameraPopWidget extends StatelessWidget {
@@ -28,7 +27,7 @@ class CameraPopWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.photo_camera,color: AppColor.primer),
+                leading: Icon(Icons.photo_camera,color: EnvironmentConfig.of(context)!.primaryTheme,),
                 title: const Text('Camera'),
                 onTap: onTapCamera,
               ),

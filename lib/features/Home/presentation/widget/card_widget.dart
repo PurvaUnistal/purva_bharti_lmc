@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 
 class CardWidget extends StatelessWidget {
   final void Function() onTap;
@@ -20,14 +20,14 @@ class CardWidget extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.091,
           child: Card(
             color: Colors.white,
-            shadowColor: AppColor.primer1,
+            shadowColor: EnvironmentConfig.of(context)!.secondaryTheme,
             elevation: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   icon,
-                  color: AppColor.primer1,
+                  color: EnvironmentConfig.of(context)!.secondaryTheme,
                 ),
                 CommonStyle.widthSpace(context: context),
                 Flexible(

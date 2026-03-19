@@ -4,6 +4,7 @@ import 'package:lmc/Utils/common_widgets/enlarge_widge.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart' show EnvironmentConfig;
 
 class NetworkImageWidget extends StatelessWidget {
   final String title;
@@ -60,7 +61,7 @@ class NetworkImageWidget extends StatelessWidget {
 
                       child: TextButton(
                         child: Container(
-                            color: AppColor.primer,
+                            color:EnvironmentConfig.of(context)!.primaryTheme,
                             child: Icon(Icons.zoom_out_map,color: AppColor.white,)),
                         onPressed: () async {
                           await showBottomSheet(
@@ -80,7 +81,7 @@ class NetworkImageWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.photo_camera_back_outlined, color: AppColor.primer,size: 18,),
+                    Icon(Icons.photo_camera_back_outlined, color: EnvironmentConfig.of(context)!.primaryTheme,size: 18,),
                     Text(AppString.photo,style: Styles.labels,),
                   ],
                 ),

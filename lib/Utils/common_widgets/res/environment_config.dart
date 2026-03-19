@@ -21,10 +21,15 @@ class EnvironmentConfig extends InheritedWidget {
     print("flavor-->${flavors}");
     switch (flavors) {
       case EnvironmentFlavors.prodPBGPL:
-      //  return "https://pbgplc.smartgasnet.com/api/";
         return "https://pbgpl.smartgasnet.com/api/";
       case EnvironmentFlavors.prodMGL:
         return "https://mgl.smartgasnet.com/api/";
+      case EnvironmentFlavors.prodVRPL:
+        return "https://vrpl.plcms.net/api/";
+      case EnvironmentFlavors.prodVPPL:
+        return "https://vppl.plcms.net/api/";
+      case EnvironmentFlavors.prodHPOIL:
+        return "https://hpoil.smartgasnet.com/api/";
     }
   }
 
@@ -35,6 +40,12 @@ class EnvironmentConfig extends InheritedWidget {
         return "https://pbgpl.smartgasnet.com/";
       case EnvironmentFlavors.prodMGL:
         return "https://mgl.smartgasnet.com/";
+      case EnvironmentFlavors.prodVRPL:
+        return "https://vrpl.plcms.net";
+      case EnvironmentFlavors.prodVPPL:
+        return "https://vppl.plcms.net/";
+      case EnvironmentFlavors.prodHPOIL:
+        return "https://hpoil.smartgasnet.com/";
     }
   }
 
@@ -44,6 +55,27 @@ class EnvironmentConfig extends InheritedWidget {
         return Colors.green.shade800;
       case EnvironmentFlavors.prodMGL:
         return Colors.green.shade800;
+      case EnvironmentFlavors.prodHPOIL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodVPPL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodVRPL:
+        return Colors.amber.shade400;
+    }
+  }
+
+  Color get secondaryTheme {
+    switch (flavors) {
+      case EnvironmentFlavors.prodPBGPL:
+        return Colors.yellow.shade800;
+      case EnvironmentFlavors.prodMGL:
+        return Colors.yellow.shade800;
+      case EnvironmentFlavors.prodHPOIL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodVPPL:
+        return Colors.green.shade800;
+      case EnvironmentFlavors.prodVRPL:
+        return Colors.amber.shade400;
     }
   }
 }

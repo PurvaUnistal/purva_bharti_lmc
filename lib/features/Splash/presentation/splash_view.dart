@@ -101,11 +101,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              AppConfig.instanceInit()!.client == Client.purvaBharti
-                  ? AppIcon.pbgplLogo
-                  :AppConfig.instanceInit()!.client == Client.mahaNagar
-                  ? AppIcon.mglLogo
-                  : AppIcon.pbgplLogo,
+              AppIcon.logo(),
              height: MediaQuery.of(context).size.height * 0.3,
               width: MediaQuery.of(context).size.width * 0.6,
             ),

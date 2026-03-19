@@ -4,6 +4,8 @@ import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 
+import 'res/environment_config.dart';
+
 //ignore: must_be_immutable
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
@@ -64,7 +66,7 @@ class TextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: AppColor.primer,
+      cursorColor:  EnvironmentConfig.of(context)!.primaryTheme,
       focusNode: focusNode,
       autofillHints: autofillHints,
       onTap: onTap,
@@ -103,10 +105,10 @@ class TextFieldWidget extends StatelessWidget {
         fillColor: AppColor.white,
         isDense: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
-        border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-        focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-        disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-        enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+        border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+        focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+        disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+        enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
         errorBorder: CommonStyle.borderRed,
         hintText: hintText,
         hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,

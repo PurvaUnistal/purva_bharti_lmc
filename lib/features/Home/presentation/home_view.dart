@@ -127,7 +127,12 @@ class _HomeViewState extends State<HomeView> {
     return ListView(
         children: [
           Image.asset(
-            AppConfig.instanceInit()!.client == Client.purvaBharti ? AppIcon.lmcBanner :AppIcon.mglBanner, width: double.infinity,),
+            AppConfig.instanceInit()!.client == Client.purvaBharti
+                ? AppIcon.pbgplBanner
+           : AppConfig.instanceInit()!.client == Client.mahaNagar
+            ?AppIcon.mglBanner
+            :AppIcon.lmcBanner,
+            width: double.infinity,),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
           if (ctx.user.role == "lmc" || ctx.user.role == "ngc") ...[

@@ -9,6 +9,7 @@ import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
 import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
@@ -72,7 +73,7 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
                     child: Text(AppString.consumerDetailH,style: Styles.appTitle,textAlign: TextAlign.center,),
                   ),
                   decoration: BoxDecoration(
-                      color: AppColor.primer,
+                      color:EnvironmentConfig.of(context)!.primaryTheme,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
                   ),
                 ),

@@ -4,6 +4,8 @@ import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
+import 'res/environment_config.dart';
+
 class AutoCompleteTextFieldWidget extends StatelessWidget {
   final List<String> suggestions;
   final Widget? suffixIcon;
@@ -82,7 +84,7 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
           (context, controller, focusNode, onEditingComplete) {
         return TextFormField(
           key: fieldKey,
-          cursorColor: AppColor.primer,
+          cursorColor: EnvironmentConfig.of(context)!.primaryTheme,
           controller: controller,
           focusNode: focusNode,
           onEditingComplete: onEditingComplete,
@@ -110,10 +112,10 @@ class AutoCompleteTextFieldWidget extends StatelessWidget {
             fillColor: AppColor.white,
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
-            border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-            focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-            disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
-            enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border,
+            border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+            focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+            disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
+            enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
             errorBorder: CommonStyle.borderRed,
             hintText: hintText,
             hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,

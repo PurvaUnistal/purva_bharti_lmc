@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/singleton.dart';
+
+import 'environment_config.dart';
 
 class Styles {
+
+  static BuildContext? context = Singleton.instanceInit()?.context;
+
   static TextStyle rel = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 8);
   static TextStyle appTitle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12);
 
@@ -10,7 +16,7 @@ class Styles {
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle text = TextStyle(fontSize: 12, color: AppColor.primer, fontWeight: FontWeight.bold);
+  static TextStyle text = TextStyle(fontSize: 12, color:  EnvironmentConfig.of(context!)!.primaryTheme, fontWeight: FontWeight.bold);
 
   static TextStyle subTitle = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800);
   static TextStyle subStar = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800, color: Colors.red);
@@ -18,7 +24,7 @@ class Styles {
   static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.red);
   static TextStyle table = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
 
-  static TextStyle labels = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.primer);
+  static TextStyle labels = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color:  EnvironmentConfig.of(context!)!.primaryTheme,);
   static TextStyle labelGrey = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: AppColor.black54);
   static TextStyle title = TextStyle(fontSize: 12, color: Colors.green.shade800, fontWeight: FontWeight.bold);
   static TextStyle titleR12 = TextStyle(fontSize: 12, color: Colors.red, fontWeight: FontWeight.bold);
