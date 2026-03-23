@@ -19,15 +19,23 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
   final bool isLoader;
   final bool isBtnLoader;
   final bool isSelected;
-  final bool isExtraPipe;
+  final bool isGiExtraPipe;
+  final bool isCopperExtraPipe;
+  final bool isTFAvail;
+  final bool isManualPipe;
   final GetConstantModel checkFeasibleValue;
   final GetConstantModel lmcReasonValue;
   final List<GetConstantModel> listOfCheckFeasible;
   final List<GetConstantModel> listOfLMCReason;
-  final List<GetConstantModel> listOfAllRFC;
   final List<MaterialItem> materialList;
-  final TextEditingController extraPipeController;
-  final TextEditingController extraPriceController;
+  final List<MaterialItem> materialListCopper;
+  final TextEditingController manualPipLengthCtrl;
+  final TextEditingController extraGiPipeCtrl;
+  final TextEditingController extraGiPriceCtrl;
+  final TextEditingController extraCopperPipeCtrl;
+  final TextEditingController extraCopperPriceCtrl;
+  final TextEditingController extraTotalPriceCtrl;
+  final TextEditingController extraTotalPipeCtrl;
   final TextEditingController bpNumberController;
   final TextEditingController trNumberController;
   final TextEditingController proposedDateController;
@@ -41,13 +49,16 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
     required this.isLoader,
     required this.isBtnLoader,
     required this.isSelected,
-    required this.isExtraPipe,
+    required this.isGiExtraPipe,
+    required this.isCopperExtraPipe,
+    required this.isTFAvail,
+    required this.isManualPipe,
     required this.checkFeasibleValue,
     required this.lmcReasonValue,
     required this.listOfCheckFeasible,
     required this.listOfLMCReason,
     required this.materialList,
-    required this.listOfAllRFC,
+    required this.materialListCopper,
     required this.bpNumberController,
     required this.trNumberController,
     required this.proposedDateController,
@@ -56,32 +67,46 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
     required this.reasonController,
     required this.remarksController,
     required this.followUpDateController,
-    required this.extraPipeController,
-    required this.extraPriceController,
+    required this.manualPipLengthCtrl,
+    required this.extraGiPipeCtrl,
+    required this.extraGiPriceCtrl,
+    required this.extraCopperPipeCtrl,
+    required this.extraCopperPriceCtrl,
+    required this.extraTotalPriceCtrl,
+    required this.extraTotalPipeCtrl,
   });
 
   @override
   // TODO: implement props
   List<Object> get props => [
-        isLoader,
-        isBtnLoader,
-        isSelected,
-        isExtraPipe,
-        checkFeasibleValue,
-        lmcReasonValue,
-        listOfCheckFeasible,
-        listOfLMCReason,
-        materialList,
-        listOfAllRFC,
-        bpNumberController,
-        trNumberController,
-        proposedDateController,
-        feasibilityDateController,
-        assignedDateController,
-        reasonController,
-        remarksController,
-        followUpDateController,
-        extraPipeController,
-        extraPriceController,
-      ];
+    isLoader,
+    isBtnLoader,
+    isSelected,
+    isGiExtraPipe,
+    isCopperExtraPipe,
+    isTFAvail,
+    isManualPipe,
+    checkFeasibleValue,
+    lmcReasonValue,
+    listOfCheckFeasible,
+    listOfLMCReason,
+    materialList,
+    materialListCopper,
+
+    bpNumberController,
+    trNumberController,
+    proposedDateController,
+    feasibilityDateController,
+    assignedDateController,
+    reasonController,
+    remarksController,
+    followUpDateController,
+    manualPipLengthCtrl,
+    extraGiPipeCtrl,
+    extraGiPriceCtrl,
+   extraCopperPipeCtrl,
+    extraCopperPriceCtrl,
+    extraTotalPriceCtrl,
+    extraTotalPipeCtrl,
+  ];
 }

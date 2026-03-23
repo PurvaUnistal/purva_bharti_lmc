@@ -7,6 +7,8 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -146,11 +148,9 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi(
-      {required BuildContext context, required String pipeQty}) async {
-    String propertyCategoryId = await SharedPref.getString(
-        key: PrefsValue.propertyCategoryId);
-    try {
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context, required String pipeQty}) async {
+    String propertyCategoryId = await SharedPref.getString(key: PrefsValue.propertyCategoryId);
+   try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
         "pipeQty": pipeQty,
@@ -160,9 +160,36 @@ class FormInstallationHelper {
       var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails,
           context: context,
           formData: para);
-      return ExtraPipePriceData.fromJson(res['data']);
+      if(res['data'] != null){
+        return ExtraPipePriceData.fromJson(res['data']);
+      }
     } catch (e) {
       log("getExtraPipeDetails-->${e.toString()}");
+    }
+    return null;
+  }
+
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsCopperApi({
+    required BuildContext context,
+    required String pipeQty,
+    required String giqty
+  }) async {
+    String propertyCategoryId = await SharedPref.getString(key: PrefsValue.propertyCategoryId);
+    try {
+      Map<String, String> para = {
+        "schema": ctx.user.schema ?? "",
+        "pipeQty": pipeQty,
+        "property_category_id": propertyCategoryId,
+        "giqty": giqty,
+
+      };
+      log("jsonCopper---->  ${para}");
+      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetailsCopper,
+          context: context,
+          formData: para);
+      return ExtraPipePriceData.fromJson(res['data']);
+    } catch (e) {
+      log("getExtraPipeDetailsCopper-->${e.toString()}");
     }
     return null;
   }
@@ -188,6 +215,8 @@ class FormInstallationHelper {
     required String fittingDetails,
     required List<MaterialItem> pipeLength,
     required String meterPhoto,
+    required String rfcPhoto,
+    required String pneumaticPhoto,
     required String houseLat,
     required String houseLong,
     required String housePhoto,
@@ -220,6 +249,9 @@ class FormInstallationHelper {
         return error("The Meter Initial Reading field is required.");
       }
 
+      if (!isInstallRegulator && AppConfig.instanceInit()!.client == Client.hpoil) {
+        return error("Please select Install Regulator Checkbox.");
+      }
       if (isInstallRegulator) {
         if (regulatorType.name == null) {
           return error("The Regulator Type field is required.");
@@ -258,13 +290,17 @@ class FormInstallationHelper {
       if (fittingDetails.isEmpty) {
         return error("The Fitting Details field is required.");
       }
-
       if (totalPipeLength <= 0) {
         return error("Please enter at least one pipe detail.");
       }
-
       if (meterPhoto.isEmpty) {
         return error("The Meter Photo field is required.");
+      }
+      if (rfcPhoto.isEmpty && AppConfig.instanceInit()!.client == Client.hpoil) {
+        return error("The RFC Photo field is required.");
+      }
+      if (pneumaticPhoto.isEmpty && AppConfig.instanceInit()!.client == Client.hpoil) {
+        return error("The Pneumatic Photo field is required.");
       }
       if (houseLat.isEmpty || houseLong.isEmpty) {
         return error("The House Latitude and Longitude Point is required.");
@@ -292,8 +328,6 @@ class FormInstallationHelper {
     required String workCompletedDate,
     required String materialIdLmc,
     required String qtyLmc,
-    required String extraPipe,
-    required String extraPrice,
     required LmcReasonModel delayReason,
     required String meterReadingDate,
     required String materialId,
@@ -314,6 +348,12 @@ class FormInstallationHelper {
     required String tapOffLength,
     required String supplyPaint,
     required String gaisified,
+    required String giExtraPipe,
+    required String giExtraPrice,
+    required String copperExtraPipe,
+    required String copperExtraPrice,
+    required String totalExtraPipe,
+    required String totalExtraPrice,
   }) async {
 
     String lmcInstallId = await SharedPref.getString(
@@ -341,8 +381,12 @@ class FormInstallationHelper {
         "work_completed_date": workCompletedDate,
         "material_id_lmc": materialIdLmc,
         "qty_lmc": qtyLmc,
-        "extra_pipe": extraPipe,
-        "extra_price": extraPrice,
+        "gi_pipe" : giExtraPipe.isNotEmpty ? giExtraPipe.trim().toString() : "0.0",
+        "gi_pipe_price" : giExtraPrice.isNotEmpty ? giExtraPrice.trim().toString() : "0.0",
+        "cu_pipe" : copperExtraPipe.isNotEmpty ? copperExtraPipe.trim().toString() : "0.0",
+        "cu_pipe_price" : copperExtraPrice.isNotEmpty ? copperExtraPrice.trim().toString() : "0.0",
+        "extra_pipe": totalExtraPipe.isNotEmpty ? totalExtraPipe.trim().toString() : "0.0",
+        "extra_price": totalExtraPrice.isNotEmpty ? totalExtraPrice.trim().toString() : "0.0",
         "tap_off": tapOff,
         "tap_off_length": tapOffLength,
         "supply_paint": supplyPaint,

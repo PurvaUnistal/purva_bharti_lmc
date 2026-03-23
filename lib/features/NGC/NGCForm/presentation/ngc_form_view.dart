@@ -991,7 +991,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         context: context,
         child: RowWidget(
           widget1: ImageWidget(
-            star: AppString.star,
+            isRequired: true,
             title: AppString.mrPhoto,
             imgFile: dataState.mrPhoto,
             onPressed: () {
@@ -1011,7 +1011,7 @@ class _NGCFormViewState extends State<NGCFormView> {
             },
           ),
           widget2: ImageWidget(
-            star: AppString.star,
+            isRequired: true,
             title: AppString.srPhoto,
             imgFile: dataState.srPhoto,
             onPressed: () {

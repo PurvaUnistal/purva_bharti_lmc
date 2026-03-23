@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/common_widgets/CheckboxWidget.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
@@ -20,7 +21,6 @@ import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
-import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_bloc.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_event.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_state.dart';
@@ -98,41 +98,42 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           ),
           CommonStyle.vertical(context: context),
           RowWidget(
-              widget1: _bpNumberController(stateData: dataState),
-              widget2: _trNumberController(stateData: dataState)),
+              widget1: _bpNumberController(dataState: dataState),
+              widget2: _trNumberController(dataState: dataState)),
           CommonStyle.vertical(context: context),
           RowWidget(
-              widget1: _proposedDateController(stateData: dataState),
-              widget2: _feasibilityDateController(stateData: dataState)),
+              widget1: _proposedDateController(dataState: dataState),
+              widget2: _feasibilityDateController(dataState: dataState)),
           CommonStyle.vertical(context: context),
-          _installationDateController(stateData: dataState),
-          _delayReasonDropdown(stateData: dataState),
+          _installationDateController(dataState: dataState),
+          _delayReasonDropdown(dataState: dataState),
           CommonStyle.vertical(context: context),
-          _meterNumberController(stateData: dataState),
-          _initialMeterReading(stateData: dataState),
-          _installRegulatorCheck(stateData: dataState),
-          _regulatorTypeDropdown(stateData: dataState),
-          _regulatorController(stateData: dataState),
-          _mrNumberController(stateData: dataState),
-          _ngConversionDateController(stateData: dataState),
-          _rfcDateControllerController(stateData: dataState),
+          _meterNumberController(dataState: dataState),
+          _initialMeterReading(dataState: dataState),
+          _installRegulatorCheck(dataState: dataState),
+          _regulatorTypeDropdown(dataState: dataState),
+          _regulatorController(dataState: dataState),
+          _mrNumberController(dataState: dataState),
+          _ngConversionDateController(dataState: dataState),
+          _rfcDateControllerController(dataState: dataState),
           CommonStyle.vertical(context: context),
-          _materialList(stateData: dataState),
-          _checkListRFC(stateData: dataState),
+          _materialList(dataState: dataState),
+          _materialCopperList(dataState: dataState),
+          _checkListRFC(dataState: dataState),
           CommonStyle.vertical(context: context),
-          _locationOfHouse(stateData: dataState),
+          _locationOfHouse(dataState: dataState),
           CommonStyle.vertical(context: context),
           AppConfig.instanceInit()!.client == Client.mahaNagar ? Column(
             children: [
-              _checkCoatTap(stateData: dataState),
+              _checkCoatTap(dataState: dataState),
               dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
-              dataState.tapOffValue == "1" ? _tapOffLengthController(stateData: dataState) : SizedBox.shrink(),
+              dataState.tapOffValue == "1" ? _tapOffLengthController(dataState: dataState) : SizedBox.shrink(),
               CommonStyle.vertical(context: context),
-              _gasifiedRadioBtn(stateData: dataState),
+              _gasifiedRadioBtn(dataState: dataState),
               CommonStyle.vertical(context: context),
             ],
           ) : SizedBox.shrink(),
-          _image(stateData: dataState),
+          _image(dataState: dataState),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
           _button(dataState: dataState),
@@ -142,53 +143,53 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _bpNumberController({required FormInstallationDataState stateData}) {
+  Widget _bpNumberController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       hintText: AppString.bpNumber,
       label: AppString.bpNumber,
       enabled: false,
-      controller: stateData.bpNumberController,
+      controller: dataState.bpNumberController,
     );
   }
 
-  Widget _trNumberController({required FormInstallationDataState stateData}) {
+  Widget _trNumberController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       hintText: AppString.crNumber,
       label: AppString.crNumber,
       enabled: false,
-      controller: stateData.trNumberController,
+      controller: dataState.trNumberController,
     );
   }
 
   Widget _proposedDateController(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       hintText: AppString.lmcProDate,
       label: AppString.lmcProDate,
       enabled: false,
-      controller: stateData.proposedDateController,
+      controller: dataState.proposedDateController,
     );
   }
 
   Widget _feasibilityDateController(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       hintText: AppString.lmcFeaDate,
       label: AppString.lmcFeaDate,
       enabled: false,
-      controller: stateData.feasibilityDateController,
+      controller: dataState.feasibilityDateController,
     );
   }
 
   Widget _installationDateController(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
       hintText: AppString.installationDate,
       label: AppString.installationDate,
       textInputAction: TextInputAction.done,
       enabled: true,
-      controller: stateData.installationDateController,
+      controller: dataState.installationDateController,
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
         onPressed: () {
@@ -203,18 +204,18 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _delayReasonDropdown({required FormInstallationDataState stateData}) {
-    return stateData.isDelayReason == true
+  Widget _delayReasonDropdown({required FormInstallationDataState dataState}) {
+    return dataState.isDelayReason == true
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
               star: AppString.star,
               label: AppString.reasonDelay,
               hint: AppString.reasonDelay,
-              dropdownValue: stateData.delayReasonValue.name == null
+              dropdownValue: dataState.delayReasonValue.name == null
                   ? null
-                  : stateData.delayReasonValue,
-              items: stateData.listOfDelayReason,
+                  : dataState.delayReasonValue,
+              items: dataState.listOfDelayReason,
               onChanged: (val) {
                 BlocProvider.of<FormInstallationBloc>(context)
                     .add(SelectDelayReasonValueEvent(delayReasonValue: val));
@@ -226,7 +227,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
   Widget _meterNumberController(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -237,15 +238,15 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             star: AppString.star,
             hintText: AppString.meterNumber,
             label: AppString.meterNumber,
-            suggestions: stateData.listOfMeterNumberSerial.length == 0
+            suggestions: dataState.listOfMeterNumberSerial.length == 0
                 ? ["No Data Found"]
-                : stateData.listOfMeterNumberSerial,
+                : dataState.listOfMeterNumberSerial,
             keyboardType: TextInputType.text,
-            controller: stateData.meterNumberSerialController,
+            controller: dataState.meterNumberSerialController,
             validator: (value) {
               if (value != null &&
                   value.isNotEmpty &&
-                  !stateData.listOfMeterNumberSerial.contains(value)) {
+                  !dataState.listOfMeterNumberSerial.contains(value)) {
                 return AppString.meterNoErrorMsg;
               }
               return null;
@@ -271,14 +272,14 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             hintText: AppString.meterConnection,
             label: AppString.meterConnection,
             enabled: false,
-            controller: stateData.meterConnectionMeterController,
+            controller: dataState.meterConnectionMeterController,
           ),
         )
       ],
     );
   }
 
-  Widget _initialMeterReading({required FormInstallationDataState stateData}) {
+  Widget _initialMeterReading({required FormInstallationDataState dataState}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,11 +312,11 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             CommonStyle.widthSpace(context: context),
             MeterNoWidget(enabled: false),
             CommonStyle.widthSpace(context: context),
-            _meterReading1Controller(stateData: stateData),
+            _meterReading1Controller(dataState: dataState),
             CommonStyle.widthSpace(context: context),
-            _meterReading2Controller(stateData: stateData),
+            _meterReading2Controller(dataState: dataState),
             CommonStyle.widthSpace(context: context),
-            _meterReading3Controller(stateData: stateData),
+            _meterReading3Controller(dataState: dataState),
           ],
         ),
       ],
@@ -323,20 +324,20 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _meterReading1Controller(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return MeterNoWidget(
       maxLength: 1,
       enabled: true,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.previous,
-      controller: stateData.meterIniReading1Controller,
-      focusNode: stateData.meterIniReading1FocusNode,
+      controller: dataState.meterIniReading1Controller,
+      focusNode: dataState.meterIniReading1FocusNode,
       onFieldSubmitted: (String value) {
         FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading1FocusNode);
+            .requestFocus(dataState.meterIniReading1FocusNode);
       },
       onChanged: (val) {
-        if (stateData.meterIniReading1Controller.text.length == 1) {
+        if (dataState.meterIniReading1Controller.text.length == 1) {
           FocusScope.of(context).nextFocus();
         } else {
           FocusScope.of(context).unfocus();
@@ -348,20 +349,20 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _meterReading2Controller(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return MeterNoWidget(
       maxLength: 1,
       enabled: true,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.previous,
-      controller: stateData.meterIniReading2Controller,
-      focusNode: stateData.meterIniReading2FocusNode,
+      controller: dataState.meterIniReading2Controller,
+      focusNode: dataState.meterIniReading2FocusNode,
       onFieldSubmitted: (String value) {
         FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading2FocusNode);
+            .requestFocus(dataState.meterIniReading2FocusNode);
       },
       onChanged: (val) {
-        if (stateData.meterIniReading2Controller.text.length == 1) {
+        if (dataState.meterIniReading2Controller.text.length == 1) {
           FocusScope.of(context).nextFocus();
         } else {
           FocusScope.of(context).unfocus();
@@ -373,20 +374,20 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _meterReading3Controller(
-      {required FormInstallationDataState stateData}) {
+      {required FormInstallationDataState dataState}) {
     return MeterNoWidget(
       maxLength: 1,
       enabled: true,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.done,
-      controller: stateData.meterIniReading3Controller,
-      focusNode: stateData.meterIniReading3FocusNode,
+      controller: dataState.meterIniReading3Controller,
+      focusNode: dataState.meterIniReading3FocusNode,
       onFieldSubmitted: (String value) {
         FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading3FocusNode);
+            .requestFocus(dataState.meterIniReading3FocusNode);
       },
       onChanged: (val) {
-        if (stateData.meterIniReading3Controller.text.length == 1) {
+        if (dataState.meterIniReading3Controller.text.length == 1) {
           FocusScope.of(context).unfocus();
         } else {
           FocusScope.of(context).unfocus();
@@ -397,44 +398,51 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _installRegulatorCheck(
-      {required FormInstallationDataState stateData}) {
+  Widget _installRegulatorCheck({required FormInstallationDataState dataState}) {
     return CommonStyle.col(
       context: context,
-      child: Card(
-        child: Row(
-          children: [
-            Checkbox(
-              value: stateData.isInstallRegulator,
-              onChanged: (newVal) {
-                BlocProvider.of<FormInstallationBloc>(context).add(
-                    SelectInstallRegulatorEvent(
-                        context: context, installRegulator: newVal!));
-              },
-            ),
-            Text(
-              AppString.installRegulator,
-              style: Styles.labels,
-            ),
-          ],
-        ),
-      ),
+      child: CheckboxWidget(
+        isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
+        title:  AppString.installRegulator,
+        value: dataState.isInstallRegulator,
+        onChanged: (v) => BlocProvider.of<FormInstallationBloc>(context).add(SelectInstallRegulatorEvent(context: context, installRegulator: v!)),
+
+      )
+      // Card(
+      //   CheckBoxWidget
+      //   child: Row(
+      //     children: [
+      //       Checkbox(
+      //         value: dataState.isInstallRegulator,
+      //         onChanged: (newVal) {
+      //           BlocProvider.of<FormInstallationBloc>(context).add(
+      //               SelectInstallRegulatorEvent(
+      //                   context: context, installRegulator: newVal!));
+      //         },
+      //       ),
+      //       Text(
+      //         AppString.installRegulator,
+      //         style: Styles.labels,
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
   Widget _regulatorTypeDropdown(
-      {required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
+      {required FormInstallationDataState dataState}) {
+    return dataState.isInstallRegulator == true
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
               star: AppString.star,
               label: AppString.regulatorType,
               hint: AppString.regulatorType,
-              dropdownValue: stateData.regulatorTypeValue.name == null
+              dropdownValue: dataState.regulatorTypeValue.name == null
                   ? null
-                  : stateData.regulatorTypeValue,
-              items: stateData.listOfRegulatorType,
+                  : dataState.regulatorTypeValue,
+              items: dataState.listOfRegulatorType,
               onChanged: (val) {
                 BlocProvider.of<FormInstallationBloc>(context).add(
                     SelectRegulatorTypeValueEvent(
@@ -445,29 +453,29 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         : Container();
   }
 
-  Widget _regulatorController({required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
-        ? stateData.isRegulator == false
-            ? stateData.regulatorTypeValue.name != null
+  Widget _regulatorController({required FormInstallationDataState dataState}) {
+    return dataState.isInstallRegulator == true
+        ? dataState.isRegulator == false
+            ? dataState.regulatorTypeValue.name != null
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(
                       fieldKey: regulatorFieldKey,
                       star: AppString.star,
-                      enabled: stateData.regulatorTypeValue.name == null
+                      enabled: dataState.regulatorTypeValue.name == null
                           ? false
                           : true,
-                      label: stateData.regulatorTypeValue.name != "PRV"
+                      label: dataState.regulatorTypeValue.name != "PRV"
                           ? AppString.srNumber
                           : AppString.regulator,
-                      hintText: stateData.regulatorTypeValue.name != "PRV"
+                      hintText: dataState.regulatorTypeValue.name != "PRV"
                           ? AppString.srNumber
                           : AppString.regulator,
-                      suggestions: stateData.listOfRegulatorSerial.length == 0
+                      suggestions: dataState.listOfRegulatorSerial.length == 0
                           ? ["No Data Found"]
-                          : stateData.listOfRegulatorSerial,
+                          : dataState.listOfRegulatorSerial,
                       keyboardType: TextInputType.text,
-                      controller: stateData.regulatorSerialController,
+                      controller: dataState.regulatorSerialController,
                       onSelected: (val) {
                         regulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
@@ -477,8 +485,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       validator: (value) {
                         if (value != null &&
                             value.isNotEmpty &&
-                            !stateData.listOfRegulatorSerial.contains(value)) {
-                          return stateData.regulatorTypeValue.name != "PRV"
+                            !dataState.listOfRegulatorSerial.contains(value)) {
+                          return dataState.regulatorTypeValue.name != "PRV"
                               ? AppString.srNoErrorMsg
                               : AppString.regulatorNoErrorMsg;
                         }
@@ -497,10 +505,10 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         : Container();
   }
 
-  Widget _mrNumberController({required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
-        ? stateData.isRegulator == false
-            ? stateData.regulatorTypeValue.name == "SR"
+  Widget _mrNumberController({required FormInstallationDataState dataState}) {
+    return dataState.isInstallRegulator == true
+        ? dataState.isRegulator == false
+            ? dataState.regulatorTypeValue.name == "SR"
                 ? CommonStyle.col(
                     context: context,
                     child: AutoCompleteTextFieldWidget(
@@ -508,11 +516,11 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       star: AppString.star,
                       label: AppString.meterRegulator,
                       hintText: AppString.meterRegulator,
-                      suggestions: stateData.listOfMRSerial.length == 0
+                      suggestions: dataState.listOfMRSerial.length == 0
                           ? ["No Data Found"]
-                          : stateData.listOfMRSerial,
+                          : dataState.listOfMRSerial,
                       keyboardType: TextInputType.text,
-                      controller: stateData.mrNumberController,
+                      controller: dataState.mrNumberController,
                       onSelected: (val) {
                         mRegulatorFieldKey.currentState?.validate();
                         BlocProvider.of<FormInstallationBloc>(context).add(
@@ -521,7 +529,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       validator: (value) {
                         if (value != null &&
                             value.isNotEmpty &&
-                            !stateData.listOfMRSerial.contains(value)) {
+                            !dataState.listOfMRSerial.contains(value)) {
                           return AppString.mrNoErrorMsg;
                         }
                         return null;
@@ -539,8 +547,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _rfcDateControllerController(
-      {required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
+      {required FormInstallationDataState dataState}) {
+    return dataState.isInstallRegulator == true
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
@@ -549,7 +557,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               label: AppString.rfcDate,
               textInputAction: TextInputAction.done,
               enabled: true,
-              controller: stateData.rfcDateController,
+              controller: dataState.rfcDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,
                 onPressed: () {
@@ -567,15 +575,15 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
   Widget _ngConversionDateController(
-      {required FormInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
+      {required FormInstallationDataState dataState}) {
+    return dataState.isInstallRegulator == true
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
               star: AppString.star,
               hintText: AppString.ngProposedDate,
               label: AppString.ngProposedDate,
-              controller: stateData.ngConversionDateController,
+              controller: dataState.ngConversionDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,
                 onPressed: () {
@@ -592,7 +600,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         : Container();
   }
 
-  Widget _locationOfHouse({required FormInstallationDataState stateData}) {
+  Widget _locationOfHouse({required FormInstallationDataState dataState}) {
     return Row(
       children: [
         Flexible(
@@ -602,7 +610,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             star: AppString.star,
             hintText: AppString.latOfHouse,
             label: AppString.latOfHouse,
-            controller: stateData.latOfHouseController,
+            controller: dataState.latOfHouseController,
           ),
         ),
         CommonStyle.widthSpace(context: context),
@@ -613,7 +621,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             star: AppString.star,
             hintText: AppString.longOfHouse,
             label: AppString.longOfHouse,
-            controller: stateData.longOfHouseController,
+            controller: dataState.longOfHouseController,
           ),
         ),
         /* SizedBox(
@@ -629,63 +637,62 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _materialList({required FormInstallationDataState stateData}) {
+  Widget _materialList({required FormInstallationDataState dataState}) {
     return Column(
       children: [
         Column(
-          children: stateData.materialList.mapIndexed((index, e) {
+          children: dataState.materialList.mapIndexed((index, e) {
             return Column(
               children: [
                 Row(
                   children: [
                     e.name.toLowerCase().contains("pipe")
                         ? Flexible(
-                            flex: 7,
-                            child: TextFieldWidget(
-                              hintText: AppString.pipe,
-                              label: AppString.pipe,
-                              initialValue: e.name,
-                              enabled: false,
-                            ),
-                          )
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.pipe,
+                        label: AppString.pipe,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    )
                         : Flexible(
-                            flex: 7,
-                            child: TextFieldWidget(
-                              hintText: AppString.material,
-                              label: AppString.material,
-                              initialValue: e.name,
-                              enabled: false,
-                            ),
-                          ),
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.material,
+                        label: AppString.material,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    ),
                     CommonStyle.widthSpace(context: context),
                     e.name.toLowerCase().contains("pipe")
                         ? Flexible(
-                            flex: 3,
-                            child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
-                              controller: e.controller,
-                              enabled: true,
-                              keyboardType: TextInputType.number,
-                              textInputAction : TextInputAction.done,
-                              onChanged: (val) {
-                                BlocProvider.of<FormInstallationBloc>(context)
-                                    .add(SelectQTYLMCEvent(
-                                        context: context, qtyValue: val));
-                              },
-                            ),
-                          )
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          BlocProvider.of<FormInstallationBloc>(
+                              context)
+                              .add(SelectQTYLMCEvent(
+                              context: context, qtyValue: val));
+                        },
+                      ),
+                    )
                         : Flexible(
-                            flex: 3,
-                            child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
-                              controller: e.controller,
-                              enabled: true,
-                              keyboardType: TextInputType.number,
-                              textInputAction : TextInputAction.done,
-                            ),
-                          )
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                      ),
+                    )
                   ],
                 ),
                 CommonStyle.vertical(context: context),
@@ -693,32 +700,164 @@ class _FormInstallationViewState extends State<FormInstallationView> {
             );
           }).toList(),
         ),
-        stateData.isExtraPipe == false
-            ? _extraPipeWidget(stateData: stateData)
+        dataState.isGiExtraPipe == false
+            ? _extraGiPipeWidget(dataState: dataState)
             : DottedLoaderWidget(),
         CommonStyle.vertical(context: context),
       ],
     );
   }
 
-  Widget _extraPipeWidget({required FormInstallationDataState stateData}) {
+  Widget _materialCopperList({required FormInstallationDataState dataState}) {
+    return AppConfig.instanceInit()!.client == Client.hpoil
+        ? Column(
+      children: [
+        Column(
+          children: dataState.materialListCopper.mapIndexed((index, e) {
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    e.name.toLowerCase().contains("pipe")
+                        ? Flexible(
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.pipe,
+                        label: AppString.pipe,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    )
+                        : Flexible(
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: AppString.material,
+                        label: AppString.material,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    ),
+                    CommonStyle.widthSpace(context: context),
+                    e.name.toLowerCase().contains("pipe")
+                        ? Flexible(
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          BlocProvider.of<FormInstallationBloc>(
+                              context)
+                              .add(SelectQTYLMCCopperEvent(
+                              context: context, qtyValue: val));
+                        },
+                      ),
+                    )
+                        : Flexible(
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                      ),
+                    )
+                  ],
+                ),
+                CommonStyle.vertical(context: context),
+              ],
+            );
+          }).toList(),
+        ),
+        dataState.isCopperExtraPipe == false
+            ? _extraCopperPipeWidget(dataState: dataState)
+            : DottedLoaderWidget(),
+        CommonStyle.vertical(context: context),
+        _extraTotalPipeWidget(dataState: dataState),
+        CommonStyle.vertical(context: context),
+        // if(AppConfig.instanceInit()!.client == Client.hpoil)...[
+        //   _manualPipeCheckbox(dataState: dataState),
+        //   CommonStyle.vertical(context: context),
+        //   _manualPipLengthWidget(dataState: dataState),
+        //   CommonStyle.vertical(context: context),
+        // ],
+      ],
+    )
+        : SizedBox.shrink();
+  }
+
+  Widget _manualPipeCheckbox({required FormInstallationDataState dataState}){
+    return CheckboxWidget(
+      title: "Manual Pipe",
+      value: dataState.isManualPipe,
+      onChanged: (v) => BlocProvider.of<FormInstallationBloc>(context).add(SelectManualPipeEvent(isValue: v!)),
+    );
+  }
+  Widget _manualPipLengthWidget({required FormInstallationDataState dataState}){
+    return dataState.isManualPipe ? TextFieldWidget(
+      hintText: AppString.extraPipe,
+      label: AppString.extraPipe,
+      controller: dataState.manualPipLengthCtrl,
+    ) : SizedBox.shrink();
+  }
+
+
+  Widget _extraGiPipeWidget({required FormInstallationDataState dataState}) {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPipe,
         label: AppString.extraPipe,
-        controller: stateData.extraPipeController,
+        controller: dataState.extraGiPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPrice,
         label: AppString.extraPrice,
-        controller: stateData.extraPriceController,
+        controller: dataState.extraGiPriceCtrl,
       ),
     );
   }
 
-  Widget _checkListRFC({required FormInstallationDataState stateData}) {
+
+  Widget _extraCopperPipeWidget({required FormInstallationDataState dataState}) {
+    return RowWidget(
+      widget1: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPipeCopper,
+        label: AppString.extraPipeCopper,
+        controller: dataState.extraCopperPipeCtrl,
+      ),
+      widget2: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPriceCopper,
+        label: AppString.extraPriceCopper,
+        controller: dataState.extraCopperPriceCtrl,
+      ),
+    );
+  }
+
+  Widget _extraTotalPipeWidget({required FormInstallationDataState dataState}) {
+    return RowWidget(
+      widget1: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPipeTotal,
+        label: AppString.extraPipeTotal,
+        controller: dataState.extraTotalPipeCtrl,
+      ),
+      widget2: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPriceTotal,
+        label: AppString.extraPriceTotal,
+        controller: dataState.extraTotalPriceCtrl,
+      ),
+    );
+  }
+
+  Widget _checkListRFC({required FormInstallationDataState dataState}) {
     var w = MediaQuery.of(context).size.width * 0.5;
     print("_checkListRFC-->${w}");
     return GridView.builder(
@@ -729,13 +868,13 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         childAspectRatio: 4.0,
       ),
       shrinkWrap: true,
-      itemCount: stateData.listOfAllRFC.length,
+      itemCount: dataState.listOfAllRFC.length,
       itemBuilder: (context, index) {
         return Card(
           child: Row(
             children: [
               Checkbox(
-                value: stateData.listOfAllRFC[index].isSelected,
+                value: dataState.listOfAllRFC[index].isSelected,
                 onChanged: (newVal) {
                   BlocProvider.of<FormInstallationBloc>(context).add(
                       SelectRFCCheckValueEvent(
@@ -743,7 +882,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                 },
               ),
               Text(
-                stateData.listOfAllRFC[index].value!,
+                dataState.listOfAllRFC[index].value!,
                 style: Styles.labels,
               ),
             ],
@@ -753,7 +892,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _checkCoatTap({required FormInstallationDataState stateData}) {
+  Widget _checkCoatTap({required FormInstallationDataState dataState}) {
     var w = MediaQuery.of(context).size.width * 0.5;
     print("_checkListRFC-->${w}");
     return GridView.builder(
@@ -764,10 +903,10 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         childAspectRatio: 4.0,
       ),
       shrinkWrap: true,
-      itemCount: stateData.coatTapList.length,
+      itemCount: dataState.coatTapList.length,
       itemBuilder: (context, index) {
-        final option = stateData.coatTapList[index];
-        final isSelected = stateData.selectedCoatTap.contains(option);
+        final option = dataState.coatTapList[index];
+        final isSelected = dataState.selectedCoatTap.contains(option);
         return Card(
           child: Row(
             children: [
@@ -792,17 +931,17 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
 
 
-  Widget _tapOffLengthController({required FormInstallationDataState stateData}) {
+  Widget _tapOffLengthController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       star: "* ",
       hintText: "Tap Off Length",
       label: "Tap Off Length",
       keyboardType: TextInputType.number,
-      controller: stateData.tapOffLengthController,
+      controller: dataState.tapOffLengthController,
     );
   }
 
-  Widget _gasifiedRadioBtn({required FormInstallationDataState stateData}) {
+  Widget _gasifiedRadioBtn({required FormInstallationDataState dataState}) {
     return Container(
       // margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
        padding: const EdgeInsets.all(8),
@@ -825,13 +964,13 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: stateData.gasifiedList.map((option) {
+            children: dataState.gasifiedList.map((option) {
               return Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: stateData.selectedGasified == option
+                      color: dataState.selectedGasified == option
                           ? EnvironmentConfig.of(context)!.primaryTheme
                           : Colors.grey.shade300,
                       width: 1,
@@ -845,7 +984,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                       textAlign: TextAlign.center,
                     ),
                     value: option,
-                    groupValue: stateData.selectedGasified,
+                    groupValue: dataState.selectedGasified,
                     onChanged: (value) {
                       if (value != null) {
                         context
@@ -868,14 +1007,15 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
 
-  Widget _image({required FormInstallationDataState stateData}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _image({required FormInstallationDataState dataState}) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
       children: [
         ImageWidget(
-          star: AppString.star,
+          isRequired: true,
           title: AppString.meter,
-          imgFile: stateData.meterPhoto,
+          imgFile: dataState.meterPhoto,
           onPressed: () {
             showModalBottomSheet(
                 enableDrag: true,
@@ -897,10 +1037,11 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                 });
           },
         ),
-        stateData.isInstallRegulator == true
+        dataState.isInstallRegulator == true
             ? ImageWidget(
+          isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
                 title: AppString.rfc,
-                imgFile: stateData.rfcCardPhoto,
+                imgFile: dataState.rfcCardPhoto,
                 onPressed: () {
                   showModalBottomSheet(
                       enableDrag: true,
@@ -923,10 +1064,11 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                 },
               )
             : Container(),
-        stateData.isInstallRegulator == true
+        dataState.isInstallRegulator == true
             ? ImageWidget(
+                isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
                 title: AppString.pneumatic,
-                imgFile: stateData.pneumaticTestReportPhoto,
+                imgFile: dataState.pneumaticTestReportPhoto,
                 onPressed: () {
                   showModalBottomSheet(
                       enableDrag: true,
@@ -950,9 +1092,9 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               )
             : Container(),
         ImageWidget(
-          star: AppString.star,
+          isRequired: true,
           title: AppString.housePhoto,
-          imgFile: stateData.housePhoto,
+          imgFile: dataState.housePhoto,
           onPressed: () {
             showModalBottomSheet(
                 enableDrag: true,

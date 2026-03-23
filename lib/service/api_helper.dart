@@ -20,8 +20,8 @@ class ApiHelper {
       }
       String url = Apis.baseUrl + urlEndPoint;
       final response = await get(Uri.parse(url));
-      log("URL-->${urlEndPoint.toString()}");
-      log(urlEndPoint + "==> " + response.body);
+      log("URL-->${url.toString()}");
+      log("responseBody==> ${response.body}");
       if (response.statusCode == 200) {
         return response.body.toString();
       }

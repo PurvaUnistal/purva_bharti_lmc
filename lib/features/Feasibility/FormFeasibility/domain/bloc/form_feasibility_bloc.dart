@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +16,8 @@ import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility
 import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
 
-class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
+class FormFeasibilityBloc
+    extends Bloc<FormFeasibilityEvent, FormFeasibilityState> {
   FormFeasibilityBloc() : super(FormFeasibilityInitialState()) {
     on<FormFeasibilityPageLoadEvent>(_pageLoad);
     on<SelectProposedDateEvent>(_selectProposedDate);
@@ -23,17 +26,20 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     on<SelectCheckFeasibilityValueEvent>(_selectCheckFeasibilityValue);
     on<SelectLMCReasonValueEvent>(_selectLMCReasonValue);
     on<SelectQTYLMCEvent>(_selectQTYLMC);
+    on<SelectQTYLMCCopperEvent>(_selectQTYLMCCopper);
+    on<SelectTFAvailableEvent>(_selectTFAvailable);
+    on<SelectManualPipeEvent>(_selectManualPipe);
     on<SubmitFormFeasibilityEvent>(_submit);
   }
 
   bool isLoader = false;
   bool isBtnLoader = false;
   bool isSelected = false;
-  bool isExtraPipe = false;
+  bool isGiExtraPipe = false;
+  bool isCopperExtraPipe = false;
+  bool isTFAvail = false;
+  bool isManualPipe = false;
 
-
-  String extraPipe = "0";
-  String extraPrice = "0";
 
   GetConstantModel checkFeasibleValue = GetConstantModel();
   GetConstantModel lmcReasonValue = GetConstantModel();
@@ -46,8 +52,13 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   List<MaterialItem> materialList = [];
   List<MaterialItem> listOfMaterial = [];
   List<String> listOfQtyLMC = [];
-  String qtyData = "";
-  List<GetConstantModel> listOfAllRFC = [];
+
+  List<FreeMaterialData> listOfAllMaterialCopper = [];
+  List<String> listOfAllMaterialIdCopper = [];
+  List<MaterialItem> materialListCopper = [];
+  List<MaterialItem> listOfMaterialCopper = [];
+  List<String> listOfQtyLMCCopper = [];
+  String qtyDataCopper = "";
 
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController trNumberController = TextEditingController();
@@ -57,15 +68,26 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   TextEditingController followUpDateController = TextEditingController();
   TextEditingController reasonController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
-  TextEditingController extraPipeController = TextEditingController(text: "0");
-  TextEditingController extraPriceController = TextEditingController(text: "0");
+  TextEditingController manualPipLengthCtrl = TextEditingController();
+
+  TextEditingController extraGiPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraGiPriceCtrl = TextEditingController(text: "0");
+
+  TextEditingController extraCopperPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraCopperPriceCtrl = TextEditingController(text: "0");
+
+  TextEditingController extraTotalPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraTotalPriceCtrl = TextEditingController(text: "0");
 
   _pageLoad(FormFeasibilityPageLoadEvent event, emit) async {
     emit(FormFeasibilityPageLoadState());
     isLoader = false;
     isBtnLoader = false;
     isSelected = false;
-    isExtraPipe = false;
+    isGiExtraPipe = false;
+    isCopperExtraPipe = false;
+    isTFAvail = false;
+    isManualPipe = false;
     checkFeasibleValue = GetConstantModel();
     lmcReasonValue = GetConstantModel();
     listOfCheckFeasible = [];
@@ -75,11 +97,19 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     materialList = [];
     listOfMaterial = [];
     listOfQtyLMC = [];
-    listOfAllRFC = [];
-    extraPipe = "0";
-    extraPrice = "0";
-    extraPipeController.text = "0";
-    extraPriceController.text = "0";
+    listOfAllMaterialCopper = [];
+     listOfAllMaterialIdCopper = [];
+    materialListCopper = [];
+   listOfMaterialCopper = [];
+    listOfQtyLMCCopper = [];
+     qtyDataCopper = "";
+    manualPipLengthCtrl.text = "";
+    extraGiPipeCtrl = TextEditingController(text: "0");
+    extraGiPriceCtrl = TextEditingController(text: "0");
+    extraCopperPriceCtrl = TextEditingController(text: "0");
+    extraCopperPipeCtrl = TextEditingController(text: "0");
+     extraTotalPipeCtrl = TextEditingController(text: "0");
+     extraTotalPriceCtrl = TextEditingController(text: "0");
     proposedDateController.text = '';
     reasonController.text = '';
     remarksController.text = '';
@@ -93,17 +123,22 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     bpNumberController.text = results[0] ?? "";
     trNumberController.text = results[1] ?? "";
     assignedDateController.text = results[2] ?? "";
-    feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
+    feasibilityDateController.text = DateFormat(
+      AppString.dateFormat,
+    ).format(DateTime.now());
     await Future.wait(<Future>[
       fetchCheckFeasibilityApi(context: event.context),
       fetchLMCReasonApi(context: event.context),
       fetchFreeMaterialApi(context: event.context),
+      fetchFreeMaterialCopperApi(context: event.context),
     ]);
     _eventCompleted(emit);
   }
 
   _selectFeasibilityDate(SelectFeasibilityDateEvent event, emit) async {
-    var assignDate = DateFormat(AppString.dateFormat).parse(assignedDateController.text);
+    var assignDate = DateFormat(
+      AppString.dateFormat,
+    ).parse(assignedDateController.text);
     DateTime? dateTime = await showDatePicker(
       context: event.context,
       initialDate: DateTime.now(),
@@ -118,8 +153,15 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectProposedDate(SelectProposedDateEvent event, emit) async {
-    var feasibilityDate = DateFormat(AppString.dateFormat).parse(feasibilityDateController.text);
-    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: feasibilityDate, lastDate: DateTime(2050));
+    var feasibilityDate = DateFormat(
+      AppString.dateFormat,
+    ).parse(feasibilityDateController.text);
+    DateTime? dateTime = await showDatePicker(
+      context: event.context,
+      initialDate: DateTime.now(),
+      firstDate: feasibilityDate,
+      lastDate: DateTime(2050),
+    );
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       proposedDateController.text = formattedDate.toString();
@@ -128,8 +170,15 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
   }
 
   _selectFollowUpDate(SelectFollowUpDateEvent event, emit) async {
-    var assignDate = DateFormat(AppString.dateFormat).parse(assignedDateController.text);
-    DateTime? dateTime = await showDatePicker(context: event.context, initialDate: DateTime.now(), firstDate: assignDate, lastDate: DateTime(2050));
+    var assignDate = DateFormat(
+      AppString.dateFormat,
+    ).parse(assignedDateController.text);
+    DateTime? dateTime = await showDatePicker(
+      context: event.context,
+      initialDate: DateTime.now(),
+      firstDate: assignDate,
+      lastDate: DateTime(2050),
+    );
     if (dateTime != null) {
       String formattedDate = DateFormat(AppString.dateFormat).format(dateTime);
       followUpDateController.text = formattedDate.toString();
@@ -157,62 +206,221 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     );
     if (res != null) {
       listOfAllMaterial = res;
-      tempList = List.generate(listOfAllMaterial.length, (i) => listOfAllMaterial[i].id!);
+      tempList = List.generate(
+        listOfAllMaterial.length,
+        (i) => listOfAllMaterial[i].id!,
+      );
       listOfAllMaterialId.addAll(tempList);
       listOfMaterial = List.generate(
         listOfAllMaterial.length,
         (i) => MaterialItem(
-            value: '0',
-            id: '${listOfAllMaterial[i].id}',
-            name: '${listOfAllMaterial[i].materialName}',
-            unit: '${listOfAllMaterial[i].materialUnit}',
-            controller: TextEditingController()),
+          value: '0',
+          id: '${listOfAllMaterial[i].id}',
+          name: '${listOfAllMaterial[i].materialName}',
+          unit: '${listOfAllMaterial[i].materialUnit}',
+          controller: TextEditingController(),
+        ),
       );
       materialList.addAll(listOfMaterial);
-      listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+      listOfQtyLMC =
+          listOfMaterial
+              .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+              .toList();
       print("listOfQtyLMC-->${listOfQtyLMC}");
       return res;
     }
   }
 
-  _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
-    double sumOfPipes = 0.0;
-    for (int i = 0; i < listOfMaterial.length; i++) {
-      MaterialItem dataOfAllMaterial = listOfMaterial[i];
-      if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
-        if (dataOfAllMaterial.controller.text != "") {
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
-          sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
-        } else {
-          dataOfAllMaterial.controller.text = '';
-          listOfQtyLMC = listOfMaterial.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+  fetchFreeMaterialCopperApi({required BuildContext context}) async {
+    List<String> tempCopperList = [];
+    var res = await FormFeasibilityHelper.getAllFreeMaterialCopperApi(
+      context: context,
+    );
+    if (res != null) {
+      listOfAllMaterialCopper = res;
+      tempCopperList = List.generate(
+        listOfAllMaterialCopper.length,
+        (i) => listOfAllMaterialCopper[i].id!,
+      );
+      listOfAllMaterialIdCopper.addAll(tempCopperList);
+      listOfMaterialCopper = List.generate(
+        listOfAllMaterialCopper.length,
+        (i) => MaterialItem(
+          value: '0',
+          id: '${listOfAllMaterialCopper[i].id}',
+          name: '${listOfAllMaterialCopper[i].materialName}',
+          unit: '${listOfAllMaterialCopper[i].materialUnit}',
+          controller: TextEditingController(),
+        ),
+      );
+      materialListCopper.addAll(listOfMaterialCopper);
+      listOfQtyLMCCopper =
+          listOfMaterialCopper
+              .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+              .toList();
+      print("listOfQtyLMC-->${listOfQtyLMCCopper}");
+      return res;
+    }
+  }
+
+  double _getSum(List<MaterialItem> list) {
+    return list.fold(0.0, (sum, item) {
+      if (item.name.toLowerCase().contains("pipe")) {
+        final value = item.controller.text.trim();
+        return sum + (value.isEmpty ? 0.0 : double.parse(value));
+      }
+      return sum;
+    });
+  }
+
+  Future<void> _calculateExtraPipe({
+    required Emitter emit,
+    required BuildContext context,
+  }) async {
+    double sumOfPipes = _getSum(listOfMaterial);
+    double sumOfPipesCopper = _getSum(listOfMaterialCopper);
+
+    double totalSum = sumOfPipes + sumOfPipesCopper;
+
+    print("Total Sum ---> $totalSum");
+
+    /// Declare OUTSIDE
+    var giRes;
+    var copperRes;
+
+    if (totalSum > 15.0) {
+      isGiExtraPipe = true;
+      isCopperExtraPipe = true;
+      _eventCompleted(emit);
+
+      /// Reset BEFORE API
+      extraGiPriceCtrl.text = "";
+      extraGiPipeCtrl.text = "";
+      extraCopperPriceCtrl.text = "";
+      extraCopperPipeCtrl.text = "";
+
+      /// Run APIs in parallel
+      await Future.wait([
+        if (sumOfPipes != 0.0)
+          Future(() async {
+            giRes = await FormInstallationHelper.getExtraPipeDetailsApi(
+              context: context,
+              pipeQty: sumOfPipes.toString(),
+            );
+          }),
+
+        if (sumOfPipesCopper != 0.0)
+          Future(() async {
+            copperRes =
+            await FormInstallationHelper.getExtraPipeDetailsCopperApi(
+              context: context,
+              pipeQty: sumOfPipesCopper.toString(),
+              giqty: sumOfPipes.toString(),
+            );
+          }),
+      ]);
+
+      /// Apply Results
+      if (giRes != null) {
+        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraGiPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+      } else {
+        extraGiPriceCtrl.text = '0';
+        extraGiPipeCtrl.text = '0';
+      }
+
+      if (copperRes != null) {
+        if(sumOfPipes < 15.0){
+          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+          extraCopperPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+        }else{
+          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPipeCtrl.text = "${copperRes.cupipe} ${copperRes.pipeUm}";
         }
+      } else {
+        extraCopperPriceCtrl.text = '0';
+        extraCopperPipeCtrl.text = '0';
       }
-    }
-    print("sumOfPipes---> $sumOfPipes");
-    if (sumOfPipes > 15.0) {
-      isExtraPipe = true;
-      _eventCompleted(emit);
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
-      extraPriceController.text = "";
-      extraPipeController.text = "";
-      extraPipe = "";
-      extraPrice = "";
-      if (res != null) {
-        isExtraPipe = false;
-        _eventCompleted(emit);
-        extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
-        extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
-        extraPipe = res.qty.toString();
-        extraPrice = res.price.toString();
-        _eventCompleted(emit);
+      /// ✅ SET TOTAL ONLY ONCE (VERY IMPORTANT)
+      if (copperRes != null) {
+        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        extraTotalPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+      } else if (giRes != null) {
+        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraTotalPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+      } else {
+        extraTotalPriceCtrl.text = '0';
+        extraTotalPipeCtrl.text = '0';
       }
+
+      isGiExtraPipe = false;
+      isCopperExtraPipe = false;
     } else {
-      isExtraPipe = false;
-      _eventCompleted(emit);
-      extraPriceController.text = '0';
-      extraPipeController.text = '0';
+      /// RESET BOTH
+      isGiExtraPipe = false;
+      isCopperExtraPipe = false;
+
+      extraGiPriceCtrl.text = '0';
+      extraGiPipeCtrl.text = '0';
+
+      extraCopperPriceCtrl.text = '0';
+      extraCopperPipeCtrl.text = '0';
+
+      extraTotalPriceCtrl.text = '0';
+      extraTotalPipeCtrl.text = '0';
     }
+    _eventCompleted(emit);
+  }
+
+  _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
+    listOfQtyLMC = listOfMaterial
+        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+        .toList();
+
+    await _calculateExtraPipe(
+      emit: emit,
+      context: event.context,
+    );
+  }
+
+  _selectQTYLMCCopper(SelectQTYLMCCopperEvent event, emit) async {
+    listOfQtyLMCCopper = listOfMaterialCopper
+        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+        .toList();
+
+    await _calculateExtraPipe(
+      emit: emit,
+      context: event.context,
+    );
+  }
+
+  fetchCheckFeasibilityApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getCheckFeasibilityApi(
+      context: context,
+    );
+    if (res != null) {
+      listOfCheckFeasible = res;
+      return res;
+    }
+  }
+
+  fetchLMCReasonApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getLMCReasonApi(context: context);
+    if (res != null) {
+      listOfLMCReason = res;
+      return res;
+    }
+  }
+
+  _selectTFAvailable(SelectTFAvailableEvent event, emit) {
+    isTFAvail = event.isValue;
+    log("isTFAvail-- ${isTFAvail.toString()}");
+    _eventCompleted(emit);
+  }
+
+  _selectManualPipe(SelectManualPipeEvent event, emit) {
+    isManualPipe = event.isValue;
+    log("isManualPipe-- ${isManualPipe.toString()}");
     _eventCompleted(emit);
   }
 
@@ -237,11 +445,26 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           proposedDate: proposedDateController.text.trim().toString(),
           isFeasible: checkFeasibleValue,
           comment: reasonController.text..trim().toString(),
-          followUpDate: followUpDateController.text..trim().toString(),
-          extraPipe: extraPipe,
-          extraPrice: extraPrice,
-          materialId: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
-          qtyLMC: listOfQtyLMC.toList().toString().replaceAll('[', '').replaceAll(']', ''),
+          followUpDate: followUpDateController.text.trim().toString(),
+          giExtraPipe: extraGiPipeCtrl.text.trim().toString(),
+          giExtraPrice: extraGiPriceCtrl.text.trim().toString(),
+          copperExtraPipe: extraCopperPipeCtrl.text.trim().toString(),
+          copperExtraPrice: extraCopperPriceCtrl.text.trim().toString(),
+          totalExtraPipe: extraTotalPipeCtrl.text.trim().toString(),
+          totalExtraPrice: extraTotalPriceCtrl.text.trim().toString(),
+          manualPipe: isManualPipe ? "1" : "0",
+          manualPipeLength: manualPipLengthCtrl.text.trim().toString(),
+          tfStatus: isTFAvail ? "1" : "0",
+          materialId: listOfAllMaterialId
+              .toList()
+              .toString()
+              .replaceAll('[', '')
+              .replaceAll(']', ''),
+          qtyLMC: listOfQtyLMC
+              .toList()
+              .toString()
+              .replaceAll('[', '')
+              .replaceAll(']', ''),
         );
         if (res != null && res.error == false) {
           isBtnLoader = false;
@@ -249,10 +472,11 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
           await Utils.successSnackBar(msg: res.data!, context: event.context);
           await FormFeasibilityHelper.clearCache();
           Navigator.pushAndRemoveUntil(
-              event.context,
-              MaterialPageRoute(builder: (BuildContext context) => HomeView()),
-              //  InstallationView()),
-              (Route<dynamic> route) => false);
+            event.context,
+            MaterialPageRoute(builder: (BuildContext context) => HomeView()),
+            //  InstallationView()),
+            (Route<dynamic> route) => false,
+          );
         } else {
           isBtnLoader = false;
           _eventCompleted(emit);
@@ -265,44 +489,38 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     }
   }
 
-  fetchCheckFeasibilityApi({required BuildContext context}) async {
-    var res = await FormFeasibilityHelper.getCheckFeasibilityApi(context: context);
-    if (res != null) {
-      listOfCheckFeasible = res;
-      return res;
-    }
-  }
-
-  fetchLMCReasonApi({required BuildContext context}) async {
-    var res = await FormFeasibilityHelper.getLMCReasonApi(context: context);
-    if (res != null) {
-      listOfLMCReason = res;
-      return res;
-    }
-  }
-
   _eventCompleted(emit) {
-    emit(FormFeasibilityDataState(
-      isLoader: isLoader,
-      isBtnLoader: isBtnLoader,
-      isSelected: isSelected,
-      isExtraPipe: isExtraPipe,
-      checkFeasibleValue: checkFeasibleValue,
-      lmcReasonValue: lmcReasonValue,
-      listOfCheckFeasible: listOfCheckFeasible,
-      listOfLMCReason: listOfLMCReason,
-      listOfAllRFC: listOfAllRFC,
-      materialList: materialList,
-      bpNumberController: bpNumberController,
-      trNumberController: trNumberController,
-      proposedDateController: proposedDateController,
-      feasibilityDateController: feasibilityDateController,
-      assignedDateController: assignedDateController,
-      reasonController: reasonController,
-      followUpDateController: followUpDateController,
-      remarksController: remarksController,
-      extraPipeController: extraPipeController,
-      extraPriceController: extraPriceController,
-    ));
+    emit(
+      FormFeasibilityDataState(
+        isLoader: isLoader,
+        isTFAvail: isTFAvail,
+        isManualPipe: isManualPipe,
+        isBtnLoader: isBtnLoader,
+        isSelected: isSelected,
+        isGiExtraPipe: isGiExtraPipe,
+        checkFeasibleValue: checkFeasibleValue,
+        lmcReasonValue: lmcReasonValue,
+        listOfCheckFeasible: listOfCheckFeasible,
+        listOfLMCReason: listOfLMCReason,
+        materialList: materialList,
+        bpNumberController: bpNumberController,
+        trNumberController: trNumberController,
+        proposedDateController: proposedDateController,
+        feasibilityDateController: feasibilityDateController,
+        assignedDateController: assignedDateController,
+        reasonController: reasonController,
+        followUpDateController: followUpDateController,
+        remarksController: remarksController,
+        manualPipLengthCtrl: manualPipLengthCtrl,
+        extraGiPipeCtrl: extraGiPipeCtrl,
+        extraGiPriceCtrl: extraGiPriceCtrl,
+        isCopperExtraPipe: isCopperExtraPipe,
+        extraCopperPipeCtrl: extraCopperPipeCtrl,
+        extraCopperPriceCtrl: extraCopperPriceCtrl,
+        extraTotalPriceCtrl: extraTotalPriceCtrl,
+        extraTotalPipeCtrl: extraTotalPipeCtrl,
+        materialListCopper: materialListCopper,
+      ),
+    );
   }
 }

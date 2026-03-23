@@ -61,6 +61,15 @@ class SelectQTYLMCEvent extends FormFeasibilityEvent {
   List<Object> get props => [qtyValue,context,];
 }
 
+class SelectQTYLMCCopperEvent extends FormFeasibilityEvent {
+  final String qtyValue;
+  final BuildContext context;
+  SelectQTYLMCCopperEvent({required this.qtyValue,required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [qtyValue,context,];
+}
+
 class SelectRFCCheckValueEvent extends FormFeasibilityEvent {
   final bool isSelected;
   final BuildContext context;
@@ -69,6 +78,20 @@ class SelectRFCCheckValueEvent extends FormFeasibilityEvent {
   @override
   // TODO: implement props
   List<Object> get props => [isSelected,context, index];
+}
+
+class SelectTFAvailableEvent extends FormFeasibilityEvent {
+  final bool isValue;
+  SelectTFAvailableEvent({required this.isValue,});
+  @override
+  List<Object?> get props => [isValue];
+}
+
+class SelectManualPipeEvent extends FormFeasibilityEvent {
+  final bool isValue;
+  SelectManualPipeEvent({required this.isValue,});
+  @override
+  List<Object?> get props => [isValue];
 }
 
 class SubmitFormFeasibilityEvent extends FormFeasibilityEvent {

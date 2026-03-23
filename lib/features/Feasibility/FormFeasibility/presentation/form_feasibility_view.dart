@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lmc/Utils/common_widgets/CheckboxWidget.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
@@ -11,8 +12,10 @@ import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
@@ -101,12 +104,15 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           _checkFeasibilityDropdown(stateData: dataState),
           CommonStyle.vertical(context: context),
           _materialList(dataState: dataState),
+          _materialCopperList(dataState: dataState),
           _proposedDateController(stateData: dataState),
           _lmcReasonDropdown(stateData: dataState),
           _reasonController(stateData: dataState),
           _followUpDateController(stateData: dataState),
           _remarksController(stateData: dataState),
           CommonStyle.vertical(context: context),
+          CommonStyle.vertical(context: context),
+          _tfAvailCheckbox(dataState: dataState),
           CommonStyle.vertical(context: context),
           _button(dataState: dataState),
           CommonStyle.vertical(context: context),
@@ -133,8 +139,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  Widget _assignedDateController(
-      {required FormFeasibilityDataState stateData}) {
+  Widget _assignedDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
       hintText: AppString.assignedDate,
       label: AppString.assignedDate,
@@ -143,10 +148,9 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     );
   }
 
-  Widget _feasibilityDateController(
-      {required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" ||
-            stateData.checkFeasibleValue?.key == "3"
+  Widget _feasibilityDateController({required FormFeasibilityDataState stateData}) {
+    return stateData.checkFeasibleValue.key == "2"
+        || stateData.checkFeasibleValue.key == "3"
         ? Container()
         : CommonStyle.col(
             context: context,
@@ -171,13 +175,12 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           );
   }
 
-  Widget _checkFeasibilityDropdown(
-      {required FormFeasibilityDataState stateData}) {
+  Widget _checkFeasibilityDropdown({required FormFeasibilityDataState stateData}) {
     return DropdownWidget<GetConstantModel>(
       star: AppString.star,
       label: AppString.checkFeasibility,
       hint: AppString.checkFeasibility,
-      dropdownValue: stateData.checkFeasibleValue?.value == null
+      dropdownValue: stateData.checkFeasibleValue.value == null
           ? null
           : stateData.checkFeasibleValue,
       items: stateData.listOfCheckFeasible,
@@ -189,7 +192,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
 
   Widget _materialList({required FormFeasibilityDataState dataState}) {
-    return dataState.checkFeasibleValue?.key == "1"
+    return dataState.checkFeasibleValue.key == "1"
         ? Column(
             children: [
               Column(
@@ -252,38 +255,165 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                   );
                 }).toList(),
               ),
-              dataState.isExtraPipe == false
-                  ? _extraPipeWidget(dataState: dataState)
+              dataState.isGiExtraPipe == false
+                  ? _extraGiPipeWidget(dataState: dataState)
                   : DottedLoaderWidget(),
               CommonStyle.vertical(context: context),
             ],
           )
-        : Container();
+        : SizedBox.shrink();
   }
 
-  Widget _extraPipeWidget({required FormFeasibilityDataState dataState}) {
+  Widget _materialCopperList({required FormFeasibilityDataState dataState}) {
+    return dataState.checkFeasibleValue.key == "1" && AppConfig.instanceInit()!.client == Client.hpoil
+        ? Column(
+            children: [
+              Column(
+                children: dataState.materialListCopper.mapIndexed((index, e) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          e.name.toLowerCase().contains("pipe")
+                              ? Flexible(
+                                  flex: 7,
+                                  child: TextFieldWidget(
+                                    hintText: AppString.pipe,
+                                    label: AppString.pipe,
+                                    initialValue: e.name,
+                                    enabled: false,
+                                  ),
+                                )
+                              : Flexible(
+                                  flex: 7,
+                                  child: TextFieldWidget(
+                                    hintText: AppString.material,
+                                    label: AppString.material,
+                                    initialValue: e.name,
+                                    enabled: false,
+                                  ),
+                                ),
+                          CommonStyle.widthSpace(context: context),
+                          e.name.toLowerCase().contains("pipe")
+                              ? Flexible(
+                                  flex: 3,
+                                  child: TextFieldWidget(
+                                    hintText: e.unit,
+                                    label: e.unit,
+                                    controller: e.controller,
+                                    enabled: true,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (val) {
+                                      BlocProvider.of<FormFeasibilityBloc>(
+                                              context)
+                                          .add(SelectQTYLMCCopperEvent(
+                                              context: context, qtyValue: val));
+                                    },
+                                  ),
+                                )
+                              : Flexible(
+                                  flex: 3,
+                                  child: TextFieldWidget(
+                                    hintText: e.unit,
+                                    label: e.unit,
+                                    controller: e.controller,
+                                    enabled: true,
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                )
+                        ],
+                      ),
+                      CommonStyle.vertical(context: context),
+                    ],
+                  );
+                }).toList(),
+              ),
+              dataState.isCopperExtraPipe == false
+                  ? _extraCopperPipeWidget(dataState: dataState)
+                  : DottedLoaderWidget(),
+              CommonStyle.vertical(context: context),
+              _extraTotalPipeWidget(dataState: dataState),
+              CommonStyle.vertical(context: context),
+              // if(AppConfig.instanceInit()!.client == Client.hpoil)...[
+              //   _manualPipeCheckbox(dataState: dataState),
+              //   CommonStyle.vertical(context: context),
+              //   _manualPipLengthWidget(dataState: dataState),
+              //   CommonStyle.vertical(context: context),
+              // ],
+            ],
+          )
+        : SizedBox.shrink();
+  }
+
+  Widget _manualPipeCheckbox({required FormFeasibilityDataState dataState}){
+    return  CheckboxWidget(
+      title: "Manual Pipe",
+      value: dataState.isManualPipe,
+      onChanged: (v) => BlocProvider.of<FormFeasibilityBloc>(context).add(SelectManualPipeEvent(isValue: v!)),
+    );
+  }
+  Widget _manualPipLengthWidget({required FormFeasibilityDataState dataState}){
+    return dataState.isManualPipe ? TextFieldWidget(
+      hintText: AppString.extraPipe,
+      label: AppString.extraPipe,
+      controller: dataState.manualPipLengthCtrl,
+    ) : SizedBox.shrink();
+  }
+
+  Widget _extraGiPipeWidget({required FormFeasibilityDataState dataState}) {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPipe,
         label: AppString.extraPipe,
-        controller: dataState.extraPipeController,
+        controller: dataState.extraGiPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
         hintText: AppString.extraPrice,
         label: AppString.extraPrice,
-        controller: dataState.extraPriceController,
+        controller: dataState.extraGiPriceCtrl,
       ),
     );
   }
 
-  Widget _proposedDateController(
-      {required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" ||
-            stateData.checkFeasibleValue?.key == "3"
-        ? Container()
-        : TextFieldWidget(
+
+  Widget _extraCopperPipeWidget({required FormFeasibilityDataState dataState}) {
+    return RowWidget(
+      widget1: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPipeCopper,
+        label: AppString.extraPipeCopper,
+        controller: dataState.extraCopperPipeCtrl,
+      ),
+      widget2: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPriceCopper,
+        label: AppString.extraPriceCopper,
+        controller: dataState.extraCopperPriceCtrl,
+      ),
+    );
+  }
+
+  Widget _extraTotalPipeWidget({required FormFeasibilityDataState dataState}) {
+    return RowWidget(
+      widget1: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPipeTotal,
+        label: AppString.extraPipeTotal,
+        controller: dataState.extraTotalPipeCtrl,
+      ),
+      widget2: TextFieldWidget(
+        enabled: false,
+        hintText: AppString.extraPriceTotal,
+        label: AppString.extraPriceTotal,
+        controller: dataState.extraTotalPriceCtrl,
+      ),
+    );
+  }
+
+  Widget _proposedDateController({required FormFeasibilityDataState stateData}) {
+    return stateData.checkFeasibleValue.key == "1" ? TextFieldWidget(
             star: AppString.star,
             hintText: AppString.lmcProDate,
             label: AppString.lmcProDate,
@@ -300,18 +430,18 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               BlocProvider.of<FormFeasibilityBloc>(context)
                   .add(SelectProposedDateEvent(context: context));
             },
-          );
+          ) : SizedBox.shrink();
   }
 
   Widget _lmcReasonDropdown({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" ||
-            stateData.checkFeasibleValue?.key == "3"
+    return stateData.checkFeasibleValue.key == "2"
+        || stateData.checkFeasibleValue.key == "3"
         ? Center(
             child: DropdownWidget<GetConstantModel>(
               star: AppString.star,
               label: AppString.lmcReason,
               hint: AppString.lmcReason,
-              dropdownValue: stateData.lmcReasonValue?.key == null
+              dropdownValue: stateData.lmcReasonValue.key == null
                   ? null
                   : stateData.lmcReasonValue,
               items: stateData.listOfLMCReason,
@@ -323,13 +453,13 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               },
             ),
           )
-        : Container();
+        : SizedBox.shrink();
   }
 
   Widget _reasonController({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "2" ||
-            stateData.checkFeasibleValue?.key == "3"
-        ? stateData.lmcReasonValue?.key == "Others"
+    return stateData.checkFeasibleValue.key == "2"
+        || stateData.checkFeasibleValue.key == "3"
+        ? stateData.lmcReasonValue.key == "Others"
             ? CommonStyle.col(
                 context: context,
                 child: TextFieldWidget(
@@ -342,12 +472,12 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                   controller: stateData.reasonController,
                 ),
               )
-            : Container()
-        : Container();
+            : SizedBox.shrink()
+        : SizedBox.shrink();
   }
 
   Widget _remarksController({required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "3"
+    return stateData.checkFeasibleValue.key == "3"
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
@@ -359,12 +489,11 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               controller: stateData.remarksController,
             ),
           )
-        : Container();
+        : SizedBox.shrink();
   }
 
-  Widget _followUpDateController(
-      {required FormFeasibilityDataState stateData}) {
-    return stateData.checkFeasibleValue?.key == "3"
+  Widget _followUpDateController({required FormFeasibilityDataState stateData}) {
+    return stateData.checkFeasibleValue.key == "3"
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
@@ -386,7 +515,15 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               },
             ),
           )
-        : Container();
+        : SizedBox.shrink();
+  }
+
+  Widget _tfAvailCheckbox({required FormFeasibilityDataState dataState}){
+    return  CheckboxWidget(
+      title: "TF Available",
+      value: dataState.isTFAvail,
+      onChanged: (v) => BlocProvider.of<FormFeasibilityBloc>(context).add(SelectTFAvailableEvent(isValue: v!)),
+    );
   }
 
   Widget _button({required FormFeasibilityDataState dataState}) {

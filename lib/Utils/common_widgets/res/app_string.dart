@@ -96,8 +96,12 @@ class AppString {
   static String srNumber = "SR";
   static String rfcDeclarationDate = "RFC Declaration Date";
   static String proNgcConDate = "NGC Conversion Date";
-  static String extraPrice = "Extra Price";
-  static String extraPipe = "Extra Pipe";
+  static String extraPrice = "Extra GI Price";
+  static String extraPipe = "Extra GI Pipe";
+  static String extraPriceCopper = "Extra Copper Price";
+  static String extraPipeCopper = "Extra Copper Pipe";
+  static String extraPriceTotal = "Extra Total Price";
+  static String extraPipeTotal = "Extra Total Pipe";
   static String photo = "Photo";
   static String ngcReportFile = "Ngc Report File";
   static String pneumatic = "Pneumatic Test Report";
@@ -109,6 +113,7 @@ class AppString {
   static String meterPhoto = "Meter Photo";
   static String material = "Material";
   static String pipe = "Pipe";
+  static String pipeCopper = "Pipe Copper";
   static String meter = "Meter Photo";
   static String reason = "Reason";
   static String remarks = "Remarks";

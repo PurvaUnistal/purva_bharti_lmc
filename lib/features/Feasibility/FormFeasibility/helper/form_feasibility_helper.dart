@@ -85,6 +85,28 @@ class FormFeasibilityHelper {
     return null;
   }
 
+
+  static Future<List<FreeMaterialData>?> getAllFreeMaterialCopperApi({
+    required BuildContext context,
+  }) async {
+    String propertyCategoryId = await SharedPref.getString(
+        key: PrefsValue.propertyCategoryId);
+    try {
+      Map<String, String> para = {
+        "schema": ctx.user.schema ?? "",
+        "property_category_id": propertyCategoryId,
+      };
+      String json = Uri(queryParameters: para).query;
+
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterialCopper + json, context: context);
+      AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
+      return materialModel.data;
+    } catch (e) {
+      log("getAllFreeMaterialCopper-->${e.toString()}");
+    }
+    return null;
+  }
+
   static Future<List<GetConstantModel>?> getRFCApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
@@ -181,8 +203,15 @@ class FormFeasibilityHelper {
     required GetConstantModel isFeasible,
     required String materialId,
     required String qtyLMC,
-    required String extraPipe,
-    required String extraPrice,
+    required String giExtraPipe,
+    required String giExtraPrice,
+    required String copperExtraPipe,
+    required String copperExtraPrice,
+    required String totalExtraPipe,
+    required String totalExtraPrice,
+    required String manualPipe,
+    required String manualPipeLength,
+    required String tfStatus,
   }) async {
 
     String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
@@ -201,8 +230,15 @@ class FormFeasibilityHelper {
         "follow_up_date": followUpDate,
         "material_id_lmc": materialId,
         "qty_lmc": qtyLMC,
-        "extra_pipe": extraPipe,
-        "extra_price": extraPrice,
+        "gi_pipe" : giExtraPipe.isNotEmpty ? giExtraPipe.trim().toString() : "0.0",
+        "gi_pipe_price" : giExtraPrice.isNotEmpty ? giExtraPrice.trim().toString() : "0.0",
+        "cu_pipe" : copperExtraPipe.isNotEmpty ? copperExtraPipe.trim().toString() : "0.0",
+        "cu_pipe_price" : copperExtraPrice.isNotEmpty ? copperExtraPrice.trim().toString() : "0.0",
+        "extra_pipe": totalExtraPipe.isNotEmpty ? totalExtraPipe.trim().toString() : "0.0",
+        "extra_price": totalExtraPrice.isNotEmpty ? totalExtraPrice.trim().toString() : "0.0",
+        "manual_pipe": manualPipe.isNotEmpty ? manualPipe.trim().toString() : "0.0",
+        "manual_pipe_length": manualPipeLength.isNotEmpty ? manualPipeLength.trim().toString() : "0.0",
+        "tf_status": tfStatus,
       };
       log("para-->${para}");
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);

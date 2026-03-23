@@ -119,8 +119,6 @@ class CaptureCameraHouseEvent extends FormInstallationEvent{
   List<Object> get props => [context,];
 }
 
-
-
 class MeterInitReadingEvent extends FormInstallationEvent{
   @override
   List<Object?> get props => [];
@@ -150,6 +148,14 @@ class SelectQTYLMCEvent extends FormInstallationEvent {
   List<Object> get props => [qtyValue,context,];
 }
 
+class SelectQTYLMCCopperEvent extends FormInstallationEvent {
+  final String qtyValue;
+  final BuildContext context;
+  SelectQTYLMCCopperEvent({required this.qtyValue,required this.context});
+  @override
+  // TODO: implement props
+  List<Object> get props => [qtyValue,context,];
+}
 
 class SelectLocationOfHouseEvent extends FormInstallationEvent {
   final BuildContext context;
@@ -221,6 +227,14 @@ class SelectGasifiedRadioEvent extends FormInstallationEvent {
   @override
   List<Object?> get props => [option,];
 }
+
+class SelectManualPipeEvent extends FormInstallationEvent {
+  final bool isValue;
+  SelectManualPipeEvent({required this.isValue,});
+  @override
+  List<Object?> get props => [isValue];
+}
+
 
 class SubmitFormInstallationEvent extends FormInstallationEvent {
   final BuildContext context;

@@ -15,7 +15,6 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMat
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/helper/form_feasibility_helper.dart';
-import 'package:lmc/features/Home/presentation/home_view.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_event.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_state.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
@@ -53,6 +52,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     on<ToggleOptionEvent>(_selectToggleOption);
     on<SelectGasifiedRadioEvent>(_selectGasifiedRadio);
     on<SelectQTYLMCEvent>(_selectQTYLMC);
+    on<SelectQTYLMCCopperEvent>(_selectQTYLMCCopper);
+    on<SelectManualPipeEvent>(_selectManualPipe);
     on<SubmitFormInstallationEvent>(_submit);
   }
 
@@ -65,7 +66,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   bool isCheckMeterMismatch = false;
   bool isCheckRegulatorMismatch = false;
   bool isCheckMR = false;
-  bool isExtraPipe = false;
+  bool isGiExtraPipe = false;
+  bool isCopperExtraPipe = false;
+  bool isManualPipe = false;
 
 
   String currentDate = "";
@@ -97,10 +100,17 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   List<GetConstantModel> listOfReadyNGC = [];
   List<LmcReasonModel> listOfDelayReason = [];
   List<LmcReasonModel> listOfRegulatorType = [];
+
   List<FreeMaterialData> listOfAllMaterial = [];
   List<MaterialItem> materialList = [];
   List<String> listOfAllMaterialId = [];
   List<String> listOfQtyLMC = [];
+
+  List<FreeMaterialData> listOfAllMaterialCopper = [];
+  List<MaterialItem> materialListCopper = [];
+  List<String> listOfAllMaterialIdCopper = [];
+  List<String> listOfQtyLMCCopper = [];
+
   List<GetConstantModel> listOfAllRFC = [];
   List<String> coatTapList = [];
   List<String> selectedCoatTap = [];
@@ -127,8 +137,16 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   TextEditingController mrNumberController = TextEditingController();
   TextEditingController meterReadingDate = TextEditingController();
   TextEditingController tapOffLengthController = TextEditingController();
-  TextEditingController extraPipeController = TextEditingController(text: "0");
-  TextEditingController extraPriceController = TextEditingController(text: "0");
+  TextEditingController manualPipLengthCtrl = TextEditingController();
+
+  TextEditingController extraGiPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraGiPriceCtrl = TextEditingController(text: "0");
+
+  TextEditingController extraCopperPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraCopperPriceCtrl = TextEditingController(text: "0");
+
+  TextEditingController extraTotalPipeCtrl = TextEditingController(text: "0");
+  TextEditingController extraTotalPriceCtrl = TextEditingController(text: "0");
 
   FocusNode meterIniReading1FocusNode = FocusNode();
   FocusNode meterIniReading2FocusNode = FocusNode();
@@ -156,7 +174,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     isCheckMeterMismatch = false;
     isCheckRegulatorMismatch = false;
     isCheckMR = false;
-    isExtraPipe = false;
+    isGiExtraPipe = false;
+    isCopperExtraPipe = false;
+    isManualPipe = false;
     housePhoto = File("");
     rfcCardPhoto = File("");
     pneumaticTestReportPhoto = File("");
@@ -184,14 +204,26 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     materialList = [];
     listOfAllMaterialId = [];
     listOfQtyLMC = [];
+
+    listOfAllMaterialCopper = [];
+    materialListCopper = [];
+    listOfAllMaterialIdCopper = [];
+    listOfQtyLMCCopper = [];
+
+
     listOfAllRFC = [];
     meterNoId = "";
     extraPipe = "0";
     extraPrice = "0";
     meterTesting = "0";
     paintingOfGIPipe = "0";
-    extraPipeController.text = "0";
-    extraPriceController.text = "0";
+    manualPipLengthCtrl.text = "";
+    extraGiPipeCtrl = TextEditingController(text: "0");
+    extraGiPriceCtrl = TextEditingController(text: "0");
+    extraCopperPriceCtrl = TextEditingController(text: "0");
+    extraCopperPipeCtrl = TextEditingController(text: "0");
+    extraTotalPipeCtrl = TextEditingController(text: "0");
+    extraTotalPriceCtrl = TextEditingController(text: "0");
     meterConnectionMeterController.text = "";
     mrNumberController.text = "";
     meterNumberSerialController.text = "";
@@ -234,9 +266,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
     ]);
     await fetchMetersApi(context: event.context, meterSerial: "");
-    await  fetchFreeMaterialApi(
-      context: event.context,
-    );
+    await fetchFreeMaterialApi(context: event.context);
+    await fetchFreeMaterialCopperApi(context: event.context);
    await checkDelayReason();
     _eventCompleted(emit);
   }
@@ -404,46 +435,155 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     }
   }
 
-  _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
-    double sumOfPipes = 0.0;
-    for (int i = 0; i < materialList.length; i++) {
-      MaterialItem dataOfAllMaterial = materialList[i];
-      if (dataOfAllMaterial.name.toLowerCase().contains("pipe")) {
-        if (dataOfAllMaterial.controller.text != "") {
-          sumOfPipes += double.parse(dataOfAllMaterial.controller.text);
-          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
-        } else {
-          dataOfAllMaterial.controller.text = '';
-          listOfQtyLMC = materialList.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+  fetchFreeMaterialCopperApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getAllFreeMaterialCopperApi(context: context,);
+    if (res != null) {
+      listOfAllMaterialCopper = res;
+      materialListCopper.addAll(listOfAllMaterialCopper.map((data) {
+        return MaterialItem(
+          value: '0',
+          id: data.id ?? "",
+          name: data.materialName ?? "",
+          unit: data.materialUnit ?? "",
+          controller: TextEditingController(),
+        );
+      }));
+      print("materialListCopper--->${materialListCopper}");
+      listOfAllMaterialIdCopper = listOfAllMaterialCopper.map((e) => e.id.toString(),).toList();
+      listOfQtyLMCCopper = materialListCopper.map((e) => e.controller.text.isEmpty ? "0" : e.controller.text).toList();
+      return res;
+    }
+  }
+
+  double _getSum(List<MaterialItem> list) {
+    return list.fold(0.0, (sum, item) {
+      if (item.name.toLowerCase().contains("pipe")) {
+        final value = item.controller.text.trim();
+        return sum + (value.isEmpty ? 0.0 : double.parse(value));
+      }
+      return sum;
+    });
+  }
+
+  Future<void> _calculateExtraPipe({
+    required Emitter emit,
+    required BuildContext context,
+  }) async {
+    double sumOfPipes = _getSum(materialList);
+    double sumOfPipesCopper = _getSum(materialListCopper);
+
+    double totalSum = sumOfPipes + sumOfPipesCopper;
+
+    print("Total Sum ---> $totalSum");
+
+    /// Declare OUTSIDE
+    var giRes;
+    var copperRes;
+
+    if (totalSum > 15.0) {
+      isGiExtraPipe = true;
+      isCopperExtraPipe = true;
+      _eventCompleted(emit);
+
+      /// Reset BEFORE API
+      extraGiPriceCtrl.text = "";
+      extraGiPipeCtrl.text = "";
+      extraCopperPriceCtrl.text = "";
+      extraCopperPipeCtrl.text = "";
+
+      /// Run APIs in parallel
+      await Future.wait([
+        if (sumOfPipes != 0.0)
+          Future(() async {
+            giRes = await FormInstallationHelper.getExtraPipeDetailsApi(
+              context: context,
+              pipeQty: sumOfPipes.toString(),
+            );
+          }),
+
+        if (sumOfPipesCopper != 0.0)
+          Future(() async {
+            copperRes =
+            await FormInstallationHelper.getExtraPipeDetailsCopperApi(
+              context: context,
+              pipeQty: sumOfPipesCopper.toString(),
+              giqty: sumOfPipes.toString(),
+            );
+          }),
+      ]);
+
+      /// Apply Results
+      if (giRes != null) {
+        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraGiPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+      } else {
+        extraGiPriceCtrl.text = '0';
+        extraGiPipeCtrl.text = '0';
+      }
+
+      if (copperRes != null) {
+        if(sumOfPipes < 15.0){
+          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+          extraCopperPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+        }else{
+          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPipeCtrl.text = "${copperRes.cupipe} ${copperRes.pipeUm}";
         }
+      } else {
+        extraCopperPriceCtrl.text = '0';
+        extraCopperPipeCtrl.text = '0';
       }
-    }
-    _eventCompleted(emit);
-    print("sumOfPipes---> $sumOfPipes");
-    if (sumOfPipes > 15.0) {
-      isExtraPipe = true;
-      _eventCompleted(emit);
-      var res = await FormInstallationHelper.getExtraPipeDetailsApi(context: event.context, pipeQty: sumOfPipes.toString());
-      extraPriceController.text = "";
-      extraPipeController.text = "";
-      extraPipe = "";
-      extraPrice = "";
-      if (res != null) {
-        isExtraPipe = false;
-        _eventCompleted(emit);
-        extraPriceController.text = res.price.toString() + ' ' + res.priceUm.toString();
-        extraPipeController.text = res.qty.toString() + ' ' + res.pipeUm.toString();
-        extraPipe = res.qty.toString();
-        extraPrice = res.price.toString();
-        _eventCompleted(emit);
+      /// ✅ SET TOTAL ONLY ONCE (VERY IMPORTANT)
+      if (copperRes != null) {
+        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        extraTotalPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+      } else if (giRes != null) {
+        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraTotalPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+      } else {
+        extraTotalPriceCtrl.text = '0';
+        extraTotalPipeCtrl.text = '0';
       }
+
+      isGiExtraPipe = false;
+      isCopperExtraPipe = false;
     } else {
-      isExtraPipe = false;
-      _eventCompleted(emit);
-      extraPriceController.text = '0';
-      extraPipeController.text = '0';
+      /// RESET BOTH
+      isGiExtraPipe = false;
+      isCopperExtraPipe = false;
+
+      extraGiPriceCtrl.text = '0';
+      extraGiPipeCtrl.text = '0';
+
+      extraCopperPriceCtrl.text = '0';
+      extraCopperPipeCtrl.text = '0';
+
+      extraTotalPriceCtrl.text = '0';
+      extraTotalPipeCtrl.text = '0';
     }
     _eventCompleted(emit);
+  }
+
+  _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
+    listOfQtyLMC = materialList
+        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+        .toList();
+
+    await _calculateExtraPipe(
+      emit: emit,
+      context: event.context,
+    );
+  }
+
+  _selectQTYLMCCopper(SelectQTYLMCCopperEvent event, emit) async {
+    listOfQtyLMCCopper = materialListCopper
+        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+        .toList();
+
+    await _calculateExtraPipe(
+      emit: emit,
+      context: event.context,
+    );
   }
 
   _meterInitReading(MeterInitReadingEvent event, emit) {
@@ -698,6 +838,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
+  _selectManualPipe(SelectManualPipeEvent event, emit) {
+    isManualPipe = event.isValue;
+    log("isManualPipe-- ${isManualPipe.toString()}");
+    _eventCompleted(emit);
+  }
+
   _submit(SubmitFormInstallationEvent event, emit) async {
     try {
       var validationCheck = await FormInstallationHelper.validationSubmit(
@@ -721,6 +867,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         fittingDetails: listOfAllMaterialId.toList().toString().replaceAll('[', '').replaceAll(']', ''),
         pipeLength: materialList,
         meterPhoto: meterPhoto.path.toString(),
+        rfcPhoto: rfcCardPhoto.path.toString(),
+        pneumaticPhoto: pneumaticTestReportPhoto.path.toString(),
         houseLat: latOfHouseController.text.trim().toString(),
         houseLong: longOfHouseController.text.trim().toString(),
         housePhoto: housePhoto.path.toString(),
@@ -730,8 +878,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         _eventCompleted(emit);
         var res = await FormInstallationHelper.saveLMCInstallation(
           context: event.context,
-          extraPipe: extraPipe.toString(),
-          extraPrice: extraPrice.toString(),
+          giExtraPipe: extraGiPipeCtrl.text.trim().toString(),
+          giExtraPrice: extraGiPriceCtrl.text.trim().toString(),
+          copperExtraPipe: extraCopperPipeCtrl.text.trim().toString(),
+          copperExtraPrice: extraCopperPriceCtrl.text.trim().toString(),
+          totalExtraPipe: extraTotalPipeCtrl.text.trim().toString(),
+          totalExtraPrice: extraTotalPriceCtrl.text.trim().toString(),
           workCompletedDate: installationDateController.text.trim().toString(),
           rfcDate: rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),
@@ -789,7 +941,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     emit(FormInstallationDataState(
       tapOffValue: tapOffValue,
       isLoader: isLoader,
-      isExtraPipe: isExtraPipe,
+      isManualPipe: isManualPipe,
       isInstallRegulator: isInstallRegulator,
       isCheckRegulatorMismatch: isCheckRegulatorMismatch,
       isCheckMeterMismatch: isCheckMeterMismatch,
@@ -834,8 +986,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       longOfHouseController: longOfHouseController,
       ngConversionDateController: ngConversionDateController,
       mrNumberController: mrNumberController,
-      extraPipeController: extraPipeController,
-      extraPriceController: extraPriceController,
+      manualPipLengthCtrl: manualPipLengthCtrl,
       regulatorSerialController: regulatorSerialController,
       meterNumberSerialController: meterNumberSerialController,
       tapOffLengthController: tapOffLengthController,
@@ -844,6 +995,15 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       selectedCoatTap:selectedCoatTap,
       selectedGasified: selectedGasified,
       gasifiedList: gasifiedList,
+      isGiExtraPipe: isGiExtraPipe,
+      isCopperExtraPipe: isCopperExtraPipe,
+      extraGiPipeCtrl: extraGiPipeCtrl,
+      extraGiPriceCtrl: extraGiPriceCtrl,
+      extraCopperPipeCtrl: extraCopperPipeCtrl,
+      extraCopperPriceCtrl: extraCopperPriceCtrl,
+      extraTotalPriceCtrl: extraTotalPriceCtrl,
+      extraTotalPipeCtrl: extraTotalPipeCtrl,
+      materialListCopper: materialListCopper,
     ));
   }
 

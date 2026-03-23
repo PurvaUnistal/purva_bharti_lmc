@@ -21,7 +21,7 @@ class Styles {
   static TextStyle subTitle = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800);
   static TextStyle subStar = const TextStyle(fontSize: 8, fontWeight: FontWeight.w800, color: Colors.red);
 
-  static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.red);
+  static TextStyle stars = const TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
   static TextStyle table = const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
 
   static TextStyle labels = TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color:  EnvironmentConfig.of(context!)!.primaryTheme,);

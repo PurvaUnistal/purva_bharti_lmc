@@ -8,9 +8,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialIt
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 
-abstract class FormInstallationState extends Equatable {
-
-}
+abstract class FormInstallationState extends Equatable {}
 
 class FormInstallationInitialState extends FormInstallationState {
   @override
@@ -24,7 +22,9 @@ class FormInstallationPageLoadState extends FormInstallationInitialState {
 
 class FormInstallationDataState extends FormInstallationInitialState {
   final bool isLoader;
-  final bool isExtraPipe;
+  final bool isGiExtraPipe;
+  final bool isCopperExtraPipe;
+  final bool isManualPipe;
   final bool isInstallRegulator;
   final bool isCheckMeterMismatch;
   final bool isCheckRegulatorMismatch;
@@ -53,6 +53,7 @@ class FormInstallationDataState extends FormInstallationInitialState {
   final List<FreeMaterialData> listOfAllMaterial;
   final List<GetConstantModel> listOfAllRFC;
   final List<MaterialItem> materialList;
+  final List<MaterialItem> materialListCopper;
   final FocusNode meterIniReading1FocusNode;
   final FocusNode meterIniReading2FocusNode;
   final FocusNode meterIniReading3FocusNode;
@@ -61,8 +62,13 @@ class FormInstallationDataState extends FormInstallationInitialState {
   final TextEditingController longOfHouseController;
   final TextEditingController mrNumberController;
   final TextEditingController ngConversionDateController;
-  final TextEditingController extraPipeController;
-  final TextEditingController extraPriceController;
+  final TextEditingController manualPipLengthCtrl;
+  final TextEditingController extraGiPipeCtrl;
+  final TextEditingController extraGiPriceCtrl;
+  final TextEditingController extraCopperPipeCtrl;
+  final TextEditingController extraCopperPriceCtrl;
+  final TextEditingController extraTotalPriceCtrl;
+  final TextEditingController extraTotalPipeCtrl;
   final TextEditingController meterConnectionMeterController;
   final TextEditingController bpNumberController;
   final TextEditingController trNumberController;
@@ -86,7 +92,9 @@ class FormInstallationDataState extends FormInstallationInitialState {
     required this.tapOffValue,
     required this.isInstallRegulator,
     required this.isLoader,
-    required this.isExtraPipe,
+    required this.isGiExtraPipe,
+    required this.isCopperExtraPipe,
+    required this.isManualPipe,
     required this.isCheckRegulatorMismatch,
     required this.isCheckMeterMismatch,
     required this.isBtnLoader,
@@ -112,6 +120,7 @@ class FormInstallationDataState extends FormInstallationInitialState {
     required this.listOfAllMaterial,
     required this.listOfAllRFC,
     required this.materialList,
+    required this.materialListCopper,
     required this.listOfQtyLMC,
     required this.meterIniReading1FocusNode,
     required this.meterIniReading2FocusNode,
@@ -131,8 +140,7 @@ class FormInstallationDataState extends FormInstallationInitialState {
     required this.longOfHouseController,
     required this.mrNumberController,
     required this.ngConversionDateController,
-    required this.extraPipeController,
-    required this.extraPriceController,
+    required this.manualPipLengthCtrl,
     required this.meterNumberSerialController,
     required this.regulatorSerialController,
     required this.tapOffLengthController,
@@ -140,13 +148,20 @@ class FormInstallationDataState extends FormInstallationInitialState {
     required this.coatTapList,
     required this.selectedGasified,
     required this.gasifiedList,
-
+    required this.extraGiPipeCtrl,
+    required this.extraGiPriceCtrl,
+    required this.extraCopperPipeCtrl,
+    required this.extraCopperPriceCtrl,
+    required this.extraTotalPriceCtrl,
+    required this.extraTotalPipeCtrl,
   });
 
   FormInstallationDataState copyWith({
     String? tapOffValue,
     bool? isLoader,
-    bool? isExtraPipe,
+    bool? isGiExtraPipe,
+    bool? isCopperExtraPipe,
+    bool? isManualPipe,
     bool? isInstallRegulator,
     bool? isCheckMeterMismatch,
     bool? isCheckRegulatorMismatch,
@@ -174,24 +189,35 @@ class FormInstallationDataState extends FormInstallationInitialState {
     List<FreeMaterialData>? listOfAllMaterial,
     List<GetConstantModel>? listOfAllRFC,
     List<MaterialItem>? materialList,
+    List<MaterialItem>? materialListCopper,
     List<String>? selectedCoatTap,
     List<String>? coatTapList,
     String? selectedGasified,
     List<String>? gasifiedList,
+    TextEditingController? extraGiPipeCtrl,
+    TextEditingController? extraGiPriceCtrl,
+    TextEditingController? extraCopperPipeCtrl,
+    TextEditingController? extraCopperPriceCtrl,
+    TextEditingController? extraTotalPriceCtrl,
+    TextEditingController? extraTotalPipeCtrl,
   }) {
     return FormInstallationDataState(
       isLoader: isLoader ?? this.isLoader,
       tapOffValue: tapOffValue ?? this.tapOffValue,
-      isExtraPipe: isExtraPipe ?? this.isExtraPipe,
+      isGiExtraPipe: isGiExtraPipe ?? this.isGiExtraPipe,
+      isCopperExtraPipe: isCopperExtraPipe ?? this.isCopperExtraPipe,
+      isManualPipe: isManualPipe ?? this.isManualPipe,
       isInstallRegulator: isInstallRegulator ?? this.isInstallRegulator,
       isCheckMeterMismatch: isCheckMeterMismatch ?? this.isCheckMeterMismatch,
-      isCheckRegulatorMismatch: isCheckRegulatorMismatch ?? this.isCheckRegulatorMismatch,
+      isCheckRegulatorMismatch:
+          isCheckRegulatorMismatch ?? this.isCheckRegulatorMismatch,
       isBtnLoader: isBtnLoader ?? this.isBtnLoader,
       isDelayReason: isDelayReason ?? this.isDelayReason,
       isRegulator: isRegulator ?? this.isRegulator,
       isSelected: isSelected ?? this.isSelected,
       rfcCardPhoto: rfcCardPhoto ?? this.rfcCardPhoto,
-      pneumaticTestReportPhoto: pneumaticTestReportPhoto ?? this.pneumaticTestReportPhoto,
+      pneumaticTestReportPhoto:
+          pneumaticTestReportPhoto ?? this.pneumaticTestReportPhoto,
       installationPhoto: installationPhoto ?? this.installationPhoto,
       meterPhoto: meterPhoto ?? this.meterPhoto,
       housePhoto: housePhoto ?? this.housePhoto,
@@ -203,13 +229,16 @@ class FormInstallationDataState extends FormInstallationInitialState {
       listOfTypeOfNr: listOfTypeOfNr ?? this.listOfTypeOfNr,
       listOfDelayReason: listOfDelayReason ?? this.listOfDelayReason,
       listOfRegulatorType: listOfRegulatorType ?? this.listOfRegulatorType,
-      listOfMeterNumberSerial: listOfMeterNumberSerial ?? this.listOfMeterNumberSerial,
-      listOfRegulatorSerial: listOfRegulatorSerial ?? this.listOfRegulatorSerial,
+      listOfMeterNumberSerial:
+          listOfMeterNumberSerial ?? this.listOfMeterNumberSerial,
+      listOfRegulatorSerial:
+          listOfRegulatorSerial ?? this.listOfRegulatorSerial,
       listOfMRSerial: listOfMRSerial ?? this.listOfMRSerial,
       listOfQtyLMC: listOfQtyLMC ?? this.listOfQtyLMC,
       listOfAllMaterial: listOfAllMaterial ?? this.listOfAllMaterial,
       listOfAllRFC: listOfAllRFC ?? this.listOfAllRFC,
       materialList: materialList ?? this.materialList,
+      materialListCopper: materialListCopper ?? this.materialListCopper,
       selectedCoatTap: selectedCoatTap ?? this.selectedCoatTap,
       gasifiedList: gasifiedList ?? this.gasifiedList,
       coatTapList: coatTapList ?? this.coatTapList,
@@ -232,11 +261,16 @@ class FormInstallationDataState extends FormInstallationInitialState {
       longOfHouseController: longOfHouseController,
       mrNumberController: mrNumberController,
       ngConversionDateController: ngConversionDateController,
-      extraPipeController: extraPipeController,
-      extraPriceController: extraPriceController,
+      manualPipLengthCtrl: manualPipLengthCtrl,
       meterNumberSerialController: meterNumberSerialController,
       regulatorSerialController: regulatorSerialController,
       tapOffLengthController: tapOffLengthController,
+      extraGiPipeCtrl: extraGiPipeCtrl ?? this.extraGiPipeCtrl,
+      extraGiPriceCtrl: extraGiPriceCtrl ?? this.extraGiPriceCtrl,
+      extraCopperPipeCtrl: extraCopperPipeCtrl ?? this.extraCopperPipeCtrl,
+      extraCopperPriceCtrl: extraCopperPriceCtrl ?? this.extraCopperPriceCtrl,
+      extraTotalPriceCtrl: extraTotalPriceCtrl ?? this.extraTotalPriceCtrl,
+      extraTotalPipeCtrl: extraTotalPipeCtrl ?? this.extraTotalPipeCtrl,
     );
   }
 
@@ -244,61 +278,69 @@ class FormInstallationDataState extends FormInstallationInitialState {
   // TODO: implement props
   List<Object> get props => [
     tapOffValue,
-        isLoader,
-        isExtraPipe,
-        isInstallRegulator,
-        isCheckRegulatorMismatch,
-        isCheckMeterMismatch,
-        isBtnLoader,
-        isDelayReason,
-        isRegulator,
-        meterPhoto,
-        housePhoto,
-        meterNoValue,
-        typeOfNrValue,
-        delayReasonValue,
-        listOfMeterNumberSerial,
-        listOfTypeOfNr,
-        listOfDelayReason,
-        listOfMeterNumber,
-        regulatorTypeValue,
-        listOfRegulatorType,
-        meterConnectionMeterController,
-        bpNumberController,
-        trNumberController,
-        proposedDateController,
-        rfcDateController,
-        feasibilityDateController,
-        installationDateController,
-        meterIniReading1Controller,
-        meterIniReading2Controller,
-        meterIniReading3Controller,
-        meterInitialReadingController,
-        meterIniReading1FocusNode,
-        meterIniReading2FocusNode,
-        meterIniReading3FocusNode,
-        isSelected,
-        listOfQtyLMC,
-        rfcCardPhoto,
-        pneumaticTestReportPhoto,
-        installationPhoto,
-        listOfRegulatorSerial,
+    isLoader,
+    isGiExtraPipe,
+    isCopperExtraPipe,
+    isManualPipe,
+    isInstallRegulator,
+    isCheckRegulatorMismatch,
+    isCheckMeterMismatch,
+    isBtnLoader,
+    isDelayReason,
+    isRegulator,
+    meterPhoto,
+    housePhoto,
+    meterNoValue,
+    typeOfNrValue,
+    delayReasonValue,
+    listOfMeterNumberSerial,
+    listOfTypeOfNr,
+    listOfDelayReason,
+    listOfMeterNumber,
+    regulatorTypeValue,
+    listOfRegulatorType,
+    meterConnectionMeterController,
+    bpNumberController,
+    trNumberController,
+    proposedDateController,
+    rfcDateController,
+    feasibilityDateController,
+    installationDateController,
+    meterIniReading1Controller,
+    meterIniReading2Controller,
+    meterIniReading3Controller,
+    meterInitialReadingController,
+    meterIniReading1FocusNode,
+    meterIniReading2FocusNode,
+    meterIniReading3FocusNode,
+    isSelected,
+    listOfQtyLMC,
+    rfcCardPhoto,
+    pneumaticTestReportPhoto,
+    installationPhoto,
+    listOfRegulatorSerial,
     listOfMRSerial,
 
-        listOfAllMaterial,
-        listOfAllRFC,
-        materialList,
-        latOfHouseController,
-        longOfHouseController,
-        ngConversionDateController,
-        mrNumberController,
-        extraPipeController,
-        extraPriceController,
-        meterNumberSerialController,
-        regulatorSerialController,
+    listOfAllMaterial,
+    listOfAllRFC,
+    materialList,
+    materialListCopper,
+    latOfHouseController,
+    longOfHouseController,
+    ngConversionDateController,
+    mrNumberController,
+    manualPipLengthCtrl,
+    meterNumberSerialController,
+    regulatorSerialController,
     tapOffLengthController,
     selectedCoatTap,
     coatTapList,
     selectedGasified,
-      ];
+    extraGiPipeCtrl,
+    extraGiPriceCtrl,
+    extraCopperPipeCtrl,
+    extraCopperPriceCtrl,
+    extraTotalPriceCtrl,
+    extraTotalPipeCtrl,
+  ];
 }

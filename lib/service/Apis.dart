@@ -31,8 +31,10 @@ class Apis {
   static get getNgcMeters => "getNgcMeters?";
   static get getNgcRegulators => "getNgcRegulators?";
   static get getAllFreeMaterial => "getAllFreeMaterial?";
+  static get getAllFreeMaterialCopper => "getAllFreePipeMaterialCopper?";
   static get getAllFreePipeMaterial => "getAllFreePipeMaterial?";
-  static get getExtraPipeDetails => "getExtraPipeDetails?";
+  static get getExtraPipeDetails => "getExtraPipeDetails";
+  static get getExtraPipeDetailsCopper => "getExtraPipeDetailsCopper";
   static get saveLmcFeasibility => "saveLmcFeasibility";
   static get saveLmcInstallation => "saveLmcInstallation";
   static get saveLmcRFCInstallation  => "saveLmcRFCInstallation";
