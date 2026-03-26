@@ -181,14 +181,14 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
-  Widget _installationDateController(
-      {required FormInstallationDataState dataState}) {
+  Widget _installationDateController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
       star: AppString.star,
       hintText: AppString.installationDate,
       label: AppString.installationDate,
       textInputAction: TextInputAction.done,
       enabled: true,
+      readOnly: true,
       controller: dataState.installationDateController,
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
@@ -557,6 +557,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               label: AppString.rfcDate,
               textInputAction: TextInputAction.done,
               enabled: true,
+              readOnly: true,
               controller: dataState.rfcDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,
@@ -583,6 +584,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
               star: AppString.star,
               hintText: AppString.ngProposedDate,
               label: AppString.ngProposedDate,
+              readOnly: true,
               controller: dataState.ngConversionDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,

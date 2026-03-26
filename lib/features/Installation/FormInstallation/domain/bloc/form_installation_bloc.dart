@@ -73,14 +73,21 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
   String currentDate = "";
   String installRegulator = "0";
-  String extraPipe = "0";
-  String extraPrice = "0";
+
   String meterTesting = "0";
   String paintingOfGIPipe = "0";
 
   String tapOffValue = "";
   String supplyOfPaintValue = "";
   String gasifiedValue = "";
+
+
+  String extraGiPipe = "0.0";
+  String extraGiPrice = "0.0";
+  String extraCopperPipe = "0.0";
+  String extraCopperPrice = "0.0";
+  String extraTotalPipe = "0.0";
+  String extraTotalPrice = "0.0";
 
   ListOfMeterNo meterNoValue = ListOfMeterNo();
   GetConstantModel typeOfNrValue = GetConstantModel();
@@ -213,8 +220,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
     listOfAllRFC = [];
     meterNoId = "";
-    extraPipe = "0";
-    extraPrice = "0";
+    extraGiPipe = "0.0";
+    extraGiPrice = "0.0";
+    extraCopperPipe = "0.0";
+    extraCopperPrice = "0.0";
+    extraTotalPipe = "0.0";
+    extraTotalPrice = "0.0";
     meterTesting = "0";
     paintingOfGIPipe = "0";
     manualPipLengthCtrl.text = "";
@@ -490,6 +501,14 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       extraGiPipeCtrl.text = "";
       extraCopperPriceCtrl.text = "";
       extraCopperPipeCtrl.text = "";
+      extraGiPipe = "0.0";
+      extraGiPrice = "0.0";
+
+      extraCopperPipe = "0.0";
+      extraCopperPrice = "0.0";
+
+      extraTotalPipe = "0.0";
+      extraTotalPrice = "0.0";
 
       /// Run APIs in parallel
       await Future.wait([
@@ -514,35 +533,52 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
       /// Apply Results
       if (giRes != null) {
-        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
         extraGiPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraGiPipe = giRes.qty.toString();
+        extraGiPrice = giRes.price.toString();
       } else {
-        extraGiPriceCtrl.text = '0';
         extraGiPipeCtrl.text = '0';
+        extraGiPriceCtrl.text = '0';
+        extraGiPipe  = '0';
+        extraGiPrice  = '0';
       }
 
       if (copperRes != null) {
-        if(sumOfPipes < 15.0){
-          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        if (sumOfPipes < 15.0) {
           extraCopperPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
-        }else{
-          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+          extraCopperPipe = copperRes.qty.toString();
+          extraCopperPrice = copperRes.price.toString();
+        } else {
           extraCopperPipeCtrl.text = "${copperRes.cupipe} ${copperRes.pipeUm}";
+          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPipe = copperRes.cupipe.toString();
+          extraCopperPrice = copperRes.cuprice.toString();
         }
       } else {
-        extraCopperPriceCtrl.text = '0';
         extraCopperPipeCtrl.text = '0';
+        extraCopperPriceCtrl.text = '0';
+        extraCopperPipe = '0';
+        extraCopperPrice = '0';
       }
+
       /// ✅ SET TOTAL ONLY ONCE (VERY IMPORTANT)
       if (copperRes != null) {
-        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
         extraTotalPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        extraTotalPipe = copperRes.qty.toString();
+        extraTotalPrice = copperRes.price.toString();
       } else if (giRes != null) {
-        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
         extraTotalPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraTotalPipe = giRes.qty.toString();
+        extraTotalPrice = giRes.price.toString();
       } else {
         extraTotalPriceCtrl.text = '0';
         extraTotalPipeCtrl.text = '0';
+        extraTotalPipe  = '0';
+        extraTotalPrice  = '0';
       }
 
       isGiExtraPipe = false;
@@ -560,9 +596,19 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
       extraTotalPriceCtrl.text = '0';
       extraTotalPipeCtrl.text = '0';
+
+      extraGiPipe = "0.0";
+      extraGiPrice = "0.0";
+
+      extraCopperPipe = "0.0";
+      extraCopperPrice = "0.0";
+
+      extraTotalPipe = "0.0";
+      extraTotalPrice = "0.0";
     }
     _eventCompleted(emit);
   }
+
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
     listOfQtyLMC = materialList
@@ -878,12 +924,12 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
         _eventCompleted(emit);
         var res = await FormInstallationHelper.saveLMCInstallation(
           context: event.context,
-          giExtraPipe: extraGiPipeCtrl.text.trim().toString(),
-          giExtraPrice: extraGiPriceCtrl.text.trim().toString(),
-          copperExtraPipe: extraCopperPipeCtrl.text.trim().toString(),
-          copperExtraPrice: extraCopperPriceCtrl.text.trim().toString(),
-          totalExtraPipe: extraTotalPipeCtrl.text.trim().toString(),
-          totalExtraPrice: extraTotalPriceCtrl.text.trim().toString(),
+          giExtraPipe: extraGiPipe.trim().toString(),
+          giExtraPrice: extraGiPrice.trim().toString(),
+          copperExtraPipe: extraCopperPipe.trim().toString(),
+          copperExtraPrice: extraCopperPrice.trim().toString(),
+          totalExtraPipe: extraTotalPipe.trim().toString(),
+          totalExtraPrice: extraTotalPrice.trim().toString(),
           workCompletedDate: installationDateController.text.trim().toString(),
           rfcDate: rfcDateController.text.trim().toString(),
           meterReadingDate: meterReadingDate.text.trim().toString(),

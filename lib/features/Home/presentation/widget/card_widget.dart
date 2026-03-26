@@ -19,9 +19,14 @@ class CardWidget extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.22,
           height: MediaQuery.of(context).size.height * 0.091,
           child: Card(
-            color: Colors.white,
             shadowColor: EnvironmentConfig.of(context)!.secondaryTheme,
-            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8), // optional rounded corners
+              side: BorderSide(
+                color: EnvironmentConfig.of(context)!.secondaryTheme, // border color
+                width: 0.5, // border thickness
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

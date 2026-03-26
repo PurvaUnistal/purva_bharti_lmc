@@ -29,6 +29,22 @@ class FormFeasibilityHelper {
     return null;
   }
 
+  static Future<List<GetConstantModel>?> getPipelineStatusApi({required BuildContext context}) async {
+    try {
+      Map<String, String> para = {
+        "key": "pipelinestatus",
+      };
+      String json = Uri(queryParameters: para).query;
+      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      List<GetConstantModel> response = GetConstantModel.mapToList(res);
+      return response;
+    } catch (e) {
+      log("getRFCApi-->${e.toString()}");
+    }
+
+    return null;
+  }
+
   static Future<List<GetConstantModel>?> getLMCReasonApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
@@ -149,6 +165,7 @@ class FormFeasibilityHelper {
     required String proposedDate,
     required GetConstantModel isFeasible,
     required GetConstantModel lmcReasonValue,
+    required GetConstantModel pipelineStatusValue,
     required String reason,
     required String followUpDate,
   }) async {
@@ -156,41 +173,52 @@ class FormFeasibilityHelper {
       if (feasibilityDate.isEmpty) {
         Utils.errorSnackBar(msg: "The Feasibility Date field is required.", context: context);
         return false;
-      } else if (isFeasible.key == null) {
+      }
+
+      if (isFeasible.key == null) {
         Utils.errorSnackBar(msg: "The Is Feasible field is required.", context: context);
         return false;
       }
-      else if(isFeasible.key == "1"){
-      /*  if (int.parse(pipeLength.reduce((value, element) => (int.parse(value) + int.parse(element)).toString())) <= 0) {
-          Utils.errorSnackBar(msg: "Please enter at least one pipe detail.", context: context);
-          return false;
-        } else */
-          if (proposedDate.isEmpty) {
+
+      // ✅ Feasible
+      if (isFeasible.key == "1") {
+        if (proposedDate.isEmpty) {
           Utils.errorSnackBar(msg: "The LMC Proposed Date field is required.", context: context);
           return false;
         }
       }
-       else if (isFeasible.key == "2" || isFeasible.key == "3") {
+
+      // ❌ Not Feasible / Conditional
+      if (isFeasible.key == "2" || isFeasible.key == "3") {
         if (lmcReasonValue.key == null) {
           Utils.errorSnackBar(msg: "The LMC Reason field is required.", context: context);
           return false;
-        } else if (lmcReasonValue.key == "Others") {
-          if (reason.isEmpty) {
-            Utils.errorSnackBar(msg: "The Reason field is required.", context: context);
-            return false;
-          }
+        }
+
+        if (lmcReasonValue.key == "Others" && reason.isEmpty) {
+          Utils.errorSnackBar(msg: "The Reason field is required.", context: context);
+          return false;
         }
       }
+
+      // 📅 Follow-up required
       if (isFeasible.key == "3") {
         if (followUpDate.isEmpty) {
           Utils.errorSnackBar(msg: "The Follow Up Date field is required.", context: context);
           return false;
         }
       }
+
+      // ✅ ALWAYS validate pipeline status
+      if (pipelineStatusValue.key == null) {
+        Utils.errorSnackBar(msg: "The Pipeline Status field is required.", context: context);
+        return false;
+      }
+
       return true;
     } catch (e) {
       log("catchValidationSubmit--->${e.toString()}");
-      return true;
+      return false; // ⚠️ better to return false on error
     }
   }
 
@@ -201,6 +229,7 @@ class FormFeasibilityHelper {
     required String comment,
     required String followUpDate,
     required GetConstantModel isFeasible,
+    required GetConstantModel pipelineStatus,
     required String materialId,
     required String qtyLMC,
     required String giExtraPipe,
@@ -221,15 +250,16 @@ class FormFeasibilityHelper {
       Map<String, String> para = {
         "lmcId": lmcId,
         "dmaId": dma,
-        "user_id": ctx.user.id ?? "",
-        "proposed_date": proposedDate,
-        "feasibility_visit_date": feasibilityDate,
-        "schema": ctx.user.schema ?? "",
-        "is_feasible": isFeasible.key,
-        "comment": comment,
-        "follow_up_date": followUpDate,
-        "material_id_lmc": materialId,
-        "qty_lmc": qtyLMC,
+        "user_id": ctx.user.id.toString() ?? "",
+        "proposed_date": proposedDate.toString(),
+        "feasibility_visit_date": feasibilityDate.toString(),
+        "schema": ctx.user.schema.toString() ?? "",
+        "is_feasible": isFeasible.key.toString(),
+        "pipeline_status": pipelineStatus.key.toString(),
+        "comment": comment.toString(),
+        "follow_up_date": followUpDate.toString(),
+        "material_id_lmc": materialId.toString(),
+        "qty_lmc": qtyLMC.toString(),
         "gi_pipe" : giExtraPipe.isNotEmpty ? giExtraPipe.trim().toString() : "0.0",
         "gi_pipe_price" : giExtraPrice.isNotEmpty ? giExtraPrice.trim().toString() : "0.0",
         "cu_pipe" : copperExtraPipe.isNotEmpty ? copperExtraPipe.trim().toString() : "0.0",
@@ -238,7 +268,7 @@ class FormFeasibilityHelper {
         "extra_price": totalExtraPrice.isNotEmpty ? totalExtraPrice.trim().toString() : "0.0",
         "manual_pipe": manualPipe.isNotEmpty ? manualPipe.trim().toString() : "0.0",
         "manual_pipe_length": manualPipeLength.isNotEmpty ? manualPipeLength.trim().toString() : "0.0",
-        "tf_status": tfStatus,
+        "tf_status": tfStatus.toString(),
       };
       log("para-->${para}");
       var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);

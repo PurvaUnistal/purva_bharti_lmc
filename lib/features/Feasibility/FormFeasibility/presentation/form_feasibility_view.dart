@@ -111,6 +111,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           _followUpDateController(stateData: dataState),
           _remarksController(stateData: dataState),
           CommonStyle.vertical(context: context),
+          _pipelineStatusDropdown(stateData: dataState),
           CommonStyle.vertical(context: context),
           _tfAvailCheckbox(dataState: dataState),
           CommonStyle.vertical(context: context),
@@ -159,6 +160,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               hintText: AppString.lmcFeaDate,
               label: AppString.lmcFeaDate,
               enabled: true,
+              readOnly: true,
               controller: stateData.feasibilityDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,
@@ -186,7 +188,23 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
       items: stateData.listOfCheckFeasible,
       onChanged: (val) {
         BlocProvider.of<FormFeasibilityBloc>(context)
-            .add(SelectCheckFeasibilityValueEvent(checkFeasibility: val));
+            .add(SelectCheckFeasibilityValueEvent(checkFeasibility: val!));
+      },
+    );
+  }
+
+  Widget _pipelineStatusDropdown({required FormFeasibilityDataState stateData}) {
+    return DropdownWidget<GetConstantModel>(
+      star: AppString.star,
+      label: AppString.pipelineStatus,
+      hint: AppString.pipelineStatus,
+      dropdownValue: stateData.pipelineStatusValue.value == null
+          ? null
+          : stateData.pipelineStatusValue,
+      items: stateData.listOfPipelineStatus,
+      onChanged: (val) {
+        BlocProvider.of<FormFeasibilityBloc>(context)
+            .add(SelectPipelineStatusValueEvent(checkPipelineStatus: val!));
       },
     );
   }
@@ -418,6 +436,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
             hintText: AppString.lmcProDate,
             label: AppString.lmcProDate,
             enabled: true,
+      readOnly: true,
             controller: stateData.proposedDateController,
             suffixIcon: IconButtonWidget(
               iconData: Icons.calendar_today,
@@ -446,10 +465,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                   : stateData.lmcReasonValue,
               items: stateData.listOfLMCReason,
               onChanged: (val) {
-                print(
-                    "stateData.lmcReasonValue -->${stateData.lmcReasonValue}");
                 BlocProvider.of<FormFeasibilityBloc>(context)
-                    .add(SelectLMCReasonValueEvent(lmcReasonValue: val));
+                    .add(SelectLMCReasonValueEvent(lmcReasonValue: val!));
               },
             ),
           )
@@ -501,6 +518,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
               hintText: AppString.followUpDate,
               label: AppString.followUpDate,
               enabled: true,
+              readOnly: true,
               controller: stateData.followUpDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,

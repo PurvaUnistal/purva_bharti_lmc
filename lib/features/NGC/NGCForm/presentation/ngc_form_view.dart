@@ -318,6 +318,7 @@ class _NGCFormViewState extends State<NGCFormView> {
       label: AppString.ngConversionDate,
       hintText: AppString.ngConversionDate,
       enabled: true,
+      readOnly: true,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.text,
       controller: dataState.ngConversionDateController,

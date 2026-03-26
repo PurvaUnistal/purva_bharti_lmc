@@ -180,6 +180,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       label: AppString.installationDate,
       textInputAction: TextInputAction.next,
       enabled: true,
+      readOnly: true,
       controller: stateData.installationDateController,
       suffixIcon: IconButtonWidget(
         iconData: Icons.calendar_today,
@@ -544,6 +545,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
               label: AppString.rfcDate,
               textInputAction: TextInputAction.next,
               enabled: true,
+              readOnly: true,
               controller: stateData.rfcDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,
@@ -570,6 +572,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
               star: AppString.star,
               hintText: AppString.ngProposedDate,
               label: AppString.ngProposedDate,
+              readOnly: true,
               controller: stateData.ngConversionDateController,
               suffixIcon: IconButtonWidget(
                 iconData: Icons.calendar_today,

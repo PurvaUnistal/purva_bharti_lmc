@@ -20,13 +20,13 @@ class ExtraPipePriceModel {
 }
 
 class ExtraPipePriceData {
-  String? qty;
-  int? price;
-  int? cupipeextra;
-  int? gipipe;
-  int? giprice;
-  int? cupipe;
-  int? cuprice;
+  dynamic qty;
+  dynamic price;
+  dynamic cupipeextra;
+  dynamic gipipe;
+  dynamic giprice;
+  dynamic cupipe;
+  dynamic cuprice;
   String? pipeUm;
   String? priceUm;
   String? pipeProvided;

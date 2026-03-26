@@ -9,7 +9,7 @@ class AppString {
   static const Map<Client, String> _releaseDates = {
     Client.mahaNagar: "22-07-2025",
     Client.purvaBharti: "11-06-2025",
-    Client.hpoil: "6-03-2026",
+    Client.hpoil: "26-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
   };
@@ -73,6 +73,7 @@ class AppString {
   static String installationDate = "Date of Installation";
   static String lmcFeasibilityDate = "LMC Feasibility Date";
   static String checkFeasibility = "Is Feasible?";
+  static String pipelineStatus = "Pipeline Status";
   static String lmcReason = "LMC Reason";
   static String meterConnection = "Meter Connection";
   static String regulatorType = "Regulator Type";

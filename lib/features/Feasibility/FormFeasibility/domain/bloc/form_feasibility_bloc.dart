@@ -24,6 +24,7 @@ class FormFeasibilityBloc
     on<SelectFeasibilityDateEvent>(_selectFeasibilityDate);
     on<SelectFollowUpDateEvent>(_selectFollowUpDate);
     on<SelectCheckFeasibilityValueEvent>(_selectCheckFeasibilityValue);
+    on<SelectPipelineStatusValueEvent>(_selectPipelineStatusValueEvent);
     on<SelectLMCReasonValueEvent>(_selectLMCReasonValue);
     on<SelectQTYLMCEvent>(_selectQTYLMC);
     on<SelectQTYLMCCopperEvent>(_selectQTYLMCCopper);
@@ -40,12 +41,13 @@ class FormFeasibilityBloc
   bool isTFAvail = false;
   bool isManualPipe = false;
 
-
   GetConstantModel checkFeasibleValue = GetConstantModel();
   GetConstantModel lmcReasonValue = GetConstantModel();
+  GetConstantModel pipelineStatusValue = GetConstantModel();
 
   List<GetConstantModel> listOfCheckFeasible = [];
   List<GetConstantModel> listOfLMCReason = [];
+  List<GetConstantModel> listOfPipelineStatus = [];
 
   List<FreeMaterialData> listOfAllMaterial = [];
   List<String> listOfAllMaterialId = [];
@@ -59,6 +61,13 @@ class FormFeasibilityBloc
   List<MaterialItem> listOfMaterialCopper = [];
   List<String> listOfQtyLMCCopper = [];
   String qtyDataCopper = "";
+
+  String extraGiPipe = "0.0";
+  String extraGiPrice = "0.0";
+  String extraCopperPipe = "0.0";
+  String extraCopperPrice = "0.0";
+  String extraTotalPipe = "0.0";
+  String extraTotalPrice = "0.0";
 
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController trNumberController = TextEditingController();
@@ -90,26 +99,34 @@ class FormFeasibilityBloc
     isManualPipe = false;
     checkFeasibleValue = GetConstantModel();
     lmcReasonValue = GetConstantModel();
+    pipelineStatusValue = GetConstantModel();
     listOfCheckFeasible = [];
     listOfLMCReason = [];
+    listOfPipelineStatus = [];
     listOfAllMaterial = [];
     listOfAllMaterialId = [];
     materialList = [];
     listOfMaterial = [];
     listOfQtyLMC = [];
     listOfAllMaterialCopper = [];
-     listOfAllMaterialIdCopper = [];
+    listOfAllMaterialIdCopper = [];
     materialListCopper = [];
-   listOfMaterialCopper = [];
+    listOfMaterialCopper = [];
     listOfQtyLMCCopper = [];
-     qtyDataCopper = "";
+    qtyDataCopper = "";
     manualPipLengthCtrl.text = "";
+    extraGiPipe = "0.0";
+    extraGiPrice = "0.0";
+    extraCopperPipe = "0.0";
+    extraCopperPrice = "0.0";
+    extraTotalPipe = "0.0";
+    extraTotalPrice = "0.0";
     extraGiPipeCtrl = TextEditingController(text: "0");
     extraGiPriceCtrl = TextEditingController(text: "0");
     extraCopperPriceCtrl = TextEditingController(text: "0");
     extraCopperPipeCtrl = TextEditingController(text: "0");
-     extraTotalPipeCtrl = TextEditingController(text: "0");
-     extraTotalPriceCtrl = TextEditingController(text: "0");
+    extraTotalPipeCtrl = TextEditingController(text: "0");
+    extraTotalPriceCtrl = TextEditingController(text: "0");
     proposedDateController.text = '';
     reasonController.text = '';
     remarksController.text = '';
@@ -128,6 +145,7 @@ class FormFeasibilityBloc
     ).format(DateTime.now());
     await Future.wait(<Future>[
       fetchCheckFeasibilityApi(context: event.context),
+      fetchPipelineStatusApi(context: event.context),
       fetchLMCReasonApi(context: event.context),
       fetchFreeMaterialApi(context: event.context),
       fetchFreeMaterialCopperApi(context: event.context),
@@ -188,14 +206,17 @@ class FormFeasibilityBloc
 
   _selectCheckFeasibilityValue(SelectCheckFeasibilityValueEvent event, emit) {
     checkFeasibleValue = event.checkFeasibility;
-    print(" event.checkFeasibility;-->${event.checkFeasibility}");
-    print(" checkFeasibleValue-->${checkFeasibleValue}");
+    _eventCompleted(emit);
+  }
+
+
+  _selectPipelineStatusValueEvent(SelectPipelineStatusValueEvent event, emit) {
+    pipelineStatusValue = event.checkPipelineStatus;
     _eventCompleted(emit);
   }
 
   _selectLMCReasonValue(SelectLMCReasonValueEvent event, emit) {
     lmcReasonValue = event.lmcReasonValue;
-    print(lmcReasonValue);
     _eventCompleted(emit);
   }
 
@@ -298,6 +319,14 @@ class FormFeasibilityBloc
       extraGiPipeCtrl.text = "";
       extraCopperPriceCtrl.text = "";
       extraCopperPipeCtrl.text = "";
+      extraGiPipe = "0.0";
+      extraGiPrice = "0.0";
+
+      extraCopperPipe = "0.0";
+      extraCopperPrice = "0.0";
+
+      extraTotalPipe = "0.0";
+      extraTotalPrice = "0.0";
 
       /// Run APIs in parallel
       await Future.wait([
@@ -312,45 +341,62 @@ class FormFeasibilityBloc
         if (sumOfPipesCopper != 0.0)
           Future(() async {
             copperRes =
-            await FormInstallationHelper.getExtraPipeDetailsCopperApi(
-              context: context,
-              pipeQty: sumOfPipesCopper.toString(),
-              giqty: sumOfPipes.toString(),
-            );
+                await FormInstallationHelper.getExtraPipeDetailsCopperApi(
+                  context: context,
+                  pipeQty: sumOfPipesCopper.toString(),
+                  giqty: sumOfPipes.toString(),
+                );
           }),
       ]);
 
       /// Apply Results
       if (giRes != null) {
-        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
         extraGiPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+        extraGiPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraGiPipe = giRes.qty.toString();
+        extraGiPrice = giRes.price.toString();
       } else {
-        extraGiPriceCtrl.text = '0';
         extraGiPipeCtrl.text = '0';
+        extraGiPriceCtrl.text = '0';
+        extraGiPipe  = '0';
+        extraGiPrice  = '0';
       }
 
       if (copperRes != null) {
-        if(sumOfPipes < 15.0){
-          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        if (sumOfPipes < 15.0) {
           extraCopperPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
-        }else{
-          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+          extraCopperPipe = copperRes.qty.toString();
+          extraCopperPrice = copperRes.price.toString();
+        } else {
           extraCopperPipeCtrl.text = "${copperRes.cupipe} ${copperRes.pipeUm}";
+          extraCopperPriceCtrl.text = "${copperRes.cuprice} ${copperRes.priceUm}";
+          extraCopperPipe = copperRes.cupipe.toString();
+          extraCopperPrice = copperRes.cuprice.toString();
         }
       } else {
-        extraCopperPriceCtrl.text = '0';
         extraCopperPipeCtrl.text = '0';
+        extraCopperPriceCtrl.text = '0';
+        extraCopperPipe = '0';
+        extraCopperPrice = '0';
       }
+
       /// ✅ SET TOTAL ONLY ONCE (VERY IMPORTANT)
       if (copperRes != null) {
-        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
         extraTotalPipeCtrl.text = "${copperRes.qty} ${copperRes.pipeUm}";
+        extraTotalPriceCtrl.text = "${copperRes.price} ${copperRes.priceUm}";
+        extraTotalPipe = copperRes.qty.toString();
+        extraTotalPrice = copperRes.price.toString();
       } else if (giRes != null) {
-        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
         extraTotalPipeCtrl.text = "${giRes.qty} ${giRes.pipeUm}";
+        extraTotalPriceCtrl.text = "${giRes.price} ${giRes.priceUm}";
+        extraTotalPipe = giRes.qty.toString();
+        extraTotalPrice = giRes.price.toString();
       } else {
         extraTotalPriceCtrl.text = '0';
         extraTotalPipeCtrl.text = '0';
+        extraTotalPipe  = '0';
+        extraTotalPrice  = '0';
       }
 
       isGiExtraPipe = false;
@@ -368,30 +414,35 @@ class FormFeasibilityBloc
 
       extraTotalPriceCtrl.text = '0';
       extraTotalPipeCtrl.text = '0';
+
+      extraGiPipe = "0.0";
+      extraGiPrice = "0.0";
+
+      extraCopperPipe = "0.0";
+      extraCopperPrice = "0.0";
+
+      extraTotalPipe = "0.0";
+      extraTotalPrice = "0.0";
     }
     _eventCompleted(emit);
   }
 
   _selectQTYLMC(SelectQTYLMCEvent event, emit) async {
-    listOfQtyLMC = listOfMaterial
-        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
-        .toList();
+    listOfQtyLMC =
+        listOfMaterial
+            .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+            .toList();
 
-    await _calculateExtraPipe(
-      emit: emit,
-      context: event.context,
-    );
+    await _calculateExtraPipe(emit: emit, context: event.context);
   }
 
   _selectQTYLMCCopper(SelectQTYLMCCopperEvent event, emit) async {
-    listOfQtyLMCCopper = listOfMaterialCopper
-        .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
-        .toList();
+    listOfQtyLMCCopper =
+        listOfMaterialCopper
+            .map((e) => e.controller.text.isEmpty ? "0" : e.controller.text)
+            .toList();
 
-    await _calculateExtraPipe(
-      emit: emit,
-      context: event.context,
-    );
+    await _calculateExtraPipe(emit: emit, context: event.context);
   }
 
   fetchCheckFeasibilityApi({required BuildContext context}) async {
@@ -400,6 +451,16 @@ class FormFeasibilityBloc
     );
     if (res != null) {
       listOfCheckFeasible = res;
+      return res;
+    }
+  }
+
+  fetchPipelineStatusApi({required BuildContext context}) async {
+    var res = await FormFeasibilityHelper.getPipelineStatusApi(
+      context: context,
+    );
+    if (res != null) {
+      listOfPipelineStatus = res;
       return res;
     }
   }
@@ -432,6 +493,7 @@ class FormFeasibilityBloc
         pipeLength: listOfQtyLMC,
         isFeasible: checkFeasibleValue,
         lmcReasonValue: lmcReasonValue,
+          pipelineStatusValue:pipelineStatusValue,
         proposedDate: proposedDateController.text.trim().toString(),
         reason: reasonController.text.trim().toString(),
         followUpDate: followUpDateController.text.trim().toString(),
@@ -444,14 +506,15 @@ class FormFeasibilityBloc
           feasibilityDate: feasibilityDateController.text..trim().toString(),
           proposedDate: proposedDateController.text.trim().toString(),
           isFeasible: checkFeasibleValue,
+          pipelineStatus: pipelineStatusValue,
           comment: reasonController.text..trim().toString(),
           followUpDate: followUpDateController.text.trim().toString(),
-          giExtraPipe: extraGiPipeCtrl.text.trim().toString(),
-          giExtraPrice: extraGiPriceCtrl.text.trim().toString(),
-          copperExtraPipe: extraCopperPipeCtrl.text.trim().toString(),
-          copperExtraPrice: extraCopperPriceCtrl.text.trim().toString(),
-          totalExtraPipe: extraTotalPipeCtrl.text.trim().toString(),
-          totalExtraPrice: extraTotalPriceCtrl.text.trim().toString(),
+          giExtraPipe: extraGiPipe.trim().toString(),
+          giExtraPrice: extraGiPrice.trim().toString(),
+          copperExtraPipe: extraCopperPipe.trim().toString(),
+          copperExtraPrice: extraCopperPrice.trim().toString(),
+          totalExtraPipe: extraTotalPipe.trim().toString(),
+          totalExtraPrice: extraTotalPrice.trim().toString(),
           manualPipe: isManualPipe ? "1" : "0",
           manualPipeLength: manualPipLengthCtrl.text.trim().toString(),
           tfStatus: isTFAvail ? "1" : "0",
@@ -500,8 +563,10 @@ class FormFeasibilityBloc
         isGiExtraPipe: isGiExtraPipe,
         checkFeasibleValue: checkFeasibleValue,
         lmcReasonValue: lmcReasonValue,
+        pipelineStatusValue: pipelineStatusValue,
         listOfCheckFeasible: listOfCheckFeasible,
         listOfLMCReason: listOfLMCReason,
+        listOfPipelineStatus: listOfPipelineStatus,
         materialList: materialList,
         bpNumberController: bpNumberController,
         trNumberController: trNumberController,

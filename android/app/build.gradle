@@ -12,15 +12,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
 
 def keystoreProperties = new Properties()
 
@@ -47,8 +38,6 @@ android {
         applicationId "com"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
     }
 
     flavorDimensions "app"
@@ -110,10 +99,10 @@ android {
             applicationIdSuffix ".unistal.hpoil.lmc"
             resValue "string", "app_name", "HPOIL LMC"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/unistal_logo",
-                    appIconRound: "@mipmap/unistal_logo"
+                    appIcon: "@mipmap/hp_oil_logo",
+                    appIconRound: "@mipmap/hp_oil_logo"
             ]
-            versionCode 1
+            versionCode 2
             versionName "1.0.0-HPOIL"
             def keystorePropertiesFile = rootProject.file('hpoil.properties')
             if (keystorePropertiesFile.exists()) {

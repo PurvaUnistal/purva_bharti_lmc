@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 
 abstract class FormFeasibilityEvent extends Equatable{}
 
@@ -37,15 +38,23 @@ class SelectFollowUpDateEvent extends FormFeasibilityEvent {
 }
 
 class SelectCheckFeasibilityValueEvent extends FormFeasibilityEvent {
-  final dynamic checkFeasibility;
+  final GetConstantModel checkFeasibility;
   SelectCheckFeasibilityValueEvent({required this.checkFeasibility});
   @override
   // TODO: implement props
   List<Object> get props => [checkFeasibility];
 }
 
+class SelectPipelineStatusValueEvent extends FormFeasibilityEvent {
+  final GetConstantModel checkPipelineStatus;
+  SelectPipelineStatusValueEvent({required this.checkPipelineStatus});
+  @override
+  // TODO: implement props
+  List<Object> get props => [checkPipelineStatus];
+}
+
 class SelectLMCReasonValueEvent extends FormFeasibilityEvent {
-  final dynamic lmcReasonValue;
+  final GetConstantModel lmcReasonValue;
   SelectLMCReasonValueEvent({required this.lmcReasonValue});
   @override
   // TODO: implement props

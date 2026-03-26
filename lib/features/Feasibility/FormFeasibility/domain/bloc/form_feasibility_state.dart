@@ -25,8 +25,10 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
   final bool isManualPipe;
   final GetConstantModel checkFeasibleValue;
   final GetConstantModel lmcReasonValue;
+  final GetConstantModel pipelineStatusValue;
   final List<GetConstantModel> listOfCheckFeasible;
   final List<GetConstantModel> listOfLMCReason;
+  final List<GetConstantModel> listOfPipelineStatus;
   final List<MaterialItem> materialList;
   final List<MaterialItem> materialListCopper;
   final TextEditingController manualPipLengthCtrl;
@@ -55,8 +57,10 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
     required this.isManualPipe,
     required this.checkFeasibleValue,
     required this.lmcReasonValue,
+    required this.pipelineStatusValue,
     required this.listOfCheckFeasible,
     required this.listOfLMCReason,
+    required this.listOfPipelineStatus,
     required this.materialList,
     required this.materialListCopper,
     required this.bpNumberController,
@@ -88,8 +92,10 @@ class FormFeasibilityDataState extends FormFeasibilityInitialState {
     isManualPipe,
     checkFeasibleValue,
     lmcReasonValue,
+    pipelineStatusValue,
     listOfCheckFeasible,
     listOfLMCReason,
+    listOfPipelineStatus,
     materialList,
     materialListCopper,
 

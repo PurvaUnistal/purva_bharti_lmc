@@ -24,6 +24,7 @@ class TextFieldWidget extends StatelessWidget {
   final GestureTapCallback? onTap;
   final ValueChanged<String>? onFieldSubmitted;
   final bool? enabled;
+  final bool? readOnly;
   final bool? autofocus;
   final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
@@ -52,6 +53,7 @@ class TextFieldWidget extends StatelessWidget {
     this.onTap,
     this.onFieldSubmitted,
     this.enabled,
+    this.readOnly,
     this.autofocus,
     this.textCapitalization,
     this.textInputAction,
@@ -67,12 +69,17 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       cursorColor:  EnvironmentConfig.of(context)!.primaryTheme,
-      focusNode: focusNode,
+      showCursor: readOnly == true ? false : true,
+      enableInteractiveSelection: readOnly == true ? false : true,
+      focusNode: readOnly == true
+          ? FocusNode(canRequestFocus: false)
+          : focusNode,
       autofillHints: autofillHints,
       onTap: onTap,
       autofocus: autofocus ?? false,
       onFieldSubmitted: onFieldSubmitted,
       enabled: enabled ?? true,
+      readOnly: readOnly ?? false,
       maxLength: maxLength,
       maxLines: maxLine ?? 1,
       onChanged: onChanged,
