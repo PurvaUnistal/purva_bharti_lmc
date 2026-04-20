@@ -14,7 +14,7 @@
        android:name="${applicationName}"
        android:allowBackup="true"
        android:hardwareAccelerated="false"
-       android:icon="@mipmap/hp_oil_logo"
+       android:icon="@mipmap/agcl_logo"
        android:label="@string/app_name"
        android:largeHeap="true"
        android:requestLegacyExternalStorage="true"

@@ -60,7 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       context: event.context,
     );
     if (validationCheck == true) {
-  //    try {
+      try {
         _isPageLoader = true;
         _eventCompleted(emit);
         var res = await LoginHelper.loginData(
@@ -68,8 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: passwordController.text.trim().toString(),
           context: event.context,
         );
-        if (res != null && res.user!.role == "ngc" ||
-            res!.user!.role == "lmc") {
+        if (res != null && res.user != null&& res.user!.role == "ngc" || res!.user!.role == "lmc") {
           _isPageLoader = false;
           _eventCompleted(emit);
           if (res.user != null) {
@@ -106,11 +105,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             context: event.context,
           );
         }
-      // } catch (e) {
-      //   _isPageLoader = false;
-      //   _eventCompleted(emit);
-      //   log("catchLoginBloc-->${e.toString()}");
-      // }
+      } catch (e) {
+        _isPageLoader = false;
+        _eventCompleted(emit);
+        log("catchLoginBloc-->${e.toString()}");
+      }
     }
     _eventCompleted(emit);
   }

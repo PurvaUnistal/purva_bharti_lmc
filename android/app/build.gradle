@@ -109,6 +109,17 @@ android {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
         }
+        prodAGCL {
+            dimension "app"
+            applicationIdSuffix ".unistal.agcl.lmc"
+            resValue "string", "app_name", "AGCL LMC"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/agcl_logo",
+                    appIconRound: "@mipmap/agcl_logo"
+            ]
+            versionCode 2
+            versionName "1.0.0-AGCL"
+        }
     }
 
     signingConfigs {
