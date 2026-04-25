@@ -157,12 +157,20 @@ class SelectQTYLMCCopperEvent extends FormInstallationEvent {
   List<Object> get props => [qtyValue,context,];
 }
 
-class SelectLocationOfHouseEvent extends FormInstallationEvent {
+class SelectLocationOfHouseEvent  extends FormInstallationEvent{
+  final double lat;
+  final double lng;
   final BuildContext context;
-  SelectLocationOfHouseEvent({required this.context});
+
+  SelectLocationOfHouseEvent({
+    required this.lat,
+    required this.lng,
+    required this.context,
+  });
+
   @override
   // TODO: implement props
-  List<Object> get props => [context];
+  List<Object?> get props => [lat,lng,context];
 }
 
 class CaptureGalleryRFCCardEvent extends FormInstallationEvent{
@@ -234,7 +242,6 @@ class SelectManualPipeEvent extends FormInstallationEvent {
   @override
   List<Object?> get props => [isValue];
 }
-
 
 class SubmitFormInstallationEvent extends FormInstallationEvent {
   final BuildContext context;

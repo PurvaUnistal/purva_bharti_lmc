@@ -5,11 +5,13 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -170,6 +172,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
   File pneumaticTestReportPhoto = File("");
   File installationPhoto = File("");
 
+  LatLng houseLatLng = LatLng(0,0);
+  Set<Marker> markers = {};
+
   _pageLoad(FormInstallationPageLoadEvent event, emit) async {
     emit(FormInstallationPageLoadState());
     isLoader = false;
@@ -184,6 +189,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     isGiExtraPipe = false;
     isCopperExtraPipe = false;
     isManualPipe = false;
+
+    houseLatLng = LatLng(0,0);
+    markers = {};
     housePhoto = File("");
     rfcCardPhoto = File("");
     pneumaticTestReportPhoto = File("");
@@ -276,6 +284,7 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     ),
 
     ]);
+    await _setHouseLocation(context: event.context);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchFreeMaterialApi(context: event.context);
     await fetchFreeMaterialCopperApi(context: event.context);
@@ -706,25 +715,51 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     _eventCompleted(emit);
   }
 
+
   _setHouseLocation({required BuildContext context}) async {
+    BitmapDescriptor? customMarkerIcon;
+    customMarkerIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(48, 48)),
+      AppIcon.houseMarker,
+    );
     var status = await Permission.location.status;
+
     if (status.isDenied) {
       status = await Permission.location.request();
     }
+
     if (status.isPermanentlyDenied) {
       await openAppSettings();
     }
 
     if (await Permission.location.isGranted) {
       var getLocation = await FormInstallationHelper.getCurrentLocation();
-      latOfHouseController =
-          TextEditingController(text: getLocation?.latitude.toString());
-      longOfHouseController =
-          TextEditingController(text: getLocation?.longitude.toString());
+
+      if (getLocation != null) {
+        final lat = getLocation.latitude;
+        final lng = getLocation.longitude;
+
+        latOfHouseController.text = lat.toString();
+        longOfHouseController.text = lng.toString();
+
+        /// ✅ IMPORTANT: update map state
+        houseLatLng = LatLng(lat, lng);
+
+        markers = {
+          Marker(
+            markerId: MarkerId("house_location"),
+            position: houseLatLng,
+            icon: customMarkerIcon ?? BitmapDescriptor.defaultMarker,
+          )
+        };
+      }
+
       return getLocation;
     } else {
       Utils.errorSnackBar(
-          msg:  "Location permission denied", context: context);
+        msg: "Location permission denied",
+        context: context,
+      );
     }
   }
 
@@ -1050,6 +1085,8 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
       extraTotalPriceCtrl: extraTotalPriceCtrl,
       extraTotalPipeCtrl: extraTotalPipeCtrl,
       materialListCopper: materialListCopper,
+      houseLatLng: houseLatLng,
+      markers: markers,
     ));
   }
 

@@ -29,4 +29,6 @@ class AppIcon {
   static String pbgplBanner = 'assets/icons/lmc-banner1.png';
   static String mglBanner = 'assets/icons/mgl_banner.png';
   static String lmcBanner = 'assets/icons/lmc_banner.png';
+
+  static String houseMarker = 'assets/markers/house_marker.png';
 }

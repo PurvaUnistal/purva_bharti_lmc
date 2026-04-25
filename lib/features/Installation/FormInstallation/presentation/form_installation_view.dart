@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lmc/Utils/common_widgets/CheckboxWidget.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
@@ -28,6 +29,8 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReaso
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/image_widget.dart';
 import 'package:lmc/features/Installation/FormInstallation/presentation/Widgets/meter_no_widget.dart';
 import 'package:lmc/features/Installation/LMCInstallation/presentation/Widgets/cameraPopWidget.dart';
+
+import 'Widgets/full_map_widget.dart';
 
 class FormInstallationView extends StatefulWidget {
   const FormInstallationView({
@@ -135,6 +138,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           ) : SizedBox.shrink(),
           _image(dataState: dataState),
           CommonStyle.vertical(context: context),
+          _googleMap(dataState: dataState),
           CommonStyle.vertical(context: context),
           _button(dataState: dataState),
           CommonStyle.vertical(context: context),
@@ -1006,13 +1010,76 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     );
   }
 
+  Widget _googleMap({required FormInstallationDataState dataState}) {
+    var h = MediaQuery.of(context).size.height;
+
+    return Stack(
+      children: [
+        Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: EnvironmentConfig.of(context)!.primaryTheme,
+              width: 1,
+            ),
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            height: h * 0.25,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: dataState.houseLatLng ?? LatLng(28.6139, 77.2090), // fallback Delhi
+                zoom: 18,
+              ),
+
+              /// ✅ show marker
+              markers: dataState.markers,
+
+              /// ✅ show current location blue dot
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+                onTap: (LatLng latLng) {
+                  BlocProvider.of<FormInstallationBloc>(context).add(
+                    SelectLocationOfHouseEvent(
+                      lat: latLng.latitude,
+                      lng: latLng.longitude,
+                      context: context,
+                    ),
+                  );
+                },
+              onMapCreated: (GoogleMapController controller) {
+                if (dataState.houseLatLng != null) {
+                  controller.animateCamera(
+                    CameraUpdate.newLatLng(dataState.houseLatLng),
+                  );
+                }
+              },
+            ),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.fullscreen),
+          onPressed: () {
+            final state = context.read<FormInstallationBloc>().state;
+
+            if (state is FormInstallationDataState) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FullMapWidget(dataState: state),
+                ),
+              );
+            }
+          },
+        )
+      ],
+    );
+  }
 
 
 
   Widget _image({required FormInstallationDataState dataState}) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    return Row(
       children: [
         ImageWidget(
           isRequired: true,

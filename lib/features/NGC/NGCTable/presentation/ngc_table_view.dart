@@ -107,7 +107,7 @@ class _NgcTableViewState extends State<NgcTableView> {
       hintText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
-      maxLength: 10,
+      maxLength: 15,
       suffixIcon: IconButtonWidget(
         iconData: Icons.search_rounded,
         onPressed: (){},

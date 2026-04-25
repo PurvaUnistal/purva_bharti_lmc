@@ -457,18 +457,57 @@ class FormInstallationHelper {
   }
 
   static Future<Position?> getCurrentLocation() async {
-    await Geolocator.requestPermission();
-    await Permission.locationAlways.request();
-    if (Platform.isAndroid) {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-          forceAndroidLocationManager: true,
-          locationSettings: LocationSettings(
+    try {
+      // Step 1: Check service enabled (GPS)
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        log('Location services are disabled.');
+        await Geolocator.openLocationSettings();
+        return null;
+      }
 
-          ));
-      log('latitude : ${position.latitude} longitude : ${position.longitude}');
+      // Step 2: Check permission (Geolocator)
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied) {
+        log('Location permission denied');
+        return null;
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        log('Location permission permanently denied');
+        await Geolocator.openAppSettings();
+        return null;
+      }
+
+      // Step 3: (Optional but recommended) Handle permission_handler
+      var status = await Permission.location.status;
+
+      if (status.isDenied) {
+        status = await Permission.location.request();
+      }
+
+      if (status.isPermanentlyDenied) {
+        await openAppSettings();
+        return null;
+      }
+
+      // Step 4: Fetch location
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: AndroidSettings(
+          accuracy: LocationAccuracy.high),
+      );
+
+      log('latitude: ${position.latitude}, longitude: ${position.longitude}');
       return position;
+
+    } catch (e) {
+      log('Error getting location: $e');
+      return null;
     }
-    return null;
   }
 }

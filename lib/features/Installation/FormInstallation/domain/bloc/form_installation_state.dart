@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
@@ -87,6 +88,8 @@ class FormInstallationDataState extends FormInstallationInitialState {
   final List<String> coatTapList;
   final String selectedGasified;
   final List<String> gasifiedList;
+  final LatLng houseLatLng;
+  final Set<Marker> markers;
 
   FormInstallationDataState({
     required this.tapOffValue,
@@ -154,6 +157,8 @@ class FormInstallationDataState extends FormInstallationInitialState {
     required this.extraCopperPriceCtrl,
     required this.extraTotalPriceCtrl,
     required this.extraTotalPipeCtrl,
+    required this.houseLatLng,
+    required this.markers,
   });
 
   FormInstallationDataState copyWith({
@@ -200,6 +205,8 @@ class FormInstallationDataState extends FormInstallationInitialState {
     TextEditingController? extraCopperPriceCtrl,
     TextEditingController? extraTotalPriceCtrl,
     TextEditingController? extraTotalPipeCtrl,
+    LatLng? houseLatLng,
+    Set<Marker>? markers,
   }) {
     return FormInstallationDataState(
       isLoader: isLoader ?? this.isLoader,
@@ -271,6 +278,8 @@ class FormInstallationDataState extends FormInstallationInitialState {
       extraCopperPriceCtrl: extraCopperPriceCtrl ?? this.extraCopperPriceCtrl,
       extraTotalPriceCtrl: extraTotalPriceCtrl ?? this.extraTotalPriceCtrl,
       extraTotalPipeCtrl: extraTotalPipeCtrl ?? this.extraTotalPipeCtrl,
+      houseLatLng: houseLatLng ?? this.houseLatLng,
+      markers: markers ?? this.markers,
     );
   }
 
@@ -342,5 +351,7 @@ class FormInstallationDataState extends FormInstallationInitialState {
     extraCopperPriceCtrl,
     extraTotalPriceCtrl,
     extraTotalPipeCtrl,
+    houseLatLng,
+    markers,
   ];
 }
