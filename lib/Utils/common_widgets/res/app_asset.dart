@@ -14,10 +14,13 @@ class AppIcon {
         ? AppIcon.vpplLogo
         :AppConfig.instanceInit()!.client == Client.vrpl
         ? AppIcon.vrplLogo
+        :AppConfig.instanceInit()!.client == Client.agcl
+        ? AppIcon.agclLogo
         : AppIcon.unistalLogo;
   }
   static String pbgplLogo = 'assets/icons/pbg_logo.png';
   static String mglLogo = 'assets/icons/mgl_logo.png';
+  static String agclLogo = 'assets/icons/agcl_logo.png';
   static String oilIndiaLogo = 'assets/icons/oil_india_logo.png';
   static String hpOilLogo = 'assets/icons/hp_oil_logo.png';
   static String vpplLogo = 'assets/icons/vppl_plcms.png';
