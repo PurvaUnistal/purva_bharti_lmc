@@ -27,9 +27,9 @@ class Apis {
   static get regulatorType => "regulatortype";
   static get getMeters => "getMeters?";
   static get getMrRegulators => "getMrRegulators?";
-  static get getRegulators => "getRegulators?";
+  static get getRegulators => "getRegulators";
   static get getNgcMeters => "getNgcMeters?";
-  static get getNgcRegulators => "getNgcRegulators?";
+  static get getNgcRegulators => "getNgcRegulators";
   static get getAllFreeMaterial => "getAllFreeMaterial?";
   static get getAllFreePipeMaterial => "getAllFreePipeMaterial?";
   static get getExtraPipeDetails => "getExtraPipeDetails?";

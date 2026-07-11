@@ -32,6 +32,8 @@ class EnvironmentConfig extends InheritedWidget {
         return "https://hpoil.smartgasnet.com/api/";
       case EnvironmentFlavors.prodAGCL:
         return "https://agcl.smartgasnet.com/api/";
+      case EnvironmentFlavors.prodHPCL:
+        return "https://hpcl.smartgasnet.com/api/";
     }
   }
 
@@ -50,6 +52,8 @@ class EnvironmentConfig extends InheritedWidget {
         return "https://hpoil.smartgasnet.com/";
       case EnvironmentFlavors.prodAGCL:
         return "https://agcl.smartgasnet.com/";
+      case EnvironmentFlavors.prodHPCL:
+        return "https://hpcl.smartgasnet.com/";
     }
   }
 
@@ -67,6 +71,8 @@ class EnvironmentConfig extends InheritedWidget {
         return Colors.amber.shade400;
       case EnvironmentFlavors.prodAGCL:
         return Colors.blue.shade800;
+      case EnvironmentFlavors.prodHPCL:
+        return Color(0xFF1A237E);
     }
   }
 
@@ -84,6 +90,8 @@ class EnvironmentConfig extends InheritedWidget {
         return Colors.amber.shade400;
       case EnvironmentFlavors.prodAGCL:
         return Colors.blue.shade800;
+      case EnvironmentFlavors.prodHPCL:
+        return Color(0xFFC62828);
     }
   }
 }

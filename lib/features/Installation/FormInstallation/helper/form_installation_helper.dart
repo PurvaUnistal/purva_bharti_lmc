@@ -7,14 +7,17 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPipeDetailsModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
+import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
+import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
@@ -29,8 +32,8 @@ class FormInstallationHelper {
         "key": "typeOfNr",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(
+          urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -42,8 +45,7 @@ class FormInstallationHelper {
   static Future<List<LmcReasonModel>?> lmcReasonApi(
       {required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.lmcReason, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.lmcReason);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
           res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
@@ -53,11 +55,17 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> regulatorTypeApi(
-      {required BuildContext context}) async {
+  static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.regulatorType, context: context);
+      InstallationDoneRows? installVal =  await AppConfig.instanceInit()?.installationDoneRows;
+      Map<String, String> para = {
+        "prop_name": installVal!.propName ?? "",
+        "schema": ctx.user.schema ?? "",
+        "property_category_id": installVal.propertyCategoryId ?? "",
+      };
+      String json = Uri(queryParameters: para).query;
+      String url = installVal.propName == "Commercial" ?  "${Apis.regulatorType}?$json" : Apis.regulatorType;
+      var res = await ServerRequest.getData(urlEndPoint:url);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
           res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
@@ -67,15 +75,14 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<GetConstantModel>?> getReadyForNgcApi(
-      {required BuildContext context}) async {
+  static Future<List<GetConstantModel>?> getReadyForNgcApi({required BuildContext context}) async {
     try {
       Map<String, String> para = {
         "key": "isCustomerReadyForNgc",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(
+          urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -94,8 +101,7 @@ class FormInstallationHelper {
         "meterSerial": meterSerial,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMeters + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getMeters + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -104,9 +110,11 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi(
-      {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+  static Future<List<ListOfMeterNo>?> getRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
     try {
+      InstallationDoneRows? installVal =  await AppConfig.instanceInit()?.installationDoneRows;
+      InstallationByNgcData? ngcValue =  await AppConfig.instanceInit()?.ngcData;
+      String propName = installVal?.propName ?? ngcValue?.propName ?? "";
       Map<String, String> para = {
         "schema":ctx.user.schema ?? "",
         "user_id": ctx.user.id ?? "",
@@ -115,8 +123,18 @@ class FormInstallationHelper {
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getRegulators + json, context: context);
+      Map<String, String> para1 = {
+        "schema":ctx.user.schema ?? "",
+        "user_id": ctx.user.id ?? "",
+        "role": ctx.user.role ?? "",
+        "regulatorSerial": regulatorSerial,
+        "regulatorType": regulatorType,
+        "prop_name": propName,
+      };
+      String json1 = Uri(queryParameters: para1).query;
+
+      String url = propName == "Commercial" ?  "${Apis.getRegulators}?$json1" : "${Apis.getRegulators}?$json";
+      var res = await ServerRequest.getData(urlEndPoint: url);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -136,8 +154,8 @@ class FormInstallationHelper {
         "regulatorType": "",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMrRegulators + json, context: context);
+      var res = await ServerRequest.getData(
+          urlEndPoint: Apis.getMrRegulators + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -157,9 +175,7 @@ class FormInstallationHelper {
         "property_category_id": propertyCategoryId,
 
       };
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails,
-          context: context,
-          formData: para);
+      var res = await ServerRequest.postData(urlEndPoint: Apis.getExtraPipeDetails, body: para);
       return ExtraPipePriceData.fromJson(res['data']);
     } catch (e) {
       log("getExtraPipeDetails-->${e.toString()}");
@@ -359,19 +375,16 @@ class FormInstallationHelper {
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(
+      var res = await ServerRequest.postDataWithFile(
           urlEndPoint: Apis.saveLmcInstallation,
-          body: para, context: context,
+          body: para,
           imageRequestObject: [
             ImageRequestObject(
-                "meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+              key:"meter_photo",path: meterPhoto.isEmpty ? "" : meterPhoto.toString()),
             //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
-            ImageRequestObject("rfc_form",
-                isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-            ImageRequestObject("pneumatic_image",
-                pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-            ImageRequestObject(
-                "house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
+            ImageRequestObject( key:"rfc_form", path:isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
+            ImageRequestObject( key:"pneumatic_image", path:pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
+            ImageRequestObject(key: "house_image",path: housePhoto.isEmpty ? "" : housePhoto.toString()),
           ]);
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);

@@ -14,28 +14,38 @@ class BackgroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ctx = UserContext.getUserContext();
-    final url = EnvironmentConfig.of(context)!.imageBaseURL;
-    final themeColor =
-        EnvironmentConfig.of(context)?.primaryTheme ??
-        Theme.of(context).primaryColor;
+    final env = EnvironmentConfig.of(context)!;
+    final url = env.imageBaseURL;
+
+    // Same gradient as AppBarWidget
+    final appBarGradient = BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: <Color>[
+          env.secondaryTheme,
+          env.primaryTheme,
+        ],
+      ),
+    );
+
     return Column(
       children: [
         ctx.user.name != null && ctx.user.name!.isNotEmpty
             ? Container(
-              width: double.infinity,
-              color: themeColor,
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              child: Text(
-                "${ctx.user.name!.toUpperCase()}, (${ctx.user.schema!.toUpperCase()}) ${url == Apis.basePath ? "(UAT APP)" : ""}",
-
-                style: Styles.rel,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
+          width: double.infinity,
+          decoration: appBarGradient, // gradient instead of flat color
+          child: Text(
+            "${ctx.user.name!.toUpperCase()}, (${ctx.user.schema!.toUpperCase()}) ${url == Apis.basePath ? "(UAT APP)" : ""}",
+            style: Styles.rel,
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
             : Container(),
         Expanded(child: child),
         Container(
-          decoration: BoxDecoration(color:  EnvironmentConfig.of(context)!.primaryTheme,),
+          width: double.infinity,
+          decoration: appBarGradient, // gradient instead of flat color
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,7 +56,6 @@ class BackgroundWidget extends StatelessWidget {
                   style: Styles.rel,
                 ),
               ),
-
               Flexible(
                 child: Text(
                   AppString.version,

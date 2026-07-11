@@ -28,7 +28,7 @@ def keystoreProperties = new Properties()
 android {
     namespace "com"
     compileSdkVersion 36
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -65,73 +65,85 @@ android {
             if (keystorePropertiesFile.exists()) {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
-            versionCode 1
-            versionName "1.0.0-PBGPL LMC"
+            versionCode 23
+            versionName "1.0.9-PBGPL LMC"
         }
-        prodMGL {
-            dimension "app"
-            applicationIdSuffix ".unistal.mgl.lmc"
-            resValue "string", "app_name", "MGL LMC"
-            manifestPlaceholders = [
-                    appIcon: "@mipmap/mgl_logo",
-                    appIconRound: "@mipmap/mgl_logo"
-            ]
-            def keystorePropertiesFile = rootProject.file('mgl_key.properties')
-            if (keystorePropertiesFile.exists()) {
-                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-            }
-            versionCode 1
-            versionName "1.0.0-MGL LMC"
-        }
-        prodVPPL {
-            dimension "app"
-            applicationIdSuffix ".unistal.vppl.lmc"
-            resValue "string", "app_name", "VPPL LMC"
-            manifestPlaceholders = [
-                    appIcon: "@mipmap/vppl_plcms",
-                    appIconRound: "@mipmap/vppl_plcms"
-            ]
-            versionCode 1
-            versionName "1.0.0-VPPL LMC"
-        }
-        prodVRPL {
-            dimension "app"
-            applicationIdSuffix ".unistal.vrpl.lmc"
-            resValue "string", "app_name", "VRPL LMC"
-            manifestPlaceholders = [
-                    appIcon: "@mipmap/vrpl_plcms",
-                    appIconRound: "@mipmap/vrpl_plcms"
-            ]
-            versionCode 1
-            versionName "1.0.0-VRPL LMC"
-        }
-        prodHPOIL {
-            dimension "app"
-            applicationIdSuffix ".unistal.hpoil.lmc"
-            resValue "string", "app_name", "HPOIL LMC"
-            manifestPlaceholders = [
-                    appIcon: "@mipmap/unistal_logo",
-                    appIconRound: "@mipmap/unistal_logo"
-            ]
-            versionCode 1
-            versionName "1.0.0-HPOIL"
-            def keystorePropertiesFile = rootProject.file('hpoil.properties')
-            if (keystorePropertiesFile.exists()) {
-                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-            }
-        }
-        prodAGCL {
-            dimension "app"
-            applicationIdSuffix ".unistal.agcl.lmc"
-            resValue "string", "app_name", "AGCL LMC"
-            manifestPlaceholders = [
-                    appIcon: "@mipmap/unistal_logo",
-                    appIconRound: "@mipmap/unistal_logo"
-            ]
-            versionCode 1
-            versionName "1.0.0-AGCL"
-
-        }
+//        prodMGL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.mgl.lmc"
+//            resValue "string", "app_name", "MGL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/mgl_logo",
+//                    appIconRound: "@mipmap/mgl_logo"
+//            ]
+//            def keystorePropertiesFile = rootProject.file('mgl_key.properties')
+//            if (keystorePropertiesFile.exists()) {
+//                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//            }
+//            versionCode 1
+//            versionName "1.0.0-MGL LMC"
+//        }
+//        prodVPPL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.vppl.lmc"
+//            resValue "string", "app_name", "VPPL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/vppl_plcms",
+//                    appIconRound: "@mipmap/vppl_plcms"
+//            ]
+//            versionCode 1
+//            versionName "1.0.0-VPPL LMC"
+//        }
+//        prodVRPL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.vrpl.lmc"
+//            resValue "string", "app_name", "VRPL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/vrpl_plcms",
+//                    appIconRound: "@mipmap/vrpl_plcms"
+//            ]
+//            versionCode 1
+//            versionName "1.0.0-VRPL LMC"
+//        }
+//        prodHPOIL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.hpoil.lmc"
+//            resValue "string", "app_name", "HPOIL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/unistal_logo",
+//                    appIconRound: "@mipmap/unistal_logo"
+//            ]
+//            versionCode 1
+//            versionName "1.0.0-HPOIL"
+//            def keystorePropertiesFile = rootProject.file('hpoil.properties')
+//            if (keystorePropertiesFile.exists()) {
+//                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//            }
+//        }
+//        prodAGCL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.agcl.lmc"
+//            resValue "string", "app_name", "AGCL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/agcl_logo",
+//                    appIconRound: "@mipmap/agcl_logo"
+//            ]
+//            versionCode 1
+//            versionName "1.0.0-AGCL"
+//
+//        }
+//        prodHPCL {
+//            dimension "app"
+//            applicationIdSuffix ".unistal.hpcl.lmc"
+//            resValue "string", "app_name", "HPCL LMC"
+//            manifestPlaceholders = [
+//                    appIcon: "@mipmap/hpcl_logo",
+//                    appIconRound: "@mipmap/hpcl_logo"
+//            ]
+//            versionCode 1
+//            versionName "1.0.0-HPCL"
+//
+//        }
     }
 
     signingConfigs {

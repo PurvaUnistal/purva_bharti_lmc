@@ -8,6 +8,7 @@ import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasi
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
+import 'package:lmc/features/NGC/NGCTable/helper/ngc_table_helper.dart';
 
 class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> {
   LMCFeasibilityBloc() : super(LMCFeasibilityInitialState()) {
@@ -60,8 +61,13 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 9) {
-      listOfFilterFeasibilityRow = listOfFilterFeasibilityRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber) || element.mobileNumber.toString().contains(event.searchBpNumber)).toList();
+    final query = event.searchBpNumber.trim();
+    if(query.isNotEmpty){
+      listOfFilterFeasibilityRow = listOfFeasibilityRow
+          .where((element) =>
+      element.bpNumber.toString().contains(query) ||
+          element.mobileNumber.toString().contains(query))
+          .toList();
     } else {
       listOfFilterFeasibilityRow = await listOfFeasibilityRow;
     }
@@ -69,7 +75,7 @@ class LMCFeasibilityBloc extends Bloc<LMCFeasibilityEvent, LMCFeasibilityState> 
   }
 
   fetchAllArea({required BuildContext context}) async {
-    var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
+    var res = await NgcTableHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
       listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));

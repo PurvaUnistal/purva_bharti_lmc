@@ -50,73 +50,115 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   _setSubmitLoginData(LoginSubmitDataEvent event, emit) async {
+    // 1. Connectivity check
     if (await ConnectivityHelper.allConnectivityCheck(context: event.context) ==
         false) {
       return;
     }
+
+    // 2. Field validation
     var validationCheck = await LoginHelper.textFieldValidation(
-      email: emailController.text.trim().toString(),
-      password: passwordController.text.trim().toString(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
       context: event.context,
     );
-    if (validationCheck == true) {
-  //    try {
-        _isPageLoader = true;
+    if (validationCheck != true) {
+      _eventCompleted(emit);
+      return;
+    }
+
+    try {
+      // 3. Show loader and call API
+      _isPageLoader = true;
+      _eventCompleted(emit);
+
+      var res = await LoginHelper.loginData(
+        emailId: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        context: event.context,
+      );
+
+      // 4. Hide loader
+      _isPageLoader = false;
+
+      // 5. Fail fast: null response or missing user (e.g. 401 Unauthorised)
+      if (res == null || res.user == null) {
         _eventCompleted(emit);
-        var res = await LoginHelper.loginData(
-          emailId: emailController.text.trim().toString(),
-          password: passwordController.text.trim().toString(),
+        Utils.errorSnackBar(
+          msg: "Invalid email or password",
           context: event.context,
         );
-        if (res != null && res.user!.role == "ngc" ||
-            res!.user!.role == "lmc") {
-          _isPageLoader = false;
-          _eventCompleted(emit);
-          if (res.user != null) {
-            _loginModel = res;
-            if (res.status == 200 && res.user!.role!.toLowerCase().contains('lmc') || res.user!.role!.toLowerCase().contains('ngc')) {
-              await Utils.successSnackBar(msg: res.messages!, context: event.context,);
-              await SharedPref.setString(key: PrefsValue.passwordVal, value: emailController.text,);
-              await SharedPref.setString(key: PrefsValue.emailVal, value: passwordController.text,);
-              String userJson = jsonEncode(res.toJson());
-              await SharedPref.setString(key: PrefsValue.userInfo, value: userJson,);
-              await AppConfig.instanceInit()?.setLoginData(newLoginData: loginModel,);
-              PackageInfo packageInfo = await PackageInfo.fromPlatform();
-              await SharedPref.setString(
-                key: PrefsValue.buildNumber,
-                value: packageInfo.buildNumber,
-              );
-              if (res.user!.role == "lmc" || res.user!.role == "ngc") {
-                Navigator.pushReplacementNamed(event.context, RoutesName.home);
-              }
-            } else {
-              _isPageLoader = false;
-              _eventCompleted(emit);
-              return Utils.errorSnackBar(
-                msg: "Invalid user accessed",
-                context: event.context,
-              );
-            }
-          }
-        } else {
-          _isPageLoader = false;
-          _eventCompleted(emit);
-          return Utils.errorSnackBar(
-            msg: "Invalid user accessed",
-            context: event.context,
-          );
+        return;
+      }
+
+      // 6. Single role + status check
+      final role = res.user!.role?.toLowerCase() ?? "";
+      final isValidRole = role == "lmc" || role == "ngc";
+
+      if (res.status == 200 && isValidRole) {
+        _loginModel = res;
+
+        await Utils.successSnackBar(
+          msg: res.messages ?? "Login successful",
+          context: event.context,
+        );
+
+        // NOTE: keys were previously swapped — email now goes to emailVal,
+        // password to passwordVal.
+        await SharedPref.setString(
+          key: PrefsValue.emailVal,
+          value: emailController.text,
+        );
+        await SharedPref.setString(
+          key: PrefsValue.passwordVal,
+          value: passwordController.text,
+        );
+
+        String userJson = jsonEncode(res.toJson());
+        await SharedPref.setString(
+          key: PrefsValue.userInfo,
+          value: userJson,
+        );
+
+        await AppConfig.instanceInit()?.setLoginData(
+          newLoginData: loginModel,
+        );
+
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        await SharedPref.setString(
+          key: PrefsValue.buildNumber,
+          value: packageInfo.buildNumber,
+        );
+
+        _eventCompleted(emit);
+
+        if (event.context.mounted) {
+          Navigator.pushReplacementNamed(event.context, RoutesName.home);
         }
-      // } catch (e) {
-      //   _isPageLoader = false;
-      //   _eventCompleted(emit);
-      //   log("catchLoginBloc-->${e.toString()}");
-      // }
+        return;
+      }
+
+      // 7. Wrong role or non-200 status
+      _eventCompleted(emit);
+      Utils.errorSnackBar(
+        msg: "Invalid user accessed",
+        context: event.context,
+      );
+    } catch (e) {
+      // 8. Any unexpected error (Dio throw, parsing, null, etc.)
+      _isPageLoader = false;
+      _eventCompleted(emit);
+      log("catchLoginBloc-->${e.toString()}");
+      Utils.errorSnackBar(
+        msg: "Login failed. Please try again.",
+        context: event.context,
+      );
     }
-    _eventCompleted(emit);
   }
 
   _eventCompleted(Emitter<LoginState> emit) {
-    emit(LoginFetchDataState(
+    emit(
+      LoginFetchDataState(
         isPageLoader: isPageLoader,
         isPassword: isPassword,
         emailController: emailController,

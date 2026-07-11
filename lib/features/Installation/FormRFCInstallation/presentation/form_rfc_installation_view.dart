@@ -51,84 +51,84 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.white,
-        appBar: AppBarWidget(
+      backgroundColor: AppColor.white,
+      appBar: AppBarWidget(
         title: AppString.lmcInstallH,
         boolLeading: true,
-    ),
-    body: SafeArea(
-      child: BackgroundWidget(
-        child: BlocBuilder<FormRFCInstallationBloc, FormRFCInstallationState>(
-          builder: (context, state) {
-            if (state is FormRFCInstallationDataState) {
-              return Form(
-                  onWillPop: _onWillPop,
-                  child: _itemBuilder(dataState: state));
-            } else {
-              return Center(child: SpinLoader());
-            }
-          },
+      ),
+      body: SafeArea(
+        child: BackgroundWidget(
+          child:
+          BlocBuilder<FormRFCInstallationBloc, FormRFCInstallationState>(
+            builder: (context, state) {
+              if (state is FormRFCInstallationDataState) {
+                return Form(
+                    onWillPop: _onWillPop,
+                    child: _itemBuilder(dataState: state));
+              } else {
+                return Center(child: SpinLoader());
+              }
+            },
+          ),
         ),
-        ),
-    ),
+      ),
     );
   }
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
-            context: context,
-            builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
-                message: "Do you want to Installation?",
-                okButtonText: "Exit",
-                onPressed: () => Navigator.of(context).pop(true)))) ??
+        context: context,
+        builder: (BuildContext mContext) => MessageBoxTwoButtonPopWidget(
+            message: "Do you want to exit Installation?",
+            okButtonText: "Exit",
+            onPressed: () => Navigator.of(context).pop(true)))) ??
         false;
   }
 
   _itemBuilder({required FormRFCInstallationDataState dataState}) {
     return ListView(
-        padding: EdgeInsets.all(8),
-        children: [
-          Text(
-            AppString.installationForm,
-            style: Styles.text,
-            textAlign: TextAlign.center,
-          ),
-          CommonStyle.vertical(context: context),
-          RowWidget(
-              widget1: _bpNumberController(stateData: dataState),
-              widget2: _trNumberController(stateData: dataState)),
-          CommonStyle.vertical(context: context),
-          RowWidget(
-              widget1: _proposedDateController(stateData: dataState),
-              widget2: _feasibilityDateController(stateData: dataState)),
-          CommonStyle.vertical(context: context),
-          _installationDateController(stateData: dataState),
-          _delayReasonDropdown(stateData: dataState),
-          CommonStyle.vertical(context: context),
-          _meterNumberController(stateData: dataState),
-          /* CommonStyle.vertical(context: context),
-          _meterConnectionDropdown(stateData: dataState),*/
-          _initialMeterReading(stateData: dataState),
-          _installRegulatorCheck(stateData: dataState),
-          _regulatorTypeDropdown(stateData: dataState),
-          _regulatorController(stateData: dataState),
-          _mrNumberController(stateData: dataState),
-          _ngConversionDateController(stateData: dataState),
-          _rfcDateControllerController(stateData: dataState),
-          CommonStyle.vertical(context: context),
-          _materialList(stateData: dataState),
-          _checkListRFC(stateData: dataState),
-          CommonStyle.vertical(context: context),
-          _locationOfHouse(stateData: dataState),
-          CommonStyle.vertical(context: context),
-          _image(stateData: dataState),
-          CommonStyle.vertical(context: context),
-          CommonStyle.vertical(context: context),
-          _button(dataState: dataState),
-          CommonStyle.vertical(context: context),
-          CommonStyle.vertical(context: context),
-        ],
-
+      padding: EdgeInsets.all(8),
+      children: [
+        Text(
+          AppString.installationForm,
+          style: Styles.text,
+          textAlign: TextAlign.center,
+        ),
+        CommonStyle.vertical(context: context),
+        RowWidget(
+            widget1: _bpNumberController(stateData: dataState),
+            widget2: _trNumberController(stateData: dataState)),
+        CommonStyle.vertical(context: context),
+        RowWidget(
+            widget1: _proposedDateController(stateData: dataState),
+            widget2: _feasibilityDateController(stateData: dataState)),
+        CommonStyle.vertical(context: context),
+        _installationDateController(stateData: dataState),
+        _delayReasonDropdown(stateData: dataState),
+        CommonStyle.vertical(context: context),
+        _meterNumberController(stateData: dataState),
+        /* CommonStyle.vertical(context: context),
+        _meterConnectionDropdown(stateData: dataState),*/
+        _initialMeterReading(stateData: dataState),
+        _installRegulatorCheck(stateData: dataState),
+        _regulatorTypeDropdown(stateData: dataState),
+        _regulatorController(stateData: dataState),
+        _mrNumberController(stateData: dataState),
+        _ngConversionDateController(stateData: dataState),
+        _rfcDateControllerController(stateData: dataState),
+        CommonStyle.vertical(context: context),
+        _materialList(stateData: dataState),
+        _checkListRFC(stateData: dataState),
+        CommonStyle.vertical(context: context),
+        _locationOfHouse(stateData: dataState),
+        CommonStyle.vertical(context: context),
+        _image(stateData: dataState),
+        CommonStyle.vertical(context: context),
+        CommonStyle.vertical(context: context),
+        _button(dataState: dataState),
+        CommonStyle.vertical(context: context),
+        CommonStyle.vertical(context: context),
+      ],
     );
   }
 
@@ -199,66 +199,65 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       {required FormRFCInstallationDataState stateData}) {
     return stateData.isDelayReason == true
         ? CommonStyle.col(
-            context: context,
-            child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.reasonDelay,
-              hint: AppString.reasonDelay,
-              dropdownValue: stateData.delayReasonValue.name == null
-                  ? null
-                  : stateData.delayReasonValue,
-              items: stateData.listOfDelayReason,
-              onChanged: (val) {
-                BlocProvider.of<FormRFCInstallationBloc>(context)
-                    .add(SelectDelayReasonValueEvent(delayReasonValue: val));
-              },
-            ),
-          )
+      context: context,
+      child: DropdownWidget<LmcReasonModel>(
+        star: AppString.star,
+        label: AppString.reasonDelay,
+        hint: AppString.reasonDelay,
+        dropdownValue: stateData.delayReasonValue.name == null
+            ? null
+            : stateData.delayReasonValue,
+        items: stateData.listOfDelayReason,
+        onChanged: (val) {
+          BlocProvider.of<FormRFCInstallationBloc>(context)
+              .add(SelectDelayReasonValueEvent(delayReasonValue: val));
+        },
+      ),
+    )
         : Container();
   }
 
   Widget _meterNumberController(
       {required FormRFCInstallationDataState stateData}) {
     final oldMeterNo = stateData.oldMeterSerial;
-    print("oldMeterNo--->${oldMeterNo}");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-          Flexible(
-            flex: 8,
-            child: AutoCompleteTextFieldWidget(
-              fieldKey: meterFieldKey,
-              star: AppString.star,
-              hintText: AppString.meterNumber,
-              label: AppString.meterNumber,
-              suggestions: stateData.listOfMeterNumberSerial.length == 0
-                  ? ["No Data Found"]
-                  : stateData.listOfMeterNumberSerial,
-              keyboardType: TextInputType.text,
-              controller: stateData.meterNumberSerialController,
-              validator: (value) {
-                if (value != null &&
-                    value != oldMeterNo &&
-                    value.isNotEmpty &&
-                    !stateData.listOfMeterNumberSerial.contains(value)) {
-                  return AppString.meterNoErrorMsg;
-                }
-                return null;
-              },
-              onSelected: (val) {
-                meterFieldKey.currentState?.validate();
-                BlocProvider.of<FormRFCInstallationBloc>(context).add(
-                    SelectMeterNumberValueEvent(
-                        context: context, meterReadingValue: val));
-              },
-              onChanged: (val) {
-                meterFieldKey.currentState?.validate();
-                BlocProvider.of<FormRFCInstallationBloc>(context).add(
-                    SelectMeterNumberValueEvent(
-                        context: context, meterReadingValue: val));
-              },
-            ),
+        Flexible(
+          flex: 8,
+          child: AutoCompleteTextFieldWidget(
+            fieldKey: meterFieldKey,
+            star: AppString.star,
+            hintText: AppString.meterNumber,
+            label: AppString.meterNumber,
+            suggestions: stateData.listOfMeterNumberSerial.length == 0
+                ? ["No Data Found"]
+                : stateData.listOfMeterNumberSerial,
+            keyboardType: TextInputType.text,
+            controller: stateData.meterNumberSerialController,
+            validator: (value) {
+              if (value != null &&
+                  value != oldMeterNo &&
+                  value.isNotEmpty &&
+                  !stateData.listOfMeterNumberSerial.contains(value)) {
+                return AppString.meterNoErrorMsg;
+              }
+              return null;
+            },
+            onSelected: (val) {
+              meterFieldKey.currentState?.validate();
+              BlocProvider.of<FormRFCInstallationBloc>(context).add(
+                  SelectMeterNumberValueEvent(
+                      context: context, meterReadingValue: val));
+            },
+            onChanged: (val) {
+              meterFieldKey.currentState?.validate();
+              BlocProvider.of<FormRFCInstallationBloc>(context).add(
+                  SelectMeterNumberValueEvent(
+                      context: context, meterReadingValue: val));
+            },
           ),
+        ),
         CommonStyle.widthSpace(context: context),
         Flexible(
           flex: 4,
@@ -324,18 +323,16 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       maxLength: 1,
       enabled: true,
       keyboardType: TextInputType.number,
-      textInputAction: TextInputAction.previous,
+      textInputAction: TextInputAction.next,
       controller: stateData.meterIniReading1Controller,
       focusNode: stateData.meterIniReading1FocusNode,
       onFieldSubmitted: (String value) {
         FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading1FocusNode);
+            .requestFocus(stateData.meterIniReading2FocusNode);
       },
       onChanged: (val) {
         if (stateData.meterIniReading1Controller.text.length == 1) {
           FocusScope.of(context).nextFocus();
-        } else {
-          FocusScope.of(context).unfocus();
         }
         BlocProvider.of<FormRFCInstallationBloc>(context)
             .add(MeterInitReadingEvent());
@@ -349,18 +346,16 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       maxLength: 1,
       enabled: true,
       keyboardType: TextInputType.number,
-      textInputAction: TextInputAction.previous,
+      textInputAction: TextInputAction.next,
       controller: stateData.meterIniReading2Controller,
       focusNode: stateData.meterIniReading2FocusNode,
       onFieldSubmitted: (String value) {
         FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading2FocusNode);
+            .requestFocus(stateData.meterIniReading3FocusNode);
       },
       onChanged: (val) {
         if (stateData.meterIniReading2Controller.text.length == 1) {
           FocusScope.of(context).nextFocus();
-        } else {
-          FocusScope.of(context).unfocus();
         }
         BlocProvider.of<FormRFCInstallationBloc>(context)
             .add(MeterInitReadingEvent());
@@ -378,13 +373,10 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       controller: stateData.meterIniReading3Controller,
       focusNode: stateData.meterIniReading3FocusNode,
       onFieldSubmitted: (String value) {
-        FocusScope.of(context)
-            .requestFocus(stateData.meterIniReading3FocusNode);
+        FocusScope.of(context).unfocus();
       },
       onChanged: (val) {
         if (stateData.meterIniReading3Controller.text.length == 1) {
-          FocusScope.of(context).unfocus();
-        } else {
           FocusScope.of(context).unfocus();
         }
         BlocProvider.of<FormRFCInstallationBloc>(context)
@@ -418,45 +410,93 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
     );
   }
 
+  /// Regulator Type dropdown.
+  /// - Hidden until "Install Regulator" is checked.
+  /// - Shows a loader while the regulator type list is empty (data not
+  ///   yet loaded), so an empty dropdown is never shown.
+  /// - Pre-selected SR/PRV (edit/resume case) is matched against the
+  ///   loaded list instance so the dropdown displays it correctly.
+  /// - Re-selecting the same type (SR -> SR or PRV -> PRV) is ignored,
+  ///   so already-entered serial values are not cleared unnecessarily.
   Widget _regulatorTypeDropdown(
       {required FormRFCInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
-        ? CommonStyle.col(
+    // 1. Install Regulator not checked -> hide.
+    if (stateData.isInstallRegulator != true) {
+      return Container();
+    }
+
+    // 2. Regulator type data not loaded yet -> show loader.
+    if (stateData.listOfRegulatorType.isEmpty) {
+      return CommonStyle.col(
+        context: context,
+        child: DottedLoaderWidget(),
+      );
+    }
+
+    // 3. Match the already-selected value (SR/PRV) against the list items
+    //    so the dropdown pre-selects it correctly even when the state value
+    //    is a different instance than the list item.
+    final LmcReasonModel? selectedType =
+    stateData.regulatorTypeValue.name == null
+        ? null
+        : stateData.listOfRegulatorType.firstWhereOrNull(
+            (e) => e.name == stateData.regulatorTypeValue.name);
+
+    return CommonStyle.col(
       context: context,
       child: DropdownWidget<LmcReasonModel>(
         star: AppString.star,
         label: AppString.regulatorType,
         hint: AppString.regulatorType,
-        dropdownValue: stateData.regulatorTypeValue.name == null
-            ? null
-            : stateData.regulatorTypeValue,
+        dropdownValue: selectedType,
         items: stateData.listOfRegulatorType,
         onChanged: (val) {
+          // 4. Same type re-selected -> do nothing, keep entered values.
+          if (val?.name == stateData.regulatorTypeValue.name) {
+            return;
+          }
+
+          // Type actually changed -> clear stale serials from the
+          // previous type before switching, so an old PRV/SR value
+          // doesn't linger in the fields.
+          stateData.regulatorSerialController.clear();
+          stateData.mrNumberController.clear();
+          regulatorFieldKey.currentState?.reset();
+          mRegulatorFieldKey.currentState?.reset();
+
           BlocProvider.of<FormRFCInstallationBloc>(context).add(
               SelectRegulatorTypeValueEvent(
                   regulatorTypeValue: val!, context: context));
         },
       ),
-    )
-        : Container();
+    );
   }
 
-  Widget _regulatorController({required FormRFCInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
-        ? stateData.isRegulator == false
-        ? stateData.regulatorTypeValue.name != null
-        ? CommonStyle.col(
+  /// Regulator / SR Number field.
+  /// - Hidden until "Install Regulator" is checked AND a type is selected.
+  /// - Shows a single DottedLoaderWidget while serials are loading.
+  /// - Label/hint switch between "SR Number" and "Regulator" based on type.
+  Widget _regulatorController(
+      {required FormRFCInstallationDataState stateData}) {
+    if (stateData.isInstallRegulator != true) {
+      return Container();
+    }
+    if (stateData.isRegulator == true) {
+      return DottedLoaderWidget();
+    }
+    if (stateData.regulatorTypeValue.name == null) {
+      return Container();
+    }
+    return CommonStyle.col(
       context: context,
       child: AutoCompleteTextFieldWidget(
-        fieldKey:regulatorFieldKey,
+        fieldKey: regulatorFieldKey,
         star: AppString.star,
-        enabled: stateData.regulatorTypeValue.name == null
-            ? false
-            : true,
-        label: stateData.regulatorTypeValue.name != "PRV"
+        enabled: true,
+        label: stateData.regulatorTypeValue.name == "SR"
             ? AppString.srNumber
             : AppString.regulator,
-        hintText: stateData.regulatorTypeValue.name != "PRV"
+        hintText: stateData.regulatorTypeValue.name == "SR"
             ? AppString.srNumber
             : AppString.regulator,
         suggestions: stateData.listOfRegulatorSerial.length == 0
@@ -474,7 +514,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
           if (value != null &&
               value.isNotEmpty &&
               !stateData.listOfRegulatorSerial.contains(value)) {
-            return stateData.regulatorTypeValue.name != "PRV"
+            return stateData.regulatorTypeValue.name == "SR"
                 ? AppString.srNoErrorMsg
                 : AppString.regulatorNoErrorMsg;
           }
@@ -482,22 +522,29 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         },
         onChanged: (val) async {
           await regulatorFieldKey.currentState?.validate();
-          // BlocProvider.of<FormRFCInstallationBloc>(context).add(
-          //     SelectRegulatorsValueEvent(
-          //         context: context, regulatorsValue: val));
         },
       ),
-    )
-        : Container()
-        : DottedLoaderWidget()
-        : Container();
+    );
   }
 
-  Widget _mrNumberController({required FormRFCInstallationDataState stateData}) {
-    return stateData.isInstallRegulator == true
-        ? stateData.isRegulator == false
-        ? stateData.regulatorTypeValue.name == "SR"
-        ? CommonStyle.col(
+  /// Meter Regulator (MR) field.
+  /// - Only ever shown when the selected regulator type is "SR".
+  /// - Never renders its own loader (the regulator field above owns the
+  ///   loading indicator), so PRV selection and loading states no longer
+  ///   show a stray MR field/loader.
+  Widget _mrNumberController(
+      {required FormRFCInstallationDataState stateData}) {
+    if (stateData.isInstallRegulator != true ||
+        stateData.regulatorTypeValue.name != "SR") {
+      return Container();
+    }
+
+    if (stateData.isRegulator == true) {
+      // Loader already displayed by _regulatorController.
+      return Container();
+    }
+
+    return CommonStyle.col(
       context: context,
       child: AutoCompleteTextFieldWidget(
         fieldKey: mRegulatorFieldKey,
@@ -511,8 +558,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         controller: stateData.mrNumberController,
         onSelected: (val) {
           mRegulatorFieldKey.currentState?.validate();
-          BlocProvider.of<FormRFCInstallationBloc>(context).add(
-              SelectMREvent(context: context, mRegulators: val));
+          BlocProvider.of<FormRFCInstallationBloc>(context)
+              .add(SelectMREvent(context: context, mRegulators: val));
         },
         validator: (value) {
           if (value != null &&
@@ -524,40 +571,36 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         },
         onChanged: (val) async {
           await mRegulatorFieldKey.currentState?.validate();
-          // BlocProvider.of<FormRFCInstallationBloc>(context).add(
-          //     SelectMREvent(context: context, mRegulators: val));
         },
       ),
-    )
-        : Container()
-        : DottedLoaderWidget()
-        : Container();
+    );
   }
+
   Widget _rfcDateControllerController(
       {required FormRFCInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true
         ? CommonStyle.col(
-            context: context,
-            child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.rfcDate,
-              label: AppString.rfcDate,
-              textInputAction: TextInputAction.next,
-              enabled: true,
-              controller: stateData.rfcDateController,
-              suffixIcon: IconButtonWidget(
-                iconData: Icons.calendar_today,
-                onPressed: () {
-                  BlocProvider.of<FormRFCInstallationBloc>(context)
-                      .add(SelectRFCDateEvent(context: context));
-                },
-              ),
-              onTap: () {
-                BlocProvider.of<FormRFCInstallationBloc>(context)
-                    .add(SelectRFCDateEvent(context: context));
-              },
-            ),
-          )
+      context: context,
+      child: TextFieldWidget(
+        star: AppString.star,
+        hintText: AppString.rfcDate,
+        label: AppString.rfcDate,
+        textInputAction: TextInputAction.next,
+        enabled: true,
+        controller: stateData.rfcDateController,
+        suffixIcon: IconButtonWidget(
+          iconData: Icons.calendar_today,
+          onPressed: () {
+            BlocProvider.of<FormRFCInstallationBloc>(context)
+                .add(SelectRFCDateEvent(context: context));
+          },
+        ),
+        onTap: () {
+          BlocProvider.of<FormRFCInstallationBloc>(context)
+              .add(SelectRFCDateEvent(context: context));
+        },
+      ),
+    )
         : Container();
   }
 
@@ -565,25 +608,25 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       {required FormRFCInstallationDataState stateData}) {
     return stateData.isInstallRegulator == true
         ? CommonStyle.col(
-            context: context,
-            child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.ngProposedDate,
-              label: AppString.ngProposedDate,
-              controller: stateData.ngConversionDateController,
-              suffixIcon: IconButtonWidget(
-                iconData: Icons.calendar_today,
-                onPressed: () {
-                  BlocProvider.of<FormRFCInstallationBloc>(context)
-                      .add(SelectNGConversionDateEvent(context: context));
-                },
-              ),
-              onTap: () {
-                BlocProvider.of<FormRFCInstallationBloc>(context)
-                    .add(SelectNGConversionDateEvent(context: context));
-              },
-            ),
-          )
+      context: context,
+      child: TextFieldWidget(
+        star: AppString.star,
+        hintText: AppString.ngProposedDate,
+        label: AppString.ngProposedDate,
+        controller: stateData.ngConversionDateController,
+        suffixIcon: IconButtonWidget(
+          iconData: Icons.calendar_today,
+          onPressed: () {
+            BlocProvider.of<FormRFCInstallationBloc>(context)
+                .add(SelectNGConversionDateEvent(context: context));
+          },
+        ),
+        onTap: () {
+          BlocProvider.of<FormRFCInstallationBloc>(context)
+              .add(SelectNGConversionDateEvent(context: context));
+        },
+      ),
+    )
         : Container();
   }
 
@@ -629,57 +672,39 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
       children: [
         Column(
           children: stateData.materialList.mapIndexed((index, e) {
+            final isPipe = e.name.toLowerCase().contains("pipe");
             return Column(
               children: [
                 Row(
                   children: [
-                    e.name.toLowerCase().contains("pipe")
-                        ? Flexible(
-                            flex: 7,
-                            child: TextFieldWidget(
-                              hintText: AppString.pipe,
-                              label: AppString.pipe,
-                              initialValue: e.name,
-                              enabled: false,
-                            ),
-                          )
-                        : Flexible(
-                            flex: 7,
-                            child: TextFieldWidget(
-                              hintText: AppString.material,
-                              label: AppString.material,
-                              initialValue: e.name,
-                              enabled: false,
-                            ),
-                          ),
+                    Flexible(
+                      flex: 7,
+                      child: TextFieldWidget(
+                        hintText: isPipe ? AppString.pipe : AppString.material,
+                        label: isPipe ? AppString.pipe : AppString.material,
+                        initialValue: e.name,
+                        enabled: false,
+                      ),
+                    ),
                     CommonStyle.widthSpace(context: context),
-                    e.name.toLowerCase().contains("pipe")
-                        ? Flexible(
-                            flex: 3,
-                            child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
-                              controller: e.controller,
-                              enabled: true,
-                              keyboardType: TextInputType.number,
-                              onChanged: (val) {
-                                BlocProvider.of<FormRFCInstallationBloc>(
-                                        context)
-                                    .add(SelectQTYLMCEvent(
-                                        context: context, qtyValue: val));
-                              },
-                            ),
-                          )
-                        : Flexible(
-                            flex: 3,
-                            child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
-                              controller: e.controller,
-                              enabled: true,
-                              keyboardType: TextInputType.number,
-                            ),
-                          )
+                    Flexible(
+                      flex: 3,
+                      child: TextFieldWidget(
+                        hintText: e.unit,
+                        label: e.unit,
+                        controller: e.controller,
+                        enabled: true,
+                        keyboardType: TextInputType.number,
+                        onChanged: isPipe
+                            ? (val) {
+                          BlocProvider.of<FormRFCInstallationBloc>(
+                              context)
+                              .add(SelectQTYLMCEvent(
+                              context: context, qtyValue: val));
+                        }
+                            : null,
+                      ),
+                    ),
                   ],
                 ),
                 CommonStyle.vertical(context: context),
@@ -713,8 +738,6 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   }
 
   Widget _checkListRFC({required FormRFCInstallationDataState stateData}) {
-    var w = MediaQuery.of(context).size.width * 0.5;
-    print("_checkListRFC-->${w}");
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.5,
@@ -723,6 +746,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         childAspectRatio: 4.0,
       ),
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: stateData.listOfAllRFC.length,
       itemBuilder: (context, index) {
         return Card(
@@ -733,7 +757,9 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                 onChanged: (newVal) {
                   BlocProvider.of<FormRFCInstallationBloc>(context).add(
                       SelectRFCCheckValueEvent(
-                          context: context, isSelected: newVal!, index: index));
+                          context: context,
+                          isSelected: newVal!,
+                          index: index));
                 },
               ),
               Text(
@@ -779,57 +805,57 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         ),
         stateData.isInstallRegulator == true
             ? NetworkImageWidget(
-                title: AppString.rfc,
-                baseUrl: stateData.baseUrl,
-                networkPath: stateData.rfcCardPhoto,
-                onPressed: () {
-                  showModalBottomSheet(
-                      enableDrag: true,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ImagePopWidget(
-                          onTapCamera: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormRFCInstallationBloc>(context)
-                                .add(CaptureCameraRFCCardEvent());
-                          },
-                          onTapGallery: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormRFCInstallationBloc>(context)
-                                .add(CaptureGalleryRFCCardEvent());
-                          },
-                        );
-                      });
-                },
-              )
+          title: AppString.rfc,
+          baseUrl: stateData.baseUrl,
+          networkPath: stateData.rfcCardPhoto,
+          onPressed: () {
+            showModalBottomSheet(
+                enableDrag: true,
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return ImagePopWidget(
+                    onTapCamera: () async {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<FormRFCInstallationBloc>(context)
+                          .add(CaptureCameraRFCCardEvent());
+                    },
+                    onTapGallery: () async {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<FormRFCInstallationBloc>(context)
+                          .add(CaptureGalleryRFCCardEvent());
+                    },
+                  );
+                });
+          },
+        )
             : Container(),
         stateData.isInstallRegulator == true
             ? NetworkImageWidget(
-                title: AppString.pneumatic,
-                baseUrl: stateData.baseUrl,
-                networkPath: stateData.pneumaticTestReportPhoto,
-                onPressed: () {
-                  showModalBottomSheet(
-                      enableDrag: true,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ImagePopWidget(
-                          onTapCamera: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormRFCInstallationBloc>(context)
-                                .add(CaptureCameraPneumaticEvent());
-                          },
-                          onTapGallery: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormRFCInstallationBloc>(context)
-                                .add(CaptureGalleryPneumaticEvent());
-                          },
-                        );
-                      });
-                },
-              )
+          title: AppString.pneumatic,
+          baseUrl: stateData.baseUrl,
+          networkPath: stateData.pneumaticTestReportPhoto,
+          onPressed: () {
+            showModalBottomSheet(
+                enableDrag: true,
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return ImagePopWidget(
+                    onTapCamera: () async {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<FormRFCInstallationBloc>(context)
+                          .add(CaptureCameraPneumaticEvent());
+                    },
+                    onTapGallery: () async {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<FormRFCInstallationBloc>(context)
+                          .add(CaptureGalleryPneumaticEvent());
+                    },
+                  );
+                });
+          },
+        )
             : Container(),
         NetworkImageWidget(
           star: AppString.star,
@@ -859,11 +885,11 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _button({required FormRFCInstallationDataState dataState}) {
     return dataState.isBtnLoader == false
         ? ButtonWidget(
-            text: AppString.submit,
-            onPressed: () {
-              BlocProvider.of<FormRFCInstallationBloc>(context)
-                  .add(SubmitFormRFCInstallation(context: context));
-            })
+        text: AppString.submit,
+        onPressed: () {
+          BlocProvider.of<FormRFCInstallationBloc>(context)
+              .add(SubmitFormRFCInstallation(context: context));
+        })
         : DottedLoaderWidget();
   }
 }

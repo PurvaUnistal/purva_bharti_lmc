@@ -82,6 +82,8 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
             );
           }
         } else {
+          AppConfig.instanceInit()?.clear();
+          await SharedPref.clearAll();
           Navigator.pushReplacementNamed(
             context,
             RoutesName.login,

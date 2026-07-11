@@ -342,31 +342,50 @@ class FormRFCInstallationBloc
   }
 
   _selectRegulatorTypeValue(SelectRegulatorTypeValueEvent event, emit) async {
-    isRegulator = true;
-    _eventCompleted(emit);
+    // 1) Naya type commit + purana data clear — loader emit se PEHLE
     regulatorTypeValue = event.regulatorTypeValue;
     regulatorSerialController.clear();
     mrNumberController.clear();
-    if (event.regulatorTypeValue.name == "SR") {
-      await fetchMRApi(
-        context: event.context,
-        regulatorSerial: "",
-        regulatorType: event.regulatorTypeValue.id.toString(),
-      );
-      await fetchRegulatorsApi(
-        context: event.context,
-        regulatorSerial: "",
-        regulatorType: event.regulatorTypeValue.id.toString(),
-      );
-    } else if (event.regulatorTypeValue.name != null) {
-      await fetchRegulatorsApi(
-        context: event.context,
-        regulatorSerial: "",
-        regulatorType: event.regulatorTypeValue.id.toString(),
-      );
-    }
-    isRegulator = false;
+    regulatorsId = '';
+    mrRegulatorsId = '';
+    isCheckRegulatorMismatch = false;
+    isCheckMR = false;
+    listOfRegulator = [];
+    listOfMR = [];
+    listOfRegulatorSerial = [];
+    listOfMRSerial = [];
+
+    // 2) Loader ON
+    isRegulator = true;
     _eventCompleted(emit);
+
+    // 3) Fetch — SR par dono calls parallel (2x fast), error par bhi loader OFF
+    try {
+      if (event.regulatorTypeValue.name == "SR") {
+        await Future.wait(<Future>[
+          fetchMRApi(
+            context: event.context,
+            regulatorSerial: "",
+            regulatorType: event.regulatorTypeValue.id.toString(),
+          ),
+          fetchRegulatorsApi(
+            context: event.context,
+            regulatorSerial: "",
+            regulatorType: event.regulatorTypeValue.id.toString(),
+          ),
+        ]);
+      } else if (event.regulatorTypeValue.name != null) {
+        await fetchRegulatorsApi(
+          context: event.context,
+          regulatorSerial: "",
+          regulatorType: event.regulatorTypeValue.id.toString(),
+        );
+      }
+    } finally {
+      // 4) Loader OFF — exception aaye tab bhi
+      isRegulator = false;
+      _eventCompleted(emit);
+    }
   }
 
   fetchRFCInstallationApi({required BuildContext context}) async {
@@ -455,22 +474,35 @@ class FormRFCInstallationBloc
           );
         }
         // Safely extract values from rfcInstallationLmc
-        String isValid = rfcInstallationLmc.regulatorCheck ?? "";
         String regulatorTypeId = rfcInstallationLmc.regulatorTypeId ?? "";
+        String isValid = regulatorTypeId.isNotEmpty ? "1" : rfcInstallationLmc.regulatorCheck ?? "";
+
         if (isValid == "1") {
           isInstallRegulator = true;
 
-          switch (regulatorTypeId) {
-            case "1":
-              regulatorTypeValue.id = regulatorTypeId;
-              regulatorTypeValue.name = "SR";
-              break;
-            case "2":
-              regulatorTypeValue.id = regulatorTypeId;
-              regulatorTypeValue.name = "PRV";
-              break;
-            default:
-              regulatorTypeValue = LmcReasonModel();
+          // regulatorTypeId ko loaded list ke saath match karo —
+          // SR/PRV ke alawa bhi jo type list me hai, wo select ho jayegi.
+          final matchedType = listOfRegulatorType
+              .firstWhereOrNull((e) => e.id == regulatorTypeId);
+
+          if (matchedType != null) {
+            regulatorTypeValue = matchedType;
+          } else {
+            // List me match nahi mila, lekin id hai to fallback:
+            switch (regulatorTypeId) {
+              case "1":
+                regulatorTypeValue = LmcReasonModel()
+                  ..id = regulatorTypeId
+                  ..name = "SR";
+                break;
+              case "2":
+                regulatorTypeValue = LmcReasonModel()
+                  ..id = regulatorTypeId
+                  ..name = "PRV";
+                break;
+              default:
+                regulatorTypeValue = LmcReasonModel();
+            }
           }
         } else {
           isInstallRegulator = false;
@@ -689,8 +721,7 @@ class FormRFCInstallationBloc
     );
     if (res != null) {
       listOfRegulator = res;
-      listOfRegulatorSerial =
-          listOfRegulator.map((e) => e.serialNumber!).toList();
+      listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
       return res;
     }
   }

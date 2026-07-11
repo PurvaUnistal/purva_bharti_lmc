@@ -8,6 +8,7 @@ import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_instal
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_state.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/features/Installation/LMCInstallation/helper/lmc_installation_helper.dart';
+import 'package:lmc/features/NGC/NGCTable/helper/ngc_table_helper.dart';
 
 class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationState> {
   LMCInstallationBloc() : super(LMCInstallationInitialState()) {
@@ -62,9 +63,13 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
 
   _searchBpNumber(SearchBpNumberEvent event, emit) async {
     bpNumberController.text = event.searchBpNumber;
-    if (event.searchBpNumber.length > 9) {
-      listOfFilterInstallationRow = listOfFilterInstallationRow.where((element) => element.bpNumber.toString().contains(event.searchBpNumber) || element.mobileNumber.toString().contains(event.searchBpNumber)).toList();
-      _eventCompleted(emit);
+    final query = event.searchBpNumber.trim();
+    if(query.isNotEmpty){
+      listOfFilterInstallationRow = listOfInstallationRow
+          .where((element) =>
+      element.bpNumber.toString().contains(query) ||
+          element.mobileNumber.toString().contains(query))
+          .toList();
     } else {
       listOfFilterInstallationRow = await listOfInstallationRow;
     }
@@ -72,7 +77,7 @@ class LMCInstallationBloc extends Bloc<LMCInstallationEvent, LMCInstallationStat
   }
 
   fetchAllArea({required BuildContext context}) async {
-    var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
+    var res = await NgcTableHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
       listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));
