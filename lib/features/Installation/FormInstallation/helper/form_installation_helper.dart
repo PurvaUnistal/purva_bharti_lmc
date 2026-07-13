@@ -14,7 +14,7 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPip
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
@@ -29,8 +29,7 @@ class FormInstallationHelper {
         "key": "typeOfNr",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -42,8 +41,8 @@ class FormInstallationHelper {
   static Future<List<LmcReasonModel>?> lmcReasonApi(
       {required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.lmcReason, context: context);
+      var res = await ServerRequest.getData(
+          urlEndPoint: Apis.lmcReason);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
           res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
@@ -56,8 +55,7 @@ class FormInstallationHelper {
   static Future<List<LmcReasonModel>?> regulatorTypeApi(
       {required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.regulatorType, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.regulatorType);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
           res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
@@ -74,8 +72,7 @@ class FormInstallationHelper {
         "key": "isCustomerReadyForNgc",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -94,8 +91,7 @@ class FormInstallationHelper {
         "meterSerial": meterSerial,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMeters + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getMeters + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -115,8 +111,7 @@ class FormInstallationHelper {
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getRegulators + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getRegulators + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -136,8 +131,7 @@ class FormInstallationHelper {
         "regulatorType": "",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMrRegulators + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getMrRegulators + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -157,9 +151,7 @@ class FormInstallationHelper {
         "property_category_id": propertyCategoryId,
 
       };
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails,
-          context: context,
-          formData: para);
+      var res = await ServerRequest.postData(urlEndPoint: Apis.getExtraPipeDetails, body: para);
       return ExtraPipePriceData.fromJson(res['data']);
     } catch (e) {
       log("getExtraPipeDetails-->${e.toString()}");
@@ -359,19 +351,19 @@ class FormInstallationHelper {
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(
+      var res = await ServerRequest.postDataWithFile(
           urlEndPoint: Apis.saveLmcInstallation,
-          body: para, context: context,
+          body: para,
           imageRequestObject: [
             ImageRequestObject(
-                "meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+                key: "meter_photo",path:  meterPhoto.isEmpty ? "" : meterPhoto.toString()),
             //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
-            ImageRequestObject("rfc_form",
+            ImageRequestObject(key: "rfc_form",path:
                 isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-            ImageRequestObject("pneumatic_image",
+            ImageRequestObject(key: "pneumatic_image",path:
                 pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-            ImageRequestObject(
-                "house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
+            ImageRequestObject(key:
+                "house_image",path:  housePhoto.isEmpty ? "" : housePhoto.toString()),
           ]);
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);

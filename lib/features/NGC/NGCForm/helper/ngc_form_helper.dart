@@ -7,8 +7,8 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReaso
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/model/SubmitNgcReportModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lmc/service/server_request.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -68,7 +68,7 @@ class NGCFormHelper{
 
   static Future<List<LmcReasonModel>?> lmcReasonApi({required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.lmcReason, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.lmcReason);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -79,7 +79,7 @@ class NGCFormHelper{
 
   static Future<List<LmcReasonModel>?> ngcReasonApi({required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.ngcReason, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.ngcReason);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -90,7 +90,7 @@ class NGCFormHelper{
 
   static Future<List<LmcReasonModel>?> meterReplaceTypeApi({required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.meterReplaceType, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.meterReplaceType,);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -101,7 +101,7 @@ class NGCFormHelper{
 
   static Future<List<LmcReasonModel>?> regulatorTypeApi({required BuildContext context}) async {
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.regulatorType, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.regulatorType);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(res.map((x) => LmcReasonModel.fromJson(x)));
       return response;
     } catch (e) {
@@ -120,7 +120,7 @@ class NGCFormHelper{
         "meterSerial":meterSerial,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcMeters + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getNgcMeters + json);
       if(res != null){
         MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
         return meterNoModel.data;
@@ -145,7 +145,7 @@ class NGCFormHelper{
       "regulatorType": regulatorType,
     };
     String json = Uri(queryParameters: para).query;
-    var res = await ApiHelper.getData(urlEndPoint: Apis.getNgcRegulators + json, context: context);
+    var res = await ServerRequest.getData(urlEndPoint: Apis.getNgcRegulators + json);
     if(res != null){
       print(res);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
@@ -387,16 +387,16 @@ class NGCFormHelper{
     };
     log("jsonBody-->${body}");
     try {
-      var res = await ApiHelper.postDataWithFile(
+      var res = await ServerRequest.postDataWithFile(
         urlEndPoint: "${Apis.setNGCReport}",
         body: body,
         imageRequestObject: [
-          ImageRequestObject("meter_image", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-          ImageRequestObject("ngc_report_file", ngcReportPhoto.isEmpty ? "" :ngcReportPhoto.toString()),
-          ImageRequestObject("mr_photo", mrPhoto.isEmpty ? "" : mrPhoto.toString()),
-          ImageRequestObject("sr_photo", srPhoto.isEmpty  ? "" : srPhoto.toString()),
+          ImageRequestObject(key: "meter_image",path:  meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+          ImageRequestObject(key: "ngc_report_file",path:  ngcReportPhoto.isEmpty ? "" :ngcReportPhoto.toString()),
+          ImageRequestObject(key: "mr_photo",path:  mrPhoto.isEmpty ? "" : mrPhoto.toString()),
+          ImageRequestObject(key: "sr_photo",path:  srPhoto.isEmpty  ? "" : srPhoto.toString()),
         ],
-        context: context,
+
       );
       if (res != null && res["error"] == false) {
         return SubmitNgcReportModel.fromJson(res);

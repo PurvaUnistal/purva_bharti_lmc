@@ -1,15 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 
 class LoginHelper {
   static Future<dynamic> textFieldValidation({required String email, required String password, required BuildContext context}) async {
@@ -49,10 +48,10 @@ class LoginHelper {
       "device": deviceId,
     };
     log("para-->${para}");
-  //  try {
-      var res = await ApiHelper.postData(
+    try {
+      var res = await ServerRequest.postData(
           urlEndPoint: Apis.loginUrl,
-          param: para, context: context);
+          body: jsonEncode(para));
       if (res != null && res["error"] == false) {
         return LoginModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
@@ -63,10 +62,10 @@ class LoginHelper {
         return null;
       }
       return null;
-    // } catch (e) {
-    //   log("catchLoginHelper-->${e.toString()}");
-    //   Utils.errorSnackBar(msg: e.toString(), context: context);
-    //   return null;
-    // }
+    } catch (e) {
+      log("catchLoginHelper-->${e.toString()}");
+      Utils.errorSnackBar(msg: e.toString(), context: context);
+      return null;
+    }
   }
 }

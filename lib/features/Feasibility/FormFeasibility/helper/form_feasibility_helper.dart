@@ -9,7 +9,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMat
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 
 class FormFeasibilityHelper {
 
@@ -20,7 +20,7 @@ class FormFeasibilityHelper {
         "key": "is_feasible",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -35,7 +35,7 @@ class FormFeasibilityHelper {
         "key": "lmcReason",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -56,7 +56,7 @@ class FormFeasibilityHelper {
         "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getAllFreePipeMaterial + json);
       AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {
@@ -76,7 +76,7 @@ class FormFeasibilityHelper {
         "property_category_id": propertyCategoryId,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getAllFreeMaterial + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getAllFreeMaterial + json);
       AllFreeMaterialModel materialModel = AllFreeMaterialModel.fromJson(res);
       return materialModel.data;
     } catch (e) {
@@ -91,7 +91,7 @@ class FormFeasibilityHelper {
         "key": "rfc",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getConstant + json);
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -205,7 +205,7 @@ class FormFeasibilityHelper {
         "extra_price": extraPrice,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postData(urlEndPoint: Apis.saveLmcFeasibility, formData: para, context: context);
+      var res = await ServerRequest.postData(urlEndPoint: Apis.saveLmcFeasibility, body: para);
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
       } else if (res != null && res["error"] == true) {

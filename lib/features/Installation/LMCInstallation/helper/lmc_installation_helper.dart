@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 
 class LMCInstallationHelper{
 
@@ -20,7 +20,7 @@ class LMCInstallationHelper{
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getLMCInstallation + json);
       if (res != null) {
         return InstallationDoneModel.fromJson(res);
       }

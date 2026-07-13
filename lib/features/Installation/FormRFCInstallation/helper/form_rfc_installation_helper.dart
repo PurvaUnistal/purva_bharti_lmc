@@ -13,7 +13,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasib
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_server_dio.dart';
+import 'package:lmc/service/server_request.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormRFCInstallationHelper {
@@ -32,7 +32,7 @@ class FormRFCInstallationHelper {
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getlmcRFCInstallationApi + json, context: context);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getlmcRFCInstallationApi + json);
       return RFCInstallationModel.fromJson(res);
     } catch (e) {
       log("getlmcRFCInstallationApi-->${e.toString()}");
@@ -223,11 +223,11 @@ class FormRFCInstallationHelper {
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context, imageRequestObject: [
-        ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-        ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-        ImageRequestObject("pneumatic_image", pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-        ImageRequestObject("house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
+      var res = await ServerRequest.postDataWithFile(urlEndPoint: Apis.saveLmcRFCInstallation, body: para,imageRequestObject: [
+        ImageRequestObject(key: "meter_photo",path:  meterPhoto.isEmpty ? "" : meterPhoto.toString()),
+        ImageRequestObject(key: "rfc_form",path:  isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
+        ImageRequestObject(key: "pneumatic_image",path:  pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
+        ImageRequestObject(key: "house_image",path:  housePhoto.isEmpty ? "" : housePhoto.toString()),
       ]);
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
