@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
-import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/button_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/presentation/form_feasibility_view.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_event.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_state.dart';
 
 class PreviewFeasibilityView extends StatefulWidget {
   const PreviewFeasibilityView({
@@ -26,11 +21,7 @@ class PreviewFeasibilityView extends StatefulWidget {
 }
 
 class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
-  @override
-  void initState() {
-    BlocProvider.of<PreviewFeasibilityBloc>(context).add(PreviewFeasibilityPageLoadEvent(context: context));
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,23 +33,17 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     ),
     body: SafeArea(
       child: BackgroundWidget(
-       child:  BlocBuilder<PreviewFeasibilityBloc, PreviewFeasibilityState>(
-          builder: (context, state) {
-            if (state is PreviewFeasibilityDataState) {
-              return _itemBuilder(dataState: state, context: context);
-            } else {
-              return Center(child: SpinLoader());
-            }
-          },
-        ),
+       child: _itemBuilder(),
         ),
     ),
     );
   }
 
-  _itemBuilder({required PreviewFeasibilityDataState dataState, required BuildContext context}) {
-    return  SingleChildScrollView(
-        child: Padding(
+  _itemBuilder() {
+    final data = AppConfig.instanceInit()?.feasibilityData;
+    return  ListView(
+      children: [
+        Padding(
           padding: const EdgeInsets.all(8.0),
           child: Card(
             elevation: 1.5,
@@ -77,28 +62,29 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),)
                   ),
                 ),
-                _rowItem(textName: AppString.crNumber, textValue: dataState.crNumber),
-                _rowItem(textName: AppString.bpNumber, textValue: dataState.bpNumber),
-                _rowItem(textName: AppString.chargeArea, textValue: dataState.chargeArea),
-                _rowItem(textName: AppString.area, textValue: dataState.areaName),
-                _rowItem(textName: AppString.firstName, textValue: dataState.firstName),
-                _rowItem(textName: AppString.lastName, textValue: dataState.lastName),
-                _rowItem(textName: AppString.mobileNumber, textValue: dataState.mobileNumber),
-                _rowItem(textName: AppString.buildingNumber, textValue: dataState.buildingNumber),
-                _rowItem(textName: AppString.houseNumber, textValue: dataState.houseNumber),
-                _rowItem(textName: AppString.street, textValue: dataState.locality),
-                _rowItem(textName: AppString.town, textValue: dataState.town),
-                _rowItem(textName: AppString.pinCode, textValue: dataState.pinCode),
+                _rowItem(textName: AppString.crNumber, textValue: data!.crn ?? ""),
+                _rowItem(textName: AppString.trNumber, textValue: data.trNumber ?? ""),
+                _rowItem(textName: AppString.chargeArea, textValue: data.chargeAreaName ?? ""),
+                _rowItem(textName: AppString.area, textValue: data.areaName ?? ""),
+                _rowItem(textName: AppString.firstName, textValue: data.firstName ?? ""),
+                _rowItem(textName: AppString.lastName, textValue: data.lastName ?? ""),
+                _rowItem(textName: AppString.mobileNumber, textValue: data.mobileNumber ?? ""),
+                _rowItem(textName: AppString.buildingNumber, textValue: data.buildingNumber),
+                _rowItem(textName: AppString.houseNumber, textValue: data.houseNumber),
+                _rowItem(textName: AppString.street, textValue: data.locality),
+                _rowItem(textName: AppString.town, textValue: data.town),
+                _rowItem(textName: AppString.pinCode, textValue: data.pinCode),
                 CommonStyle.vertical(context: context),
                 CommonStyle.vertical(context: context),
-                _button(dataState: dataState),
+                _button(),
                 CommonStyle.vertical(context: context),
                 CommonStyle.vertical(context: context),
               ],
             ),
           ),
         ),
-      );
+      ],
+    );
 
   }
 
@@ -113,13 +99,11 @@ class _PreviewFeasibilityViewState extends State<PreviewFeasibilityView> {
     );
   }
 
-  Widget _button({required PreviewFeasibilityDataState dataState}) {
-    return dataState.isLoader == false
-        ? ButtonWidget(
+  Widget _button() {
+    return ButtonWidget(
         text: AppString.checkFea,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => FormFeasibilityView()));
-        })
-        : DottedLoaderWidget();
+        });
   }
 }

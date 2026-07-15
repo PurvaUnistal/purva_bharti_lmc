@@ -148,7 +148,7 @@ class FeasibilityData {
         propName: json["prop_name"] ?? "",
         propClass: json["prop_class"] ?? "",
         bpNumber: json["bp_number"] ?? "",
-        proposedDate: json["proposed_date"] ?? "",
+        proposedDate: json["proposed_date"] ?? "00-00-0000",
         assignLmcDate: json["assign_lmc_date"] ?? "",
         trNumber: json["tr_number"] ?? "",
       );

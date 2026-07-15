@@ -203,7 +203,7 @@ class InstallationDoneRows {
     id = json['id'] ?? "";
     dmaRegId = json['dma_reg_id'] ?? "";
     assignLmcId = json['assign_lmc_id'] ?? "";
-    proposedDate = json['proposed_date'] ?? "";
+    proposedDate = json['proposed_date'] ?? "00-00-0000";
     feasibilityVisitDate = json['feasibility_visit_date'] ?? "";
     additionalBom = json['additional_bom'] ?? "";
     createdAt = json['created_at'] ?? "";

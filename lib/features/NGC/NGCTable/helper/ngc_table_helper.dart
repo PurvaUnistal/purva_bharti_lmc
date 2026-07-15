@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
-import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/server_request.dart';
@@ -9,19 +8,6 @@ import 'package:lmc/service/server_request.dart';
 class NgcTableHelper {
 
   static final ctx = UserContext.getUserContext();
-  static Future<List<GetAllAreaModel>?> getAllAreaApi({required BuildContext context}) async {
-
-    try {
-      var res = await ServerRequest.getData(
-          urlEndPoint: Apis.areaList + ctx.user.schema!);
-      if(res != null){
-        return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
-      }
-    } catch (e) {
-      log("getAllAreaModelFromJson-->${e.toString()}");
-    }
-    return null;
-  }
 
   static Future<LMCInstallationByNgcModel?> getLmcInstallationByNgcApi({required BuildContext context, required String areaId, required String bpNumber}) async {
 

@@ -9,12 +9,10 @@ import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/bloc/lmc_feasibility_bloc.dart';
-import 'package:lmc/features/Feasibility/PreviewFeasibility/domain/bloc/preview_feasibility_bloc.dart';
 import 'package:lmc/features/Home/domain/bloc/home_bloc.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/bloc/form_installation_bloc.dart';
 import 'package:lmc/features/Installation/FormRFCInstallation/domain/bloc/form_rfc_installation_bloc.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/bloc/lmc_installation_bloc.dart';
-import 'package:lmc/features/Installation/PreviewInstallation/domain/bloc/preview_installation_bloc.dart';
 import 'package:lmc/features/Login/domain/bloc/login_bloc.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_bloc.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_bloc.dart';
@@ -74,10 +72,8 @@ class _RootState extends State<Root>with WidgetsBindingObserver  {
           BlocProvider(create: (BuildContext context) => LoginBloc()),
           BlocProvider(create: (BuildContext context) => HomeBloc()),
           BlocProvider(create: (BuildContext context) => LMCFeasibilityBloc()),
-          BlocProvider(create: (BuildContext context) => PreviewFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => FormFeasibilityBloc()),
           BlocProvider(create: (BuildContext context) => LMCInstallationBloc()),
-          BlocProvider(create: (BuildContext context) => PreviewInstallationBloc()),
           BlocProvider(create: (BuildContext context) => FormInstallationBloc()),
           BlocProvider(create: (BuildContext context) => FormRFCInstallationBloc()),
           BlocProvider(create: (BuildContext context) => NgcTableBloc()),
@@ -87,12 +83,12 @@ class _RootState extends State<Root>with WidgetsBindingObserver  {
           navigatorKey: AppNavigator.navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor:  EnvironmentConfig.of(context)!.primaryTheme,
-            hintColor:  EnvironmentConfig.of(context)!.primaryTheme,
+            primaryColor:  primary,
+            hintColor:  primary,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: EnvironmentConfig.of(context)!.primaryTheme,
+              seedColor: primary,
             ),
           ),
           initialRoute: RoutesName.splash,

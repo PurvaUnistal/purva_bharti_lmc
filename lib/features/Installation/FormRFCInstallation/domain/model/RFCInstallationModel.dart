@@ -351,7 +351,7 @@ class RFCInstallationLmc {
     propertyCategoryId = json['property_category_id'] ?? "";
     propertyClassId = json['property_class_id'] ?? "";
     assignId = json['assign_id'] ?? "";
-    proposedDate = json['proposed_date'] ?? "";
+    proposedDate = json['proposed_date'] ?? "00-00-0000";
     feasibilityVisitDate = json['feasibility_visit_date'] ?? "";
     lmcInstallationDate = json['lmc_installation_date'] ?? "";
     lmcProposedNgcDate = json['lmc_proposed_ngc_date'] ?? "";

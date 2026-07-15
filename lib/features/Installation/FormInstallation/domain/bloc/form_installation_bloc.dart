@@ -10,6 +10,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -215,11 +216,11 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
 
     meterReadingDate.text = currentDate;
     installationDateController.text = currentDate;
-
-    trNumberController.text = await SharedPref.getString(key: PrefsValue.crNumber);
-    bpNumberController.text = await SharedPref.getString(key: PrefsValue.bpNumber);
-    proposedDateController.text = await SharedPref.getString(key: PrefsValue.proposedDate);
-    feasibilityDateController.text = await SharedPref.getString(key: PrefsValue.feasibilityVisitDate);
+    final data =   AppConfig.instanceInit()?.installationDoneRows;
+    trNumberController.text = data!.crn ?? "";
+    bpNumberController.text = data.bpNumber ?? "";
+    proposedDateController.text = data.proposedDate ?? "";
+    feasibilityDateController.text = data.feasibilityVisitDate ?? "";
     coatTapList = ['Supply of Paint/Coat', 'Tap Off', ];
      selectedGasified = '';
      gasifiedList = ['Yes', 'No',];

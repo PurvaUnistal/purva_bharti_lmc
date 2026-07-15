@@ -13,8 +13,10 @@ class LMCFeasibilityHelper {
   static Future<List<GetAllAreaModel>?> getAllAreaApi({required BuildContext context}) async {
 
     try {
-      var res = await ServerRequest.getData(urlEndPoint: Apis.areaList + ctx.user.schema ?? "");
-      return getAllAreaModelFromJson(res);
+      var res = await ServerRequest.getData(urlEndPoint: Apis.areaList + ctx.user.schema!);
+      if(res != null){
+        return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
+      }
     } catch (e) {
       log("getAllAreaModelFromJson-->${e.toString()}");
     }
@@ -34,7 +36,8 @@ class LMCFeasibilityHelper {
     try {
       var res = await ServerRequest.getData(urlEndPoint: Apis.getLMCFeasibility + json);
       if (res != null) {
-        return FeasibilityModel.fromJson(jsonDecode(res));
+        final decoded = res is String ? jsonDecode(res) : res;
+        return FeasibilityModel.fromJson(decoded);
       }
     } catch (e) {
       log("FeasibilityModel-->${e.toString()}");

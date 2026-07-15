@@ -36,8 +36,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  late final Client _client;
+
+  bool get _isAGCL => _client == Client.agcl;
+
   @override
   void initState() {
+    _client = AppConfig.instanceInit()!.client!;
     BlocProvider.of<HomeBloc>(context).add(HomeLoadEvent(context: context));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       callMethodeChannel();
@@ -135,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
             width: double.infinity,),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
-          if (ctx.user.role == "lmc" || ctx.user.role == "ngc") ...[
+          if (_isAGCL ? ctx.user.role == "feasibility" || ctx.user.role == "lmc" || ctx.user.role == "ngc": ctx.user.role == "lmc" || ctx.user.role == "ngc") ...[
             ...dataState.listOFAccessRight
                 .where((access) => ["LMC01", "LMC02", "NGC01"].contains(access.menuCode))
                 .map((access) {

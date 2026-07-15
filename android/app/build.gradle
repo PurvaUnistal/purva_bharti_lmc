@@ -113,8 +113,8 @@ android {
             applicationIdSuffix ".unistal.agcl.lmc"
             resValue "string", "app_name", "AGCL LMC"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/unistal_logo",
-                    appIconRound: "@mipmap/unistal_logo"
+                    appIcon: "@mipmap/agcl_logo",
+                    appIconRound: "@mipmap/agcl_logo"
             ]
             versionCode 1
             versionName "1.0.0-AGCL"

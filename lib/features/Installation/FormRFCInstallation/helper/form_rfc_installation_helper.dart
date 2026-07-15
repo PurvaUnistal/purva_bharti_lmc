@@ -7,6 +7,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -21,8 +22,8 @@ class FormRFCInstallationHelper {
   static final ctx = UserContext.getUserContext();
 
   static Future<RFCInstallationModel?> lmcRFCInstallationApi({required BuildContext context}) async {
-
-    String bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
+    final data =   AppConfig.instanceInit()?.rfcData;
+    String bpNumber = data!.bpNumber ?? "";
     Map<String, String> para = {
       "schema": ctx.user.schema ?? "",
       "user_id": ctx.user.id ?? "",
@@ -185,11 +186,11 @@ class FormRFCInstallationHelper {
     required String pneumaticPhoto,
     required String housePhoto,
   }) async {
-
-    String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
-    String installationId = await SharedPref.getString(key: PrefsValue.installationId);
-    String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
-    String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
+    final data =   AppConfig.instanceInit()?.rfcData;
+    String lmcInstallId = data!.lmcInstallId ?? "";
+    String installationId = data.installationId ?? "";
+    String meterDma = data.dma ?? "";
+    String lmcFeasId = data.lmcFeasId ?? "";;;
     try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,

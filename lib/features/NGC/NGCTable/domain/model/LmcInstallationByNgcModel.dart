@@ -82,6 +82,7 @@ class InstallationByNgcData {
   String? ageingId;
   String? areaId;
   String? mobileNumber;
+  String? sapAmcStatus;
   String? firstName;
   dynamic middleName;
   String? lastName;
@@ -411,6 +412,7 @@ class InstallationByNgcData {
         this.ageingId,
         this.areaId,
         this.mobileNumber,
+        this.sapAmcStatus,
         this.firstName,
         this.middleName,
         this.lastName,
@@ -740,6 +742,7 @@ class InstallationByNgcData {
     ageingId = json['ageing_id'] ?? "";
     areaId = json['area_id'] ?? "";
     mobileNumber = json['mobile_number'] ?? "";
+    sapAmcStatus = json['sap_amc_status'] ?? "";
     firstName = json['first_name'] ?? "";
     middleName = json['middle_name'] ?? "";
     lastName = json['last_name'] ?? "";
@@ -1071,6 +1074,7 @@ class InstallationByNgcData {
     data['ageing_id'] = this.ageingId;
     data['area_id'] = this.areaId;
     data['mobile_number'] = this.mobileNumber;
+    data['sap_amc_status'] = this.sapAmcStatus;
     data['first_name'] = this.firstName;
     data['middle_name'] = this.middleName;
     data['last_name'] = this.lastName;

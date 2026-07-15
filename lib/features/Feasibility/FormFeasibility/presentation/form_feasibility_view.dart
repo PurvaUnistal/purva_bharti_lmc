@@ -47,17 +47,19 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         title: AppString.lmcFeaH,
         boolLeading: true,
     ),
-    body: BackgroundWidget(
-        child: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
-          builder: (context, state) {
-            if (state is FormFeasibilityDataState) {
-              return _itemBuilder(dataState: state);
-            } else {
-              return Center(child: SpinLoader());
-            }
-          },
+    body: SafeArea(
+      child: BackgroundWidget(
+          child: BlocBuilder<FormFeasibilityBloc, FormFeasibilityState>(
+            builder: (context, state) {
+              if (state is FormFeasibilityDataState) {
+                return _itemBuilder(dataState: state);
+              } else {
+                return Center(child: SpinLoader());
+              }
+            },
+          ),
         ),
-      ),
+    ),
       ),
     );
   }
@@ -117,8 +119,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _bpNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.bpNumber,
-      label: AppString.bpNumber,
+      hintText: AppString.trNumber,
+      label: AppString.trNumber,
       enabled: false,
       controller: stateData.bpNumberController,
     );

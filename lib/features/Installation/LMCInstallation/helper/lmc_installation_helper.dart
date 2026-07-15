@@ -29,4 +29,26 @@ class LMCInstallationHelper{
     }
     return null;
   }
+
+  static Future<InstallationDoneModel?> getLmcAllocationList({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
+
+    Map<String, String> para = {
+      "schema": ctx.user.schema ?? "",
+      "user_id": ctx.user.id ?? "",
+      "role": ctx.user.role ?? "",
+      "page": page,
+      "bp_number": bpNumber,
+      "area_id": areaId,
+    };
+    String json = Uri(queryParameters: para).query;
+    try {
+      var res = await ServerRequest.getData(urlEndPoint: Apis.getLmcAllocationList + json);
+      if (res != null) {
+        return InstallationDoneModel.fromJson(res);
+      }
+    } catch (e) {
+      log("getLMCInstallationApi-->${e.toString()}");
+    }
+    return null;
+  }
 }

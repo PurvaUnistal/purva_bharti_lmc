@@ -7,6 +7,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -140,10 +141,9 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi(
-      {required BuildContext context, required String pipeQty}) async {
-    String propertyCategoryId = await SharedPref.getString(
-        key: PrefsValue.propertyCategoryId);
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context, required String pipeQty}) async {
+    final data =   AppConfig.instanceInit()?.installationDoneRows;
+    String propertyCategoryId = data!.propertyCategoryId ?? "";
     try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
@@ -307,12 +307,10 @@ class FormInstallationHelper {
     required String supplyPaint,
     required String gaisified,
   }) async {
-
-    String lmcInstallId = await SharedPref.getString(
-        key: PrefsValue.lmcInstallId);
-    String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
-    String lmcFeasId = await SharedPref.getString(
-        key: PrefsValue.meterLMCFeasId);
+    final data =   AppConfig.instanceInit()?.installationDoneRows;
+    String lmcInstallId = data!.lmcInstallId ?? "";
+    String meterDma = data.dma ?? "";
+    String lmcFeasId = data.lmcFeasId ?? "";
 
     try {
       Map<String, String> para = {

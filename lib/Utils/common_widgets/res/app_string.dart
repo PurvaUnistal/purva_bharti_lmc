@@ -12,6 +12,7 @@ class AppString {
     Client.hpoil: "6-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
+    Client.agcl: "15-07-2026",
   };
 
   static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
@@ -67,6 +68,7 @@ class AppString {
   static String district = "District";
   static String pinCode = "Pin Code";
   static String searchBPNumber = "Search Mobile/BP Number...";
+  static String trNumber = "TR Number";
   static String bpNumber = "BP Number";
   static String lmcProDate = "Proposed Installation Date";
   static String rfcDate = "RFC Date";

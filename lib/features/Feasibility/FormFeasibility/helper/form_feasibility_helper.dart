@@ -5,6 +5,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/SaveFeasibleModel.dart';
@@ -47,9 +48,8 @@ class FormFeasibilityHelper {
   static Future<List<FreeMaterialData>?> getAllFreePipeMaterial({
     required BuildContext context,
   }) async {
-
-    String propertyCategoryId = await SharedPref.getString(
-        key: PrefsValue.propertyCategoryId);
+    final data = AppConfig.instanceInit()?.feasibilityData;
+    String propertyCategoryId = data!.propertyCategoryId ?? "";
     try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
@@ -65,11 +65,9 @@ class FormFeasibilityHelper {
     return null;
   }
 
-  static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({
-    required BuildContext context,
-  }) async {
-    String propertyCategoryId = await SharedPref.getString(
-        key: PrefsValue.propertyCategoryId);
+  static Future<List<FreeMaterialData>?> getAllFreeMaterialApi({required BuildContext context,}) async {
+    final data = AppConfig.instanceInit()?.feasibilityData;
+    String propertyCategoryId = data!.propertyCategoryId ?? "";
     try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
@@ -184,9 +182,9 @@ class FormFeasibilityHelper {
     required String extraPipe,
     required String extraPrice,
   }) async {
-
-    String lmcId = await SharedPref.getString(key: PrefsValue.assignId);
-    String dma = await SharedPref.getString(key: PrefsValue.dma);
+    final data = AppConfig.instanceInit()?.feasibilityData;
+    String lmcId = data!.assignId ?? "";
+    String dma = data.dma ?? "";
 
     try {
       Map<String, String> para = {

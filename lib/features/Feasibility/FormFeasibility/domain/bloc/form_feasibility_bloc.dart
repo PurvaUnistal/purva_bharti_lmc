@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_event.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/bloc/form_feasibility_state.dart';
@@ -84,15 +85,10 @@ class FormFeasibilityBloc extends Bloc<FormFeasibilityEvent, FormFeasibilityStat
     reasonController.text = '';
     remarksController.text = '';
     followUpDateController.text = '';
-    final results = await Future.wait(<Future>[
-      SharedPref.getString(key: PrefsValue.bpNumber),
-      SharedPref.getString(key: PrefsValue.crNumber),
-      SharedPref.getString(key: PrefsValue.assignLmcDate),
-    ]);
-
-    bpNumberController.text = results[0] ?? "";
-    trNumberController.text = results[1] ?? "";
-    assignedDateController.text = results[2] ?? "";
+    final data = AppConfig.instanceInit()?.feasibilityData;
+    bpNumberController.text = data!.trNumber ?? "";
+    trNumberController.text = data.crn ?? "";
+    assignedDateController.text = data.assignLmcDate ?? "";
     feasibilityDateController.text = DateFormat(AppString.dateFormat).format(DateTime.now());
     await Future.wait(<Future>[
       fetchCheckFeasibilityApi(context: event.context),

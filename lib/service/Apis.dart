@@ -18,6 +18,7 @@ class Apis {
   static get areaList => "getAllArea?schema=";
   static get getLMCFeasibility => "getlmcapi?";
   static get getLMCInstallation => "getlmcInstallationApi?";
+  static get getLmcAllocationList => "get-lmc-allocation-list?";
   static get getRFCInstallation => "getlmcRFCInstallationApi?";
   static get getConstant => "getConstant?";
   static get getlmcRFCInstallationApi => "getlmcRFCInstallationApi?";

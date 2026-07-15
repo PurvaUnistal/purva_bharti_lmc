@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
+import 'package:lmc/features/Installation/FormRFCInstallation/domain/model/RFCInstallationModel.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
@@ -14,7 +16,9 @@ class AppConfig {
   RoleType? roleType;
   Client? client;
   LoginModel loginData = LoginModel();
+  FeasibilityData feasibilityData = FeasibilityData();
   InstallationDoneRows installationDoneRows = InstallationDoneRows();
+  RFCInstallationLmc rfcData  = RFCInstallationLmc();
   InstallationByNgcData ngcData = InstallationByNgcData();
 
   static AppConfig? instanceInit() {
@@ -38,6 +42,15 @@ class AppConfig {
 
   setClient({required Client client}){
     this.client =  client;
+  }
+
+  setFeasibilityData({required FeasibilityData feasibilityVal}){
+    this.feasibilityData =  feasibilityVal;
+  }
+
+
+  setRFCInstallationData({required RFCInstallationLmc rfcVal}){
+    this.rfcData =  rfcVal;
   }
 
   setInstallationData({required InstallationDoneRows value}){

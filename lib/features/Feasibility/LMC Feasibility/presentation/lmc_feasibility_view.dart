@@ -2,14 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
 import 'package:lmc/Utils/common_widgets/dropdown_widget.dart';
 import 'package:lmc/Utils/common_widgets/icon_button.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
@@ -44,15 +43,17 @@ class _FeasibilityViewState extends State<FeasibilityView> {
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: AppBarWidget(title: AppString.lmcFeaH, boolLeading: true),
-      body: BackgroundWidget(
-        child: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
-          builder: (context, state) {
-            if (state is LMCFeasibilityDataState) {
-              return _itemBuilder(dataState: state);
-            } else {
-              return const Center(child: SpinLoader());
-            }
-          },
+      body: SafeArea(
+        child: BackgroundWidget(
+          child: BlocBuilder<LMCFeasibilityBloc, LMCFeasibilityState>(
+            builder: (context, state) {
+              if (state is LMCFeasibilityDataState) {
+                return _itemBuilder(dataState: state);
+              } else {
+                return const Center(child: SpinLoader());
+              }
+            },
+          ),
         ),
       ),
     );
@@ -155,8 +156,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                             horizontalMargin: 0,
                             showCheckboxColumn: false,
                             dataTextStyle: Styles.texts,
-                            dataRowHeight:
-                                MediaQuery.of(context).size.height * 0.04,
+                            dataRowHeight: MediaQuery.of(context).size.height * 0.04,
                             headingRowColor: MaterialStateColor.resolveWith(
                               (states) => EnvironmentConfig.of(context)!.primaryTheme,
                             ),
@@ -164,7 +164,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                             columns: [
                               CommonStyle.dataColumn(label: "S.No"),
                               CommonStyle.dataColumn(label: "Mobile Number"),
-                              CommonStyle.dataColumn(label: "BP Number"),
+                              CommonStyle.dataColumn(label: "TR Number"),
                               CommonStyle.dataColumn(label: "Area"),
                               CommonStyle.dataColumn(label: "Name"),
                             ],
@@ -173,133 +173,15 @@ class _FeasibilityViewState extends State<FeasibilityView> {
                                     .mapIndexed(
                                       (index, user) => DataRow(
                                         onSelectChanged: (newValue) async {
-                                          await SharedPref.setString(
-                                            key: PrefsValue.assignLmcDate,
-                                            value: user.assignLmcDate ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.crNumber,
-                                            value: user.crn ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.proposedDate,
-                                            value: user.proposedDate ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.lmcId,
-                                            value: user.lmcId ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.assignId,
-                                            value: user.assignId ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.dma,
-                                            value: user.dma ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.bpNumber,
-                                            value: user.bpNumber ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.chargeArea,
-                                            value: user.chargeAreaName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.areaName,
-                                            value: user.areaName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.firstName,
-                                            value: user.firstName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.lastName,
-                                            value: user.lastName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.mobileNumber,
-                                            value: user.mobileNumber ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.guardianName,
-                                            value: user.guardianName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.proCateName,
-                                            value: user.propName ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.propClass,
-                                            value: user.propClass ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.buildingNumber,
-                                            value: user.buildingNumber ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.houseNumber,
-                                            value: user.houseNumber ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.locality,
-                                            value: user.locality ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.address2,
-                                            value: user.address2 ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.state,
-                                            value: user.state ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.town,
-                                            value: user.town ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.district,
-                                            value: user.district ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.pinCode,
-                                            value: user.pinCode ?? "",
-                                          );
-                                          await SharedPref.setString(
-                                            key: PrefsValue.propertyCategoryId,
-                                            value: user.propertyCategoryId!,
-                                          );
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      PreviewFeasibilityView(),
-                                            ),
-                                          );
+                                          await AppConfig.instanceInit()?.setFeasibilityData(feasibilityVal: user);
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewFeasibilityView()));
                                         },
                                         cells: <DataCell>[
-                                          CommonStyle.dataCell(
-                                            label:
-                                                (dataState.listOfFilterFeasibilityRow
-                                                            .indexOf(user) +
-                                                        1 +
-                                                        (dataState.pageNo - 1) *
-                                                            10)
-                                                    .toString(),
-                                          ),
-                                          CommonStyle.dataCell(
-                                            label: user.mobileNumber.toString(),
-                                          ),
-                                          CommonStyle.dataCell(
-                                            label: user.bpNumber.toString(),
-                                          ),
-                                          CommonStyle.dataCell(
-                                            label: user.areaName.toString(),
-                                          ),
-                                          CommonStyle.dataCell(
-                                            label: user.firstName.toString(),
-                                          ),
+                                          CommonStyle.dataCell(label: (dataState.listOfFilterFeasibilityRow.indexOf(user) + 1 + (dataState.pageNo - 1) * 10).toString()),
+                                          CommonStyle.dataCell(label: user.mobileNumber.toString()),
+                                          CommonStyle.dataCell(label: user.trNumber.toString()),
+                                          CommonStyle.dataCell(label: user.areaName.toString()),
+                                          CommonStyle.dataCell(label: user.firstName.toString()),
                                         ],
                                       ),
                                     )

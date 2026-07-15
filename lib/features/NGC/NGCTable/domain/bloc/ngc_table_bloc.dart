@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
+import 'package:lmc/features/Feasibility/LMC%20Feasibility/helper/feasibility_helper.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_event.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/bloc/ngc_table_state.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
@@ -67,7 +68,7 @@ class NgcTableBloc extends Bloc<NgcTableEvent, NgcTableState> {
   }
 
   fetchAllArea({required BuildContext context}) async {
-    var res = await NgcTableHelper.getAllAreaApi(context: context);
+    var res = await LMCFeasibilityHelper.getAllAreaApi(context: context);
     if (res != null) {
       listOfAllArea = res;
       listOfAllArea.sort((a, b) => a.areaName!.compareTo(b.areaName!));

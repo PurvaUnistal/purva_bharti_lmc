@@ -9,6 +9,7 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/res/singleton.dart';
@@ -211,22 +212,14 @@ class FormRFCInstallationBloc
     meterIniReading3FocusNode = FocusNode();
 
     currentDate = await DateFormat(AppString.dateFormat).format(DateTime.now());
-
+    final data =   AppConfig.instanceInit()?.rfcData;
     meterReadingDate.text = currentDate;
     installationDateController.text = currentDate;
 
-    trNumberController.text = await SharedPref.getString(
-      key: PrefsValue.crNumber,
-    );
-    bpNumberController.text = await SharedPref.getString(
-      key: PrefsValue.bpNumber,
-    );
-    proposedDateController.text = await SharedPref.getString(
-      key: PrefsValue.proposedDate,
-    );
-    feasibilityDateController.text = await SharedPref.getString(
-      key: PrefsValue.feasibilityVisitDate,
-    );
+    trNumberController.text = data!.crn ?? "";
+    bpNumberController.text =  data.bpNumber ?? "";
+    proposedDateController.text = data.proposedDate ?? "";
+    feasibilityDateController.text = data.feasibilityVisitDate ?? "";
 
     Future.wait(<Future>[
       fetchDelayReasonApi(context: event.context),
@@ -378,10 +371,7 @@ class FormRFCInstallationBloc
         rfcInstallationLmc = await res.data!.lmc!;
         listOfRFCInstallationMaterial = await res.data!.material!;
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
-        await SharedPref.setString(
-          key: PrefsValue.installationId,
-          value: rfcInstallationLmc.installationId!,
-        );
+        await AppConfig.instanceInit()?.setRFCInstallationData(rfcVal: rfcInstallationLmc);
         installationDateController.text = rfcInstallationLmc.workCompletedDate!;
         // delayReasonValue.name = rfcInstallationLmc.delayReason!;
         for (var i = 0; i < listOfDelayReason.length; i++) {

@@ -17,12 +17,12 @@ class LoginModel {
   final String? exptime;
 
   LoginModel({
-     this.status,
-     this.error,
-     this.messages,
-     this.token,
-     this.user,
-     this.exptime,
+    this.status,
+    this.error,
+    this.messages,
+    this.token,
+    this.user,
+    this.exptime,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
@@ -57,20 +57,26 @@ class User {
   final List<Accessright>? accessright;
   final String? spreadId;
   final String? sectionId;
+  final String? smartLogo;
+  final String? projectLogo;
+  final String? projectUrl;
 
   User({
-     this.id,
-     this.email,
-     this.moduleId,
-     this.name,
-     this.userStatus,
-     this.pwdChanged,
-     this.modules,
-     this.schema,
-     this.role,
-     this.accessright,
-     this.spreadId,
-     this.sectionId,
+    this.id,
+    this.email,
+    this.moduleId,
+    this.name,
+    this.userStatus,
+    this.pwdChanged,
+    this.modules,
+    this.schema,
+    this.role,
+    this.accessright,
+    this.spreadId,
+    this.sectionId,
+    this.smartLogo,
+    this.projectLogo,
+    this.projectUrl,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -83,9 +89,12 @@ class User {
     modules: json["modules"] ?? "",
     schema: json["schema"] ?? "",
     role: json["role"] ?? "",
-    accessright: json["accessright"] == null ? [] :List<Accessright>.from(json["accessright"].map((x) => Accessright.fromJson(x))),
+    accessright: json["accessright"] == null ? [] : List<Accessright>.from(json["accessright"].map((x) => Accessright.fromJson(x))),
     spreadId: json["spread_id"] ?? "",
     sectionId: json["section_id"] ?? "",
+    smartLogo: json["smartLogo"] ?? "",
+    projectLogo: json["projectLogo"] ?? "",
+    projectUrl: json["projectUrl"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -97,10 +106,13 @@ class User {
     "pwd_changed": pwdChanged,
     "modules": modules,
     "schema": schema,
-    "role": role,
+    "role": role?.trim().toString(),
     "accessright": List<dynamic>.from(accessright!.map((x) => x.toJson())),
     "spread_id": spreadId,
     "section_id": sectionId,
+    "smartLogo": smartLogo,
+    "projectLogo": projectLogo,
+    "projectUrl": projectUrl,
   };
 }
 
@@ -111,10 +123,10 @@ class Accessright {
   final String? submoduleAlias;
 
   Accessright({
-     this.menuCode,
-     this.id,
-     this.name,
-     this.submoduleAlias,
+    this.menuCode,
+    this.id,
+    this.name,
+    this.submoduleAlias,
   });
 
   static accessrightListFromJson(String json) {

@@ -15,10 +15,11 @@ class LMCInstallationPageLoadState extends LMCInstallationInitialState {
   List<Object> get props => [];
 }
 
-
 class LMCInstallationDataState extends LMCInstallationInitialState {
   final bool isLoader;
   final bool isAreaFilter;
+  final bool isLoadingMore;
+  final bool hasMoreData;
   final GetAllAreaModel allAreaValue;
   final int pageNo;
   final List<GetAllAreaModel> listOfAllArea;
@@ -31,6 +32,8 @@ class LMCInstallationDataState extends LMCInstallationInitialState {
     required this.isLoader,
     required this.isAreaFilter,
     required this.allAreaValue,
+    this.isLoadingMore = false,
+    this.hasMoreData = true,
     required this.pageNo,
     required this.listOfAllArea,
     required this.listOfFilterInstallationRow,
@@ -39,17 +42,46 @@ class LMCInstallationDataState extends LMCInstallationInitialState {
     required this.bpNumberController,
   });
 
+  LMCInstallationDataState copyWith({
+    bool? isLoader,
+    bool? isAreaFilter,
+    bool? isLoadingMore,
+    bool? hasMoreData,
+    GetAllAreaModel? allAreaValue,
+    int? pageNo,
+    List<GetAllAreaModel>? listOfAllArea,
+    List<InstallationDoneRows>? listOfFilterInstallationRow,
+    InstallationDoneModel? installationDoneModel,
+    ScrollController? scrollController,
+    TextEditingController? bpNumberController,
+  }) {
+    return LMCInstallationDataState(
+      isLoader: isLoader ?? this.isLoader,
+      isAreaFilter: isAreaFilter ?? this.isAreaFilter,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMoreData: hasMoreData ?? this.hasMoreData,
+      allAreaValue: allAreaValue ?? this.allAreaValue,
+      pageNo: pageNo ?? this.pageNo,
+      listOfAllArea: listOfAllArea ?? this.listOfAllArea,
+      listOfFilterInstallationRow: listOfFilterInstallationRow ?? this.listOfFilterInstallationRow,
+      installationDoneModel: installationDoneModel ?? this.installationDoneModel,
+      scrollController: scrollController ?? this.scrollController,
+      bpNumberController: bpNumberController ?? this.bpNumberController,
+    );
+  }
+
   @override
-  // TODO: implement props
   List<Object> get props => [
-        isLoader,
-        isAreaFilter,
-        allAreaValue,
-        pageNo,
-        listOfAllArea,
-        listOfFilterInstallationRow,
-        installationDoneModel,
-        scrollController,
-        bpNumberController,
-      ];
+    isLoader,
+    isAreaFilter,
+    allAreaValue,
+    pageNo,
+    isLoadingMore,
+    hasMoreData,
+    listOfAllArea,
+    listOfFilterInstallationRow,
+    installationDoneModel,
+    scrollController,
+    bpNumberController,
+  ];
 }

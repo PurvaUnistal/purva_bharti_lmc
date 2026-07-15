@@ -29,6 +29,14 @@ class SearchBpNumberEvent extends LMCInstallationEvent {
   // TODO: implement props
   List<Object> get props => [context, searchBpNumber];
 }
+class LoadMoreInstallationEvent extends LMCInstallationEvent {
+  final BuildContext context;
+  LoadMoreInstallationEvent({required this.context});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [context];
+}
 
 class LoadMoreTableEvent extends LMCInstallationEvent {
   final BuildContext context;
