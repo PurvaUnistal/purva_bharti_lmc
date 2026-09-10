@@ -48,10 +48,10 @@ dev_dependencies:
     sdk: flutter
 
 flutter_icons:
-  android: "agcl_logo"
+  android: "hp_oil_logo"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icons/agcl_logo.png"
+  image_path: "assets/icons/hp_oil_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
