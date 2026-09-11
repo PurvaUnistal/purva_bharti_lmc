@@ -9,6 +9,7 @@ import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/Utils/common_widgets/res/environment_config.dart';
 import 'package:lmc/Utils/common_widgets/res/singleton.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -103,10 +104,8 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController meterIniReading3Controller = TextEditingController();
   TextEditingController meterInitialReadingController = TextEditingController();
   TextEditingController meterNumberSerialController = TextEditingController();
-  TextEditingController meterConnectionMeterController =
-      TextEditingController();
-  TextEditingController regulatorSerialSearchController =
-      TextEditingController();
+  TextEditingController meterConnectionMeterController = TextEditingController();
+  TextEditingController regulatorSerialSearchController = TextEditingController();
   TextEditingController regulatorSerialController = TextEditingController();
   TextEditingController mrNumberSearchController = TextEditingController();
   TextEditingController mrSerialNumberController = TextEditingController();
@@ -119,14 +118,14 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   TextEditingController nameContractorController = TextEditingController();
   TextEditingController bpNumberController = TextEditingController();
   TextEditingController reasonMeterChangeController = TextEditingController();
-  TextEditingController reasonRegulatorChangeController =
-      TextEditingController();
+  TextEditingController reasonRegulatorChangeController = TextEditingController();
   TextEditingController noOfBurnersController = TextEditingController();
   TextEditingController meterSerialController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController altMobileNumberController = TextEditingController();
   TextEditingController noOfFamilyMembersController = TextEditingController();
   TextEditingController emailIdController = TextEditingController();
+  TextEditingController correctionFactorController = TextEditingController();
   TextEditingController typeOfNrController = TextEditingController();
   TextEditingController dateInstallationController = TextEditingController();
   TextEditingController delayReasonController = TextEditingController();
@@ -804,6 +803,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
           contactPerson: mobileNumberController.text.trim().toString(),
           conversionDate: ngConversionDateController.text.trim().toString(),
           email: emailIdController.text.trim().toString(),
+          correctionFactorController: AppConfig.instanceInit()!.client == Client.purvaBharti ?correctionFactorController.text.trim().toString() : '',
           isInstall: isInstall,
           jmrNo: bpNumberController.text.trim().toString(),
           lmcInstallationId: lmcInstallationId.toString(),
@@ -902,6 +902,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
       mobileNumberController: mobileNumberController,
       altMobileNumberController: altMobileNumberController,
       emailIdController: emailIdController,
+      correctionFactorController: correctionFactorController,
       ngChargeDateController: ngConversionDateController,
       typeOfNrController: typeOfNrController,
       dateInstallationController: dateInstallationController,

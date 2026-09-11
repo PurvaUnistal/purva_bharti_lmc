@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lmc/Utils/common_widgets/Loader/DottedLoader.dart';
 import 'package:lmc/Utils/common_widgets/Loader/SpinLoader.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
+import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
 import 'package:lmc/Utils/common_widgets/auto_complete_text_field_widget.dart';
 import 'package:lmc/Utils/common_widgets/background_widget.dart';
@@ -12,8 +14,10 @@ import 'package:lmc/Utils/common_widgets/image_pop_widget.dart';
 import 'package:lmc/Utils/common_widgets/message_box_two_button_pop.dart';
 import 'package:lmc/Utils/common_widgets/res/app_bar_widget.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart';
 import 'package:lmc/Utils/common_widgets/row_widget.dart';
 import 'package:lmc/Utils/common_widgets/text_form_widget.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
@@ -118,6 +122,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   }
 
   _buildLayout({required NGCFormDataState dataState}) {
+    String propCode = AppConfig.instanceInit()!.ngcData.propCode ?? "";
     return ListView(
       padding: EdgeInsets.all(8),
       children: [
@@ -154,6 +159,10 @@ class _NGCFormViewState extends State<NGCFormView> {
         CommonStyle.vertical(context: context),
         _emailWidget(dataState: dataState),
         CommonStyle.vertical(context: context),
+        if(propCode == "com" && AppConfig.instanceInit()!.client == Client.purvaBharti)...[
+          _correctionFactorWidget(dataState: dataState),
+          CommonStyle.vertical(context: context),
+        ],
         _ngConversionDateController(dataState: dataState),
         CommonStyle.vertical(context: context),
         _delayReasonDropdown(dataState: dataState),
@@ -302,6 +311,14 @@ class _NGCFormViewState extends State<NGCFormView> {
       hintText: AppString.email,
       enabled: false,
       controller: dataState.emailIdController,
+    );
+  }
+
+  Widget _correctionFactorWidget({required NGCFormDataState dataState}) {
+    return TextFieldWidget(
+      label: AppString.correctionFactor,
+      hintText: AppString.correctionFactor,
+      controller: dataState.correctionFactorController,
     );
   }
 

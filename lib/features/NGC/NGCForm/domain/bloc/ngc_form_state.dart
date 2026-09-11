@@ -79,6 +79,7 @@ class NGCFormDataState extends NGCFormInitialState {
   final TextEditingController mobileNumberController;
   final TextEditingController altMobileNumberController;
   final TextEditingController emailIdController;
+  final TextEditingController correctionFactorController;
   final TextEditingController ngChargeDateController;
   final TextEditingController typeOfNrController;
   final TextEditingController dateInstallationController;
@@ -150,6 +151,7 @@ class NGCFormDataState extends NGCFormInitialState {
     required this.mobileNumberController,
     required this.altMobileNumberController,
     required this.emailIdController,
+    required this.correctionFactorController,
     required this.ngChargeDateController,
     required this.typeOfNrController,
     required this.dateInstallationController,
@@ -225,6 +227,7 @@ class NGCFormDataState extends NGCFormInitialState {
         mobileNumberController,
         altMobileNumberController,
         emailIdController,
+    correctionFactorController,
         ngChargeDateController,
         typeOfNrController,
         dateInstallationController,

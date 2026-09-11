@@ -8,7 +8,7 @@ import 'environment_config.dart';
 class AppString {
   static const Map<Client, String> _releaseDates = {
     Client.mahaNagar: "22-07-2025",
-    Client.purvaBharti: "11-07-2026",
+    Client.purvaBharti: "10-09-2026",
     Client.hpoil: "6-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
@@ -57,6 +57,7 @@ class AppString {
   static String mobileNumber = "Registered Mobile Number";
   static String altMobileNo = "Alternate Mobile Number";
   static String email = "Email";
+  static String correctionFactor = "Correction Factor";
   static String guardianName = "Guardian Name";
   static String propertyCategory = "Property Category";
   static String propertyClass = "Property Class";

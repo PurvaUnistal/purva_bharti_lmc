@@ -360,6 +360,7 @@ class InstallationByNgcData {
   String? dma;
   String? propName;
   String? propClass;
+  String? propCode;
 
   InstallationByNgcData(
       {this.lmcpath,
@@ -688,7 +689,9 @@ class InstallationByNgcData {
         this.isInstall,
         this.dma,
         this.propName,
-        this.propClass});
+        this.propClass,
+        this.propCode,
+      });
 
   InstallationByNgcData.fromJson(Map<String, dynamic> json) {
     lmcpath = json['lmcpath'] ?? "";
@@ -1018,6 +1021,7 @@ class InstallationByNgcData {
     dma = json['Dma'] ?? "";
     propName = json['prop_name'] ?? "";
     propClass = json['prop_class'] ?? "";
+    propCode = json['prop_code'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -1350,6 +1354,7 @@ class InstallationByNgcData {
     data['Dma'] = this.dma;
     data['prop_name'] = this.propName;
     data['prop_class'] = this.propClass;
+    data['prop_code'] = this.propCode;
     return data;
   }
 }
