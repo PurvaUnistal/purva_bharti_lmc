@@ -40,7 +40,13 @@ class BackgroundWidget extends StatelessWidget {
             bottom: false,
             child: Container(
               width: double.infinity,
-              color: themeColor,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: <Color>[ EnvironmentConfig.of(context)!.secondaryTheme,
+                      EnvironmentConfig.of(context)!.primaryTheme,]),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
               child: Text(
                 loginUserName,
@@ -64,7 +70,13 @@ class BackgroundWidget extends StatelessWidget {
             top: false,
             child: Container(
               width: double.infinity,
-              color: themeColor,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: <Color>[ EnvironmentConfig.of(context)!.secondaryTheme,
+                      EnvironmentConfig.of(context)!.primaryTheme,]),
+              ),
 
               child: Row(
                 children: [

@@ -12,6 +12,7 @@ class AppString {
     Client.hpoil: "26-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
+    Client.hngpl: "11-09-2026",
   };
 
   static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";

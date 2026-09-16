@@ -19,7 +19,7 @@ def keystoreProperties = new Properties()
 android {
     namespace "com"
     compileSdkVersion 36
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -109,17 +109,28 @@ android {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
         }
-//        prodAGCL {
-//            dimension "app"
-//            applicationIdSuffix ".unistal.agcl.lmc"
-//            resValue "string", "app_name", "AGCL LMC"
-//            manifestPlaceholders = [
-//                    appIcon: "@mipmap/agcl_logo",
-//                    appIconRound: "@mipmap/agcl_logo"
-//            ]
-//            versionCode 2
-//            versionName "1.0.0-AGCL"
-//        }
+        prodAGCL {
+            dimension "app"
+            applicationIdSuffix ".unistal.agcl.lmc"
+            resValue "string", "app_name", "AGCL LMC"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/agcl_logo",
+                    appIconRound: "@mipmap/agcl_logo"
+            ]
+            versionCode 2
+            versionName "1.0.0-AGCL"
+        }
+        prodHNGPL {
+            dimension "app"
+            applicationIdSuffix ".unistal.hngpl.lmc"
+            resValue "string", "app_name", "HNGPL LMC"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/hngpl_logo",
+                    appIconRound: "@mipmap/hngpl_logo"
+            ]
+            versionCode 1
+            versionName "1.0.0-HNGPL"
+        }
     }
 
     signingConfigs {
