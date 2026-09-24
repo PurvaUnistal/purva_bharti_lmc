@@ -135,8 +135,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _bpNumberController(
       {required FormRFCInstallationDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.bpNumber,
-      label: AppString.bpNumber,
+      labelText: AppString.bpNumber,
       enabled: false,
       controller: stateData.bpNumberController,
     );
@@ -145,8 +144,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _trNumberController(
       {required FormRFCInstallationDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.crNumber,
-      label: AppString.crNumber,
+      labelText: AppString.crNumber,
       enabled: false,
       controller: stateData.trNumberController,
     );
@@ -155,8 +153,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _proposedDateController(
       {required FormRFCInstallationDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.lmcProDate,
-      label: AppString.lmcProDate,
+      labelText: AppString.lmcProDate,
       enabled: false,
       controller: stateData.proposedDateController,
     );
@@ -165,8 +162,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _feasibilityDateController(
       {required FormRFCInstallationDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.lmcFeaDate,
-      label: AppString.lmcFeaDate,
+      labelText: AppString.lmcFeaDate,
       enabled: false,
       controller: stateData.feasibilityDateController,
     );
@@ -175,10 +171,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
   Widget _installationDateController(
       {required FormRFCInstallationDataState stateData}) {
     return TextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.installationDate,
-      label: AppString.installationDate,
-      textInputAction: TextInputAction.next,
+      isRequired: true,
+      labelText: AppString.installationDate,
       enabled: true,
       readOnly: true,
       controller: stateData.installationDateController,
@@ -202,8 +196,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.reasonDelay,
+              isRequired: true,
               hint: AppString.reasonDelay,
               dropdownValue: stateData.delayReasonValue.name == null
                   ? null
@@ -264,8 +257,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         Flexible(
           flex: 4,
           child: TextFieldWidget(
-            hintText: AppString.meterConnection,
-            label: AppString.meterConnection,
+            labelText: AppString.meterConnection,
             enabled: false,
             controller: stateData.meterConnectionMeterController,
           ),
@@ -425,8 +417,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         ? CommonStyle.col(
       context: context,
       child: DropdownWidget<LmcReasonModel>(
-        star: AppString.star,
-        label: AppString.regulatorType,
+        isRequired: true,
         hint: AppString.regulatorType,
         dropdownValue: stateData.regulatorTypeValue.name == null
             ? null
@@ -540,10 +531,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.rfcDate,
-              label: AppString.rfcDate,
-              textInputAction: TextInputAction.next,
+              isRequired: true,
+              labelText: AppString.rfcDate,
               enabled: true,
               readOnly: true,
               controller: stateData.rfcDateController,
@@ -569,9 +558,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.ngProposedDate,
-              label: AppString.ngProposedDate,
+              isRequired: true,
+              labelText: AppString.ngProposedDate,
               readOnly: true,
               controller: stateData.ngConversionDateController,
               suffixIcon: IconButtonWidget(
@@ -597,9 +585,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.latOfHouse,
-            label: AppString.latOfHouse,
+            isRequired: true,
+            labelText: AppString.latOfHouse,
             controller: stateData.latOfHouseController,
           ),
         ),
@@ -608,9 +595,8 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.longOfHouse,
-            label: AppString.longOfHouse,
+            isRequired:true,
+            labelText: AppString.longOfHouse,
             controller: stateData.longOfHouseController,
           ),
         ),
@@ -640,8 +626,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                         ? Flexible(
                             flex: 7,
                             child: TextFieldWidget(
-                              hintText: AppString.pipe,
-                              label: AppString.pipe,
+                              labelText: AppString.pipe,
                               initialValue: e.name,
                               enabled: false,
                             ),
@@ -649,8 +634,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                         : Flexible(
                             flex: 7,
                             child: TextFieldWidget(
-                              hintText: AppString.material,
-                              label: AppString.material,
+                              labelText: AppString.material,
                               initialValue: e.name,
                               enabled: false,
                             ),
@@ -660,8 +644,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                         ? Flexible(
                             flex: 3,
                             child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
+                              labelText: e.unit,
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
@@ -676,8 +659,7 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
                         : Flexible(
                             flex: 3,
                             child: TextFieldWidget(
-                              hintText: e.unit,
-                              label: e.unit,
+                              labelText: e.unit,
                               controller: e.controller,
                               enabled: true,
                               keyboardType: TextInputType.number,
@@ -702,14 +684,12 @@ class _FormRFCInstallationViewState extends State<FormRFCInstallationView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipe,
-        label: AppString.extraPipe,
+        labelText: AppString.extraPipe,
         controller: stateData.extraPipeController,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPrice,
-        label: AppString.extraPrice,
+        labelText: AppString.extraPrice,
         controller: stateData.extraPriceController,
       ),
     );

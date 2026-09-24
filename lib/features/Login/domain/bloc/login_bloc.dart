@@ -81,10 +81,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await SharedPref.setString(key: PrefsValue.userInfo, value: userJson,);
               await AppConfig.instanceInit()?.setLoginData(newLoginData: loginModel,);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
-              await SharedPref.setString(
-                key: PrefsValue.buildNumber,
-                value: packageInfo.buildNumber,
-              );
+
+              String version = packageInfo.version;
+              String buildNumber = packageInfo.buildNumber;
+              AppConfig.instanceInit()?.setBuildNumber(buildNumber: "$buildNumber($version)");
+              await SharedPref.setString(key: PrefsValue.buildNumber, value: packageInfo.buildNumber,);
               if (res.user!.role == "lmc" || res.user!.role == "ngc") {
                 Navigator.pushReplacementNamed(event.context, RoutesName.home);
               }

@@ -88,7 +88,6 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   Widget _areaDropDown({required FetchNgcTableDataState dataState}) {
     return DropdownWidget<GetAllAreaModel>(
-      label: AppString.selectArea,
       hint: AppString.selectArea,
       dropdownValue: dataState.allAreaValue.gid != null ? dataState.allAreaValue : null,
       items: dataState.listOfAllArea,
@@ -103,8 +102,7 @@ class _NgcTableViewState extends State<NgcTableView> {
 
   Widget _searchTextField({required FetchNgcTableDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.searchBPNumber,
-      hintText: AppString.searchBPNumber,
+      labelText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,

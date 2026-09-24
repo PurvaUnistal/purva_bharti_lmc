@@ -6,6 +6,7 @@ class PrefsValue {
   static String buildNumber = "buildNumber";
 
   static String bpNumber = "bpNumber";
+  static get baseUrl => "baseUrl";
 
 
 

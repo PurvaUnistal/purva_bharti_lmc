@@ -68,13 +68,14 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     final email = await SharedPref.getString(key: PrefsValue.emailVal);
     final password = await SharedPref.getString(key: PrefsValue.passwordVal);
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final newVersion  = await packageInfo.buildNumber;
-    AppConfig.instanceInit()?.setBuildNumber(buildNumber: packageInfo.buildNumber);
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    AppConfig.instanceInit()?.setBuildNumber(buildNumber: "$buildNumber($version)");
     final oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
     Timer(
       const Duration(seconds: 3),
           () async {
-        if(oldVersion == newVersion){
+        if(oldVersion == buildNumber){
           if (email.isNotEmpty || password.isNotEmpty) {
             Navigator.pushReplacementNamed(
               context,

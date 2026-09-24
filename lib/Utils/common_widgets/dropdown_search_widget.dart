@@ -1,21 +1,16 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'WidgetStyles/common_style.dart';
-import 'button_widget.dart';
-import 'res/app_color.dart';
-import 'res/app_styles.dart';
+import 'input_decoration_style.dart';
+import 'res/environment_config.dart';
 
-class DropDownSearchWidget extends StatelessWidget {
-  final List<dynamic> items;
+class DropDownSearchWidget<T> extends StatelessWidget {
+  final List<T> items;
   final ValueChanged<dynamic>? onChanged;
   final DropdownSearchItemAsString<dynamic>? itemAsString;
   final String hint;
-  final String searchFieldHint;
-  final String? searchFieldLabel;
-  final String? label;
-  final String? star;
-  final dynamic dropdownValue;
-  final DropdownSearchOnFind<String>? asyncItems;
+  final T? dropdownValue;
+  final bool isRequired;
+  final bool enabled;
 
   const DropDownSearchWidget({
     super.key,
@@ -23,113 +18,72 @@ class DropDownSearchWidget extends StatelessWidget {
     this.onChanged,
     required this.itemAsString,
     required this.hint,
-    required this.searchFieldHint,
-    required this.searchFieldLabel,
-    required this.star,
-    required this.label,
     this.dropdownValue,
-    this.asyncItems,
+    this.isRequired = false,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.054,
-      child: DropdownSearch<dynamic>(
-        items:  items,
-        enabled : true,
-      /*  clearButtonProps: ClearButtonProps(
-          isVisible: true,
-            icon: CircleAvatar(child: Icon(Icons.close_rounded,color: AppColor.white,),
-              backgroundColor: AppColor.red,
+    return DropdownSearch<T>(
+      items: items,
+      selectedItem: dropdownValue,
+      enabled: enabled,
+      itemAsString: itemAsString,
+      onChanged: onChanged,
 
-            )),*/
-        itemAsString: itemAsString,
-        onChanged: onChanged,
-        selectedItem: dropdownValue,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          textAlign: TextAlign.start,
-          textAlignVertical: TextAlignVertical.center,
-          dropdownSearchDecoration:InputDecoration(
-            filled: true,
-            fillColor: AppColor.white,
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8),
-            enabledBorder:CommonStyle.border(context: context),
-            disabledBorder:CommonStyle.border(context: context),
-            border: CommonStyle.border(context: context),
-            focusedBorder: CommonStyle.border(context: context),
-            errorBorder: CommonStyle.border(context: context),
-            label: Padding(
-              padding: const EdgeInsets.only(left: 2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(child: Text(star ?? "",  style:Styles.stars)),
-                  Flexible(child: Text(label  ?? "", style:Styles.labels),
-                  ),
-                ],
-              ),
-            ),
+      /// ✅ FIXED: REMOVE unsafe compareFn
+      compareFn: (item, selected) => item == selected,
+
+      /// ✅ USE COMMON DECORATION
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecorationStyle.inputDecoration(
+          context,
+          labelText: hint,
+          isRequired: isRequired,
+        ).copyWith(
+          fillColor: enabled ? Colors.white : Colors.grey.shade100,
+        ),
+      ),
+
+      /// ✅ CLEAN POPUP
+      popupProps: PopupProps.dialog(
+        showSearchBox: true,
+
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecorationStyle.inputDecoration(
+            context,
+            labelText: "Search",
           ),
         ),
-        popupProps: PopupProps.modalBottomSheet(
-            showSearchBox: true,
-            modalBottomSheetProps: ModalBottomSheetProps(
-              backgroundColor: AppColor.white,
-              shape:RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.all(new Radius.circular(0))),
-            ),
-            searchFieldProps: TextFieldProps(
-              decoration:InputDecoration(
-                  filled: true,
-                  fillColor: AppColor.white,
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
-                  enabledBorder:CommonStyle.border(context: context),
-                  disabledBorder:CommonStyle.border(context: context),
-                  border: CommonStyle.border(context: context),
-                  focusedBorder: CommonStyle.border(context: context),
-                  errorBorder: CommonStyle.border(context: context),
-                  label: Padding(
-                    padding: const EdgeInsets.only(left: 2.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(child: Text(star ?? "",  style:Styles.stars)),
-                        Flexible(child: Text(searchFieldLabel  ?? "", style:Styles.labels),
-                        ),
-                      ],
-                    ),
-                  ),
-                  hintText: searchFieldHint,
-                  hintStyle: Styles.labels
-              ),
-            ),
-            containerBuilder: (context, popupWidget) {
-              return SizedBox(
-                width: double.infinity,
-                child: Column(
+        containerBuilder: (context, popupWidget) {
+          return Column(
+            children: [
+              Expanded(child: popupWidget),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Flexible(child: popupWidget),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.30,
-                        child: ButtonWidget(
-                          onPressed: ()=>Navigator.pop(context),
-                          text: "Close",
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,          // ✅ White background
+                        foregroundColor: Colors.black,          // ✅ Black text
+                        side: BorderSide(color: EnvironmentConfig.of(context)!.primaryTheme),  // ✅ Grey border
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
                         ),
                       ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Cancel"),
                     ),
                   ],
                 ),
-              );
-            }),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

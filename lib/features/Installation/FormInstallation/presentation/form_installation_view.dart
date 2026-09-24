@@ -118,21 +118,21 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           _rfcDateControllerController(dataState: dataState),
           CommonStyle.vertical(context: context),
           _materialList(dataState: dataState),
-          _materialCopperList(dataState: dataState),
+          if( AppConfig.instanceInit()!.client == Client.hpoil)...[
+            _materialCopperList(dataState: dataState),
+          ],
           _checkListRFC(dataState: dataState),
           CommonStyle.vertical(context: context),
           _locationOfHouse(dataState: dataState),
           CommonStyle.vertical(context: context),
-          AppConfig.instanceInit()!.client == Client.mahaNagar ? Column(
-            children: [
-              _checkCoatTap(dataState: dataState),
-              dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
-              dataState.tapOffValue == "1" ? _tapOffLengthController(dataState: dataState) : SizedBox.shrink(),
-              CommonStyle.vertical(context: context),
-              _gasifiedRadioBtn(dataState: dataState),
-              CommonStyle.vertical(context: context),
-            ],
-          ) : SizedBox.shrink(),
+          if(AppConfig.instanceInit()!.client == Client.mahaNagar)... [
+            _checkCoatTap(dataState: dataState),
+            dataState.tapOffValue == "1" ? CommonStyle.vertical(context: context) : SizedBox.shrink(),
+            dataState.tapOffValue == "1" ? _tapOffLengthController(dataState: dataState) : SizedBox.shrink(),
+            CommonStyle.vertical(context: context),
+            _gasifiedRadioBtn(dataState: dataState),
+            CommonStyle.vertical(context: context),
+          ],
           _image(dataState: dataState),
           CommonStyle.vertical(context: context),
           CommonStyle.vertical(context: context),
@@ -145,8 +145,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _bpNumberController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.bpNumber,
-      label: AppString.bpNumber,
+      labelText: AppString.bpNumber,
       enabled: false,
       controller: dataState.bpNumberController,
     );
@@ -154,8 +153,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _trNumberController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.crNumber,
-      label: AppString.crNumber,
+      labelText: AppString.crNumber,
       enabled: false,
       controller: dataState.trNumberController,
     );
@@ -164,8 +162,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   Widget _proposedDateController(
       {required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.lmcProDate,
-      label: AppString.lmcProDate,
+      labelText: AppString.lmcProDate,
       enabled: false,
       controller: dataState.proposedDateController,
     );
@@ -174,8 +171,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   Widget _feasibilityDateController(
       {required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      hintText: AppString.lmcFeaDate,
-      label: AppString.lmcFeaDate,
+      labelText: AppString.lmcFeaDate,
       enabled: false,
       controller: dataState.feasibilityDateController,
     );
@@ -183,10 +179,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _installationDateController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
-      hintText: AppString.installationDate,
-      label: AppString.installationDate,
-      textInputAction: TextInputAction.done,
+      isRequired: true,
+      labelText: AppString.installationDate,
       enabled: true,
       readOnly: true,
       controller: dataState.installationDateController,
@@ -209,8 +203,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.reasonDelay,
+              isRequired: true,
               hint: AppString.reasonDelay,
               dropdownValue: dataState.delayReasonValue.name == null
                   ? null
@@ -269,8 +262,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         Flexible(
           flex: 4,
           child: TextFieldWidget(
-            hintText: AppString.meterConnection,
-            label: AppString.meterConnection,
+            labelText: AppString.meterConnection,
             enabled: false,
             controller: dataState.meterConnectionMeterController,
           ),
@@ -436,8 +428,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.regulatorType,
+               isRequired: true,
               hint: AppString.regulatorType,
               dropdownValue: dataState.regulatorTypeValue.name == null
                   ? null
@@ -552,10 +543,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.rfcDate,
-              label: AppString.rfcDate,
-              textInputAction: TextInputAction.done,
+              isRequired: true,
+              labelText: AppString.rfcDate,
               enabled: true,
               readOnly: true,
               controller: dataState.rfcDateController,
@@ -581,9 +570,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.ngProposedDate,
-              label: AppString.ngProposedDate,
+              isRequired: true,
+              labelText: AppString.ngProposedDate,
               readOnly: true,
               controller: dataState.ngConversionDateController,
               suffixIcon: IconButtonWidget(
@@ -609,9 +597,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.latOfHouse,
-            label: AppString.latOfHouse,
+            isRequired: true,
+            labelText: AppString.latOfHouse,
             controller: dataState.latOfHouseController,
           ),
         ),
@@ -620,9 +607,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
           flex: 3,
           child: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.longOfHouse,
-            label: AppString.longOfHouse,
+            isRequired: true,
+            labelText: AppString.longOfHouse,
             controller: dataState.longOfHouseController,
           ),
         ),
@@ -652,8 +638,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         ? Flexible(
                       flex: 7,
                       child: TextFieldWidget(
-                        hintText: AppString.pipe,
-                        label: AppString.pipe,
+                        labelText: AppString.pipe,
                         initialValue: e.name,
                         enabled: false,
                       ),
@@ -661,8 +646,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         : Flexible(
                       flex: 7,
                       child: TextFieldWidget(
-                        hintText: AppString.material,
-                        label: AppString.material,
+                        labelText: AppString.material,
                         initialValue: e.name,
                         enabled: false,
                       ),
@@ -672,8 +656,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         ? Flexible(
                       flex: 3,
                       child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
+                        labelText: e.unit,
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
@@ -688,8 +671,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         : Flexible(
                       flex: 3,
                       child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
+                        labelText: e.unit,
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
@@ -724,8 +706,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         ? Flexible(
                       flex: 7,
                       child: TextFieldWidget(
-                        hintText: AppString.pipe,
-                        label: AppString.pipe,
+                        labelText: AppString.pipe,
                         initialValue: e.name,
                         enabled: false,
                       ),
@@ -733,8 +714,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         : Flexible(
                       flex: 7,
                       child: TextFieldWidget(
-                        hintText: AppString.material,
-                        label: AppString.material,
+                        labelText: AppString.material,
                         initialValue: e.name,
                         enabled: false,
                       ),
@@ -744,8 +724,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         ? Flexible(
                       flex: 3,
                       child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
+                        labelText: e.unit,
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
@@ -760,8 +739,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
                         : Flexible(
                       flex: 3,
                       child: TextFieldWidget(
-                        hintText: e.unit,
-                        label: e.unit,
+                        labelText: e.unit,
                         controller: e.controller,
                         enabled: true,
                         keyboardType: TextInputType.number,
@@ -800,8 +778,7 @@ class _FormInstallationViewState extends State<FormInstallationView> {
   }
   Widget _manualPipLengthWidget({required FormInstallationDataState dataState}){
     return dataState.isManualPipe ? TextFieldWidget(
-      hintText: AppString.extraPipe,
-      label: AppString.extraPipe,
+      labelText: AppString.extraPipe,
       controller: dataState.manualPipLengthCtrl,
     ) : SizedBox.shrink();
   }
@@ -811,14 +788,12 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipe,
-        label: AppString.extraPipe,
+        labelText: AppString.extraPipe,
         controller: dataState.extraGiPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPrice,
-        label: AppString.extraPrice,
+        labelText: AppString.extraPrice,
         controller: dataState.extraGiPriceCtrl,
       ),
     );
@@ -829,14 +804,12 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipeCopper,
-        label: AppString.extraPipeCopper,
+        labelText: AppString.extraPipeCopper,
         controller: dataState.extraCopperPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPriceCopper,
-        label: AppString.extraPriceCopper,
+        labelText: AppString.extraPriceCopper,
         controller: dataState.extraCopperPriceCtrl,
       ),
     );
@@ -846,14 +819,12 @@ class _FormInstallationViewState extends State<FormInstallationView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipeTotal,
-        label: AppString.extraPipeTotal,
+        labelText: AppString.extraPipeTotal,
         controller: dataState.extraTotalPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPriceTotal,
-        label: AppString.extraPriceTotal,
+        labelText: AppString.extraPriceTotal,
         controller: dataState.extraTotalPriceCtrl,
       ),
     );
@@ -935,9 +906,8 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
   Widget _tapOffLengthController({required FormInstallationDataState dataState}) {
     return TextFieldWidget(
-      star: "* ",
-      hintText: "Tap Off Length",
-      label: "Tap Off Length",
+      isRequired: true,
+      labelText: "Tap Off Length",
       keyboardType: TextInputType.number,
       controller: dataState.tapOffLengthController,
     );
@@ -1009,113 +979,238 @@ class _FormInstallationViewState extends State<FormInstallationView> {
 
 
 
-  Widget _image({required FormInstallationDataState dataState}) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        ImageWidget(
-          isRequired: true,
-          title: AppString.meter,
-          imgFile: dataState.meterPhoto,
-          onPressed: () {
-            showModalBottomSheet(
-                enableDrag: true,
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return ImagePopWidget(
-                    onTapCamera: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<FormInstallationBloc>(context)
-                          .add(CaptureCameraMeterEvent());
-                    },
-                    onTapGallery: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<FormInstallationBloc>(context)
-                          .add(CaptureGalleryMeterEvent());
-                    },
-                  );
-                });
-          },
-        ),
-        dataState.isInstallRegulator == true
-            ? ImageWidget(
-          isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
-                title: AppString.rfc,
-                imgFile: dataState.rfcCardPhoto,
-                onPressed: () {
-                  showModalBottomSheet(
-                      enableDrag: true,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ImagePopWidget(
-                          onTapCamera: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormInstallationBloc>(context)
-                                .add(CaptureCameraRFCCardEvent());
-                          },
-                          onTapGallery: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormInstallationBloc>(context)
-                                .add(CaptureGalleryRFCCardEvent());
-                          },
-                        );
-                      });
-                },
-              )
-            : Container(),
-        dataState.isInstallRegulator == true
-            ? ImageWidget(
-                isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
-                title: AppString.pneumatic,
-                imgFile: dataState.pneumaticTestReportPhoto,
-                onPressed: () {
-                  showModalBottomSheet(
-                      enableDrag: true,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ImagePopWidget(
-                          onTapCamera: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormInstallationBloc>(context)
-                                .add(CaptureCameraPneumaticEvent());
-                          },
-                          onTapGallery: () async {
-                            Navigator.of(context).pop();
-                            BlocProvider.of<FormInstallationBloc>(context)
-                                .add(CaptureGalleryPneumaticEvent());
-                          },
-                        );
-                      });
-                },
-              )
-            : Container(),
-        ImageWidget(
-          isRequired: true,
-          title: AppString.housePhoto,
-          imgFile: dataState.housePhoto,
-          onPressed: () {
-            showModalBottomSheet(
-                enableDrag: true,
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return CameraPopWidget(
-                    onTapCamera: () async {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<FormInstallationBloc>(context)
-                          .add(CaptureCameraHouseEvent(context: context));
-                    },
-                  );
-                });
-          },
-        ),
-      ],
-    );
-  }
+  // Widget _image({required FormInstallationDataState dataState}) {
+  //   return Wrap(
+  //     spacing: 8,
+  //     runSpacing: 8,
+  //     children: [
+  //       ImageWidget(
+  //         isRequired: true,
+  //         title: AppString.meter,
+  //         imgFile: dataState.meterPhoto,
+  //         onPressed: () {
+  //           showModalBottomSheet(
+  //               enableDrag: true,
+  //               isScrollControlled: true,
+  //               context: context,
+  //               builder: (BuildContext context) {
+  //                 return ImagePopWidget(
+  //                   onTapCamera: () async {
+  //                     Navigator.of(context).pop();
+  //                     BlocProvider.of<FormInstallationBloc>(context)
+  //                         .add(CaptureCameraMeterEvent());
+  //                   },
+  //                   onTapGallery: () async {
+  //                     Navigator.of(context).pop();
+  //                     BlocProvider.of<FormInstallationBloc>(context)
+  //                         .add(CaptureGalleryMeterEvent());
+  //                   },
+  //                 );
+  //               });
+  //         },
+  //       ),
+  //       dataState.isInstallRegulator == true
+  //           ? ImageWidget(
+  //         isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
+  //               title: AppString.rfc,
+  //               imgFile: dataState.rfcCardPhoto,
+  //               onPressed: () {
+  //                 showModalBottomSheet(
+  //                     enableDrag: true,
+  //                     isScrollControlled: true,
+  //                     context: context,
+  //                     builder: (BuildContext context) {
+  //                       return ImagePopWidget(
+  //                         onTapCamera: () async {
+  //                           Navigator.of(context).pop();
+  //                           BlocProvider.of<FormInstallationBloc>(context)
+  //                               .add(CaptureCameraRFCCardEvent());
+  //                         },
+  //                         onTapGallery: () async {
+  //                           Navigator.of(context).pop();
+  //                           BlocProvider.of<FormInstallationBloc>(context)
+  //                               .add(CaptureGalleryRFCCardEvent());
+  //                         },
+  //                       );
+  //                     });
+  //               },
+  //             )
+  //           : Container(),
+  //       dataState.isInstallRegulator == true
+  //           ? ImageWidget(
+  //               isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
+  //               title: AppString.pneumatic,
+  //               imgFile: dataState.pneumaticTestReportPhoto,
+  //               onPressed: () {
+  //                 showModalBottomSheet(
+  //                     enableDrag: true,
+  //                     isScrollControlled: true,
+  //                     context: context,
+  //                     builder: (BuildContext context) {
+  //                       return ImagePopWidget(
+  //                         onTapCamera: () async {
+  //                           Navigator.of(context).pop();
+  //                           BlocProvider.of<FormInstallationBloc>(context)
+  //                               .add(CaptureCameraPneumaticEvent());
+  //                         },
+  //                         onTapGallery: () async {
+  //                           Navigator.of(context).pop();
+  //                           BlocProvider.of<FormInstallationBloc>(context)
+  //                               .add(CaptureGalleryPneumaticEvent());
+  //                         },
+  //                       );
+  //                     });
+  //               },
+  //             )
+  //           : Container(),
+  //       ImageWidget(
+  //         isRequired: true,
+  //         title: AppString.housePhoto,
+  //         imgFile: dataState.housePhoto,
+  //         onPressed: () {
+  //           showModalBottomSheet(
+  //               enableDrag: true,
+  //               isScrollControlled: true,
+  //               context: context,
+  //               builder: (BuildContext context) {
+  //                 return CameraPopWidget(
+  //                   onTapCamera: () async {
+  //                     Navigator.of(context).pop();
+  //                     BlocProvider.of<FormInstallationBloc>(context)
+  //                         .add(CaptureCameraHouseEvent(context: context));
+  //                   },
+  //                 );
+  //               });
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
+
+    Widget _image({required FormInstallationDataState dataState}) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Flexible(
+                child: ImageWidget(
+                  isRequired: true,
+                  title: AppString.meter,
+                  imgFile: dataState.meterPhoto,
+                  onPressed: () {
+                    showModalBottomSheet(
+                        enableDrag: true,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ImagePopWidget(
+                            onTapCamera: () async {
+                              Navigator.of(context).pop();
+                              BlocProvider.of<FormInstallationBloc>(context)
+                                  .add(CaptureCameraMeterEvent());
+                            },
+                            onTapGallery: () async {
+                              Navigator.of(context).pop();
+                              BlocProvider.of<FormInstallationBloc>(context)
+                                  .add(CaptureGalleryMeterEvent());
+                            },
+                          );
+                        });
+                  },
+                ),
+              ),
+              CommonStyle.widthSpace(context: context),
+              Flexible(
+                child: ImageWidget(
+                  isRequired: true,
+                  title: AppString.housePhoto,
+                  imgFile: dataState.housePhoto,
+                  onPressed: () {
+                    showModalBottomSheet(
+                        enableDrag: true,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CameraPopWidget(
+                            onTapCamera: () async {
+                              Navigator.of(context).pop();
+                              BlocProvider.of<FormInstallationBloc>(context)
+                                  .add(CaptureCameraHouseEvent(context: context));
+                            },
+                          );
+                        });
+                  },
+                ),
+              ),
+            ],
+          ),
+          if(dataState.isInstallRegulator == true)...[
+            CommonStyle.vertical(context: context),
+            Row(
+              children: [
+                if(dataState.isInstallRegulator == true)...[
+                  Flexible(
+                    child: ImageWidget(
+                      isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
+                      title: AppString.rfc,
+                      imgFile: dataState.rfcCardPhoto,
+                      onPressed: () {
+                        showModalBottomSheet(
+                            enableDrag: true,
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ImagePopWidget(
+                                onTapCamera: () async {
+                                  Navigator.of(context).pop();
+                                  BlocProvider.of<FormInstallationBloc>(context)
+                                      .add(CaptureCameraRFCCardEvent());
+                                },
+                                onTapGallery: () async {
+                                  Navigator.of(context).pop();
+                                  BlocProvider.of<FormInstallationBloc>(context)
+                                      .add(CaptureGalleryRFCCardEvent());
+                                },
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                  CommonStyle.widthSpace(context: context),
+                  Flexible(
+                    child: ImageWidget(
+                      isRequired: AppConfig.instanceInit()!.client == Client.hpoil ? true : false,
+                      title: AppString.pneumatic,
+                      imgFile: dataState.pneumaticTestReportPhoto,
+                      onPressed: () {
+                        showModalBottomSheet(
+                            enableDrag: true,
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ImagePopWidget(
+                                onTapCamera: () async {
+                                  Navigator.of(context).pop();
+                                  BlocProvider.of<FormInstallationBloc>(context)
+                                      .add(CaptureCameraPneumaticEvent());
+                                },
+                                onTapGallery: () async {
+                                  Navigator.of(context).pop();
+                                  BlocProvider.of<FormInstallationBloc>(context)
+                                      .add(CaptureGalleryPneumaticEvent());
+                                },
+                              );
+                            });
+                      },
+                    ),
+                  )
+                ]
+              ],
+            )
+          ]
+        ],
+      );
+    }
 
   Widget _button({required FormInstallationDataState dataState}) {
     return dataState.isBtnLoader == false

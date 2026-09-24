@@ -7,15 +7,19 @@ import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
 
 class NgcTableHelper {
-
   static final ctx = UserContext.getUserContext();
-  static Future<List<GetAllAreaModel>?> getAllAreaApi({required BuildContext context}) async {
 
+  static Future<List<GetAllAreaModel>?> getAllAreaApi({
+    required BuildContext context,
+  }) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.areaList + ctx.user.schema!, context: context);
-      if(res != null){
-        return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.areaList + ctx.user.schema!,
+      );
+      if (res != null) {
+        return List<GetAllAreaModel>.from(
+          res.map((x) => GetAllAreaModel.fromJson(x)),
+        );
       }
     } catch (e) {
       log("getAllAreaModelFromJson-->${e.toString()}");
@@ -23,8 +27,11 @@ class NgcTableHelper {
     return null;
   }
 
-  static Future<LMCInstallationByNgcModel?> getLmcInstallationByNgcApi({required BuildContext context, required String areaId, required String bpNumber}) async {
-
+  static Future<LMCInstallationByNgcModel?> getLmcInstallationByNgcApi({
+    required BuildContext context,
+    required String areaId,
+    required String bpNumber,
+  }) async {
     Map<String, String> para = {
       "schema": ctx.user.schema ?? "",
       "user_id": ctx.user.id ?? "",
@@ -34,12 +41,9 @@ class NgcTableHelper {
     };
     String json = Uri(queryParameters: para).query;
     log("json-->$json");
-    String url = Apis.getLmcInstallationByNgc +json;
+    String url = Apis.getLmcInstallationByNgc + json;
     try {
-      final res = await ApiHelper.getData(
-        urlEndPoint:url,
-        context: context,
-      );
+      final res = await ApiHelperDio.getData(urlEndPoint: url);
       print("getLmcInstallationByNgc-->${url}");
       if (res != null) {
         return LMCInstallationByNgcModel.fromJson(res);

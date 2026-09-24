@@ -34,7 +34,7 @@ class EnvironmentConfig extends InheritedWidget {
       case EnvironmentFlavors.prodAGCL:
         return "https://agcl.smartgasnet.com/api/";
       case EnvironmentFlavors.prodHNGPL:
-        return "https://hngpluat.smartgasnet.com/api/";
+        return "https://hngpl.smartgasnet.com/api/";
     }
   }
 

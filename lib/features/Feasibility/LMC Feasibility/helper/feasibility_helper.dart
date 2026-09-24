@@ -5,7 +5,7 @@ import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/FeasibilityModel.dart';
 import 'package:lmc/features/Feasibility/LMC%20Feasibility/domain/model/GetAllAreaModel.dart';
 import 'package:lmc/service/Apis.dart';
-import 'package:lmc/service/api_helper.dart';
+import 'package:lmc/service/api_server_dio.dart';
 
 class LMCFeasibilityHelper {
 
@@ -13,8 +13,8 @@ class LMCFeasibilityHelper {
   static Future<List<GetAllAreaModel>?> getAllAreaApi({required BuildContext context}) async {
 
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.areaList + ctx.user.schema ?? "", context: context);
-      return getAllAreaModelFromJson(res);
+      var res = await ApiHelperDio.getData(urlEndPoint: Apis.areaList + ctx.user.schema ?? "");
+      return List<GetAllAreaModel>.from(res.map((x) => GetAllAreaModel.fromJson(x)));
     } catch (e) {
       log("getAllAreaModelFromJson-->${e.toString()}");
     }
@@ -32,9 +32,10 @@ class LMCFeasibilityHelper {
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCFeasibility + json, context: context);
+      var res = await ApiHelperDio.getData(urlEndPoint: Apis.getLMCFeasibility + json);
       if (res != null) {
-        return FeasibilityModel.fromJson(jsonDecode(res));
+        final decoded = res is String ? jsonDecode(res) : res;
+        return FeasibilityModel.fromJson(decoded);
       }
     } catch (e) {
       log("FeasibilityModel-->${e.toString()}");

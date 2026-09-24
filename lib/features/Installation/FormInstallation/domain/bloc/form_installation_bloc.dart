@@ -10,7 +10,9 @@ import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
+import 'package:lmc/Utils/common_widgets/res/enums.dart' show Client;
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/AllFreeMaterialModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
@@ -278,6 +280,9 @@ class FormInstallationBloc extends Bloc<FormInstallationEvent, FormInstallationS
     ]);
     await fetchMetersApi(context: event.context, meterSerial: "");
     await fetchFreeMaterialApi(context: event.context);
+    if (AppConfig.instanceInit()!.client == Client.hpoil) {
+      await fetchFreeMaterialCopperApi(context: event.context);
+    }
     await fetchFreeMaterialCopperApi(context: event.context);
    await checkDelayReason();
     _eventCompleted(emit);

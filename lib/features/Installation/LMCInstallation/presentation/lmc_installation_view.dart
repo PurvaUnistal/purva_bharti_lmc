@@ -89,7 +89,6 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   Widget _areaDropDown({required LMCInstallationDataState dataState}) {
     return DropdownWidget<GetAllAreaModel>(
-      label: AppString.area,
       hint: AppString.area,
       dropdownValue:
           dataState.allAreaValue.gid == null ? null : dataState.allAreaValue,
@@ -104,8 +103,7 @@ class _LMCInstallationViewState extends State<LMCInstallationView> {
 
   Widget _searchTextField({required LMCInstallationDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.searchBPNumber,
-      hintText: AppString.searchBPNumber,
+      labelText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,

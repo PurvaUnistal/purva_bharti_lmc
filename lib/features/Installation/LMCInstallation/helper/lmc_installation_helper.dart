@@ -5,12 +5,15 @@ import 'package:lmc/features/Installation/LMCInstallation/domain/model/Installat
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
 
-class LMCInstallationHelper{
-
+class LMCInstallationHelper {
   static final ctx = UserContext.getUserContext();
 
-  static Future<InstallationDoneModel?> getLMCInstallationApi({required BuildContext context, required String page, required String bpNumber, required String areaId}) async {
-
+  static Future<InstallationDoneModel?> getLMCInstallationApi({
+    required BuildContext context,
+    required String page,
+    required String bpNumber,
+    required String areaId,
+  }) async {
     Map<String, String> para = {
       "schema": ctx.user.schema ?? "",
       "user_id": ctx.user.id ?? "",
@@ -20,7 +23,9 @@ class LMCInstallationHelper{
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getLMCInstallation + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getLMCInstallation + json,
+      );
       if (res != null) {
         return InstallationDoneModel.fromJson(res);
       }

@@ -1,24 +1,30 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
-import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/api_server_dio.dart';
 
 class LoginHelper {
-  static Future<dynamic> textFieldValidation({required String email, required String password, required BuildContext context}) async {
+  static Future<dynamic> textFieldValidation({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     try {
       if (email.isEmpty) {
         Utils.errorSnackBar(msg: AppString.emailValidation, context: context);
         return false;
       } else if (password.isEmpty) {
-        Utils.errorSnackBar(msg: AppString.passwordValidation, context: context);
+        Utils.errorSnackBar(
+          msg: AppString.passwordValidation,
+          context: context,
+        );
         return false;
       }
       return true;
@@ -41,7 +47,11 @@ class LoginHelper {
     return null;
   }
 
-  static Future<LoginModel?> loginData({required String emailId, required String password, required BuildContext context}) async {
+  static Future<LoginModel?> loginData({
+    required String emailId,
+    required String password,
+    required BuildContext context,
+  }) async {
     var deviceId = await getUniqueDeviceId();
     Map<String, String> para = {
       "email": emailId,
@@ -49,24 +59,25 @@ class LoginHelper {
       "device": deviceId,
     };
     log("para-->${para}");
-  //  try {
-      var res = await ApiHelper.postData(
-          urlEndPoint: Apis.loginUrl,
-          param: para, context: context);
-      if (res != null && res["error"] == false) {
-        return LoginModel.fromJson(res);
-      } else if (res != null && res["error"] == true) {
-        await Utils.errorSnackBar(msg: res["messages"], context: context);
-        return null;
-      } else if (res != null && res["error"] == true && res["messages"] != null) {
-        await Utils.errorSnackBar(msg: res["messages"], context: context);
-        return null;
-      }
+     try {
+    var res = await ApiHelperDio.postData(
+      urlEndPoint: Apis.loginUrl,
+      body: jsonEncode(para),
+    );
+    if (res != null && res["error"] == false) {
+      return LoginModel.fromJson(res);
+    } else if (res != null && res["error"] == true) {
+      await Utils.errorSnackBar(msg: res["messages"], context: context);
       return null;
-    // } catch (e) {
-    //   log("catchLoginHelper-->${e.toString()}");
-    //   Utils.errorSnackBar(msg: e.toString(), context: context);
-    //   return null;
-    // }
+    } else if (res != null && res["error"] == true && res["messages"] != null) {
+      await Utils.errorSnackBar(msg: res["messages"], context: context);
+      return null;
+    }
+    return null;
+    } catch (e) {
+      log("catchLoginHelper-->${e.toString()}");
+      Utils.errorSnackBar(msg: e.toString(), context: context);
+      return null;
+    }
   }
 }

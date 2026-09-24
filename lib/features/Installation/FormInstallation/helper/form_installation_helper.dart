@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,19 +21,17 @@ import 'package:lmc/service/api_server_dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
-
   static final ctx = UserContext.getUserContext();
 
-
-  static Future<List<GetConstantModel>?> getTypeOfNrApi(
-      {required BuildContext context}) async {
+  static Future<List<GetConstantModel>?> getTypeOfNrApi({
+    required BuildContext context,
+  }) async {
     try {
-      Map<String, String> para = {
-        "key": "typeOfNr",
-      };
+      Map<String, String> para = {"key": "typeOfNr"};
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getConstant + json,
+      );
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -41,13 +40,14 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> lmcReasonApi(
-      {required BuildContext context}) async {
+  static Future<List<LmcReasonModel>?> lmcReasonApi({
+    required BuildContext context,
+  }) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.lmcReason, context: context);
+      var res = await ApiHelperDio.getData(urlEndPoint: Apis.lmcReason);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
-          res.map((x) => LmcReasonModel.fromJson(x)));
+        res.map((x) => LmcReasonModel.fromJson(x)),
+      );
       return response;
     } catch (e) {
       log("lmcReasonApi-->${e.toString()}");
@@ -55,13 +55,14 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<LmcReasonModel>?> regulatorTypeApi(
-      {required BuildContext context}) async {
+  static Future<List<LmcReasonModel>?> regulatorTypeApi({
+    required BuildContext context,
+  }) async {
     try {
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.regulatorType, context: context);
+      var res = await ApiHelperDio.getData(urlEndPoint: Apis.regulatorType);
       List<LmcReasonModel> response = List<LmcReasonModel>.from(
-          res.map((x) => LmcReasonModel.fromJson(x)));
+        res.map((x) => LmcReasonModel.fromJson(x)),
+      );
       return response;
     } catch (e) {
       log("regulatorTypeApi-->${e.toString()}");
@@ -69,15 +70,15 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<GetConstantModel>?> getReadyForNgcApi(
-      {required BuildContext context}) async {
+  static Future<List<GetConstantModel>?> getReadyForNgcApi({
+    required BuildContext context,
+  }) async {
     try {
-      Map<String, String> para = {
-        "key": "isCustomerReadyForNgc",
-      };
+      Map<String, String> para = {"key": "isCustomerReadyForNgc"};
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getConstant + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getConstant + json,
+      );
       List<GetConstantModel> response = GetConstantModel.mapToList(res);
       return response;
     } catch (e) {
@@ -86,18 +87,19 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getMetersApi(
-      {required BuildContext context, required String meterSerial}) async {
+  static Future<List<ListOfMeterNo>?> getMetersApi({
+    required BuildContext context,
+    required String meterSerial,
+  }) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
+        "schema": ctx.user.schema ?? "",
         "user_id": ctx.user.id ?? "",
         "role": ctx.user.role ?? "",
         "meterSerial": meterSerial,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMeters + json, context: context);
+      var res = await ApiHelperDio.getData(urlEndPoint: Apis.getMeters + json);
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -106,19 +108,23 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getRegulatorsApi(
-      {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+  static Future<List<ListOfMeterNo>?> getRegulatorsApi({
+    required BuildContext context,
+    required String regulatorSerial,
+    required String regulatorType,
+  }) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
+        "schema": ctx.user.schema ?? "",
         "user_id": ctx.user.id ?? "",
         "role": ctx.user.role ?? "",
         "regulatorSerial": regulatorSerial,
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getRegulators + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getRegulators + json,
+      );
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -127,19 +133,23 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<List<ListOfMeterNo>?> getMeterRegulatorsApi(
-      {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
+  static Future<List<ListOfMeterNo>?> getMeterRegulatorsApi({
+    required BuildContext context,
+    required String regulatorSerial,
+    required String regulatorType,
+  }) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
+        "schema": ctx.user.schema ?? "",
         "user_id": ctx.user.id ?? "",
         "role": ctx.user.role ?? "",
         "regulatorSerial": regulatorSerial,
         "regulatorType": "",
       };
       String json = Uri(queryParameters: para).query;
-      var res = await ApiHelper.getData(
-          urlEndPoint: Apis.getMrRegulators + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getMrRegulators + json,
+      );
       MeterNoModel meterNoModel = MeterNoModel.fromJson(res);
       return meterNoModel.data;
     } catch (e) {
@@ -148,19 +158,24 @@ class FormInstallationHelper {
     return null;
   }
 
-  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({required BuildContext context, required String pipeQty}) async {
-    String propertyCategoryId = await SharedPref.getString(key: PrefsValue.propertyCategoryId);
-   try {
+  static Future<ExtraPipePriceData?> getExtraPipeDetailsApi({
+    required BuildContext context,
+    required String pipeQty,
+  }) async {
+    String propertyCategoryId = await SharedPref.getString(
+      key: PrefsValue.propertyCategoryId,
+    );
+    try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
         "pipeQty": pipeQty,
         "property_category_id": propertyCategoryId,
-
       };
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetails,
-          context: context,
-          formData: para);
-      if(res['data'] != null){
+      var res = await ApiHelperDio.postData(
+        urlEndPoint: Apis.getExtraPipeDetails,
+        body: para,
+      );
+      if (res['data'] != null) {
         return ExtraPipePriceData.fromJson(res['data']);
       }
     } catch (e) {
@@ -172,21 +187,23 @@ class FormInstallationHelper {
   static Future<ExtraPipePriceData?> getExtraPipeDetailsCopperApi({
     required BuildContext context,
     required String pipeQty,
-    required String giqty
+    required String giqty,
   }) async {
-    String propertyCategoryId = await SharedPref.getString(key: PrefsValue.propertyCategoryId);
+    String propertyCategoryId = await SharedPref.getString(
+      key: PrefsValue.propertyCategoryId,
+    );
     try {
       Map<String, String> para = {
         "schema": ctx.user.schema ?? "",
         "pipeQty": pipeQty,
         "property_category_id": propertyCategoryId,
         "giqty": giqty,
-
       };
       log("jsonCopper---->  ${para}");
-      var res = await ApiHelper.postData(urlEndPoint: Apis.getExtraPipeDetailsCopper,
-          context: context,
-          formData: para);
+      var res = await ApiHelperDio.postData(
+        urlEndPoint: Apis.getExtraPipeDetailsCopper,
+        body: para,
+      );
       return ExtraPipePriceData.fromJson(res['data']);
     } catch (e) {
       log("getExtraPipeDetailsCopper-->${e.toString()}");
@@ -243,13 +260,16 @@ class FormInstallationHelper {
         return error("The Meter Number field is required.");
       }
       if (isCheckMeterMismatch) {
-        return error("The Meter Number is mismatch. Please check your Meter Number.");
+        return error(
+          "The Meter Number is mismatch. Please check your Meter Number.",
+        );
       }
       if ([meterInit1, meterInit2, meterInit3].any((e) => e.isEmpty)) {
         return error("The Meter Initial Reading field is required.");
       }
 
-      if (!isInstallRegulator && AppConfig.instanceInit()!.client == Client.hpoil) {
+      if (!isInstallRegulator &&
+          AppConfig.instanceInit()!.client == Client.hpoil) {
         return error("Please select Install Regulator Checkbox.");
       }
       if (isInstallRegulator) {
@@ -262,20 +282,26 @@ class FormInstallationHelper {
             return error("The SR Number field is required.");
           }
           if (isCheckRegulatorMismatch) {
-            return error("The SR Number is mismatch. Please check your SR Number.");
+            return error(
+              "The SR Number is mismatch. Please check your SR Number.",
+            );
           }
           if (mrNumber.isEmpty) {
             return error("The Meter Regulator field is required.");
           }
           if (isCheckMR) {
-            return error("The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.");
+            return error(
+              "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.",
+            );
           }
         } else if (regulatorType.name == "PRV") {
           if (regulatorNumber.isEmpty) {
             return error("The Regulator field is required.");
           }
           if (isCheckRegulatorMismatch) {
-            return error("The Regulator Number is mismatch. Please check your Regulator Number.");
+            return error(
+              "The Regulator Number is mismatch. Please check your Regulator Number.",
+            );
           }
         }
 
@@ -296,10 +322,12 @@ class FormInstallationHelper {
       if (meterPhoto.isEmpty) {
         return error("The Meter Photo field is required.");
       }
-      if (rfcPhoto.isEmpty && AppConfig.instanceInit()!.client == Client.hpoil) {
+      if (rfcPhoto.isEmpty &&
+          AppConfig.instanceInit()!.client == Client.hpoil) {
         return error("The RFC Photo field is required.");
       }
-      if (pneumaticPhoto.isEmpty && AppConfig.instanceInit()!.client == Client.hpoil) {
+      if (pneumaticPhoto.isEmpty &&
+          AppConfig.instanceInit()!.client == Client.hpoil) {
         return error("The Pneumatic Photo field is required.");
       }
       if (houseLat.isEmpty || houseLong.isEmpty) {
@@ -315,7 +343,6 @@ class FormInstallationHelper {
       return true;
     }
   }
-
 
   static Future<SaveFeasibleModel?> saveLMCInstallation({
     required BuildContext context,
@@ -355,12 +382,13 @@ class FormInstallationHelper {
     required String totalExtraPipe,
     required String totalExtraPrice,
   }) async {
-
     String lmcInstallId = await SharedPref.getString(
-        key: PrefsValue.lmcInstallId);
+      key: PrefsValue.lmcInstallId,
+    );
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
     String lmcFeasId = await SharedPref.getString(
-        key: PrefsValue.meterLMCFeasId);
+      key: PrefsValue.meterLMCFeasId,
+    );
 
     try {
       Map<String, String> para = {
@@ -381,12 +409,16 @@ class FormInstallationHelper {
         "work_completed_date": workCompletedDate,
         "material_id_lmc": materialIdLmc,
         "qty_lmc": qtyLmc,
-        "gi_pipe" : giExtraPipe.isNotEmpty ? giExtraPipe.trim().toString() : "0.0",
-        "gi_pipe_price" : giExtraPrice.isNotEmpty ? giExtraPrice.trim().toString() : "0.0",
-        "cu_pipe" : copperExtraPipe.isNotEmpty ? copperExtraPipe.trim().toString() : "0.0",
-        "cu_pipe_price" : copperExtraPrice.isNotEmpty ? copperExtraPrice.trim().toString() : "0.0",
-        "extra_pipe": totalExtraPipe.isNotEmpty ? totalExtraPipe.trim().toString() : "0.0",
-        "extra_price": totalExtraPrice.isNotEmpty ? totalExtraPrice.trim().toString() : "0.0",
+        "gi_pipe": giExtraPipe.isNotEmpty ? giExtraPipe.trim().toString() : "0.0",
+        "gi_pipe_price": giExtraPrice.isNotEmpty ? giExtraPrice.trim().toString() : "0.0",
+        "extra_pipe":
+            totalExtraPipe.isNotEmpty
+                ? totalExtraPipe.trim().toString()
+                : "0.0",
+        "extra_price":
+            totalExtraPrice.isNotEmpty
+                ? totalExtraPrice.trim().toString()
+                : "0.0",
         "tap_off": tapOff,
         "tap_off_length": tapOffLength,
         "supply_paint": supplyPaint,
@@ -396,27 +428,39 @@ class FormInstallationHelper {
         "ngc": ngc.key == null ? "" : ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate,
         "regulator_check": regulatorCheck.isEmpty ? "0" : regulatorCheck,
-        "regulator_type_id": regulatorTypeId == "" ? "" : regulatorTypeId
-            .toString(),
+        "regulator_type_id": regulatorTypeId == "" ? "" : regulatorTypeId.toString(),
         "rfc_date": rfcDate.isEmpty ? "" : rfcDate,
         "meter_testing": meterTesting.isEmpty ? "0" : meterTesting,
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
+      if (AppConfig.instanceInit()!.client == Client.hpoil) {
+        para["cu_pipe"] = copperExtraPipe.isNotEmpty ? copperExtraPipe.trim().toString() : "0.0";
+        para["cu_pipe_price"] =  copperExtraPrice.isNotEmpty ? copperExtraPrice.trim().toString() : "0.0";
+      }
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(
-          urlEndPoint: Apis.saveLmcInstallation,
-          body: para, context: context,
-          imageRequestObject: [
-            ImageRequestObject(
-                "meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-            //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
-            ImageRequestObject("rfc_form",
-                isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-            ImageRequestObject("pneumatic_image",
-                pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-            ImageRequestObject(
-                "house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
-          ]);
+      var res = await ApiHelperDio.postDataWithFile(
+        urlEndPoint: Apis.saveLmcInstallation,
+        body: para,
+        imageRequestObject: [
+          ImageRequestObject(
+            key: "meter_photo",
+            path: meterPhoto.isEmpty ? "" : meterPhoto.toString(),
+          ),
+          //    ImageRequestObject("isometric_image", isometricPhoto.toString()),
+          ImageRequestObject(
+            key: "rfc_form",
+            path: isometricPhoto.isEmpty ? "" : isometricPhoto.toString(),
+          ),
+          ImageRequestObject(
+            key: "pneumatic_image",
+            path: pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString(),
+          ),
+          ImageRequestObject(
+            key: "house_image",
+            path: housePhoto.isEmpty ? "" : housePhoto.toString(),
+          ),
+        ],
+      );
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
@@ -461,11 +505,10 @@ class FormInstallationHelper {
     await Permission.locationAlways.request();
     if (Platform.isAndroid) {
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-          forceAndroidLocationManager: true,
-          locationSettings: LocationSettings(
-
-          ));
+        desiredAccuracy: LocationAccuracy.high,
+        forceAndroidLocationManager: true,
+        locationSettings: LocationSettings(),
+      );
       log('latitude : ${position.latitude} longitude : ${position.longitude}');
       return position;
     }

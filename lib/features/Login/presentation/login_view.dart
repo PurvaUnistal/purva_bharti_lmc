@@ -119,8 +119,7 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _emailWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.emailLabel,
-      hintText: AppString.emailLabel,
+      labelText: AppString.emailLabel,
       autofillHints: [AutofillHints.email, AutofillHints.password],
       keyboardType: TextInputType.emailAddress,
       prefixIcon: IconButtonWidget(iconData: Icons.email, onPressed: () {}),
@@ -130,8 +129,7 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _passwordWidget({required LoginFetchDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.passwordLabel,
-      hintText: AppString.passwordLabel,
+      labelText: AppString.passwordLabel,
       autofillHints: const [AutofillHints.password, AutofillHints.email],
       keyboardType: TextInputType.visiblePassword,
       prefixIcon: IconButtonWidget(iconData: Icons.password, onPressed: () {}),

@@ -17,11 +17,11 @@ import 'package:lmc/service/api_server_dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FormRFCInstallationHelper {
-
   static final ctx = UserContext.getUserContext();
 
-  static Future<RFCInstallationModel?> lmcRFCInstallationApi({required BuildContext context}) async {
-
+  static Future<RFCInstallationModel?> lmcRFCInstallationApi({
+    required BuildContext context,
+  }) async {
     String bpNumber = await SharedPref.getString(key: PrefsValue.bpNumber);
     Map<String, String> para = {
       "schema": ctx.user.schema ?? "",
@@ -32,7 +32,9 @@ class FormRFCInstallationHelper {
     };
     String json = Uri(queryParameters: para).query;
     try {
-      var res = await ApiHelper.getData(urlEndPoint: Apis.getlmcRFCInstallationApi + json, context: context);
+      var res = await ApiHelperDio.getData(
+        urlEndPoint: Apis.getlmcRFCInstallationApi + json,
+      );
       return RFCInstallationModel.fromJson(res);
     } catch (e) {
       log("getlmcRFCInstallationApi-->${e.toString()}");
@@ -88,7 +90,9 @@ class FormRFCInstallationHelper {
       if (meterNumber.isEmpty) {
         return error("The Meter Number field is required.");
       } else if (isCheckMeterMismatch == true) {
-        return error("The Meter Number is mismatch. Please check your Meter Number.");
+        return error(
+          "The Meter Number is mismatch. Please check your Meter Number.",
+        );
       }
       if ([meterInit1, meterInit2, meterInit3].any((e) => e.isEmpty)) {
         return error("The Meter Initial Reading field is required.");
@@ -104,20 +108,26 @@ class FormRFCInstallationHelper {
             return error("The SR Number field is required.");
           }
           if (isCheckRegulatorMismatch == true) {
-            return error("The SR Number is mismatch. Please check your SR Number.");
+            return error(
+              "The SR Number is mismatch. Please check your SR Number.",
+            );
           }
           if (mrNumber.isEmpty) {
             return error("The Meter Regulator field is required.");
           }
           if (isCheckMR) {
-            return error("The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.");
+            return error(
+              "The Meter Regulator Number is mismatch. Please check your Meter Regulator Number.",
+            );
           }
         } else if (regulatorType.name == "PRV") {
           if (regulatorNumber.isEmpty) {
             return error("The Regulator field is required.");
           }
           if (isCheckRegulatorMismatch) {
-            return error("The Regulator Number is mismatch. Please check your Regulator Number.");
+            return error(
+              "The Regulator Number is mismatch. Please check your Regulator Number.",
+            );
           }
         }
 
@@ -154,7 +164,6 @@ class FormRFCInstallationHelper {
     }
   }
 
-
   static Future<SaveFeasibleModel?> saveLmcRFCInstallation({
     required BuildContext context,
     required String meterNo,
@@ -185,11 +194,16 @@ class FormRFCInstallationHelper {
     required String pneumaticPhoto,
     required String housePhoto,
   }) async {
-
-    String lmcInstallId = await SharedPref.getString(key: PrefsValue.lmcInstallId);
-    String installationId = await SharedPref.getString(key: PrefsValue.installationId);
+    String lmcInstallId = await SharedPref.getString(
+      key: PrefsValue.lmcInstallId,
+    );
+    String installationId = await SharedPref.getString(
+      key: PrefsValue.installationId,
+    );
     String meterDma = await SharedPref.getString(key: PrefsValue.meterDma);
-    String lmcFeasId = await SharedPref.getString(key: PrefsValue.meterLMCFeasId);
+    String lmcFeasId = await SharedPref.getString(
+      key: PrefsValue.meterLMCFeasId,
+    );
     try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
@@ -212,23 +226,41 @@ class FormRFCInstallationHelper {
         "qty_lmc": qtyLmc,
         "extra_pipe": extraPipe,
         "extra_price": extraPrice,
-        "delay_reason": delayReason.name == null ? "" : delayReason.name.toString(),
+        "delay_reason":
+            delayReason.name == null ? "" : delayReason.name.toString(),
         "type_of_nr": typeOfNR.isEmpty ? "" : typeOfNR.toString(),
         "ngc": ngc.key == null ? "" : ngc.key.toString(),
         "proposed_ngc_date": proposedNgcDate,
         "regulator_check": regulatorCheck.isEmpty ? "0" : regulatorCheck,
-        "regulator_type_id": regulatorTypeId == "" ? "" : regulatorTypeId.toString(),
+        "regulator_type_id":
+            regulatorTypeId == "" ? "" : regulatorTypeId.toString(),
         "rfc_date": rfcDate.isEmpty ? "" : rfcDate,
         "meter_testing": meterTesting.isEmpty ? "0" : meterTesting,
         "paintaingofGIpipe": paintingOfGIPipe.isEmpty ? "0" : paintingOfGIPipe,
       };
       log("para-->${para}");
-      var res = await ApiHelper.postDataWithFile(urlEndPoint: Apis.saveLmcRFCInstallation, body: para, context: context, imageRequestObject: [
-        ImageRequestObject("meter_photo", meterPhoto.isEmpty ? "" : meterPhoto.toString()),
-        ImageRequestObject("rfc_form", isometricPhoto.isEmpty ? "" : isometricPhoto.toString()),
-        ImageRequestObject("pneumatic_image", pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString()),
-        ImageRequestObject("house_image", housePhoto.isEmpty ? "" : housePhoto.toString()),
-      ]);
+      var res = await ApiHelperDio.postDataWithFile(
+        urlEndPoint: Apis.saveLmcRFCInstallation,
+        body: para,
+        imageRequestObject: [
+          ImageRequestObject(
+            key: "meter_photo",
+            path: meterPhoto.isEmpty ? "" : meterPhoto.toString(),
+          ),
+          ImageRequestObject(
+            key: "rfc_form",
+            path: isometricPhoto.isEmpty ? "" : isometricPhoto.toString(),
+          ),
+          ImageRequestObject(
+            key: "pneumatic_image",
+            path: pneumaticPhoto.isEmpty ? "" : pneumaticPhoto.toString(),
+          ),
+          ImageRequestObject(
+            key: "house_image",
+            path: housePhoto.isEmpty ? "" : housePhoto.toString(),
+          ),
+        ],
+      );
       if (res != null && res["error"] == false) {
         return SaveFeasibleModel.fromJson(res);
       } else if (res != null && res["error"] == true) {
@@ -271,7 +303,9 @@ class FormRFCInstallationHelper {
   static Future<Position> getCurrentLocation() async {
     await Geolocator.requestPermission();
     await Permission.locationAlways.request();
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
     log('latitude : ${position.latitude} longitude : ${position.longitude}');
     return position;
   }

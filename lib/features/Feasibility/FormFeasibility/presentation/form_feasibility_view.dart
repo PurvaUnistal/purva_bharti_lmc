@@ -124,8 +124,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _bpNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.bpNumber,
-      label: AppString.bpNumber,
+      labelText: AppString.bpNumber,
       enabled: false,
       controller: stateData.bpNumberController,
     );
@@ -133,8 +132,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _trNumberController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.crNumber,
-      label: AppString.crNumber,
+      labelText: AppString.crNumber,
       enabled: false,
       controller: stateData.trNumberController,
     );
@@ -142,8 +140,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _assignedDateController({required FormFeasibilityDataState stateData}) {
     return TextFieldWidget(
-      hintText: AppString.assignedDate,
-      label: AppString.assignedDate,
+      labelText: AppString.assignedDate,
       enabled: false,
       controller: stateData.assignedDateController,
     );
@@ -156,9 +153,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         : CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.lmcFeaDate,
-              label: AppString.lmcFeaDate,
+              isRequired: true,
+              labelText: AppString.lmcFeaDate,
               enabled: true,
               readOnly: true,
               controller: stateData.feasibilityDateController,
@@ -179,8 +175,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _checkFeasibilityDropdown({required FormFeasibilityDataState stateData}) {
     return DropdownWidget<GetConstantModel>(
-      star: AppString.star,
-      label: AppString.checkFeasibility,
+       isRequired: true,
       hint: AppString.checkFeasibility,
       dropdownValue: stateData.checkFeasibleValue.value == null
           ? null
@@ -195,8 +190,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _pipelineStatusDropdown({required FormFeasibilityDataState stateData}) {
     return DropdownWidget<GetConstantModel>(
-      star: AppString.star,
-      label: AppString.pipelineStatus,
+       isRequired: true,
       hint: AppString.pipelineStatus,
       dropdownValue: stateData.pipelineStatusValue.value == null
           ? null
@@ -223,8 +217,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               ? Flexible(
                                   flex: 7,
                                   child: TextFieldWidget(
-                                    hintText: AppString.pipe,
-                                    label: AppString.pipe,
+                                    labelText: AppString.pipe,
                                     initialValue: e.name,
                                     enabled: false,
                                   ),
@@ -232,8 +225,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               : Flexible(
                                   flex: 7,
                                   child: TextFieldWidget(
-                                    hintText: AppString.material,
-                                    label: AppString.material,
+                                    labelText: AppString.material,
                                     initialValue: e.name,
                                     enabled: false,
                                   ),
@@ -243,8 +235,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               ? Flexible(
                                   flex: 3,
                                   child: TextFieldWidget(
-                                    hintText: e.unit,
-                                    label: e.unit,
+                                    labelText: e.unit,
                                     controller: e.controller,
                                     enabled: true,
                                     keyboardType: TextInputType.number,
@@ -259,8 +250,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               : Flexible(
                                   flex: 3,
                                   child: TextFieldWidget(
-                                    hintText: e.unit,
-                                    label: e.unit,
+                                    labelText: e.unit,
                                     controller: e.controller,
                                     enabled: true,
                                     keyboardType: TextInputType.number,
@@ -296,8 +286,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               ? Flexible(
                                   flex: 7,
                                   child: TextFieldWidget(
-                                    hintText: AppString.pipe,
-                                    label: AppString.pipe,
+                                    labelText: AppString.pipe,
                                     initialValue: e.name,
                                     enabled: false,
                                   ),
@@ -305,8 +294,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               : Flexible(
                                   flex: 7,
                                   child: TextFieldWidget(
-                                    hintText: AppString.material,
-                                    label: AppString.material,
+                                    labelText: AppString.material,
                                     initialValue: e.name,
                                     enabled: false,
                                   ),
@@ -316,8 +304,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               ? Flexible(
                                   flex: 3,
                                   child: TextFieldWidget(
-                                    hintText: e.unit,
-                                    label: e.unit,
+                                    labelText: e.unit,
                                     controller: e.controller,
                                     enabled: true,
                                     keyboardType: TextInputType.number,
@@ -332,8 +319,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
                               : Flexible(
                                   flex: 3,
                                   child: TextFieldWidget(
-                                    hintText: e.unit,
-                                    label: e.unit,
+                                    labelText: e.unit,
                                     controller: e.controller,
                                     enabled: true,
                                     keyboardType: TextInputType.number,
@@ -372,8 +358,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
   }
   Widget _manualPipLengthWidget({required FormFeasibilityDataState dataState}){
     return dataState.isManualPipe ? TextFieldWidget(
-      hintText: AppString.extraPipe,
-      label: AppString.extraPipe,
+      labelText: AppString.extraPipe,
       controller: dataState.manualPipLengthCtrl,
     ) : SizedBox.shrink();
   }
@@ -382,14 +367,12 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipe,
-        label: AppString.extraPipe,
+        labelText: AppString.extraPipe,
         controller: dataState.extraGiPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPrice,
-        label: AppString.extraPrice,
+        labelText: AppString.extraPrice,
         controller: dataState.extraGiPriceCtrl,
       ),
     );
@@ -400,14 +383,12 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipeCopper,
-        label: AppString.extraPipeCopper,
+        labelText: AppString.extraPipeCopper,
         controller: dataState.extraCopperPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPriceCopper,
-        label: AppString.extraPriceCopper,
+        labelText: AppString.extraPriceCopper,
         controller: dataState.extraCopperPriceCtrl,
       ),
     );
@@ -417,14 +398,12 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
     return RowWidget(
       widget1: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPipeTotal,
-        label: AppString.extraPipeTotal,
+        labelText: AppString.extraPipeTotal,
         controller: dataState.extraTotalPipeCtrl,
       ),
       widget2: TextFieldWidget(
         enabled: false,
-        hintText: AppString.extraPriceTotal,
-        label: AppString.extraPriceTotal,
+        labelText: AppString.extraPriceTotal,
         controller: dataState.extraTotalPriceCtrl,
       ),
     );
@@ -432,9 +411,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
 
   Widget _proposedDateController({required FormFeasibilityDataState stateData}) {
     return stateData.checkFeasibleValue.key == "1" ? TextFieldWidget(
-            star: AppString.star,
-            hintText: AppString.lmcProDate,
-            label: AppString.lmcProDate,
+            isRequired: true,
+      labelText: AppString.lmcProDate,
             enabled: true,
       readOnly: true,
             controller: stateData.proposedDateController,
@@ -457,8 +435,7 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         || stateData.checkFeasibleValue.key == "3"
         ? Center(
             child: DropdownWidget<GetConstantModel>(
-              star: AppString.star,
-              label: AppString.lmcReason,
+               isRequired: true,
               hint: AppString.lmcReason,
               dropdownValue: stateData.lmcReasonValue.key == null
                   ? null
@@ -480,12 +457,11 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
             ? CommonStyle.col(
                 context: context,
                 child: TextFieldWidget(
-                  star: AppString.star,
-                  hintText: AppString.reason,
-                  label: AppString.reason,
+                  isRequired: true,
+                  labelText: AppString.reason,
                   enabled: true,
                   maxLine: 2,
-                  inputType: TextInputType.text,
+                  textInputType: TextInputType.text,
                   controller: stateData.reasonController,
                 ),
               )
@@ -498,11 +474,10 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              hintText: AppString.remarks,
-              label: AppString.remarks,
+              labelText: AppString.remarks,
               enabled: true,
               maxLine: 3,
-              inputType: TextInputType.text,
+              textInputType: TextInputType.text,
               controller: stateData.remarksController,
             ),
           )
@@ -514,9 +489,8 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              star: AppString.star,
-              hintText: AppString.followUpDate,
-              label: AppString.followUpDate,
+              isRequired: true,
+              labelText: AppString.followUpDate,
               enabled: true,
               readOnly: true,
               controller: stateData.followUpDateController,

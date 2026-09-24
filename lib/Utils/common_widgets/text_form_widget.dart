@@ -1,141 +1,125 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lmc/Utils/common_widgets/WidgetStyles/common_style.dart';
-import 'package:lmc/Utils/common_widgets/res/app_color.dart';
-import 'package:lmc/Utils/common_widgets/res/app_styles.dart';
+import 'input_decoration_style.dart';
 
-import 'res/environment_config.dart';
-
-//ignore: must_be_immutable
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final String? initialValue;
-  final String? star;
-  final String? label;
-  final FocusNode? focusNode;
-  final Iterable<String>? autofillHints;
-  final String? hintText;
-  final String? labelText;
-  final ValueChanged<String>? onChanged;
-  final bool? obscureText;
-  final TextInputType? inputType;
-  final int? maxLength;
-  final int? maxLine;
   final GestureTapCallback? onTap;
-  final ValueChanged<String>? onFieldSubmitted;
-  final bool? enabled;
-  final bool? readOnly;
-  final bool? autofocus;
-  final TextCapitalization? textCapitalization;
-  final TextInputAction? textInputAction;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-  final List<TextInputFormatter>? inputFormatters;
-  final Widget? prefixIcon;
+  final String labelText;
+  final bool enabled;
+  final bool readOnly;
+  final bool obscureText;
+  final ValueChanged<String>? onChanged;
+  final TextInputType? textInputType;
+  final int? maxLength;
+  final int maxLine;
   final Widget? suffixIcon;
-  final String? fieldText;
+  final Widget? prefixIcon;
+  final bool isRequired;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final FormFieldValidator<String>? validator;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
-  TextFieldWidget({
-    Key? key,
-    this.focusNode,
-    this.initialValue,
-    this.star,
-    this.label,
-    this.hintText,
-    this.labelText,
-    this.autofillHints,
+  /// Key attached to the inner TextFormField. Lets the page inspect
+  /// FormFieldState.hasError, scroll to the first invalid field, and
+  /// lets this widget clear its own error while the user types.
+  final GlobalKey<FormFieldState>? fieldKey;
+  final Iterable<String>? autofillHints;
+
+  const TextFieldWidget({
+    super.key,
+    required this.labelText,
+    this.fieldKey,
+    this.enabled = true,
+    this.readOnly = false,
+    this.obscureText = false,
     this.controller,
-    this.obscureText,
-    this.onChanged,
-    this.inputType,
-    this.maxLength,
-    this.maxLine,
+    this.initialValue,
     this.onTap,
-    this.onFieldSubmitted,
-    this.enabled,
-    this.readOnly,
-    this.autofocus,
-    this.textCapitalization,
-    this.textInputAction,
-    this.keyboardType,
-    this.validator,
-    this.inputFormatters,
-    this.prefixIcon,
+    this.onChanged,
+    this.textInputType,
+    this.maxLength,
     this.suffixIcon,
-    this.fieldText,
-  }) : super(key: key);
+    this.prefixIcon,
+    this.maxLine = 1,
+    this.isRequired = false,
+    this.fontSize,
+    this.fontWeight,
+    this.validator,
+    this.keyboardType,
+    this.inputFormatters,
+    this.autofillHints,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = Theme.of(context).colorScheme.onSurface;
+
+    final enabledFill = isDark
+        ? Theme.of(context).colorScheme.surfaceContainerHighest
+        : Colors.white;
+    final disabledFill = isDark
+        ? Theme.of(context)
+        .colorScheme
+        .surfaceContainerHighest
+        .withOpacity(0.4)
+        : Colors.grey.shade100;
+
     return TextFormField(
-      cursorColor:  EnvironmentConfig.of(context)!.primaryTheme,
-      showCursor: readOnly == true ? false : true,
-      enableInteractiveSelection: readOnly == true ? false : true,
-      focusNode: readOnly == true
-          ? FocusNode(canRequestFocus: false)
-          : focusNode,
-      autofillHints: autofillHints,
-      onTap: onTap,
-      autofocus: autofocus ?? false,
-      onFieldSubmitted: onFieldSubmitted,
-      enabled: enabled ?? true,
-      readOnly: readOnly ?? false,
-      maxLength: maxLength,
-      maxLines: maxLine ?? 1,
-      onChanged: onChanged,
-      keyboardType: keyboardType ?? TextInputType.text,
+      key: fieldKey,
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       controller: controller,
-      initialValue: initialValue,
-      obscureText: obscureText ?? false,
-      validator: validator == null ? null : validator,
-      textCapitalization: textCapitalization ?? TextCapitalization.words,
-      textInputAction: textInputAction ?? TextInputAction.done,
+      initialValue: controller == null ? initialValue : null,
+      onTap: () {
+        if (readOnly) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+        onTap?.call();
+      },
+      enabled: enabled,
+      readOnly: readOnly,
+      autofillHints: autofillHints,
+      keyboardType: keyboardType,
+      textCapitalization: (keyboardType ?? TextInputType.text) == TextInputType.text
+          ? TextCapitalization.words
+          : TextCapitalization.none,
+      onChanged: (value) {
+        // If this field is currently showing an error (set by the
+        // Preview button's validate()), re-run ONLY this field's
+        // validator as the user types, so the error clears the moment
+        // the input becomes valid. Fields without errors stay quiet —
+        // no premature red text while filling the form top-to-bottom.
+        final state = fieldKey?.currentState;
+        if (state != null && state.hasError) {
+          state.validate();
+        }
+        onChanged?.call(value);
+      },
+      maxLength: maxLength,
+      maxLines: maxLine,
+      validator: validator,
       inputFormatters: inputFormatters,
-      style: Styles.texts,
-      decoration: InputDecoration(
+      obscureText: obscureText,
+      style: TextStyle(
+        fontSize: 14,
+        color: textColor,
+      ),
+      decoration: InputDecorationStyle.inputDecoration(
+        context,
+        labelText: labelText,
+        isRequired: isRequired,
+      ).copyWith(
+        fillColor: enabled ? enabledFill : disabledFill,
         counterText: "",
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        suffixIconConstraints: suffixIcon != null
-            ? const BoxConstraints(
-                maxWidth: 30,
-                maxHeight: 25,
-              )
-            : null,
-        prefixIconConstraints: prefixIcon != null
-            ? const BoxConstraints(
-                maxWidth: 30,
-                maxHeight: 25,
-              )
-            : null,
-        filled: true,
-        fillColor: AppColor.white,
-        isDense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: prefixIcon != null || suffixIcon != null ? 10 : 10),
-        border: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
-        focusedBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
-        disabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
-        enabledBorder: enabled == false ? CommonStyle.borderGrey : CommonStyle.border(context: context),
-        errorBorder: CommonStyle.borderRed,
-        hintText: hintText,
-        hintStyle: enabled == false ? Styles.labelGrey : Styles.labels,
-        label: Padding(
-          padding: const EdgeInsets.only(left: 2.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(flex: 1, child: Text(star ?? "", style: Styles.stars)),
-              Flexible(
-                flex: 6,
-                child: Text(label ?? "", style: enabled == false ? Styles.labelGrey : Styles.labels),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
-
 }

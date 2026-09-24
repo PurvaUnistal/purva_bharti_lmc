@@ -192,8 +192,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _dateInstallationController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.dateInstallation,
-      hintText: AppString.dateInstallation,
+      labelText: AppString.dateInstallation,
       enabled: false,
       controller: dataState.dateInstallationController,
     );
@@ -201,8 +200,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _proposedNgcDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.ngProposedDate,
-      hintText: AppString.ngProposedDate,
+      labelText: AppString.ngProposedDate,
       enabled: false,
       controller: dataState.proposedNgcDateController,
     );
@@ -210,8 +208,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _rfcDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.rfcDate,
-      hintText: AppString.rfcDate,
+      labelText: AppString.rfcDate,
       enabled: false,
       controller: dataState.rfcDateController,
     );
@@ -219,8 +216,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _extraPipeController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.extraPipe,
-      hintText: AppString.extraPipe,
+      labelText: AppString.extraPipe,
       enabled: false,
       controller: dataState.extraPipeController,
     );
@@ -228,8 +224,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _extraPriceController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.extraPrice,
-      hintText: AppString.extraPrice,
+      labelText: AppString.extraPrice,
       enabled: false,
       controller: dataState.extraPriceController,
     );
@@ -237,10 +232,8 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _burnerNoWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.burnersNo,
-      hintText: AppString.burnersNo,
-      textInputAction: TextInputAction.done,
+      isRequired: true,
+      labelText: AppString.burnersNo,
       keyboardType: TextInputType.text,
       controller: dataState.noOfBurnersController,
     );
@@ -249,9 +242,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _noOfFamilyMembersController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       enabled: true,
-      label: AppString.noOfFamilyMembers,
-      hintText: AppString.noOfFamilyMembers,
-      textInputAction: TextInputAction.done,
+      labelText: AppString.noOfFamilyMembers,
       keyboardType: TextInputType.text,
       controller: dataState.noOfFamilyMembersController,
     );
@@ -261,8 +252,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _mobileNumberController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.mobileNumber,
-      hintText: AppString.mobileNumber,
+      labelText: AppString.mobileNumber,
       enabled: false,
       controller: dataState.mobileNumberController,
     );
@@ -271,9 +261,7 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _altContactNoWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
       maxLength: 10,
-      hintText: AppString.altMobileNo,
-      label: AppString.altMobileNo,
-      textInputAction: TextInputAction.done,
+      labelText: AppString.altMobileNo,
       keyboardType: TextInputType.number,
       controller: dataState.altMobileNumberController,
     );
@@ -281,8 +269,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _emailWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.email,
-      hintText: AppString.email,
+      labelText: AppString.email,
       enabled: false,
       controller: dataState.emailIdController,
     );
@@ -290,9 +277,8 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _bpNumberWidget({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.bpNumber,
-      hintText: AppString.bpNumber,
+      isRequired: true,
+      labelText: AppString.bpNumber,
       enabled: false,
       controller: dataState.bpNumberController,
     );
@@ -300,7 +286,6 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _meterConnectionDropdown({required NGCFormDataState dataState}) {
     return DropdownWidget<GetConstantModel>(
-      label: AppString.meterConnection,
       hint: AppString.meterConnection,
       dropdownValue: dataState.typeOfNrValue.value!.isEmpty
           ? null
@@ -315,11 +300,9 @@ class _NGCFormViewState extends State<NGCFormView> {
 
   Widget _ngConversionDateController({required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.ngConversionDate,
-      hintText: AppString.ngConversionDate,
+      labelText: AppString.ngConversionDate,
       enabled: true,
       readOnly: true,
-      textInputAction: TextInputAction.done,
       keyboardType: TextInputType.text,
       controller: dataState.ngConversionDateController,
       suffixIcon: IconButtonWidget(
@@ -341,8 +324,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.delayStatus,
+              isRequired: true,
               hint: AppString.delayStatus,
               dropdownValue: dataState.delayReasonValue.name == null
                   ? null
@@ -362,9 +344,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              label: AppString.delayReason,
-              hintText: AppString.delayReason,
-              textInputAction: TextInputAction.done,
+              labelText: AppString.delayReason,
               controller: dataState.delayReasonController,
               maxLine: 2,
             ),
@@ -460,9 +440,8 @@ class _NGCFormViewState extends State<NGCFormView> {
   Widget _meterConnectionControllerWidget(
       {required NGCFormDataState dataState}) {
     return TextFieldWidget(
-      star: AppString.star,
-      label: AppString.meterConnection,
-      hintText: AppString.meterConnection,
+      isRequired: true,
+      labelText: AppString.meterConnection,
       enabled: false,
       controller: dataState.meterConnectionMeterController,
     );
@@ -522,10 +501,9 @@ class _NGCFormViewState extends State<NGCFormView> {
             },
           )
         : TextFieldWidget(
-            star: AppString.star,
+            isRequired: true,
             enabled: true,
-            label: AppString.meterNumber,
-            hintText: AppString.meterNumber,
+      labelText: AppString.meterNumber,
             controller: dataState.meterSerialController,
           );
   }
@@ -535,8 +513,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.meterType,
+              isRequired: true,
               hint: AppString.meterType,
               dropdownValue: dataState.meterTypeValue.name == null
                   ? null
@@ -558,9 +535,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              label: AppString.remarks,
-              hintText: AppString.remarks,
-              textInputAction: TextInputAction.done,
+              labelText: AppString.remarks,
               keyboardType: TextInputType.text,
               controller: dataState.reasonMeterChangeController,
             ),
@@ -706,9 +681,8 @@ class _NGCFormViewState extends State<NGCFormView> {
     if (!dataState.isRegularReplace) {
       // Not regular replace → show disabled TextField
       return TextFieldWidget(
-        star: AppString.star,
-        label: AppString.regulatorType,
-        hintText: AppString.regulatorType,
+        isRequired: true,
+        labelText: AppString.regulatorType,
         enabled: false,
         controller: dataState.regulatorTypeController,
       );
@@ -716,8 +690,7 @@ class _NGCFormViewState extends State<NGCFormView> {
 
     // Regular replace → show dropdown
     return DropdownWidget<LmcReasonModel>(
-      star: AppString.star,
-      label: AppString.regulatorType,
+      isRequired: true,
       hint: AppString.regulatorType,
       dropdownValue: dataState.regulatorTypeValue.name == null
           ? null
@@ -747,9 +720,8 @@ class _NGCFormViewState extends State<NGCFormView> {
       return CommonStyle.col(
         context: context,
         child: TextFieldWidget(
-          star: AppString.star,
-          label: label,
-          hintText: label,
+          isRequired: true,
+          labelText: label,
           enabled: false,
           controller: dataState.regulatorSerialController,
         ),
@@ -826,9 +798,8 @@ class _NGCFormViewState extends State<NGCFormView> {
       return CommonStyle.col(
         context: context,
         child: TextFieldWidget(
-          star: AppString.star,
-          label: AppString.meterRegulator,
-          hintText: AppString.meterRegulator,
+          isRequired: true,
+          labelText: AppString.meterRegulator,
           enabled: false,
           controller: dataState.mrSerialNumberController,
         ),
@@ -880,8 +851,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: DropdownWidget<LmcReasonModel>(
-              star: AppString.star,
-              label: AppString.regularType,
+              isRequired: true,
               hint: AppString.regularType,
               dropdownValue: dataState.regulatorTypeReasonValue.name == null
                   ? null
@@ -904,9 +874,7 @@ class _NGCFormViewState extends State<NGCFormView> {
         ? CommonStyle.col(
             context: context,
             child: TextFieldWidget(
-              label: AppString.remarks,
-              hintText: AppString.remarks,
-              textInputAction: TextInputAction.done,
+              labelText: AppString.remarks,
               keyboardType: TextInputType.text,
               controller: dataState.reasonRegulatorChangeController,
             ),
@@ -927,16 +895,14 @@ class _NGCFormViewState extends State<NGCFormView> {
         child: dataState.isMRLatLong == true ?  DottedLoaderWidget() : RowWidget(
           widget1: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.latOfMR,
-            label: AppString.latOfMR,
+            isRequired: true,
+            labelText: AppString.latOfMR,
             controller: dataState.latOfMRController,
           ),
           widget2: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.longOfMR,
-            label: AppString.longOfMR,
+            isRequired: true,
+            labelText: AppString.longOfMR,
             controller: dataState.longOfMRController,
           ),
         ),
@@ -960,16 +926,14 @@ class _NGCFormViewState extends State<NGCFormView> {
         child: dataState.isSRLatLong == true ?  DottedLoaderWidget() :RowWidget(
           widget1: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.latOfSR,
-            label: AppString.latOfSR,
+            isRequired: true,
+            labelText: AppString.latOfSR,
             controller: dataState.latOfSRController,
           ),
           widget2: TextFieldWidget(
             enabled: false,
-            star: AppString.star,
-            hintText: AppString.longOfSR,
-            label: AppString.longOfSR,
+            isRequired: true,
+            labelText: AppString.longOfSR,
             controller: dataState.longOfSRController,
           ),
         ) ,

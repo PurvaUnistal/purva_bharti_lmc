@@ -89,7 +89,6 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _areaDropDown({required LMCFeasibilityDataState dataState}) {
     return DropdownWidget<GetAllAreaModel>(
-      label: AppString.area,
       hint: AppString.area,
       dropdownValue:
           dataState.allAreaValue.gid != null ? dataState.allAreaValue : null,
@@ -104,8 +103,7 @@ class _FeasibilityViewState extends State<FeasibilityView> {
 
   Widget _searchTextField({required LMCFeasibilityDataState dataState}) {
     return TextFieldWidget(
-      label: AppString.searchBPNumber,
-      hintText: AppString.searchBPNumber,
+      labelText: AppString.searchBPNumber,
       controller: dataState.bpNumberController,
       keyboardType: TextInputType.number,
       maxLength: 10,
