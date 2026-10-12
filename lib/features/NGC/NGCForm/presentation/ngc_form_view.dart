@@ -173,12 +173,13 @@ class _NGCFormViewState extends State<NGCFormView> {
                   child: RowWidget(
                       widget1: _meterPhoto(dataState: dataState),
                       widget2: _ngcReportPhoto(dataState: dataState))),
-              dataState.regulatorCheck == "1"
-                  ? Flexible(
-                      child: RowWidget(
-                          widget1: _rfcPhoto(dataState: dataState),
-                          widget2: _pneumaticPhoto(dataState: dataState)))
-                  : Container(),
+              if(dataState.regulatorCheck == "1")...[
+                CommonStyle.widthSpace(context: context),
+                Flexible(
+                    child: RowWidget(
+                        widget1: _rfcPhoto(dataState: dataState),
+                        widget2: _pneumaticPhoto(dataState: dataState)))
+              ]
             ],
           ),
           CommonStyle.vertical(context: context),

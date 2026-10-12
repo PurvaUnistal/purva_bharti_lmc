@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'app_config.dart';
 import 'enums.dart';
 
 class EnvironmentConfig extends InheritedWidget {
@@ -39,24 +40,11 @@ class EnvironmentConfig extends InheritedWidget {
   }
 
   String get imageBaseURL {
-    print("flavor-->${flavors}");
-    switch (flavors) {
-      case EnvironmentFlavors.prodPBGPL:
-        return "https://pbgpl.smartgasnet.com/";
-      case EnvironmentFlavors.prodMGL:
-        return "https://mgl.smartgasnet.com/";
-      case EnvironmentFlavors.prodVRPL:
-        return "https://vrpl.plcms.net";
-      case EnvironmentFlavors.prodVPPL:
-        return "https://vppl.plcms.net/";
-      case EnvironmentFlavors.prodHPOIL:
-        return "https://hpoil.smartgasnet.com/";
-      case EnvironmentFlavors.prodAGCL:
-        return "https://agcl.smartgasnet.com/";
-      case EnvironmentFlavors.prodHNGPL:
-        return "https://hngpl.smartgasnet.com/";
-    }
+    final url = AppConfig.baseUrl ?? "";
+    print("flavor-->$flavors | imageBaseURL-->${url.replaceFirst(RegExp(r'api/?$'), '')}");
+    return url.replaceFirst(RegExp(r'api/?$'), '');
   }
+
 
   Color get primaryTheme {
     switch (flavors) {

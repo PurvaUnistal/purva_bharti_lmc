@@ -24,12 +24,8 @@ class TextFieldWidget extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-
-  /// Key attached to the inner TextFormField. Lets the page inspect
-  /// FormFieldState.hasError, scroll to the first invalid field, and
-  /// lets this widget clear its own error while the user types.
-  final GlobalKey<FormFieldState>? fieldKey;
   final Iterable<String>? autofillHints;
+  final GlobalKey<FormFieldState>? fieldKey;
 
   const TextFieldWidget({
     super.key,
@@ -75,6 +71,7 @@ class TextFieldWidget extends StatelessWidget {
       key: fieldKey,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       controller: controller,
+      autofillHints : autofillHints,
       initialValue: controller == null ? initialValue : null,
       onTap: () {
         if (readOnly) {
@@ -84,17 +81,11 @@ class TextFieldWidget extends StatelessWidget {
       },
       enabled: enabled,
       readOnly: readOnly,
-      autofillHints: autofillHints,
       keyboardType: keyboardType,
       textCapitalization: (keyboardType ?? TextInputType.text) == TextInputType.text
           ? TextCapitalization.words
           : TextCapitalization.none,
       onChanged: (value) {
-        // If this field is currently showing an error (set by the
-        // Preview button's validate()), re-run ONLY this field's
-        // validator as the user types, so the error clears the moment
-        // the input becomes valid. Fields without errors stay quiet —
-        // no premature red text while filling the form top-to-bottom.
         final state = fieldKey?.currentState;
         if (state != null && state.hasError) {
           state.validate();

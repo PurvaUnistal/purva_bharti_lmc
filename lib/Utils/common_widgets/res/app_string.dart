@@ -12,7 +12,7 @@ class AppString {
     Client.hpoil: "26-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
-    Client.hngpl: "24-09-2026",
+    Client.hngpl: "25-09-2026",
   };
 
   static String get date => "-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";

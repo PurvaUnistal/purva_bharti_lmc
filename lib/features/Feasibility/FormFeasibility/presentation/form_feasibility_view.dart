@@ -86,17 +86,13 @@ class _FormFeasibilityViewState extends State<FormFeasibilityView> {
           ),
           CommonStyle.vertical(context: context),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(
-                  flex: 1, child: _bpNumberController(stateData: dataState)),
+              Expanded(child: _bpNumberController(stateData: dataState)),
               CommonStyle.widthSpace(context: context),
-              Flexible(
-                  flex: 1, child: _trNumberController(stateData: dataState)),
+              Expanded(child: _trNumberController(stateData: dataState)),
               CommonStyle.widthSpace(context: context),
-              Flexible(
-                  flex: 1,
-                  child: _assignedDateController(stateData: dataState)),
+              Expanded(child: _assignedDateController(stateData: dataState)),
             ],
           ),
           _feasibilityDateController(stateData: dataState),
