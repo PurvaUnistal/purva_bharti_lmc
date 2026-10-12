@@ -25,11 +25,10 @@ class AppConfig {
     baseUrl = EnvironmentConfig.of(context)!.generalUrlBaseFlavour;
     log("baseUrl --> $baseUrl");
   }
-  String _buildNumber = "";
-  String get buildNumber => _buildNumber;
+  String buildNumber = "";
 
-  setBuildNumber({required String buildNumber}) {
-    _buildNumber = buildNumber;
+  setBuildNumber({required String value}) {
+    buildNumber = value;
   }
 
   setLoginData({required LoginModel newLoginData}) {
@@ -63,7 +62,10 @@ class AppConfig {
         : DeviceType.tablet;
   }
 
-  void clear() {
-    loginData = LoginModel();
+  static void reset() {
+    final old = instance;
+    instance = AppConfig()
+      ..buildNumber = old?.buildNumber ?? ""
+      ..client = old?.client;
   }
 }

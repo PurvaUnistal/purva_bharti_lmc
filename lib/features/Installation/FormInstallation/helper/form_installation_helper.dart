@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
-import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstantModel.dart';
 import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/MaterialItem.dart';
@@ -15,6 +14,7 @@ import 'package:lmc/features/Installation/FormInstallation/domain/model/ExtraPip
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/Installation/LMCInstallation/domain/model/InstallationDoneModel.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
 import 'package:lmc/service/server_request.dart';
@@ -22,7 +22,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class FormInstallationHelper {
 
-  static final ctx = UserContext.getUserContext();
+  static final ctx = AppConfig.instanceInit()!.loginData.user ?? User();
 
 
   static Future<List<GetConstantModel>?> getTypeOfNrApi(
@@ -60,7 +60,7 @@ class FormInstallationHelper {
       InstallationDoneRows? installVal =  await AppConfig.instanceInit()?.installationDoneRows;
       Map<String, String> para = {
         "prop_name": installVal!.propName ?? "",
-        "schema": ctx.user.schema ?? "",
+        "schema": ctx.schema ?? "",
         "property_category_id": installVal.propertyCategoryId ?? "",
       };
       String json = Uri(queryParameters: para).query;
@@ -95,9 +95,9 @@ class FormInstallationHelper {
       {required BuildContext context, required String meterSerial}) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "meterSerial": meterSerial,
       };
       String json = Uri(queryParameters: para).query;
@@ -116,17 +116,17 @@ class FormInstallationHelper {
       InstallationByNgcData? ngcValue =  await AppConfig.instanceInit()?.ngcData;
       String propName = installVal?.propName ?? ngcValue?.propName ?? "";
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "regulatorSerial": regulatorSerial,
         "regulatorType": regulatorType,
       };
       String json = Uri(queryParameters: para).query;
       Map<String, String> para1 = {
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "regulatorSerial": regulatorSerial,
         "regulatorType": regulatorType,
         "prop_name": propName,
@@ -147,9 +147,9 @@ class FormInstallationHelper {
       {required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "regulatorSerial": regulatorSerial,
         "regulatorType": "",
       };
@@ -170,7 +170,7 @@ class FormInstallationHelper {
         key: PrefsValue.propertyCategoryId);
     try {
       Map<String, String> para = {
-        "schema": ctx.user.schema ?? "",
+        "schema": ctx.schema ?? "",
         "pipeQty": pipeQty,
         "property_category_id": propertyCategoryId,
 
@@ -341,8 +341,8 @@ class FormInstallationHelper {
     try {
       Map<String, String> para = {
         "lmc_install_id": lmcInstallId.isEmpty ? " " : lmcInstallId,
-        "schema": ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
+        "schema": ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
         "meter_reading_date": meterReadingDate,
         "meter_reading": meterReading.isEmpty ? "" : meterReading,
         "dma_id": meterDma,

@@ -8,14 +8,15 @@ import 'environment_config.dart';
 class AppString {
   static const Map<Client, String> _releaseDates = {
     Client.mahaNagar: "22-07-2025",
-    Client.purvaBharti: "10-09-2026",
+    Client.purvaBharti: "12-10-2026",
     Client.hpoil: "6-03-2026",
     Client.vppl: "28-01-2026",
     Client.vrpl: "17-02-2026",
     Client.agcl: "25-04-2026",
+    Client.hpcl: "25-04-2026",
   };
 
-  static String get version => "Version : 1.0.0 - LMC-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
+  static String get date => "-${_releaseDates[AppConfig.instanceInit()!.client] ?? ""}";
 
   static String companyName = "© Unistal Systems Pvt. Ltd.";
   static String release = "Release Date";

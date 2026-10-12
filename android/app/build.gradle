@@ -66,7 +66,7 @@ android {
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             }
             versionCode 23
-            versionName "1.0.9-PBGPL LMC"
+            versionName "1.0.9-PBGPL"
         }
 //        prodMGL {
 //            dimension "app"

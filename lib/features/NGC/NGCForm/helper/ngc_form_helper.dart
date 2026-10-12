@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lmc/Utils/Utils.dart';
-import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/model/SubmitNgcReportModel.dart';
 import 'package:lmc/features/NGC/NGCTable/domain/model/LmcInstallationByNgcModel.dart';
 import 'package:lmc/service/Apis.dart';
@@ -15,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 
 class NGCFormHelper{
-  static final ctx = UserContext.getUserContext();
+  static final ctx = AppConfig.instanceInit()!.loginData.user ?? User();
 
   static Future<Position > getCurrentLocation() async {
     await Geolocator.requestPermission();
@@ -106,7 +106,7 @@ class NGCFormHelper{
       InstallationByNgcData? installVal =  await AppConfig.instanceInit()?.ngcData;
       Map<String, String> para = {
         "prop_name": installVal!.propName ?? "",
-        "schema": ctx.user.schema ?? "",
+        "schema": ctx.schema ?? "",
         "property_category_id": installVal.propertyCategoryId ?? "",
       };
       String json = Uri(queryParameters: para).query;
@@ -123,9 +123,9 @@ class NGCFormHelper{
   static Future<List<ListOfMeterNo>?> getMetersNGCApi({required BuildContext context, required String meterSerial}) async {
     try {
       Map<String, String> para = {
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "meterSerial":meterSerial,
       };
       String json = Uri(queryParameters: para).query;
@@ -147,17 +147,17 @@ class NGCFormHelper{
     try {
       InstallationByNgcData? installVal =  await AppConfig.instanceInit()?.ngcData;
     Map<String, String> para = {
-      "schema":ctx.user.schema ?? "",
-      "user_id": ctx.user.id ?? "",
-      "role": ctx.user.role ?? "",
+      "schema":ctx.schema ?? "",
+      "user_id": ctx.id ?? "",
+      "role": ctx.role ?? "",
       "regulatorSerial":regulatorSerial,
       "regulatorType": regulatorType,
     };
       Map<String, String> para1 = {
         "prop_name": installVal!.propName ?? "",
-        "schema":ctx.user.schema ?? "",
-        "user_id": ctx.user.id ?? "",
-        "role": ctx.user.role ?? "",
+        "schema":ctx.schema ?? "",
+        "user_id": ctx.id ?? "",
+        "role": ctx.role ?? "",
         "regulatorSerial":regulatorSerial,
         "regulatorType": regulatorType,
       };
@@ -368,8 +368,8 @@ class NGCFormHelper{
   }) async {
 
     Map<String, String> body = {
-      "schema": ctx.user.schema ?? "",
-      "user_id": ctx.user.id ?? "",
+      "schema": ctx.schema ?? "",
+      "user_id": ctx.id ?? "",
       "name_of_contractor": nameOfContractor.isEmpty ? "" : nameOfContractor,
       "meter_reading": meterReading.isEmpty ? "" :meterReading,
       "jmr_no": jmrNo.isEmpty ? "" :jmrNo,

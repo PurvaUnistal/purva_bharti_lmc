@@ -115,23 +115,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
 
         String userJson = jsonEncode(res.toJson());
-        await SharedPref.setString(
-          key: PrefsValue.userInfo,
-          value: userJson,
-        );
-
-        await AppConfig.instanceInit()?.setLoginData(
-          newLoginData: loginModel,
-        );
-
+        await SharedPref.setString(key: PrefsValue.userInfo, value: userJson,);
+        await AppConfig.instanceInit()?.setLoginData(newLoginData: loginModel,);
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        await SharedPref.setString(
-          key: PrefsValue.buildNumber,
-          value: packageInfo.buildNumber,
-        );
-
+        String version = packageInfo.version;
+        String buildNumber = packageInfo.buildNumber;
+        AppConfig.instanceInit()?.setBuildNumber(value: "$buildNumber($version)");
+        await SharedPref.setString(key: PrefsValue.buildNumber, value: packageInfo.buildNumber,);
         _eventCompleted(emit);
-
         if (event.context.mounted) {
           Navigator.pushReplacementNamed(event.context, RoutesName.home);
         }

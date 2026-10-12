@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lmc/Utils/Utils.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
-import 'package:lmc/Utils/common_widgets/res/UserContext.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
 import 'package:lmc/Utils/common_widgets/res/app_string.dart';
 import 'package:lmc/Utils/common_widgets/res/enums.dart';
@@ -16,6 +15,7 @@ import 'package:lmc/features/Feasibility/FormFeasibility/domain/model/GetConstan
 import 'package:lmc/features/Installation/FormInstallation/domain/model/LmcReasonModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/domain/model/MeterNoModel.dart';
 import 'package:lmc/features/Installation/FormInstallation/helper/form_installation_helper.dart';
+import 'package:lmc/features/Login/domain/model/login_model.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_event.dart';
 import 'package:lmc/features/NGC/NGCForm/domain/bloc/ngc_form_state.dart';
 import 'package:lmc/features/NGC/NGCForm/helper/ngc_form_helper.dart';
@@ -167,7 +167,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   static BuildContext? context = Singleton.instanceInit()?.context;
 
 
-  static var ctx = UserContext.getUserContext();
+  static var ctx = AppConfig.instanceInit()!.loginData.user ?? User();
 
   _pageLoad(NGCFormLoadEvent event, emit) async {
     emit(NGCFormPageLoadState());
@@ -227,7 +227,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
     longOfSRController.text = "0";
     latOfMRController.text = "0";
     longOfMRController.text = "0";
-    ctx = UserContext.getUserContext();
+    ctx = AppConfig.instanceInit()!.loginData.user ?? User();
     ngcData = await AppConfig.instanceInit()!.ngcData;
     meterConnectionMeterController.text = await ngcData.typeOfNr ?? "";
 
@@ -465,7 +465,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
 
   fetchRegulatorsApi({required BuildContext context, required String regulatorSerial, required String regulatorType}) async {
-    if (ctx.user.role == "ngc") {
+    if (ctx.role == "ngc") {
       var res = await NGCFormHelper.getRegulatorsNGCApi(
           context: context,
           regulatorSerial: regulatorSerial,
@@ -475,7 +475,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
         listOfRegulatorSerial = listOfRegulator.map((e) => e.serialNumber!).toList();
         return res;
       }
-    } else if (ctx.user.role == "lmc") {
+    } else if (ctx.role == "lmc") {
       var res = await FormInstallationHelper.getRegulatorsApi(
           context: context,
           regulatorSerial: regulatorSerial,
@@ -498,7 +498,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
   }
   fetchMetersApi(
       {required BuildContext context, required String meterSerial}) async {
-    if (ctx.user.role == "ngc") {
+    if (ctx.role == "ngc") {
       var res = await NGCFormHelper.getMetersNGCApi(
           context: context, meterSerial: meterSerial);
       if (res != null) {
@@ -507,7 +507,7 @@ class NGCFormBloc extends Bloc<NGCFormEvent, NGCFormState> {
             listOfMeterNumber.map((e) => e.serialNumber!).toList();
         return res;
       }
-    } else if (ctx.user.role == "lmc") {
+    } else if (ctx.role == "lmc") {
       var res = await FormInstallationHelper.getMetersApi(
           context: context, meterSerial: meterSerial);
       if (res != null) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lmc/Utils/common_widgets/Routes/routes_name.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/Prefs_Value.dart';
 import 'package:lmc/Utils/common_widgets/SharedPerfs/preference_utils.dart';
+import 'package:lmc/Utils/common_widgets/app_update_cleaner.dart';
 import 'package:lmc/Utils/common_widgets/res/app_asset.dart';
 import 'package:lmc/Utils/common_widgets/res/app_color.dart';
 import 'package:lmc/Utils/common_widgets/res/app_config.dart';
@@ -50,7 +51,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     try {
       String? userJson = await SharedPref.getString(key: PrefsValue.userInfo ?? "");
       if (userJson != '') {
-        Map<String, dynamic> userMap = jsonDecode(userJson!);
+        Map<String, dynamic> userMap = jsonDecode(userJson);
         LoginModel loginModel = LoginModel.fromJson(userMap);
         final appConfig = AppConfig.instanceInit();
         if (appConfig != null) {
@@ -69,8 +70,10 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     final password = await SharedPref.getString(key: PrefsValue.passwordVal);
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final newVersion  = await packageInfo.buildNumber;
-    AppConfig.instanceInit()?.setBuildNumber(buildNumber: packageInfo.buildNumber);
-    final oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    AppConfig.instanceInit()?.setBuildNumber(value: "$buildNumber($version)");
+    String oldVersion = await SharedPref.getString(key: PrefsValue.buildNumber);
     Timer(
       const Duration(seconds: 3),
           () async {
@@ -82,8 +85,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
             );
           }
         } else {
-          AppConfig.instanceInit()?.clear();
-          await SharedPref.clearAll();
+          await AppUpdateCleaner.run();
           Navigator.pushReplacementNamed(
             context,
             RoutesName.login,
